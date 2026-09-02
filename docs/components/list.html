@@ -1,0 +1,640 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>List - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="list">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>List</h1>
+        <p class="description">
+          A continuous vertical index of text or images for displaying
+          collections of items. Not intended for dense, multi-column data
+          comparisons where tables are more appropriate.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Simple one-line list items with headlines. Lists provide a scannable
+            vertical rhythm for related records and actions.
+          </p>
+          <div class="demo-box">
+            <ds-list style="inline-size: 100%; max-inline-size: 400px">
+              <ds-list-item headline="Item 1"></ds-list-item>
+              <ds-list-item headline="Item 2"></ds-list-item>
+              <ds-list-item headline="Item 3"></ds-list-item>
+            </ds-list>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-list>
+  &lt;ds-list-item headline="Item 1">&lt;/ds-list-item>
+  &lt;ds-list-item headline="Item 2">&lt;/ds-list-item>
+&lt;/ds-list></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Pre-select items or populate supporting and trailing text.</p>
+          <div class="demo-box">
+            <ds-list style="inline-size: 100%; max-inline-size: 400px">
+              <ds-list-item
+                headline="Inbox"
+                supporting-text="2 new messages"
+                trailing-text="12:30 PM"
+                selected>
+              </ds-list-item>
+              <ds-list-item
+                headline="Drafts"
+                supporting-text="4 unsent"
+                trailing-text="Yesterday">
+              </ds-list-item>
+            </ds-list>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-list>
+  &lt;ds-list-item
+    headline="Inbox"
+    supporting-text="2 new messages"
+    trailing-text="12:30 PM"
+    selected>
+  &lt;/ds-list-item>
+&lt;/ds-list></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+
+          <h3>One-Line (Default)</h3>
+          <p>Simple list items with only headline text.</p>
+          <div class="demo-box">
+            <ds-list style="inline-size: 100%; max-inline-size: 400px">
+              <ds-list-item headline="One line item 1"></ds-list-item>
+              <ds-list-item headline="One line item 2"></ds-list-item>
+              <ds-list-item headline="One line item 3"></ds-list-item>
+            </ds-list>
+          </div>
+
+          <h3>Two-Line</h3>
+          <p>List items with headline and supporting text.</p>
+          <div class="demo-box">
+            <ds-list style="inline-size: 100%; max-inline-size: 360px">
+              <ds-list-item
+                variant="two-line"
+                headline="Two line item 1"
+                supporting-text="Supporting text goes here">
+              </ds-list-item>
+              <ds-list-item
+                variant="two-line"
+                headline="Two line item 2"
+                supporting-text="Another supporting text">
+              </ds-list-item>
+              <ds-list-item
+                variant="two-line"
+                headline="Two line item 3"
+                supporting-text="More information">
+              </ds-list-item>
+            </ds-list>
+          </div>
+
+          <h3>Three-Line</h3>
+          <p>
+            List items with headline and longer supporting text (up to 2 lines).
+          </p>
+          <div class="demo-box">
+            <ds-list style="inline-size: 100%; max-inline-size: 320px">
+              <ds-list-item
+                variant="three-line"
+                headline="Three line item 1"
+                supporting-text="This is a longer supporting text that should wrap to show two lines in the content area.">
+              </ds-list-item>
+              <ds-list-item
+                variant="three-line"
+                headline="Three line item 2"
+                supporting-text="Another longer description that should wrap to two lines to demonstrate the three-line layout.">
+              </ds-list-item>
+            </ds-list>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>With Leading Elements</h2>
+          <p>List items with icons or avatars in the leading slot.</p>
+          <div class="demo-box">
+            <ds-list
+              style="
+                inline-size: 100%;
+                max-inline-size: 400px;
+                border: 1px solid var(--md-sys-color-outline-variant);
+                border-radius: 8px;
+                overflow: hidden;
+              ">
+              <ds-list-item
+                variant="two-line"
+                headline="Alice"
+                supporting-text="Available">
+                <div
+                  slot="leading"
+                  style="
+                    background: #2196f3;
+                    border-radius: 50%;
+                    inline-size: 40px;
+                    block-size: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                  ">
+                  A
+                </div>
+              </ds-list-item>
+              <ds-list-item
+                variant="two-line"
+                headline="Bob"
+                supporting-text="In a meeting">
+                <div
+                  slot="leading"
+                  style="
+                    background: #f44336;
+                    border-radius: 50%;
+                    inline-size: 40px;
+                    block-size: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                  ">
+                  B
+                </div>
+              </ds-list-item>
+              <ds-list-item
+                variant="two-line"
+                headline="Charlie"
+                supporting-text="Away">
+                <div
+                  slot="leading"
+                  style="
+                    background: #4caf50;
+                    border-radius: 50%;
+                    inline-size: 40px;
+                    block-size: 40px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: white;
+                    font-weight: bold;
+                  ">
+                  C
+                </div>
+              </ds-list-item>
+            </ds-list>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>With Trailing Elements</h2>
+          <p>List items with trailing text, buttons, or controls.</p>
+          <div class="demo-box">
+            <ds-list
+              style="
+                inline-size: 100%;
+                max-inline-size: 400px;
+                border: 1px solid var(--md-sys-color-outline-variant);
+                border-radius: 8px;
+                overflow: hidden;
+              ">
+              <ds-list-item
+                variant="two-line"
+                headline="Notifications"
+                supporting-text="Manage alerts and updates"
+                trailing-text="On">
+              </ds-list-item>
+              <ds-list-item
+                variant="two-line"
+                headline="Dark Mode"
+                supporting-text="Enable dark theme"
+                trailing-text="Off">
+              </ds-list-item>
+              <ds-list-item
+                variant="two-line"
+                headline="Location"
+                supporting-text="Share your location"
+                trailing-text="Ask">
+              </ds-list-item>
+            </ds-list>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Selected and disabled list items.</p>
+
+          <h3>Selected Items</h3>
+          <div class="demo-box">
+            <ds-list
+              style="
+                inline-size: 100%;
+                max-inline-size: 400px;
+                border: 1px solid var(--md-sys-color-outline-variant);
+                border-radius: 8px;
+                overflow: hidden;
+              ">
+              <ds-list-item headline="Unselected item"></ds-list-item>
+              <ds-list-item headline="Selected item" selected></ds-list-item>
+              <ds-list-item headline="Another unselected item"></ds-list-item>
+            </ds-list>
+          </div>
+
+          <h3>Disabled Items</h3>
+          <div class="demo-box">
+            <ds-list
+              style="
+                inline-size: 100%;
+                max-inline-size: 400px;
+                border: 1px solid var(--md-sys-color-outline-variant);
+                border-radius: 8px;
+                overflow: hidden;
+              ">
+              <ds-list-item headline="Enabled item"></ds-list-item>
+              <ds-list-item headline="Disabled item" disabled></ds-list-item>
+              <ds-list-item headline="Another enabled item"></ds-list-item>
+            </ds-list>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Click items to select them. Try different variants.</p>
+          <div class="demo-box">
+            <div
+              style="
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+                max-inline-size: 600px;
+              ">
+              <div style="display: flex; gap: 16px; flex-wrap: wrap">
+                <label>
+                  <input
+                    type="radio"
+                    name="list-variant"
+                    value="one-line"
+                    checked />
+                  One-line
+                </label>
+                <label>
+                  <input type="radio" name="list-variant" value="two-line" />
+                  Two-line
+                </label>
+                <label>
+                  <input type="radio" name="list-variant" value="three-line" />
+                  Three-line
+                </label>
+              </div>
+
+              <ds-list
+                id="interactive-list"
+                style="
+                  inline-size: 100%;
+                  max-inline-size: 400px;
+                  border: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <ds-list-item headline="Item 1"></ds-list-item>
+                <ds-list-item headline="Item 2"></ds-list-item>
+                <ds-list-item headline="Item 3"></ds-list-item>
+                <ds-list-item headline="Item 4"></ds-list-item>
+              </ds-list>
+
+              <div
+                id="list-output"
+                style="
+                  background: var(--md-sys-color-surface-variant);
+                  padding: 16px;
+                  border-radius: 8px;
+                  font-family: monospace;
+                  font-size: 14px;
+                ">
+                <strong>Selected:</strong> None
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API Reference</h2>
+
+          <h3>List Attributes</h3>
+          <p>
+            The <code>&lt;ds-list&gt;</code> container is a simple wrapper
+            element.
+          </p>
+
+          <h3>List Item Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>String</td>
+                <td>"one-line"</td>
+                <td>Item variant: "one-line", "two-line", or "three-line"</td>
+              </tr>
+              <tr>
+                <td><code>headline</code></td>
+                <td>String</td>
+                <td>-</td>
+                <td>Primary text for the item</td>
+              </tr>
+              <tr>
+                <td><code>supporting-text</code></td>
+                <td>String</td>
+                <td>-</td>
+                <td>Secondary text (two/three-line only)</td>
+              </tr>
+              <tr>
+                <td><code>trailing-text</code></td>
+                <td>String</td>
+                <td>-</td>
+                <td>Optional trailing text</td>
+              </tr>
+              <tr>
+                <td><code>selected</code></td>
+                <td>Boolean</td>
+                <td>false</td>
+                <td>Whether the item is selected</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>Boolean</td>
+                <td>false</td>
+                <td>Whether the item is disabled</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>List Item Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>leading</code></td>
+                <td>Leading element (icon, avatar, checkbox)</td>
+              </tr>
+              <tr>
+                <td><code>trailing</code></td>
+                <td>Trailing element (icon button, switch, checkbox)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>List Item CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>The main item container</td>
+              </tr>
+              <tr>
+                <td><code>leading</code></td>
+                <td>The leading slot container</td>
+              </tr>
+              <tr>
+                <td><code>content</code></td>
+                <td>The content area with headline/supporting text</td>
+              </tr>
+              <tr>
+                <td><code>headline</code></td>
+                <td>The headline text element</td>
+              </tr>
+              <tr>
+                <td><code>supporting-text</code></td>
+                <td>The supporting text element</td>
+              </tr>
+              <tr>
+                <td><code>trailing</code></td>
+                <td>The trailing slot container</td>
+              </tr>
+              <tr>
+                <td><code>trailing-text</code></td>
+                <td>The trailing text element</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>List Item CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+                <th>Default</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-list-item-height</code></td>
+                <td>Height for one-line items</td>
+                <td>calc(var(--ds-size-control-lg) + 8px)</td>
+              </tr>
+              <tr>
+                <td><code>--ds-list-item-height-two-line</code></td>
+                <td>Height for two-line items</td>
+                <td>calc(var(--ds-size-control-lg) + 24px)</td>
+              </tr>
+              <tr>
+                <td><code>--ds-list-item-height-three-line</code></td>
+                <td>Height for three-line items</td>
+                <td>calc(var(--ds-size-control-lg) + 40px)</td>
+              </tr>
+              <tr>
+                <td><code>--ds-list-item-padding</code></td>
+                <td>Padding for the item container</td>
+                <td>8px 16px</td>
+              </tr>
+              <tr>
+                <td><code>--ds-list-item-border-color</code></td>
+                <td>Divider color between items</td>
+                <td>var(--md-sys-color-outline-variant)</td>
+              </tr>
+              <tr>
+                <td><code>--ds-list-item-leading-size</code></td>
+                <td>Size for leading slot content</td>
+                <td>var(--ds-size-hit-area)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>List Item Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-list-item:click</code></td>
+                <td>Fired when item is clicked (not fired if disabled)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Interactive list content</td>
+                <td>Moves focus to interactive elements within list items</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on interactive list item</td>
+                <td>Activates the focused item if not disabled</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              List uses <code>role="list"</code>; items use
+              <code>role="listitem"</code>.
+            </li>
+            <li>
+              Disabled items set <code>aria-disabled="true"</code> and suppress
+              click events.
+            </li>
+            <li>
+              Focus management is preserved for interactive child controls.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use lists for related records,
+              messages, settings, and selectable items in a vertical sequence.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid list layouts for dense
+              comparative datasets that require columns or numeric alignment.
+            </li>
+            <li>
+              <strong>Composition:</strong> Use one-line, two-line, or
+              three-line items consistently within a section and pair
+              leading/trailing elements with clear purpose.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Mixing item heights excessively
+              and overloading trailing controls reduces scanability.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const interactiveList = document.getElementById("interactive-list");
+      const output = document.getElementById("list-output");
+
+      // Variant controls
+      document
+        .querySelectorAll('input[name="list-variant"]')
+        .forEach((radio) => {
+          radio.addEventListener("change", (e) => {
+            const items = interactiveList.querySelectorAll("ds-list-item");
+            items.forEach((item) => {
+              item.variant = e.target.value;
+              if (e.target.value === "one-line") {
+                item.supportingText = "";
+              } else if (
+                e.target.value === "two-line" &&
+                !item.supportingText
+              ) {
+                item.supportingText = "Supporting text";
+              } else if (
+                e.target.value === "three-line" &&
+                !item.supportingText
+              ) {
+                item.supportingText =
+                  "This is a longer supporting text for the three-line variant";
+              }
+            });
+            updateOutput();
+          });
+        });
+
+      // Item selection
+      interactiveList.addEventListener("ds-list-item:click", (e) => {
+        const items = interactiveList.querySelectorAll("ds-list-item");
+        items.forEach((item) => {
+          item.selected = item === e.detail.item;
+        });
+        updateOutput();
+      });
+
+      function updateOutput() {
+        const selected = interactiveList.querySelector(
+          "ds-list-item[selected]",
+        );
+        if (selected) {
+          output.innerHTML = `<strong>Selected:</strong> ${selected.headline}`;
+        } else {
+          output.innerHTML = `<strong>Selected:</strong> None`;
+        }
+      }
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

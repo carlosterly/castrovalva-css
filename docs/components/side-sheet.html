@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Side Sheet - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="side-sheet">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Side Sheet</h1>
+        <p class="description">
+          Material Design 3 side sheet for contextual navigation and supporting
+          workflows that slide in from the left or right edge. Not intended as a
+          primary app navigation shell; use a navigation drawer when the surface
+          must remain persistently navigational.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Open a standard side sheet from the left side. Side sheets expose
+            contextual tools while preserving the user's current page and task
+            state.
+          </p>
+          <div class="demo-box">
+            <ds-button id="open-left-sheet">Open Left Sheet</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-side-sheet id="sheet-left" variant="standard" position="left"&gt;
+  &lt;div slot="header"&gt;&lt;h2&gt;Navigation&lt;/h2&gt;&lt;/div&gt;
+  &lt;p&gt;Sheet content goes here.&lt;/p&gt;
+&lt;/ds-side-sheet&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Pre-configure swipe behavior before opening.</p>
+          <div class="demo-box">
+            <ds-button id="open-configured-sheet"
+              >Open Configured Sheet</ds-button
+            >
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-side-sheet
+  variant="standard"
+  position="right"
+  swipeable="false"&gt;
+  &lt;p&gt;Swipe-to-dismiss is disabled for this sheet.&lt;/p&gt;
+&lt;/ds-side-sheet&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Choose position and variant to match the intended interaction.</p>
+
+          <h3>Right Position</h3>
+          <div class="demo-box">
+            <ds-button id="open-right-sheet">Open Right Sheet</ds-button>
+          </div>
+
+          <h3>Modal Variant</h3>
+          <div class="demo-box">
+            <ds-button id="open-modal-sheet">Open Modal Sheet</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-side-sheet variant="modal" position="right"&gt;
+  &lt;p&gt;Modal side sheet requires explicit close.&lt;/p&gt;
+&lt;/ds-side-sheet&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Control open and close state programmatically.</p>
+          <div class="demo-box">
+            <ds-button id="open-state-sheet">Open State Demo</ds-button>
+            <ds-button id="close-state-sheet">Close State Demo</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+const sheet = document.querySelector('#sheet-state');
+sheet.show();
+sheet.close();</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Watch side sheet lifecycle and swipe events in the log.</p>
+          <div class="demo-box">
+            <ds-button id="open-interactive-sheet"
+              >Open Interactive Sheet</ds-button
+            >
+          </div>
+          <div class="demo-box" style="margin-block-start: 12px">
+            <pre id="side-sheet-event-log" style="margin: 0">
+Event log:
+</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td><code>standard</code></td>
+                <td><code>standard</code> or <code>modal</code>.</td>
+              </tr>
+              <tr>
+                <td><code>position</code></td>
+                <td>string</td>
+                <td><code>left</code></td>
+                <td><code>left</code> or <code>right</code>.</td>
+              </tr>
+              <tr>
+                <td><code>open</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Controls whether the sheet is visible.</td>
+              </tr>
+              <tr>
+                <td><code>swipeable</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Enables swipe-to-dismiss for standard variant.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-side-sheet:open</code></td>
+                <td><code>{}</code></td>
+                <td>Fired when the sheet opens.</td>
+              </tr>
+              <tr>
+                <td><code>ds-side-sheet:close</code></td>
+                <td><code>{}</code></td>
+                <td>Fired when the sheet closes.</td>
+              </tr>
+              <tr>
+                <td><code>ds-side-sheet:swipe</code></td>
+                <td><code>{ progress }</code></td>
+                <td>Fired while swiping with progress from 0 to 1.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>show()</code></td>
+                <td>Opens the side sheet.</td>
+              </tr>
+              <tr>
+                <td><code>close()</code></td>
+                <td>Closes the side sheet.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>Outer fixed-position host layer.</td>
+              </tr>
+              <tr>
+                <td><code>scrim</code></td>
+                <td>Background overlay layer.</td>
+              </tr>
+              <tr>
+                <td><code>sheet</code></td>
+                <td>Main side sheet surface.</td>
+              </tr>
+              <tr>
+                <td><code>header</code></td>
+                <td>Header slot wrapper.</td>
+              </tr>
+              <tr>
+                <td><code>content</code></td>
+                <td>Default content slot wrapper.</td>
+              </tr>
+              <tr>
+                <td><code>actions</code></td>
+                <td>Actions slot wrapper.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-side-sheet-width</code></td>
+                <td>Width of the sheet panel.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-side-sheet-max-width</code></td>
+                <td>Maximum width constraint.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-side-sheet-header-padding</code></td>
+                <td>Header padding (mapped to global spacing tokens).</td>
+              </tr>
+              <tr>
+                <td><code>--ds-side-sheet-actions-gap</code></td>
+                <td>Action row spacing (mapped to global spacing tokens).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Sheet open</td>
+                <td>Moves focus through controls within the sheet</td>
+              </tr>
+              <tr>
+                <td><code>Escape</code></td>
+                <td>Standard sheet open</td>
+                <td>Closes the sheet and restores focus to the trigger</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on action button</td>
+                <td>Activates the focused action</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Sheet surface uses <code>role="complementary"</code> and
+              <code>aria-modal="true"</code>.
+            </li>
+            <li>
+              Focus is restored to the previously focused element on close.
+            </li>
+            <li>
+              Scrim click closes standard variant and is ignored in modal
+              variant.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use left position for
+              navigation-adjacent context and right position for tools,
+              metadata, or assistive workflows.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid side sheets for core app
+              routing or long-form data entry that deserves a dedicated page.
+            </li>
+            <li>
+              <strong>Composition:</strong> Choose modal variant when dismissal
+              requires explicit action. Keep primary actions in the
+              <code>actions</code> slot for consistency.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Overlapping side-sheet
+              responsibility with drawers can confuse users. Keep side-sheet
+              content contextual and scoped.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <ds-side-sheet id="sheet-left" variant="standard" position="left">
+      <div slot="header">
+        <h2>Navigation</h2>
+      </div>
+      <p>Primary side-sheet content from the left edge.</p>
+      <div slot="actions">
+        <button type="button" id="sheet-left-close">Close</button>
+      </div>
+    </ds-side-sheet>
+
+    <ds-side-sheet
+      id="sheet-configured"
+      variant="standard"
+      position="right"
+      swipeable="false">
+      <div slot="header">
+        <h2>Configured Sheet</h2>
+      </div>
+      <p>Swipe-to-dismiss is disabled in this example.</p>
+      <div slot="actions">
+        <button type="button" id="sheet-configured-close">Close</button>
+      </div>
+    </ds-side-sheet>
+
+    <ds-side-sheet id="sheet-right" variant="standard" position="right">
+      <div slot="header">
+        <h2>Right Sheet</h2>
+      </div>
+      <p>Supplemental side content from the right edge.</p>
+      <div slot="actions">
+        <button type="button" id="sheet-right-close">Close</button>
+      </div>
+    </ds-side-sheet>
+
+    <ds-side-sheet id="sheet-modal" variant="modal" position="right">
+      <div slot="header">
+        <h2>Modal Sheet</h2>
+      </div>
+      <p>Modal sheets require explicit close actions.</p>
+      <div slot="actions">
+        <button type="button" id="sheet-modal-close">Close</button>
+      </div>
+    </ds-side-sheet>
+
+    <ds-side-sheet id="sheet-state" variant="standard" position="left">
+      <div slot="header">
+        <h2>State Demo</h2>
+      </div>
+      <p>Use external controls to open and close this sheet.</p>
+    </ds-side-sheet>
+
+    <ds-side-sheet id="sheet-interactive" variant="standard" position="left">
+      <div slot="header">
+        <h2>Interactive Sheet</h2>
+      </div>
+      <p>Observe lifecycle and swipe events in the event log.</p>
+      <div slot="actions">
+        <button type="button" id="sheet-interactive-close">Close</button>
+      </div>
+    </ds-side-sheet>
+
+    <script type="module">
+      const byId = (id) => document.getElementById(id);
+      const openSheet = (sheetId) => byId(sheetId).show();
+      const closeSheet = (sheetId) => byId(sheetId).close();
+
+      byId("open-left-sheet").addEventListener("click", () =>
+        openSheet("sheet-left"),
+      );
+      byId("sheet-left-close").addEventListener("click", () =>
+        closeSheet("sheet-left"),
+      );
+
+      byId("open-configured-sheet").addEventListener("click", () =>
+        openSheet("sheet-configured"),
+      );
+      byId("sheet-configured-close").addEventListener("click", () =>
+        closeSheet("sheet-configured"),
+      );
+
+      byId("open-right-sheet").addEventListener("click", () =>
+        openSheet("sheet-right"),
+      );
+      byId("sheet-right-close").addEventListener("click", () =>
+        closeSheet("sheet-right"),
+      );
+
+      byId("open-modal-sheet").addEventListener("click", () =>
+        openSheet("sheet-modal"),
+      );
+      byId("sheet-modal-close").addEventListener("click", () =>
+        closeSheet("sheet-modal"),
+      );
+
+      byId("open-state-sheet").addEventListener("click", () =>
+        openSheet("sheet-state"),
+      );
+      byId("close-state-sheet").addEventListener("click", () =>
+        closeSheet("sheet-state"),
+      );
+
+      byId("open-interactive-sheet").addEventListener("click", () =>
+        openSheet("sheet-interactive"),
+      );
+      byId("sheet-interactive-close").addEventListener("click", () =>
+        closeSheet("sheet-interactive"),
+      );
+
+      const eventLog = byId("side-sheet-event-log");
+      const interactiveSheet = byId("sheet-interactive");
+
+      interactiveSheet.addEventListener("ds-side-sheet:open", () => {
+        eventLog.textContent += "ds-side-sheet:open\n";
+      });
+
+      interactiveSheet.addEventListener("ds-side-sheet:close", () => {
+        eventLog.textContent += "ds-side-sheet:close\n";
+      });
+
+      interactiveSheet.addEventListener("ds-side-sheet:swipe", (event) => {
+        const progress = Number(event.detail.progress).toFixed(2);
+        eventLog.textContent += `ds-side-sheet:swipe (${progress})\n`;
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

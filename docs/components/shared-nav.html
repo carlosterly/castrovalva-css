@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shared Navigation - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="shared-nav">
+    <div class="page-container">
+      <ds-navigation-drawer
+        id="main-nav"
+        variant="standard"
+        open
+        persistent
+        storage-key="castrovalva-nav-drawer">
+        <div
+          slot="header"
+          style="
+            padding: var(--md-sys-spacing-4, 16px) var(--md-sys-spacing-3, 12px);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+          ">
+          <a
+            href="/"
+            style="
+              text-decoration: none;
+              color: inherit;
+              display: block;
+              cursor: pointer;
+              flex: 1;
+            ">
+            <h2
+              style="
+                margin: 0;
+                font-size: 1.25rem;
+                color: var(--md-sys-color-primary, #6750a4);
+              ">
+              Castrovalva Design System
+            </h2>
+          </a>
+          <button
+            type="button"
+            id="nav-collapse-toggle"
+            style="
+              background: none;
+              border: none;
+              cursor: pointer;
+              padding: 8px;
+              border-radius: 50%;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              color: var(--md-sys-color-on-surface-variant, #49454f);
+            "
+            aria-label="Toggle navigation">
+            <span class="material-symbols-outlined" style="font-size: 24px">
+              chevron_left
+            </span>
+          </button>
+        </div>
+
+        <div
+          style="
+            padding: var(--md-sys-spacing-3, 12px) var(--md-sys-spacing-6, 24px);
+            margin-top: var(--md-sys-spacing-2, 8px);
+          ">
+          <p
+            style="
+              margin: 0;
+              font-size: 0.6875rem;
+              font-weight: 500;
+              color: var(--md-sys-color-on-surface-variant, #49454f);
+              text-transform: uppercase;
+              letter-spacing: 0.0625rem;
+            ">
+            Components
+          </p>
+        </div>
+
+        <ds-nav-item
+          href="/docs/components/button.html"
+          icon="radio_button_checked"
+          data-page="button">
+          Button
+        </ds-nav-item>
+        <ds-nav-item
+          href="/docs/components/icon.html"
+          icon="star"
+          data-page="icon">
+          Icon
+        </ds-nav-item>
+        <ds-nav-item
+          href="/docs/components/text-field.html"
+          icon="edit"
+          data-page="text-field">
+          Text Field
+        </ds-nav-item>
+        <ds-nav-item
+          href="/docs/components/checkbox.html"
+          icon="check_box"
+          data-page="checkbox">
+          Checkbox
+        </ds-nav-item>
+        <ds-nav-item
+          href="/docs/components/navigation-drawer.html"
+          icon="menu"
+          data-page="navigation-drawer">
+          Navigation Drawer
+        </ds-nav-item>
+        <ds-nav-item
+          href="/docs/components/app-bar-top.html"
+          icon="view_headline"
+          data-page="app-bar-top">
+          Top App Bar
+        </ds-nav-item>
+        <ds-nav-item
+          href="/docs/components/navigation-rail.html"
+          icon="view_sidebar"
+          data-page="navigation-rail">
+          Navigation Rail
+        </ds-nav-item>
+
+        <div
+          style="
+            padding: var(--md-sys-spacing-4, 16px);
+            margin-top: auto;
+            border-top: 1px solid var(--md-sys-color-outline-variant, #c9c5ca);
+          ">
+          <p
+            style="
+              margin: 0;
+              font-size: 0.75rem;
+              color: var(--md-sys-color-on-surface-variant, #49454f);
+            ">
+            Version 0.1.0
+          </p>
+          <p
+            style="
+              margin: 0;
+              margin-top: 4px;
+              font-size: 0.6875rem;
+              color: var(--md-sys-color-on-surface-variant, #49454f);
+            ">
+            42 components
+          </p>
+        </div>
+      </ds-navigation-drawer>
+
+      <script>
+        // Highlight active page
+        const currentPage = document.body.dataset.page;
+        if (currentPage) {
+          const activeItem = document.querySelector(
+            `ds-nav-item[data-page="${currentPage}"]`,
+          );
+          if (activeItem) {
+            activeItem.setAttribute("active", "");
+          }
+        }
+
+        // Mobile drawer toggle
+        const mobileToggle = document.getElementById("mobile-nav-toggle");
+        const mainNav = document.getElementById("main-nav");
+        const collapseToggle = document.getElementById("nav-collapse-toggle");
+
+        if (mobileToggle && mainNav) {
+          mobileToggle.addEventListener("click", () => {
+            mainNav.variant = "modal";
+            mainNav.open = true;
+          });
+        }
+
+        // Desktop collapse toggle
+        if (collapseToggle && mainNav) {
+          collapseToggle.addEventListener("click", () => {
+            mainNav.open = !mainNav.open;
+            // Update icon direction
+            const icon = collapseToggle.querySelector(
+              ".material-symbols-outlined",
+            );
+            if (icon) {
+              icon.textContent = mainNav.open
+                ? "chevron_left"
+                : "chevron_right";
+            }
+          });
+
+          // Hide collapse button on mobile
+          function updateCollapseButton() {
+            if (window.innerWidth < 840) {
+              collapseToggle.style.display = "none";
+            } else {
+              collapseToggle.style.display = "flex";
+              // Update icon based on current state
+              const icon = collapseToggle.querySelector(
+                ".material-symbols-outlined",
+              );
+              if (icon) {
+                icon.textContent = mainNav.open
+                  ? "chevron_left"
+                  : "chevron_right";
+              }
+            }
+          }
+          window.addEventListener("resize", updateCollapseButton);
+          updateCollapseButton();
+        }
+
+        // Close mobile drawer on navigation
+        document.querySelectorAll("ds-nav-item").forEach((item) => {
+          item.addEventListener("ds-nav-item:click", () => {
+            if (mainNav.variant === "modal") {
+              mainNav.close();
+            }
+          });
+        });
+
+        // Responsive drawer variant
+        function updateDrawerVariant() {
+          if (window.innerWidth < 840) {
+            if (mainNav.variant === "standard") {
+              mainNav.variant = "modal";
+              mainNav.open = false;
+            }
+          } else {
+            if (mainNav.variant === "modal") {
+              mainNav.variant = "standard";
+              mainNav.open = true;
+            }
+          }
+        }
+
+        window.addEventListener("resize", updateDrawerVariant);
+        updateDrawerVariant();
+      </script>
+      <div class="content-area">
+        <h1>Shared Navigation</h1>
+        <p class="description">
+          Prototype shared navigation shell for component documentation pages.
+          This demonstrates a persistent navigation drawer with component
+          categorization.
+        </p>
+
+        <div class="section">
+          <h2>Features</h2>
+          <ul>
+            <li>Persistent drawer with state storage</li>
+            <li>Responsive variant switching (modal on mobile)</li>
+            <li>Active page highlighting</li>
+            <li>Grouped navigation items by category</li>
+            <li>Collapsible sidebar control</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Integration</h2>
+          <p>
+            This navigation component can be integrated into individual
+            component documentation pages to provide consistent navigation
+            across the design system.
+          </p>
+        </div>
+      </div>
+    </div>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>
+

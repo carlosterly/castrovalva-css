@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Menu - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="menu">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Menu</h1>
+        <p class="description">
+          Material Design 3 menu surfaces for action lists and context commands.
+          Not intended for multi-step workflows; use dialogs or sheets when
+          users must review substantial content before acting.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Open a simple anchored menu with text actions. Menus provide concise
+            command lists tied to the current trigger context.
+          </p>
+          <div class="demo-box">
+            <ds-button id="menu-trigger-basic">Open Menu</ds-button>
+            <ds-menu id="menu-basic" anchor="menu-trigger-basic">
+              <ds-menu-item>Profile</ds-menu-item>
+              <ds-menu-item>Settings</ds-menu-item>
+              <ds-menu-item divider></ds-menu-item>
+              <ds-menu-item>Sign out</ds-menu-item>
+            </ds-menu>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button id="menu-trigger-basic"&gt;Open Menu&lt;/ds-button&gt;
+&lt;ds-menu anchor="menu-trigger-basic"&gt;
+  &lt;ds-menu-item&gt;Profile&lt;/ds-menu-item&gt;
+  &lt;ds-menu-item&gt;Settings&lt;/ds-menu-item&gt;
+  &lt;ds-menu-item divider&gt;&lt;/ds-menu-item&gt;
+  &lt;ds-menu-item&gt;Sign out&lt;/ds-menu-item&gt;
+&lt;/ds-menu&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>
+            Use initial selected and disabled states to match current context.
+          </p>
+          <div class="demo-box">
+            <ds-button id="menu-trigger-initial">Sort Options</ds-button>
+            <ds-menu id="menu-initial" anchor="menu-trigger-initial">
+              <ds-menu-item selected>
+                <ds-icon slot="leading">check</ds-icon>
+                Name
+              </ds-menu-item>
+              <ds-menu-item>Date modified</ds-menu-item>
+              <ds-menu-item disabled>Size (Unavailable)</ds-menu-item>
+            </ds-menu>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-menu anchor="menu-trigger-initial"&gt;
+  &lt;ds-menu-item selected&gt;Name&lt;/ds-menu-item&gt;
+  &lt;ds-menu-item&gt;Date modified&lt;/ds-menu-item&gt;
+  &lt;ds-menu-item disabled&gt;Size (Unavailable)&lt;/ds-menu-item&gt;
+&lt;/ds-menu&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>
+            Use slot content patterns for icon-led and shortcut-style menus.
+          </p>
+
+          <h3>Leading Icons</h3>
+          <div class="demo-box">
+            <ds-button id="menu-trigger-icons">File Menu</ds-button>
+            <ds-menu id="menu-icons" anchor="menu-trigger-icons">
+              <ds-menu-item>
+                <ds-icon slot="leading">description</ds-icon>
+                New
+              </ds-menu-item>
+              <ds-menu-item>
+                <ds-icon slot="leading">folder_open</ds-icon>
+                Open
+              </ds-menu-item>
+              <ds-menu-item>
+                <ds-icon slot="leading">save</ds-icon>
+                Save
+              </ds-menu-item>
+            </ds-menu>
+          </div>
+
+          <h3>Trailing Content</h3>
+          <div class="demo-box">
+            <ds-button id="menu-trigger-trailing">Edit Menu</ds-button>
+            <ds-menu id="menu-trailing" anchor="menu-trigger-trailing">
+              <ds-menu-item>
+                <ds-icon slot="leading">content_copy</ds-icon>
+                Copy
+                <span slot="trailing">Ctrl+C</span>
+              </ds-menu-item>
+              <ds-menu-item>
+                <ds-icon slot="leading">content_paste</ds-icon>
+                Paste
+                <span slot="trailing">Ctrl+V</span>
+              </ds-menu-item>
+              <ds-menu-item keep-open>
+                <ds-icon slot="leading">push_pin</ds-icon>
+                Keep Open
+                <span slot="trailing">Pinned</span>
+              </ds-menu-item>
+            </ds-menu>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-menu-item&gt;
+  &lt;ds-icon slot="leading"&gt;content_copy&lt;/ds-icon&gt;
+  Copy
+  &lt;span slot="trailing"&gt;Ctrl+C&lt;/span&gt;
+&lt;/ds-menu-item&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>
+            Menus support open/closed, selected, disabled, and divider states.
+          </p>
+          <div class="demo-box">
+            <ds-button id="menu-trigger-states">Open States Demo</ds-button>
+            <ds-menu id="menu-states" anchor="menu-trigger-states">
+              <ds-menu-item selected>Selected Item</ds-menu-item>
+              <ds-menu-item>Default Item</ds-menu-item>
+              <ds-menu-item disabled>Disabled Item</ds-menu-item>
+              <ds-menu-item divider></ds-menu-item>
+              <ds-menu-item>After Divider</ds-menu-item>
+            </ds-menu>
+          </div>
+          <div class="code-block">
+            <pre>
+menu.open();
+menu.close();</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Select an item to view emitted event details.</p>
+          <div class="demo-box">
+            <ds-button id="menu-trigger-interactive">Actions</ds-button>
+            <ds-menu id="menu-interactive" anchor="menu-trigger-interactive">
+              <ds-menu-item id="menu-item-refresh">
+                <ds-icon slot="leading">refresh</ds-icon>
+                Refresh
+              </ds-menu-item>
+              <ds-menu-item id="menu-item-download">
+                <ds-icon slot="leading">download</ds-icon>
+                Download
+              </ds-menu-item>
+              <ds-menu-item id="menu-item-settings">
+                <ds-icon slot="leading">settings</ds-icon>
+                Settings
+              </ds-menu-item>
+            </ds-menu>
+          </div>
+          <div class="demo-box" style="margin-block-start: 12px">
+            <pre id="menu-event-log" style="margin: 0">
+Event log:
+</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>anchor</code></td>
+                <td>string</td>
+                <td>null</td>
+                <td>ID of the element used for anchored positioning.</td>
+              </tr>
+              <tr>
+                <td><code>open</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Reflects whether the menu is open.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-menu:open</code></td>
+                <td><code>{}</code></td>
+                <td>Fired when the menu opens.</td>
+              </tr>
+              <tr>
+                <td><code>ds-menu:close</code></td>
+                <td><code>{}</code></td>
+                <td>Fired when the menu closes.</td>
+              </tr>
+              <tr>
+                <td><code>ds-menu:select</code></td>
+                <td><code>{ item }</code></td>
+                <td>Fired when an enabled item is selected.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>open()</code></td>
+                <td>Open the menu.</td>
+              </tr>
+              <tr>
+                <td><code>close()</code></td>
+                <td>Close the menu.</td>
+              </tr>
+              <tr>
+                <td><code>toggle()</code></td>
+                <td>Toggle between open and closed states.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Menu Item Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables interaction for the item.</td>
+              </tr>
+              <tr>
+                <td><code>selected</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Marks an item as selected.</td>
+              </tr>
+              <tr>
+                <td><code>divider</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Renders a divider row.</td>
+              </tr>
+              <tr>
+                <td><code>keep-open</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Keeps the menu open after click.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-menu-item-min-height</code></td>
+                <td>Minimum menu item height (defaults to control-lg).</td>
+              </tr>
+              <tr>
+                <td><code>--ds-menu-item-leading-size</code></td>
+                <td>Leading icon slot size (defaults to icon-lg).</td>
+              </tr>
+              <tr>
+                <td><code>--ds-menu-container-padding-block</code></td>
+                <td>Menu panel top/bottom padding.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Arrow Up</code> / <code>Arrow Down</code></td>
+                <td>Menu open</td>
+                <td>Moves focus between enabled menu items</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on menu item</td>
+                <td>Selects the focused item</td>
+              </tr>
+              <tr>
+                <td><code>Escape</code></td>
+                <td>Menu open</td>
+                <td>Closes the menu and returns focus to trigger</td>
+              </tr>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Menu open</td>
+                <td>Closes the menu and continues focus navigation</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Menu surface uses <code>role="menu"</code>; items use
+              <code>role="menuitem"</code>.
+            </li>
+            <li>Disabled items expose <code>aria-disabled="true"</code>.</li>
+            <li>Backdrop click closes the menu for pointer users.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use menus for compact, contextual
+              command lists anchored to a trigger element.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid menus for long
+              explanations, multi-step tasks, or destructive flows requiring
+              strong confirmation.
+            </li>
+            <li>
+              <strong>Composition:</strong> Use concise labels, group related
+              actions with dividers, and add leading icons only when they
+              improve recognition.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Overusing
+              <code>keep-open</code> can confuse expected menu behavior. Reserve
+              it for explicit multi-select interactions.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const byId = (id) => document.getElementById(id);
+      const wireToggle = (triggerId, menuId) => {
+        const trigger = byId(triggerId);
+        const menu = byId(menuId);
+        trigger.addEventListener("click", () => menu.toggle());
+      };
+
+      wireToggle("menu-trigger-basic", "menu-basic");
+      wireToggle("menu-trigger-initial", "menu-initial");
+      wireToggle("menu-trigger-icons", "menu-icons");
+      wireToggle("menu-trigger-trailing", "menu-trailing");
+      wireToggle("menu-trigger-states", "menu-states");
+      wireToggle("menu-trigger-interactive", "menu-interactive");
+
+      const eventLog = byId("menu-event-log");
+      const interactiveMenu = byId("menu-interactive");
+
+      interactiveMenu.addEventListener("ds-menu:open", () => {
+        eventLog.textContent += "ds-menu:open\n";
+      });
+
+      interactiveMenu.addEventListener("ds-menu:close", () => {
+        eventLog.textContent += "ds-menu:close\n";
+      });
+
+      interactiveMenu.addEventListener("ds-menu:select", (event) => {
+        const selectedText = event.detail.item.textContent.trim();
+        eventLog.textContent += `ds-menu:select (${selectedText})\n`;
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,15 @@
+/* Main CSS entry point for separate CSS/JS loading */
+
+/* Import design tokens */
+@import "./tokens/tokens.css";
+
+/* Import base styles */
+@import "./styles/reset.css";
+@import "./styles/base.css";
+@import "./styles/utilities.css";
+
+/* Import component styles */
+@import "./styles/components/ds-radio.css";
+@import "./styles/components/ds-switch.css";
+@import "./styles/components/ds-textarea.css";
+@import "./styles/components/ds-chip.css";

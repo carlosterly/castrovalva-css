@@ -1,0 +1,452 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Button Group - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="button-group">
+    <div class="page-container">
+      <!-- Main Content -->
+      <div class="content-area">
+        <h1>Button Group</h1>
+        <p class="description">
+          Material Design 3 button group component for organizing related
+          actions with flexible layout options. Not intended as a replacement
+          for navigation tabs or segmented controls with persistent state.
+        </p>
+
+        <!-- Basic Usage -->
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Group multiple buttons together with consistent spacing and styling.
+            This keeps related actions visually connected and easier to scan.
+          </p>
+          <div class="demo-box">
+            <ds-button-group>
+              <ds-button>One</ds-button>
+              <ds-button>Two</ds-button>
+              <ds-button>Three</ds-button>
+            </ds-button-group>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button-group&gt;
+  &lt;ds-button&gt;One&lt;/ds-button&gt;
+  &lt;ds-button&gt;Two&lt;/ds-button&gt;
+  &lt;ds-button&gt;Three&lt;/ds-button&gt;
+&lt;/ds-button-group&gt;</pre
+            >
+          </div>
+        </div>
+
+        <!-- Variants Demo -->
+        <div class="section">
+          <h2>Variants</h2>
+          <p>
+            Button groups come in variants to support different spacing and
+            visual styles.
+          </p>
+
+          <h3>Connected (Default)</h3>
+          <p>
+            Buttons are connected with 2dp spacing and modified border radius on
+            end buttons
+          </p>
+          <div class="demo-box">
+            <ds-button-group>
+              <ds-button>One</ds-button>
+              <ds-button>Two</ds-button>
+              <ds-button>Three</ds-button>
+            </ds-button-group>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button-group&gt;
+  &lt;ds-button&gt;One&lt;/ds-button&gt;
+  &lt;ds-button&gt;Two&lt;/ds-button&gt;
+  &lt;ds-button&gt;Three&lt;/ds-button&gt;
+&lt;/ds-button-group></pre
+            >
+          </div>
+
+          <h3>Standard</h3>
+          <p>Buttons have 8dp spacing between them</p>
+          <div class="demo-box">
+            <ds-button-group variant="standard">
+              <ds-button>One</ds-button>
+              <ds-button>Two</ds-button>
+              <ds-button>Three</ds-button>
+            </ds-button-group>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button-group variant="standard">
+  &lt;ds-button&gt;One&lt;/ds-button&gt;
+  &lt;ds-button&gt;Two&lt;/ds-button&gt;
+  &lt;ds-button&gt;Three&lt;/ds-button&gt;
+&lt;/ds-button-group></pre
+            >
+          </div>
+
+          <h3>Segmented</h3>
+          <p>Segmented styling with shared outline and dividers</p>
+          <div class="demo-box">
+            <ds-button-group variant="segmented">
+              <ds-button>One</ds-button>
+              <ds-button>Two</ds-button>
+              <ds-button>Three</ds-button>
+            </ds-button-group>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button-group variant="segmented">
+  &lt;ds-button&gt;One&lt;/ds-button&gt;
+  &lt;ds-button&gt;Two&lt;/ds-button&gt;
+  &lt;ds-button&gt;Three&lt;/ds-button&gt;
+&lt;/ds-button-group></pre
+            >
+          </div>
+        </div>
+
+        <!-- Selection Demo -->
+        <div class="section">
+          <h2>Selection</h2>
+          <p>Button groups can manage single or multi-select state</p>
+
+          <h3>Single Select</h3>
+          <div class="demo-box">
+            <ds-button-group selection="single">
+              <ds-button value="day">Day</ds-button>
+              <ds-button value="week">Week</ds-button>
+              <ds-button value="month">Month</ds-button>
+            </ds-button-group>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button-group selection="single">
+  &lt;ds-button value="day">Day&lt;/ds-button&gt;
+  &lt;ds-button value="week">Week&lt;/ds-button&gt;
+  &lt;ds-button value="month">Month&lt;/ds-button&gt;
+&lt;/ds-button-group></pre
+            >
+          </div>
+
+          <h3>Multi-Select</h3>
+          <div class="demo-box">
+            <ds-button-group selection="multi">
+              <ds-button value="bold">Bold</ds-button>
+              <ds-button value="italic">Italic</ds-button>
+              <ds-button value="underline">Underline</ds-button>
+            </ds-button-group>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button-group selection="multi">
+  &lt;ds-button value="bold">Bold&lt;/ds-button&gt;
+  &lt;ds-button value="italic">Italic&lt;/ds-button&gt;
+  &lt;ds-button value="underline">Underline&lt;/ds-button&gt;
+&lt;/ds-button-group></pre
+            >
+          </div>
+        </div>
+
+        <!-- Orientation Demo -->
+        <div class="section">
+          <h2>Orientation</h2>
+          <p>Button groups can be arranged horizontally or vertically</p>
+
+          <h3>Horizontal (Default)</h3>
+          <div class="demo-box">
+            <ds-button-group>
+              <ds-button>Left</ds-button>
+              <ds-button>Middle</ds-button>
+              <ds-button>Right</ds-button>
+            </ds-button-group>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-button-group>...&lt;/ds-button-group></pre>
+          </div>
+
+          <h3>Vertical</h3>
+          <div class="demo-box">
+            <ds-button-group orientation="vertical">
+              <ds-button>Top</ds-button>
+              <ds-button>Middle</ds-button>
+              <ds-button>Bottom</ds-button>
+            </ds-button-group>
+          </div>
+          <p>
+            All buttons match the width of the longest label in vertical groups.
+          </p>
+          <div class="code-block">
+            <pre>
+&lt;ds-button-group orientation="vertical">
+  &lt;ds-button&gt;Top&lt;/ds-button&gt;
+  &lt;ds-button&gt;Middle&lt;/ds-button&gt;
+  &lt;ds-button&gt;Bottom&lt;/ds-button&gt;
+&lt;/ds-button-group></pre
+            >
+          </div>
+        </div>
+
+        <!-- With Different Button Variants -->
+        <div class="section">
+          <h2>With Different Button Variants</h2>
+          <p>Mix different button variants within a group</p>
+          <div class="demo-box">
+            <ds-button-group>
+              <ds-button variant="filled">Filled</ds-button>
+              <ds-button variant="outlined">Outlined</ds-button>
+              <ds-button variant="text">Text</ds-button>
+            </ds-button-group>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button-group&gt;
+  &lt;ds-button variant="filled">Filled&lt;/ds-button&gt;
+  &lt;ds-button variant="outlined">Outlined&lt;/ds-button&gt;
+  &lt;ds-button variant="text">Text&lt;/ds-button&gt;
+&lt;/ds-button-group></pre
+            >
+          </div>
+        </div>
+
+        <!-- States Demo -->
+        <div class="section">
+          <h2>States</h2>
+
+          <h3>Disabled</h3>
+          <p>Disable all buttons in the group at once</p>
+          <div class="demo-box">
+            <ds-button-group disabled>
+              <ds-button>One</ds-button>
+              <ds-button>Two</ds-button>
+              <ds-button>Three</ds-button>
+            </ds-button-group>
+          </div>
+          <p>
+            Setting <code>disabled</code> on the group propagates to all
+            buttons.
+          </p>
+          <div class="code-block">
+            <pre>
+&lt;ds-button-group disabled>
+  &lt;ds-button&gt;One&lt;/ds-button&gt;
+  &lt;ds-button&gt;Two&lt;/ds-button&gt;
+  &lt;ds-button&gt;Three&lt;/ds-button&gt;
+&lt;/ds-button-group></pre
+            >
+          </div>
+        </div>
+
+        <!-- API Documentation -->
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>'connected'</td>
+                <td>
+                  Button group variant: 'connected' (2dp gap, modified border
+                  radius), 'standard' (8dp gap), or 'segmented' (outlined)
+                </td>
+              </tr>
+              <tr>
+                <td><code>orientation</code></td>
+                <td>string</td>
+                <td>'horizontal'</td>
+                <td>Layout direction: 'horizontal' or 'vertical'</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables all buttons in the group</td>
+              </tr>
+              <tr>
+                <td><code>selection</code></td>
+                <td>string</td>
+                <td>'none'</td>
+                <td>Selection mode: 'none', 'single', 'multi', 'required'</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>(default)</td>
+                <td>Button elements to group</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>The main container element</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>change</code></td>
+                <td><code>{ value }</code></td>
+                <td>Fired when selection changes</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-button-group-gap</code></td>
+                <td>Custom gap between buttons (overrides variant default)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Button group focused</td>
+                <td>Moves focus between buttons in document order</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on button</td>
+                <td>Activates focused button</td>
+              </tr>
+              <tr>
+                <td><code>Arrow Keys</code></td>
+                <td>Connected variant</td>
+                <td>Navigates between sibling buttons</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              <code>role="group"</code> - Identifies button group container
+            </li>
+            <li>
+              <code>aria-label</code> - Provides accessible name for the group
+            </li>
+            <li>Child buttons maintain individual ARIA attributes</li>
+          </ul>
+          <h3>Screen Reader Support</h3>
+          <ul>
+            <li>✅ Announces button group as a grouped collection</li>
+            <li>✅ Announces each button individually with its label</li>
+            <li>✅ Announces disabled state when applied to group</li>
+            <li>✅ Each button's state changes are announced</li>
+          </ul>
+          <h3>Visual Indicators</h3>
+          <ul>
+            <li>✅ Individual button focus rings remain visible</li>
+            <li>
+              ✅ Connected variant shows visual relationship between buttons
+            </li>
+            <li>✅ Disabled state is visually distinct</li>
+            <li>✅ Sufficient color contrast for all text</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use button groups for small sets of
+              closely related actions that users compare or toggle quickly.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid button groups for primary
+              app navigation or when actions are unrelated and should be spaced
+              apart.
+            </li>
+            <li>
+              <strong>Composition:</strong> Choose connected for tight
+              relationship, standard for looser spacing, and segmented for
+              shared-outline style.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Mixing too many variants in one
+              group reduces clarity. Keep labels concise and action count
+              modest.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Apply saved theme immediately to prevent flash -->
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

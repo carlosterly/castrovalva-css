@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Button - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="button">
+    <div class="page-container">
+      <!-- Main Content -->
+      <div class="content-area">
+        <h1>Button</h1>
+        <p class="description">
+          Material Design 3 button component for triggering single, immediate
+          actions. Not intended for option selection, navigation containers, or
+          long-form input flows.
+        </p>
+
+        <!-- Basic Usage -->
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use the default filled button for the primary action in a view. It
+            is the recommended baseline because it has the strongest emphasis
+            and predictable keyboard behavior.
+          </p>
+          <div class="demo-box">
+            <ds-button>Click me</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-button&gt;Click me&lt;/ds-button&gt;</pre>
+          </div>
+        </div>
+
+        <!-- Variants Demo -->
+        <div class="section">
+          <h2>Variants</h2>
+          <p>
+            Buttons come in six variants to support different levels of emphasis
+          </p>
+
+          <h3>Filled</h3>
+          <p>High emphasis, primary actions.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> There is one clear primary action.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> Several actions compete for top
+              priority.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-button variant="filled">Filled</ds-button>
+            <ds-button variant="filled" disabled>Disabled</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-button variant="filled">Filled&lt;/ds-button></pre>
+          </div>
+
+          <h3>Filled Tonal</h3>
+          <p>Medium emphasis, secondary actions.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> A supporting action should remain
+              prominent.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> You need the visual priority of a
+              primary action.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-button variant="filled-tonal">Filled Tonal</ds-button>
+            <ds-button variant="filled-tonal" disabled>Disabled</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button variant="filled-tonal">Filled Tonal&lt;/ds-button></pre
+            >
+          </div>
+
+          <h3>Outlined</h3>
+          <p>Medium emphasis with visible stroke.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> Actions should be visible but
+              subordinate to a filled action.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> The action is destructive or critical
+              and needs stronger emphasis.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-button variant="outlined">Outlined</ds-button>
+            <ds-button variant="outlined" disabled>Disabled</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-button variant="outlined">Outlined&lt;/ds-button></pre>
+          </div>
+
+          <h3>Elevated</h3>
+          <p>Elevated appearance with shadow.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> You need a button to stand out on busy
+              or tonal surfaces.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> Flat hierarchy is required for visual
+              calm.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-button variant="elevated">Elevated</ds-button>
+            <ds-button variant="elevated" disabled>Disabled</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-button variant="elevated">Elevated&lt;/ds-button></pre>
+          </div>
+
+          <h3>Text</h3>
+          <p>Low emphasis, tertiary actions.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> Action should be available but subtle.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> Users may miss the action in dense
+              layouts.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-button variant="text">Text</ds-button>
+            <ds-button variant="text" disabled>Disabled</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-button variant="text">Text&lt;/ds-button></pre>
+          </div>
+
+          <h3>Danger</h3>
+          <p>Destructive or warning actions.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> The action is irreversible, such as
+              delete or reset.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> The action is neutral and can be
+              represented by a standard variant.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-button variant="danger">Delete</ds-button>
+            <ds-button variant="danger" disabled>Disabled</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-button variant="danger">Delete&lt;/ds-button></pre>
+          </div>
+        </div>
+
+        <!-- Sizes Demo -->
+        <div class="section">
+          <h2>Sizes</h2>
+          <p>Three size options for different contexts</p>
+          <div class="demo-box">
+            <ds-button size="small">Small</ds-button>
+            <ds-button size="medium">Medium</ds-button>
+            <ds-button size="large">Large</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button size="small">Small&lt;/ds-button>
+&lt;ds-button size="medium">Medium&lt;/ds-button>
+&lt;ds-button size="large">Large&lt;/ds-button></pre
+            >
+          </div>
+        </div>
+
+        <!-- Ripple Effect Demo -->
+        <div class="section">
+          <h2>Ripple Effect</h2>
+          <p>
+            Add Material Design 3 ripple animation with the ripple attribute
+          </p>
+          <div class="demo-box">
+            <ds-button variant="filled" ripple>Click Me</ds-button>
+            <ds-button variant="filled-tonal" ripple>Click Me</ds-button>
+            <ds-button variant="outlined" ripple>Click Me</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button variant="filled" ripple>Click Me&lt;/ds-button></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>
+            Button behavior changes by state. Disabled and loading states both
+            block activation, while loading additionally communicates progress.
+          </p>
+          <div class="demo-box">
+            <ds-button>Default</ds-button>
+            <ds-button disabled>Disabled</ds-button>
+            <ds-button loading>Loading</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button&gt;Default&lt;/ds-button&gt;
+&lt;ds-button disabled&gt;Disabled&lt;/ds-button&gt;
+&lt;ds-button loading&gt;Loading&lt;/ds-button&gt;</pre
+            >
+          </div>
+        </div>
+
+        <!-- API Documentation -->
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>'filled'</td>
+                <td>
+                  Button style: 'filled', 'filled-tonal', 'outlined',
+                  'elevated', 'text', 'danger'
+                </td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td>string</td>
+                <td>'medium'</td>
+                <td>Button size: 'small', 'medium', 'large'</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables the button and prevents interaction</td>
+              </tr>
+              <tr>
+                <td><code>loading</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Shows loading state with spinner</td>
+              </tr>
+              <tr>
+                <td><code>ripple</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Enables MD3 ripple animation on click</td>
+              </tr>
+              <tr>
+                <td><code>type</code></td>
+                <td>string</td>
+                <td>'button'</td>
+                <td>Button type: 'button', 'submit', 'reset'</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-click</code></td>
+                <td><code>{ originalEvent: MouseEvent }</code></td>
+                <td>
+                  Fired on activation when not disabled or loading. Bubbles and
+                  is composed.
+                </td>
+              </tr>
+              <tr>
+                <td><code>ds-button-content-change</code></td>
+                <td><code>{}</code></td>
+                <td>
+                  Fired when light DOM label or slotted content changes. Bubbles
+                  and is composed.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>(default)</td>
+                <td>Main button text content</td>
+              </tr>
+              <tr>
+                <td><code>icon-left</code></td>
+                <td>Icon element before text</td>
+              </tr>
+              <tr>
+                <td><code>icon-right</code></td>
+                <td>Icon element after text</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--md-sys-color-primary</code></td>
+                <td>Primary color for filled variant</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-secondary-container</code></td>
+                <td>Background color for filled-tonal variant</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-shape-corner-full</code></td>
+                <td>Border radius (default: 100px)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>button</code></td>
+                <td>The internal button element</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>The button text container</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Map</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Button not focused</td>
+                <td>Moves focus to the internal button.</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focused and enabled</td>
+                <td>Activates the button and emits <code>ds-click</code>.</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focused and disabled/loading</td>
+                <td>No activation occurs.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Uses a native internal <code>&lt;button&gt;</code> element for
+              platform semantics.
+            </li>
+            <li>
+              Disabled state maps to the internal button disabled behavior.
+            </li>
+            <li>Provide accessible labeling when icon-only content is used.</li>
+          </ul>
+
+          <h3>Screen Reader Notes</h3>
+          <ul>
+            <li>✅ Announces button label and variant</li>
+            <li>✅ Announces disabled state</li>
+            <li>✅ Announces loading state when active</li>
+            <li>✅ Semantic <code>&lt;button></code> element</li>
+          </ul>
+          <h3>Visual Indicators</h3>
+          <ul>
+            <li>✅ Visible focus ring with 2px outline</li>
+            <li>✅ Meets WCAG 2.2 focus visible requirements</li>
+            <li>✅ High contrast mode support</li>
+            <li>✅ Sufficient color contrast ratio (4.5:1 minimum)</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Single, immediate actions such as
+              submit, save, continue, or delete.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Option selection (use chips,
+              radios, or toggles) and persistent navigation (use tabs or nav
+              components).
+            </li>
+            <li>
+              <strong>Composition:</strong> Pair primary and secondary button
+              variants to establish action hierarchy.
+            </li>
+            <li>
+              <strong>Common mistake:</strong> Marking multiple actions as
+              filled; keep only one primary per context.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <!-- Apply saved theme immediately to prevent flash -->
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

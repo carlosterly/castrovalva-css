@@ -1,0 +1,547 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chip - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .chip-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ds-space-3);
+        align-items: center;
+      }
+
+      .chip-stack {
+        display: flex;
+        flex-direction: column;
+        gap: var(--ds-space-3);
+      }
+
+      .chip-card {
+        background: var(--md-sys-color-surface-container);
+        padding: var(--ds-space-4);
+        border-radius: var(--ds-border-radius-2);
+      }
+
+      .chip-message-meta {
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: 0.875rem;
+        margin-block-end: var(--ds-space-1);
+      }
+
+      .chip-message {
+        background: var(--md-sys-color-surface-variant);
+        color: var(--md-sys-color-on-surface-variant);
+        padding: var(--ds-space-3) var(--ds-space-4);
+        border-radius: 8px 8px 8px 4px;
+        display: inline-block;
+        max-inline-size: 80%;
+      }
+
+      .chip-section-label {
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: 0.875rem;
+      }
+    </style>
+  </head>
+  <body data-page="chip">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Chip</h1>
+        <p class="description">
+          Material Design 3 chip for compact actions, filters, and inputs. Not
+          intended for long-form text entry or multi-step workflows.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use chips to represent a small action or attribute. Chips provide
+            quick inline interaction without requiring larger controls.
+          </p>
+          <div class="demo-box">
+            <ds-chip label="Add item" icon="add"></ds-chip>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-chip label="Add item" icon="add"&gt;&lt;/ds-chip&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Choose the chip variant that matches the task.</p>
+
+          <h3>Assist</h3>
+          <p>Use for quick actions or shortcuts.</p>
+          <div class="demo-box">
+            <div class="chip-group">
+              <ds-chip label="Assist chip"></ds-chip>
+              <ds-chip label="With icon" icon="add"></ds-chip>
+              <ds-chip label="Elevated" elevated></ds-chip>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-chip label="Assist chip"&gt;&lt;/ds-chip&gt;
+&lt;ds-chip label="With icon" icon="add"&gt;&lt;/ds-chip&gt;
+&lt;ds-chip label="Elevated" elevated&gt;&lt;/ds-chip&gt;</pre
+            >
+          </div>
+
+          <h3>Filter</h3>
+          <p>Use for multi-select filtering.</p>
+          <div class="demo-box">
+            <div class="chip-group">
+              <ds-chip variant="filter" label="Unselected"></ds-chip>
+              <ds-chip variant="filter" label="Selected" selected></ds-chip>
+              <ds-chip
+                variant="filter"
+                label="With icon"
+                icon="filter_list"
+                selected></ds-chip>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-chip variant="filter" label="Unselected"&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="filter" label="Selected" selected&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="filter" label="With icon" icon="filter_list" selected&gt;&lt;/ds-chip&gt;</pre
+            >
+          </div>
+
+          <h3>Input</h3>
+          <p>Use for removable entries like tags or recipients.</p>
+          <div class="demo-box">
+            <div class="chip-group" id="variant-input-chips">
+              <ds-chip variant="input" label="Tag 1"></ds-chip>
+              <ds-chip variant="input" label="Tag 2"></ds-chip>
+              <ds-chip variant="input" label="With icon" icon="label"></ds-chip>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-chip variant="input" label="Tag 1"&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="input" label="Tag 2"&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="input" label="With icon" icon="label"&gt;&lt;/ds-chip&gt;</pre
+            >
+          </div>
+
+          <h3>Suggestion</h3>
+          <p>Use for contextual or AI-suggested responses.</p>
+          <div class="demo-box">
+            <div class="chip-stack">
+              <div class="chip-card">
+                <div class="chip-message-meta">Sarah • 2 min ago</div>
+                <div class="chip-message">
+                  Hey! Are you free for coffee tomorrow at 3pm?
+                </div>
+              </div>
+              <div class="chip-section-label">Quick replies</div>
+              <div class="chip-group" id="suggestion-chips">
+                <ds-chip
+                  variant="suggestion"
+                  label="Yes, sounds good!"></ds-chip>
+                <ds-chip
+                  variant="suggestion"
+                  label="Can we do 4pm instead?"></ds-chip>
+                <ds-chip
+                  variant="suggestion"
+                  label="Let me check my calendar"></ds-chip>
+                <ds-chip variant="suggestion" label="Sorry, I'm busy"></ds-chip>
+              </div>
+              <div id="suggestion-output" class="status-box"></div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-chip variant="suggestion" label="Yes, sounds good!"&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="suggestion" label="Can we do 4pm instead?"&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="suggestion" label="Let me check my calendar"&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="suggestion" label="Sorry, I'm busy"&gt;&lt;/ds-chip&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Use disabled to prevent interaction.</p>
+
+          <h3>Disabled</h3>
+          <div class="demo-box">
+            <div class="chip-group">
+              <ds-chip label="Disabled assist" disabled></ds-chip>
+              <ds-chip
+                variant="filter"
+                label="Disabled filter"
+                disabled></ds-chip>
+              <ds-chip
+                variant="filter"
+                label="Disabled selected"
+                selected
+                disabled></ds-chip>
+              <ds-chip
+                variant="input"
+                label="Disabled input"
+                disabled></ds-chip>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-chip label="Disabled assist" disabled&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="filter" label="Disabled filter" disabled&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="filter" label="Disabled selected" selected disabled&gt;&lt;/ds-chip&gt;
+&lt;ds-chip variant="input" label="Disabled input" disabled&gt;&lt;/ds-chip&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>"assist"</td>
+                <td>
+                  Type of chip: "assist", "filter", "input", or "suggestion"
+                </td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Text label displayed on the chip</td>
+              </tr>
+              <tr>
+                <td><code>icon</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Material Symbol icon name</td>
+              </tr>
+              <tr>
+                <td><code>avatar</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Avatar image URL</td>
+              </tr>
+              <tr>
+                <td><code>selected</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Whether the chip is selected (filter chips)</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Whether the chip is disabled</td>
+              </tr>
+              <tr>
+                <td><code>elevated</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Whether the chip has elevation (shadow)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>Get/set the chip variant</td>
+              </tr>
+              <tr>
+                <td><code>selected</code></td>
+                <td>boolean</td>
+                <td>Get/set the selected state (filter chips)</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>Get/set the disabled state</td>
+              </tr>
+              <tr>
+                <td><code>elevated</code></td>
+                <td>boolean</td>
+                <td>Get/set the elevated state</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-chip:click</code></td>
+                <td><code>{ variant, selected, label }</code></td>
+                <td>Fired when the chip is clicked</td>
+              </tr>
+              <tr>
+                <td><code>ds-chip:remove</code></td>
+                <td><code>{ label }</code></td>
+                <td>Fired when the remove button is clicked (input chips)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>None</code></td>
+                <td>No exposed parts</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-chip-height</code></td>
+                <td>Chip height (defaults to global control size)</td>
+              </tr>
+              <tr>
+                <td><code>--ds-chip-padding-x</code></td>
+                <td>Horizontal padding inside the chip</td>
+              </tr>
+              <tr>
+                <td><code>--ds-chip-icon-size</code></td>
+                <td>Leading icon and checkmark size</td>
+              </tr>
+              <tr>
+                <td><code>--ds-chip-avatar-size</code></td>
+                <td>Avatar size</td>
+              </tr>
+              <tr>
+                <td><code>--ds-chip-remove-size</code></td>
+                <td>Remove button icon size</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Chip set</td>
+                <td>Moves focus between chips and remove buttons</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on chip</td>
+                <td>Activates chip or toggles filter state</td>
+              </tr>
+              <tr>
+                <td><code>Delete</code> / <code>Backspace</code></td>
+                <td>Focus on input chip</td>
+                <td>Removes the chip when removable behavior is enabled</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Filter chips use <code>role="checkbox"</code> with
+              <code>aria-checked</code>.
+            </li>
+            <li>
+              Other variants use <code>role="button"</code> and expose
+              <code>aria-disabled</code> when disabled.
+            </li>
+            <li>Remove affordances include accessible labels.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Examples</h2>
+
+          <h3>Filter Chips</h3>
+          <div class="demo-box">
+            <p class="chip-section-label">Select categories:</p>
+            <div class="chip-group" id="filter-chips">
+              <ds-chip variant="filter" label="Technology"></ds-chip>
+              <ds-chip variant="filter" label="Design"></ds-chip>
+              <ds-chip variant="filter" label="Business"></ds-chip>
+              <ds-chip variant="filter" label="Health"></ds-chip>
+              <ds-chip variant="filter" label="Science"></ds-chip>
+            </div>
+            <div id="filter-output" class="status-box"></div>
+          </div>
+
+          <h3>Input Chips</h3>
+          <div class="demo-box">
+            <p class="chip-section-label">Manage tags:</p>
+            <div class="chip-group" id="input-chips">
+              <ds-chip variant="input" label="JavaScript"></ds-chip>
+              <ds-chip variant="input" label="TypeScript"></ds-chip>
+              <ds-chip variant="input" label="React"></ds-chip>
+              <ds-chip variant="input" label="Vue"></ds-chip>
+            </div>
+            <div id="input-output" class="status-box"></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use assist chips for quick actions,
+              filter chips for multi-select filtering, input chips for removable
+              entities, and suggestion chips for contextual replies.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid chips for long labels,
+              deeply nested actions, or controls that require extensive helper
+              text.
+            </li>
+            <li>
+              <strong>Composition:</strong> Keep labels concise, group related
+              chips, and use icons only when they improve recognition.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Mixing too many variants in one
+              cluster reduces clarity and increases cognitive load.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const filterChipsContainer = document.getElementById("filter-chips");
+      const filterOutput = document.getElementById("filter-output");
+
+      const inputChipsContainer = document.getElementById("input-chips");
+      const inputOutput = document.getElementById("input-output");
+      const variantInputChips = document.getElementById("variant-input-chips");
+      const suggestionChipsContainer =
+        document.getElementById("suggestion-chips");
+      const suggestionOutput = document.getElementById("suggestion-output");
+
+      const updateFilterOutput = () => {
+        const selectedChips = Array.from(
+          filterChipsContainer.querySelectorAll("ds-chip[selected]"),
+        );
+        const selectedLabels = selectedChips.map((chip) =>
+          chip.getAttribute("label"),
+        );
+
+        if (selectedLabels.length === 0) {
+          filterOutput.innerHTML =
+            "<em>No categories selected. Click chips to filter.</em>";
+          return;
+        }
+
+        filterOutput.innerHTML = `<strong>Selected categories:</strong> ${selectedLabels.join(
+          ", ",
+        )}`;
+      };
+
+      const updateInputOutput = () => {
+        const chips = Array.from(
+          inputChipsContainer.querySelectorAll("ds-chip"),
+        );
+        const labels = chips.map((chip) => chip.getAttribute("label"));
+
+        inputOutput.innerHTML = `<strong>Current tags:</strong> ${labels.join(
+          ", ",
+        )}<br><em>Click remove to delete tags</em>`;
+      };
+
+      const updateSuggestionOutput = (label) => {
+        if (!suggestionOutput) return;
+        suggestionOutput.innerHTML = `<strong>Selected reply:</strong> ${label || ""}`;
+      };
+
+      filterChipsContainer.addEventListener(
+        "ds-chip:click",
+        updateFilterOutput,
+      );
+      inputChipsContainer.addEventListener("ds-chip:remove", (event) => {
+        event.target.remove();
+        updateInputOutput();
+      });
+
+      if (variantInputChips) {
+        variantInputChips.addEventListener("ds-chip:remove", (event) => {
+          event.target.remove();
+        });
+      }
+
+      if (suggestionChipsContainer) {
+        suggestionChipsContainer.addEventListener("ds-chip:click", (event) => {
+          updateSuggestionOutput(event.detail?.label);
+        });
+      }
+
+      updateFilterOutput();
+      updateInputOutput();
+      updateSuggestionOutput("Yes, sounds good!");
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Badge - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="badge">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Badge</h1>
+        <p class="description">
+          Material Design 3 badge for compact status, count, and notification
+          indicators. Not intended to carry critical standalone information
+          without adjacent context.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use a badge inline to show a small numeric value. Badges summarize
+            count or state while relying on nearby labels for meaning.
+          </p>
+          <div
+            class="demo-box"
+            style="display: flex; gap: 16px; align-items: center">
+            <span>Inbox</span>
+            <ds-badge value="3"></ds-badge>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-badge value="3"&gt;&lt;/ds-badge&gt;</pre>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Initialize with custom max and color attributes.</p>
+          <div
+            class="demo-box"
+            style="display: flex; gap: 16px; align-items: center">
+            <ds-badge value="150" max="99" color="error"></ds-badge>
+            <ds-badge value="42" color="secondary"></ds-badge>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-badge value="150" max="99" color="error"&gt;&lt;/ds-badge&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Badge supports count, dot, and overlap positioning patterns.</p>
+
+          <h3>Dot Badge</h3>
+          <div
+            class="demo-box"
+            style="display: flex; gap: 16px; align-items: center">
+            <span>Messages</span>
+            <ds-badge dot color="secondary"></ds-badge>
+          </div>
+
+          <h3>Overlap Position</h3>
+          <div class="demo-box">
+            <button type="button" style="position: relative; padding: 8px 16px">
+              Notifications
+              <ds-badge value="7" position="overlap"></ds-badge>
+            </button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;button style="position: relative"&gt;
+  Notifications
+  &lt;ds-badge value="7" position="overlap"&gt;&lt;/ds-badge&gt;
+&lt;/button&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Examples of empty, textual, and overflow badge states.</p>
+          <div
+            class="demo-box"
+            style="display: flex; gap: 16px; align-items: center">
+            <ds-badge></ds-badge>
+            <ds-badge value="new"></ds-badge>
+            <ds-badge value="999" max="99"></ds-badge>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-badge value="999" max="99"&gt;&lt;/ds-badge&gt;</pre>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>
+            Change badge values and mode dynamically. The badge is attached to a
+            positioned host so overlap mode is easy to see.
+          </p>
+          <div
+            class="demo-box"
+            style="
+              display: flex;
+              gap: 12px;
+              align-items: center;
+              flex-wrap: wrap;
+            ">
+            <button
+              type="button"
+              id="demo-badge-host"
+              style="position: relative; padding: 8px 16px">
+              Demo Host
+              <ds-badge id="demo-badge" value="1"></ds-badge>
+            </button>
+            <ds-button id="badge-inc">Increment</ds-button>
+            <ds-button id="badge-dot">Toggle Dot</ds-button>
+            <ds-button id="badge-overlap">Toggle Position</ds-button>
+          </div>
+          <div class="demo-box" style="margin-block-start: 12px">
+            <pre id="badge-log" style="margin: 0">
+State log:
+</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>value</code></td>
+                <td>string | number</td>
+                <td>none</td>
+                <td>Badge content for count or text mode.</td>
+              </tr>
+              <tr>
+                <td><code>dot</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Renders a dot indicator with no text.</td>
+              </tr>
+              <tr>
+                <td><code>max</code></td>
+                <td>number</td>
+                <td>99</td>
+                <td>Maximum numeric value before overflow format.</td>
+              </tr>
+              <tr>
+                <td><code>color</code></td>
+                <td>string</td>
+                <td>primary</td>
+                <td>Named token color or any CSS color string.</td>
+              </tr>
+              <tr>
+                <td><code>position</code></td>
+                <td>inline | overlap</td>
+                <td>inline</td>
+                <td>Inline flow or overlap mode for overlays.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>value</code></td>
+                <td>string | null</td>
+                <td>Gets/sets badge value.</td>
+              </tr>
+              <tr>
+                <td><code>dot</code></td>
+                <td>boolean</td>
+                <td>Gets/sets dot mode.</td>
+              </tr>
+              <tr>
+                <td><code>max</code></td>
+                <td>number</td>
+                <td>Gets/sets overflow threshold.</td>
+              </tr>
+              <tr>
+                <td><code>color</code></td>
+                <td>string</td>
+                <td>Gets/sets badge color mode.</td>
+              </tr>
+              <tr>
+                <td><code>position</code></td>
+                <td>string</td>
+                <td>Gets/sets inline or overlap mode.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>(none)</td>
+                <td>—</td>
+                <td>Badge has no custom emitted events.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>(none)</td>
+                <td>No exposed CSS parts in current implementation.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-badge-size</code></td>
+                <td>Badge size in count mode (token-mapped).</td>
+              </tr>
+              <tr>
+                <td><code>--ds-badge-dot-size</code></td>
+                <td>Badge size in dot mode (token-mapped).</td>
+              </tr>
+              <tr>
+                <td><code>--ds-badge-padding-inline</code></td>
+                <td>Horizontal inner padding for count badge.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Badge attached to interactive host</td>
+                <td>Focus moves to host control, not the badge itself</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on host control</td>
+                <td>Activates host action while badge remains informational</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>Badge content uses <code>role="status"</code>.</li>
+            <li>
+              Badge is non-focusable and inherits surrounding focus semantics.
+            </li>
+            <li>
+              Pair badges with contextual labels for clear screen reader
+              meaning.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use badges to signal lightweight
+              count/status changes near related controls or labels.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid badges as the only place
+              critical meaning appears.
+            </li>
+            <li>
+              <strong>Composition:</strong> Keep values short, use
+              <code>dot</code> for binary status, and use
+              <code>position="overlap"</code> on icon/button hosts.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Large unreadable counts reduce
+              scanability; set <code>max</code> to clamp overflow values.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const badge = document.getElementById("demo-badge");
+      const log = document.getElementById("badge-log");
+
+      const writeLog = () => {
+        log.textContent += `value=${badge.value ?? "null"}, dot=${badge.dot}, position=${badge.position}\n`;
+      };
+
+      document.getElementById("badge-inc").addEventListener("click", () => {
+        const current = Number(badge.value || 0);
+        badge.value = current + 1;
+        writeLog();
+      });
+
+      document.getElementById("badge-dot").addEventListener("click", () => {
+        badge.dot = !badge.dot;
+        writeLog();
+      });
+
+      document.getElementById("badge-overlap").addEventListener("click", () => {
+        badge.position = badge.position === "overlap" ? "inline" : "overlap";
+        writeLog();
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

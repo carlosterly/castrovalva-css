@@ -1,0 +1,513 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navigation Rail - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="navigation-rail">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Navigation Rail</h1>
+        <p class="description">
+          Navigation rails provide persistent vertical navigation for tablet and
+          desktop layouts, supporting 3–7 primary destinations with optional
+          header content and a floating action button. Not intended for mobile
+          phone layouts — use <code>ds-navigation-bar</code> at narrow viewports
+          instead.
+        </p>
+
+        <!-- Basic Usage -->
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            A rail with three destinations. One destination is active. The rail
+            sits along the side of the viewport, keeping navigation visible
+            without consuming the full width of a drawer.
+          </p>
+          <div class="demo-box">
+            <ds-navigation-rail>
+              <ds-navigation-rail-item icon="home" value="home" active
+                >Home</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="search" value="search"
+                >Search</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="favorite" value="favorites"
+                >Favorites</ds-navigation-rail-item
+              >
+            </ds-navigation-rail>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-navigation-rail>
+  &lt;ds-navigation-rail-item icon="home" value="home" active>Home&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="search" value="search">Search&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="favorite" value="favorites">Favorites&lt;/ds-navigation-rail-item>
+&lt;/ds-navigation-rail></pre
+            >
+          </div>
+        </div>
+
+        <!-- With Badges -->
+        <div class="section">
+          <h2>With Badges</h2>
+          <p>Destinations can show badge counts for notifications.</p>
+          <div class="demo-box">
+            <ds-navigation-rail>
+              <ds-navigation-rail-item icon="home" value="home" active
+                >Home</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item
+                icon="notifications"
+                value="notifications"
+                badge="5"
+                >Alerts</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="chat" value="messages" badge="12"
+                >Messages</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="person" value="profile"
+                >Profile</ds-navigation-rail-item
+              >
+            </ds-navigation-rail>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-navigation-rail>
+  &lt;ds-navigation-rail-item icon="home" value="home" active>Home&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="notifications" value="notifications" badge="5">Alerts&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="chat" value="messages" badge="12">Messages&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="person" value="profile">Profile&lt;/ds-navigation-rail-item>
+&lt;/ds-navigation-rail></pre
+            >
+          </div>
+        </div>
+
+        <!-- Header and FAB -->
+        <div class="section">
+          <h2>Header and FAB</h2>
+          <p>
+            Use the <code>header</code> and <code>fab</code> slots for branded
+            content and a primary action.
+          </p>
+          <div class="demo-box">
+            <ds-navigation-rail>
+              <div slot="header" aria-hidden="true" style="font-weight: 700">
+                NR
+              </div>
+              <ds-navigation-rail-item icon="home" value="home" active
+                >Home</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="event" value="calendar"
+                >Calendar</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="work" value="work"
+                >Work</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="person" value="profile"
+                >Profile</ds-navigation-rail-item
+              >
+              <ds-fab slot="fab" icon="add"></ds-fab>
+            </ds-navigation-rail>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-navigation-rail>
+  &lt;div slot="header">NR&lt;/div>
+  &lt;ds-navigation-rail-item icon="home" value="home" active>Home&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="event" value="calendar">Calendar&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="work" value="work">Work&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="person" value="profile">Profile&lt;/ds-navigation-rail-item>
+  &lt;ds-fab slot="fab" icon="add">&lt;/ds-fab>
+&lt;/ds-navigation-rail></pre
+            >
+          </div>
+        </div>
+
+        <!-- States -->
+        <div class="section">
+          <h2>States</h2>
+          <p>Items can be active or disabled.</p>
+          <div class="demo-box">
+            <ds-navigation-rail>
+              <ds-navigation-rail-item icon="home" value="home" active
+                >Home</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="favorite" value="favorites"
+                >Favorites</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="person" value="profile" disabled
+                >Profile</ds-navigation-rail-item
+              >
+            </ds-navigation-rail>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-navigation-rail>
+  &lt;ds-navigation-rail-item icon="home" value="home" active>Home&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="favorite" value="favorites">Favorites&lt;/ds-navigation-rail-item>
+  &lt;ds-navigation-rail-item icon="person" value="profile" disabled>Profile&lt;/ds-navigation-rail-item>
+&lt;/ds-navigation-rail></pre
+            >
+          </div>
+        </div>
+
+        <!-- Interactive Demo -->
+        <div class="section">
+          <h2>Interactive Demo</h2>
+          <p>Click destinations to see the selection event.</p>
+          <div class="demo-box">
+            <ds-navigation-rail id="interactive-rail">
+              <div slot="header" aria-hidden="true">☰</div>
+              <ds-navigation-rail-item icon="home" value="home" active
+                >Home</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="search" value="search"
+                >Search</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item
+                icon="favorite"
+                value="favorites"
+                badge="2"
+                >Favorites</ds-navigation-rail-item
+              >
+              <ds-navigation-rail-item icon="person" value="profile"
+                >Profile</ds-navigation-rail-item
+              >
+              <ds-fab slot="fab" icon="add"></ds-fab>
+            </ds-navigation-rail>
+
+            <div id="rail-output" class="demo-log"></div>
+          </div>
+        </div>
+
+        <!-- Usage Guidelines -->
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Tablet and desktop layouts with 3–7
+              primary destinations of similar importance, where a full
+              navigation drawer would be too heavy but a bottom bar too small.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid on mobile phone viewports
+              — use <code>ds-navigation-bar</code> instead. Avoid when
+              destinations are fewer than three or more than seven.
+            </li>
+            <li>
+              <strong>Composition:</strong> Always keep exactly one destination
+              active. Use the header slot for branding or a menu toggle. Use the
+              FAB slot for a primary action that remains accessible at all
+              times.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Using icon-only items without
+              visible labelling — show labels on the active item at minimum.
+              Exceeding seven destinations makes the rail feel crowded.
+            </li>
+          </ul>
+        </div>
+
+        <!-- API Documentation -->
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>DSNavigationRail</h3>
+          <p>Container component for rail destinations.</p>
+
+          <h4>Slots</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>header</code></td>
+                <td>Content above destinations (logo or menu trigger)</td>
+              </tr>
+              <tr>
+                <td><code>fab</code></td>
+                <td>Floating action button below destinations</td>
+              </tr>
+              <tr>
+                <td><code>(default)</code></td>
+                <td>Destination items (ds-navigation-rail-item)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Events</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-navigation-rail:select</code></td>
+                <td><code>{ value: string, label: string }</code></td>
+                <td>Fired when a destination is selected</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>CSS Parts</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>The navigation rail container</td>
+              </tr>
+              <tr>
+                <td><code>destinations</code></td>
+                <td>Wrapper for destination items</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>DSNavigationRailItem</h3>
+          <p>Individual navigation destination item.</p>
+
+          <h4>Attributes</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>value</code></td>
+                <td>string</td>
+                <td>-</td>
+                <td>Value for this destination</td>
+              </tr>
+              <tr>
+                <td><code>icon</code></td>
+                <td>string</td>
+                <td>-</td>
+                <td>Material Symbol icon name</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>-</td>
+                <td>Destination label (or use slot content)</td>
+              </tr>
+              <tr>
+                <td><code>active</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Marks the destination as active</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables the destination</td>
+              </tr>
+              <tr>
+                <td><code>badge</code></td>
+                <td>string</td>
+                <td>-</td>
+                <td>Badge content (number or text)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Events</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-navigation-rail-item:click</code></td>
+                <td><code>{ value: string, label: string }</code></td>
+                <td>Fired when item is clicked (not disabled)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>CSS Parts</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>The item container button</td>
+              </tr>
+              <tr>
+                <td><code>icon</code></td>
+                <td>The icon element</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>The label text</td>
+              </tr>
+              <tr>
+                <td><code>indicator</code></td>
+                <td>The active indicator</td>
+              </tr>
+              <tr>
+                <td><code>badge</code></td>
+                <td>The badge element</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>CSS Custom Properties</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-navigation-rail-hover-color</code></td>
+                <td><code>--md-sys-color-on-surface</code></td>
+                <td>Hover state layer background color</td>
+              </tr>
+              <tr>
+                <td><code>--ds-navigation-rail-hover-opacity</code></td>
+                <td><code>0.08</code></td>
+                <td>Hover state layer opacity</td>
+              </tr>
+              <tr>
+                <td><code>--ds-navigation-rail-pressed-opacity</code></td>
+                <td><code>0.12</code></td>
+                <td>Pressed/active state layer opacity</td>
+              </tr>
+              <tr>
+                <td><code>--ds-navigation-rail-active-bg</code></td>
+                <td><code>--md-sys-color-secondary-container</code></td>
+                <td>Active indicator background color</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>MD3 Specification</h3>
+          <p>
+            <a
+              href="https://m3.material.io/components/navigation-rail"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Navigation Rail — Material Design 3</a
+            >
+          </p>
+
+          <h3>Browser Support</h3>
+          <ul>
+            <li>Chrome 90+</li>
+            <li>Firefox 88+</li>
+            <li>Safari 14+</li>
+            <li>Edge 90+</li>
+          </ul>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Any</td>
+                <td>Moves focus to the next rail destination</td>
+              </tr>
+              <tr>
+                <td><code>Shift+Tab</code></td>
+                <td>Any</td>
+                <td>Moves focus to the previous rail destination</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on a destination</td>
+                <td>Activates the destination and fires the select event</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              The rail uses <code>role="navigation"</code>; each item uses
+              <code>role="tab"</code>.
+            </li>
+            <li>
+              Active items expose <code>aria-selected="true"</code>; disabled
+              items expose <code>aria-disabled="true"</code>.
+            </li>
+            <li>
+              Destination labels are visible on the active item; all items carry
+              a descriptive <code>aria-label</code>.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const interactiveRail = document.getElementById("interactive-rail");
+      const railOutput = document.getElementById("rail-output");
+
+      if (interactiveRail && railOutput) {
+        interactiveRail.addEventListener("ds-navigation-rail:select", (e) => {
+          railOutput.innerHTML = `<strong>Selection Event:</strong><br>Value: ${
+            e.detail.value
+          }<br>Label: ${
+            e.detail.label
+          }<br>Time: ${new Date().toLocaleTimeString()}`;
+        });
+
+        railOutput.innerHTML = `<strong>Selection Event:</strong><br>Value: home<br>Label: Home<br>Time: ${new Date().toLocaleTimeString()}`;
+      }
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

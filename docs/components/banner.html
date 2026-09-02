@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Banner - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="banner">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Banner</h1>
+        <p class="description">
+          Material Design 3 banner for prominent, persistent messages with
+          optional supporting text and actions. Not intended for ephemeral
+          feedback; use a snackbar when the message should auto-dismiss.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Show a default banner with a message and dismiss button. Banners
+            remain in flow so users can act while retaining context.
+          </p>
+          <div class="demo-box" style="padding: 0">
+            <ds-banner open message="This is a banner message."></ds-banner>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-banner open message="This is a banner message."&gt;&lt;/ds-banner&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Pre-configure variant, dismissibility, and supporting content.</p>
+          <div class="demo-box" style="padding: 0">
+            <ds-banner
+              open
+              variant="warning"
+              dismissible="false"
+              message="Your subscription expires soon.">
+              <span slot="supporting-text"
+                >Renew now to avoid service interruption.</span
+              >
+              <div slot="actions">
+                <ds-button variant="text">Renew</ds-button>
+              </div>
+            </ds-banner>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-banner
+  open
+  variant="warning"
+  dismissible="false"
+  message="Your subscription expires soon."&gt;
+  &lt;span slot="supporting-text"&gt;Renew now to avoid service interruption.&lt;/span&gt;
+  &lt;div slot="actions"&gt;
+    &lt;ds-button variant="text"&gt;Renew&lt;/ds-button&gt;
+  &lt;/div&gt;
+&lt;/ds-banner&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Use semantic variants to align banner tone with message intent.</p>
+          <div class="demo-box" style="padding: 0; display: grid; gap: 12px">
+            <ds-banner
+              open
+              variant="default"
+              message="Default announcement."></ds-banner>
+            <ds-banner
+              open
+              variant="info"
+              message="New features are available."></ds-banner>
+            <ds-banner
+              open
+              variant="warning"
+              message="Your session will expire soon."></ds-banner>
+            <ds-banner
+              open
+              variant="error"
+              message="Failed to sync your data."></ds-banner>
+            <ds-banner
+              open
+              variant="success"
+              message="Changes saved successfully."></ds-banner>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-banner open variant="info" message="New features are available."&gt;&lt;/ds-banner&gt;
+&lt;ds-banner open variant="error" message="Failed to sync your data."&gt;&lt;/ds-banner&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>
+            Control visibility and dismiss behavior with attributes and methods.
+          </p>
+          <div class="demo-box" style="padding: 0; display: grid; gap: 12px">
+            <ds-banner
+              id="banner-state-dismissible"
+              open
+              message="Dismissible banner"></ds-banner>
+            <ds-banner
+              id="banner-state-required"
+              open
+              dismissible="false"
+              variant="error"
+              message="Verification required.">
+              <div slot="actions">
+                <ds-button variant="text">Verify</ds-button>
+              </div>
+            </ds-banner>
+          </div>
+          <div class="code-block">
+            <pre>
+const banner = document.querySelector('#banner-state-dismissible');
+banner.show({ message: 'Updated content', variant: 'info' });
+banner.hide();</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>
+            Toggle banner variant and visibility while observing emitted events.
+          </p>
+          <div class="demo-box" style="display: grid; gap: 12px">
+            <div
+              style="
+                padding: 0;
+                border: 1px dashed var(--md-sys-color-outline);
+                border-radius: 8px;
+                overflow: hidden;
+              ">
+              <ds-banner
+                id="banner-demo"
+                open
+                message="Interactive banner message.">
+                <span slot="supporting-text"
+                  >Use controls to change state and variant.</span
+                >
+                <div slot="actions">
+                  <button class="action-button" data-index="0" type="button">
+                    Primary
+                  </button>
+                  <button class="action-button" data-index="1" type="button">
+                    Secondary
+                  </button>
+                </div>
+              </ds-banner>
+            </div>
+            <div style="display: flex; flex-wrap: wrap; gap: 8px">
+              <ds-button id="banner-demo-toggle">Show / Hide</ds-button>
+              <ds-button id="banner-demo-default">Default</ds-button>
+              <ds-button id="banner-demo-info">Info</ds-button>
+              <ds-button id="banner-demo-warning">Warning</ds-button>
+              <ds-button id="banner-demo-error">Error</ds-button>
+              <ds-button id="banner-demo-success">Success</ds-button>
+            </div>
+          </div>
+          <div class="demo-box" style="margin-block-start: 12px">
+            <pre id="banner-event-log" style="margin: 0">
+Event log:
+</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>message</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Primary banner message text.</td>
+              </tr>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td><code>default</code></td>
+                <td>
+                  <code>default</code>, <code>info</code>, <code>warning</code>,
+                  <code>error</code>, or <code>success</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>dismissible</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Controls whether the dismiss button is shown.</td>
+              </tr>
+              <tr>
+                <td><code>open</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Controls visibility state.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>message</code></td>
+                <td>string</td>
+                <td>Reflects the <code>message</code> attribute.</td>
+              </tr>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>Reflects the <code>variant</code> attribute.</td>
+              </tr>
+              <tr>
+                <td><code>dismissible</code></td>
+                <td>boolean</td>
+                <td>Reflects dismissible behavior.</td>
+              </tr>
+              <tr>
+                <td><code>open</code></td>
+                <td>boolean</td>
+                <td>Reflects visibility state.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-banner:show</code></td>
+                <td><code>{ message, variant }</code></td>
+                <td>Fired when banner is shown.</td>
+              </tr>
+              <tr>
+                <td><code>ds-banner:dismiss</code></td>
+                <td><code>{ message }</code></td>
+                <td>Fired when banner is dismissed.</td>
+              </tr>
+              <tr>
+                <td><code>ds-banner:action</code></td>
+                <td><code>{ actionIndex, message }</code></td>
+                <td>
+                  Fired when an action button with
+                  <code>.action-button</code> is clicked.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>show(options)</code></td>
+                <td>Shows the banner with optional message and variant.</td>
+              </tr>
+              <tr>
+                <td><code>hide()</code></td>
+                <td>Hides the banner and emits dismiss event.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>Main banner container.</td>
+              </tr>
+              <tr>
+                <td><code>icon</code></td>
+                <td>Icon container.</td>
+              </tr>
+              <tr>
+                <td><code>content</code></td>
+                <td>Message and supporting content container.</td>
+              </tr>
+              <tr>
+                <td><code>message</code></td>
+                <td>Primary message element.</td>
+              </tr>
+              <tr>
+                <td><code>supporting-text</code></td>
+                <td>Supporting text container.</td>
+              </tr>
+              <tr>
+                <td><code>actions</code></td>
+                <td>Actions container slot wrapper.</td>
+              </tr>
+              <tr>
+                <td><code>dismiss-button</code></td>
+                <td>Dismiss button element.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-banner-padding-inline</code></td>
+                <td>
+                  Horizontal container padding. Default
+                  <code>var(--ds-space-4)</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-banner-padding-block</code></td>
+                <td>
+                  Vertical container padding. Default
+                  <code>var(--ds-space-4)</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-banner-gap</code></td>
+                <td>
+                  Gap between icon/content/actions. Default
+                  <code>var(--ds-space-4)</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-banner-icon-size</code></td>
+                <td>Icon size. Default <code>var(--ds-size-icon-lg)</code>.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-banner-dismiss-size</code></td>
+                <td>
+                  Dismiss button size. Default
+                  <code>var(--ds-size-control-md)</code>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Banner open with controls</td>
+                <td>Moves focus through dismiss and action buttons</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on a banner button</td>
+                <td>Activates the focused button action</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Host uses <code>role="region"</code> with
+              <code>aria-label="Banner notification"</code>.
+            </li>
+            <li><code>aria-hidden</code> tracks open state.</li>
+            <li>A hidden status live region announces shown messages.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use banners for persistent,
+              high-priority information that should remain visible while the
+              user continues working.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid banners for short-lived
+              confirmations or low-priority status updates; use snackbars for
+              those.
+            </li>
+            <li>
+              <strong>Composition:</strong> Keep copy concise and include a
+              clear optional action. Use non-dismissible banners only when an
+              explicit user decision is required.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Showing multiple banners at once
+              causes visual overload and weakens hierarchy.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const demoBanner = document.querySelector("#banner-demo");
+      const log = document.querySelector("#banner-event-log");
+
+      const appendLog = (message) => {
+        log.textContent += `${message}\n`;
+      };
+
+      const setVariant = (variant, message) => {
+        demoBanner.variant = variant;
+        demoBanner.message = message;
+        appendLog(`variant -> ${variant}`);
+      };
+
+      document
+        .querySelector("#banner-demo-toggle")
+        .addEventListener("click", () => {
+          demoBanner.open = !demoBanner.open;
+          appendLog(`open -> ${demoBanner.open}`);
+        });
+
+      document
+        .querySelector("#banner-demo-default")
+        .addEventListener("click", () => {
+          setVariant("default", "Default banner message.");
+        });
+      document
+        .querySelector("#banner-demo-info")
+        .addEventListener("click", () => {
+          setVariant("info", "Informational banner message.");
+        });
+      document
+        .querySelector("#banner-demo-warning")
+        .addEventListener("click", () => {
+          setVariant("warning", "Warning banner message.");
+        });
+      document
+        .querySelector("#banner-demo-error")
+        .addEventListener("click", () => {
+          setVariant("error", "Error banner message.");
+        });
+      document
+        .querySelector("#banner-demo-success")
+        .addEventListener("click", () => {
+          setVariant("success", "Success banner message.");
+        });
+
+      demoBanner.addEventListener("ds-banner:show", (event) => {
+        appendLog(`show: ${event.detail.variant}`);
+      });
+
+      demoBanner.addEventListener("ds-banner:dismiss", (event) => {
+        appendLog(`dismiss: ${event.detail.message || ""}`);
+      });
+
+      demoBanner.addEventListener("ds-banner:action", (event) => {
+        appendLog(`action: index=${event.detail.actionIndex}`);
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

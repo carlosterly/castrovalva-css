@@ -1,0 +1,595 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Combobox - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .combo-demo {
+        width: 100%;
+        max-width: 320px;
+      }
+
+      .combo-stack {
+        display: flex;
+        flex-direction: column;
+        gap: var(--ds-space-4);
+      }
+
+      .combo-row {
+        display: flex;
+        flex-direction: column;
+        gap: var(--ds-space-2);
+      }
+
+      .combo-label {
+        color: var(--md-sys-color-on-surface-variant);
+        font-size: 0.875rem;
+      }
+
+      .combo-log {
+        padding: var(--ds-space-3);
+        background: var(--md-sys-color-surface-dim);
+        border-radius: var(--ds-border-radius-2);
+      }
+
+      .combo-log-title {
+        margin: 0 0 var(--ds-space-3) 0;
+        font-weight: 500;
+      }
+
+      .combo-log-body {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+        font-size: 0.875rem;
+        max-height: 200px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+    </style>
+  </head>
+  <body data-page="combobox">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Combobox</h1>
+        <p class="description">
+          Material Design 3 combobox for selecting from a list of options with
+          optional search and multi-select. Not intended for free-form long text
+          entry where arbitrary values are expected.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use a combobox to choose from a short or filtered list. It combines
+            text input and option selection in one compact control for faster
+            discovery.
+          </p>
+          <div class="demo-box">
+            <div class="combo-demo">
+              <ds-combobox>
+                <div slot="option" data-value="apple">Apple</div>
+                <div slot="option" data-value="banana">Banana</div>
+                <div slot="option" data-value="cherry">Cherry</div>
+                <div slot="option" data-value="date">Date</div>
+              </ds-combobox>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-combobox&gt;
+  &lt;div slot="option" data-value="apple"&gt;Apple&lt;/div&gt;
+  &lt;div slot="option" data-value="banana"&gt;Banana&lt;/div&gt;
+&lt;/ds-combobox&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Provide a default value for single or multiple selection.</p>
+          <div class="demo-box">
+            <div class="combo-stack">
+              <div class="combo-row">
+                <span class="combo-label">Single value</span>
+                <div class="combo-demo">
+                  <ds-combobox value="banana">
+                    <div slot="option" data-value="apple">Apple</div>
+                    <div slot="option" data-value="banana">Banana</div>
+                    <div slot="option" data-value="cherry">Cherry</div>
+                  </ds-combobox>
+                </div>
+              </div>
+              <div class="combo-row">
+                <span class="combo-label">Multiple values</span>
+                <div class="combo-demo">
+                  <ds-combobox multiple value="css,javascript">
+                    <div slot="option" data-value="html">HTML</div>
+                    <div slot="option" data-value="css">CSS</div>
+                    <div slot="option" data-value="javascript">JavaScript</div>
+                    <div slot="option" data-value="web-components">
+                      Web Components
+                    </div>
+                  </ds-combobox>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-combobox value="banana"&gt;
+  &lt;div slot="option" data-value="banana"&gt;Banana&lt;/div&gt;
+&lt;/ds-combobox&gt;
+
+&lt;ds-combobox multiple value="css,javascript"&gt;
+  &lt;div slot="option" data-value="css"&gt;CSS&lt;/div&gt;
+  &lt;div slot="option" data-value="javascript"&gt;JavaScript&lt;/div&gt;
+&lt;/ds-combobox&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Use single, multiple, or non-searchable variants as needed.</p>
+
+          <h3>Single Selection</h3>
+          <p>Only one option can be selected at a time.</p>
+          <div class="demo-box">
+            <div class="combo-demo">
+              <ds-combobox>
+                <div slot="option" data-value="red">Red</div>
+                <div slot="option" data-value="green">Green</div>
+                <div slot="option" data-value="blue">Blue</div>
+              </ds-combobox>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-combobox&gt;
+  &lt;div slot="option" data-value="red"&gt;Red&lt;/div&gt;
+  &lt;div slot="option" data-value="green"&gt;Green&lt;/div&gt;
+&lt;/ds-combobox&gt;</pre
+            >
+          </div>
+
+          <h3>Multiple Selection</h3>
+          <p>Keep the list open to select multiple values.</p>
+          <div class="demo-box">
+            <div class="combo-demo">
+              <ds-combobox multiple>
+                <div slot="option" data-value="python">Python</div>
+                <div slot="option" data-value="javascript">JavaScript</div>
+                <div slot="option" data-value="typescript">TypeScript</div>
+                <div slot="option" data-value="rust">Rust</div>
+              </ds-combobox>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-combobox multiple&gt;
+  &lt;div slot="option" data-value="python"&gt;Python&lt;/div&gt;
+  &lt;div slot="option" data-value="javascript"&gt;JavaScript&lt;/div&gt;
+&lt;/ds-combobox&gt;</pre
+            >
+          </div>
+
+          <h3>Non-Searchable</h3>
+          <p>Disable search when users should only navigate with keys.</p>
+          <div class="demo-box">
+            <div class="combo-demo">
+              <ds-combobox searchable="false">
+                <div slot="option">Small</div>
+                <div slot="option">Medium</div>
+                <div slot="option">Large</div>
+                <div slot="option">Extra Large</div>
+              </ds-combobox>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-combobox searchable="false"&gt;
+  &lt;div slot="option"&gt;Small&lt;/div&gt;
+  &lt;div slot="option"&gt;Medium&lt;/div&gt;
+&lt;/ds-combobox&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Use disabled to prevent interaction.</p>
+          <div class="demo-box">
+            <div class="combo-demo">
+              <ds-combobox disabled>
+                <div slot="option">Option 1</div>
+                <div slot="option">Option 2</div>
+              </ds-combobox>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-combobox disabled&gt;
+  &lt;div slot="option"&gt;Option 1&lt;/div&gt;
+&lt;/ds-combobox&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Track open, close, and change events.</p>
+          <div class="demo-box">
+            <div class="combo-stack">
+              <div class="combo-demo">
+                <ds-combobox id="interactiveCombobox" multiple>
+                  <div slot="option" data-value="html">HTML</div>
+                  <div slot="option" data-value="css">CSS</div>
+                  <div slot="option" data-value="javascript">JavaScript</div>
+                  <div slot="option" data-value="web-components">
+                    Web Components
+                  </div>
+                </ds-combobox>
+              </div>
+              <div class="combo-log">
+                <p class="combo-log-title">Event Log</p>
+                <div id="eventLog" class="combo-log-body"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API Reference</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>open</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Whether the dropdown is visible</td>
+              </tr>
+              <tr>
+                <td><code>multiple</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Allow multiple selections</td>
+              </tr>
+              <tr>
+                <td><code>searchable</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Enable search input</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disable interaction</td>
+              </tr>
+              <tr>
+                <td><code>placeholder</code></td>
+                <td>string</td>
+                <td>"Select an option"</td>
+                <td>Text shown when no option selected</td>
+              </tr>
+              <tr>
+                <td><code>value</code></td>
+                <td>string|array</td>
+                <td>null</td>
+                <td>Selected value(s)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>open</code></td>
+                <td>boolean</td>
+                <td>Get/set whether the dropdown is open</td>
+              </tr>
+              <tr>
+                <td><code>multiple</code></td>
+                <td>boolean</td>
+                <td>Get/set multiple selection mode</td>
+              </tr>
+              <tr>
+                <td><code>searchable</code></td>
+                <td>boolean</td>
+                <td>Get/set search input visibility</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>Get/set disabled state</td>
+              </tr>
+              <tr>
+                <td><code>value</code></td>
+                <td>string|array</td>
+                <td>Get/set selected value(s)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-combobox:change</code></td>
+                <td><code>{ value, values }</code></td>
+                <td>Fired when selection changes</td>
+              </tr>
+              <tr>
+                <td><code>ds-combobox:open</code></td>
+                <td>—</td>
+                <td>Fired when the dropdown opens</td>
+              </tr>
+              <tr>
+                <td><code>ds-combobox:close</code></td>
+                <td>—</td>
+                <td>Fired when the dropdown closes</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>option</code></td>
+                <td>Option elements for selection</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Parameters</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>show()</code></td>
+                <td>none</td>
+                <td>Opens the dropdown</td>
+              </tr>
+              <tr>
+                <td><code>close()</code></td>
+                <td>none</td>
+                <td>Closes the dropdown</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>Main wrapper element</td>
+              </tr>
+              <tr>
+                <td><code>trigger</code></td>
+                <td>Button that opens/closes the dropdown</td>
+              </tr>
+              <tr>
+                <td><code>dropdown</code></td>
+                <td>Dropdown container</td>
+              </tr>
+              <tr>
+                <td><code>search-input</code></td>
+                <td>Search input field</td>
+              </tr>
+              <tr>
+                <td><code>listbox</code></td>
+                <td>Options container</td>
+              </tr>
+              <tr>
+                <td><code>option</code></td>
+                <td>Individual option element</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-combobox-width</code></td>
+                <td>Combobox width</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-max-height</code></td>
+                <td>Maximum dropdown height</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-height</code></td>
+                <td>Trigger button height</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-search-height</code></td>
+                <td>Search input height</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-option-height</code></td>
+                <td>Option row height</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-padding-y</code></td>
+                <td>Trigger vertical padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-padding-x</code></td>
+                <td>Trigger horizontal padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-option-padding-y</code></td>
+                <td>Option vertical padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-option-padding-x</code></td>
+                <td>Option horizontal padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-icon-size</code></td>
+                <td>Trigger icon size</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-bg-color</code></td>
+                <td>Trigger and highlight background</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-dropdown-bg</code></td>
+                <td>Dropdown and option background</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-text-color</code></td>
+                <td>Base text color</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-border-color</code></td>
+                <td>Trigger and dropdown border</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-hover-bg</code></td>
+                <td>Hover background for options</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-selected-bg</code></td>
+                <td>Selected option background</td>
+              </tr>
+              <tr>
+                <td><code>--ds-combobox-selected-color</code></td>
+                <td>Selected option text color</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <ul>
+            <li>✅ Keyboard navigation with arrows, Enter, Escape</li>
+            <li>✅ Uses listbox and option roles for screen readers</li>
+            <li>✅ Announces selection changes via aria-selected</li>
+            <li>✅ Focus returns to the trigger after close</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+
+          <h3>When to Use</h3>
+          <ul>
+            <li>When users need to search a list of options</li>
+            <li>For multi-select filters or tag selection</li>
+            <li>When options should show custom labels or metadata</li>
+          </ul>
+
+          <h3>When Not to Use</h3>
+          <ul>
+            <li>For very short lists where a simple select is faster</li>
+            <li>For binary choices where a checkbox or switch fits better</li>
+          </ul>
+
+          <h3>Best Practices</h3>
+          <ul>
+            <li>Keep option labels concise and scannable</li>
+            <li>Provide search when lists exceed 7-10 items</li>
+            <li>
+              Use meaningful values in the <code>data-value</code> attribute
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const eventLog = document.getElementById("eventLog");
+      const interactiveCombobox = document.getElementById(
+        "interactiveCombobox",
+      );
+      let eventCount = 0;
+
+      const addLog = (message) => {
+        eventCount += 1;
+        const timestamp = new Date().toLocaleTimeString();
+        eventLog.textContent =
+          `[${eventCount}] ${timestamp} - ${message}\n` + eventLog.textContent;
+      };
+
+      interactiveCombobox.addEventListener("ds-combobox:open", () => {
+        addLog("Dropdown opened");
+      });
+
+      interactiveCombobox.addEventListener("ds-combobox:close", () => {
+        addLog("Dropdown closed");
+      });
+
+      interactiveCombobox.addEventListener("ds-combobox:change", (event) => {
+        const value = Array.isArray(event.detail.value)
+          ? event.detail.value.join(", ")
+          : event.detail.value;
+        addLog(`Selection changed: ${value}`);
+      });
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

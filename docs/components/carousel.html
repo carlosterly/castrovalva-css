@@ -1,0 +1,508 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Carousel - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .demo-box ds-carousel img {
+        inline-size: 100%;
+        block-size: 100%;
+        object-fit: cover;
+        display: block;
+      }
+
+      .hero-slide {
+        inline-size: 100%;
+        block-size: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        text-align: center;
+      }
+
+      .hero-1 {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      }
+
+      .hero-2 {
+        background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      }
+
+      .hero-3 {
+        background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+      }
+
+      .event-log {
+        margin-block-start: var(--ds-space-3, 12px);
+        padding: var(--ds-space-3, 12px);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: var(--ds-radius-sm, 8px);
+        background: var(--md-sys-color-surface-container-low);
+        color: var(--md-sys-color-on-surface-variant);
+      }
+    </style>
+  </head>
+  <body data-page="carousel">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Carousel</h1>
+        <p class="description">
+          Material Design 3 carousel for browsing related content with
+          horizontal snapping and optional controls. Not intended for long-form
+          reading sequences that require stable vertical scanning.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use the default contained variant for image or content galleries.
+            Snap behavior and controls help users browse related slides
+            predictably.
+          </p>
+          <div class="demo-box">
+            <ds-carousel show-navigation show-indicators>
+              <img
+                src="https://picsum.photos/800/400?random=301"
+                alt="Slide 1" />
+              <img
+                src="https://picsum.photos/800/400?random=302"
+                alt="Slide 2" />
+              <img
+                src="https://picsum.photos/800/400?random=303"
+                alt="Slide 3" />
+            </ds-carousel>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-carousel show-navigation show-indicators&gt;
+  &lt;img src="slide1.jpg" alt="Slide 1"&gt;
+  &lt;img src="slide2.jpg" alt="Slide 2"&gt;
+  &lt;img src="slide3.jpg" alt="Slide 3"&gt;
+&lt;/ds-carousel&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Set an initial configuration with autoplay and custom interval.</p>
+          <div class="demo-box">
+            <ds-carousel auto-play auto-play-interval="3000" show-indicators>
+              <img
+                src="https://picsum.photos/800/400?random=304"
+                alt="Auto slide 1" />
+              <img
+                src="https://picsum.photos/800/400?random=305"
+                alt="Auto slide 2" />
+              <img
+                src="https://picsum.photos/800/400?random=306"
+                alt="Auto slide 3" />
+            </ds-carousel>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-carousel auto-play auto-play-interval="3000" show-indicators&gt;
+  &lt;img src="slide1.jpg" alt="Slide 1"&gt;
+  &lt;img src="slide2.jpg" alt="Slide 2"&gt;
+  &lt;img src="slide3.jpg" alt="Slide 3"&gt;
+&lt;/ds-carousel&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants/Formats</h2>
+          <p>Choose from contained, uncontained, or hero layout variants.</p>
+
+          <h3>Contained</h3>
+          <div class="demo-box">
+            <ds-carousel variant="contained" show-navigation>
+              <img
+                src="https://picsum.photos/800/400?random=307"
+                alt="Contained 1" />
+              <img
+                src="https://picsum.photos/800/400?random=308"
+                alt="Contained 2" />
+              <img
+                src="https://picsum.photos/800/400?random=309"
+                alt="Contained 3" />
+            </ds-carousel>
+          </div>
+
+          <h3>Uncontained</h3>
+          <div class="demo-box">
+            <ds-carousel variant="uncontained" show-navigation>
+              <img
+                src="https://picsum.photos/800/400?random=310"
+                alt="Uncontained 1" />
+              <img
+                src="https://picsum.photos/800/400?random=311"
+                alt="Uncontained 2" />
+              <img
+                src="https://picsum.photos/800/400?random=312"
+                alt="Uncontained 3" />
+            </ds-carousel>
+          </div>
+
+          <h3>Hero</h3>
+          <div class="demo-box">
+            <ds-carousel variant="hero" show-navigation show-indicators>
+              <div class="hero-slide hero-1"><h3>Hero 1</h3></div>
+              <div class="hero-slide hero-2"><h3>Hero 2</h3></div>
+              <div class="hero-slide hero-3"><h3>Hero 3</h3></div>
+            </ds-carousel>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-carousel variant="contained"&gt;...&lt;/ds-carousel&gt;
+&lt;ds-carousel variant="uncontained"&gt;...&lt;/ds-carousel&gt;
+&lt;ds-carousel variant="hero"&gt;...&lt;/ds-carousel&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>
+            Combine features for navigation, indicators, autoplay, and looping
+            states.
+          </p>
+
+          <h3>Navigation Only</h3>
+          <div class="demo-box">
+            <ds-carousel show-navigation>
+              <img src="https://picsum.photos/800/400?random=313" alt="Nav 1" />
+              <img src="https://picsum.photos/800/400?random=314" alt="Nav 2" />
+              <img src="https://picsum.photos/800/400?random=315" alt="Nav 3" />
+            </ds-carousel>
+          </div>
+
+          <h3>Indicators Only</h3>
+          <div class="demo-box">
+            <ds-carousel show-indicators>
+              <img src="https://picsum.photos/800/400?random=316" alt="Ind 1" />
+              <img src="https://picsum.photos/800/400?random=317" alt="Ind 2" />
+              <img src="https://picsum.photos/800/400?random=318" alt="Ind 3" />
+            </ds-carousel>
+          </div>
+
+          <h3>Loop Enabled</h3>
+          <div class="demo-box">
+            <ds-carousel loop show-navigation show-indicators>
+              <img
+                src="https://picsum.photos/800/400?random=319"
+                alt="Loop 1" />
+              <img
+                src="https://picsum.photos/800/400?random=320"
+                alt="Loop 2" />
+              <img
+                src="https://picsum.photos/800/400?random=321"
+                alt="Loop 3" />
+            </ds-carousel>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>
+            Track carousel events from control buttons, indicators, or
+            scrolling.
+          </p>
+          <div class="demo-box">
+            <ds-carousel
+              id="interactive-carousel"
+              show-navigation
+              show-indicators>
+              <img
+                src="https://picsum.photos/800/400?random=322"
+                alt="Interactive 1" />
+              <img
+                src="https://picsum.photos/800/400?random=323"
+                alt="Interactive 2" />
+              <img
+                src="https://picsum.photos/800/400?random=324"
+                alt="Interactive 3" />
+            </ds-carousel>
+            <div id="event-log" class="event-log">
+              Waiting for carousel events...
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+const carousel = document.querySelector('#interactive-carousel');
+carousel.addEventListener('ds-carousel:change', (event) =&gt; {
+  console.log(event.detail.index, event.detail.total);
+});</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API Reference</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td><code>contained</code></td>
+                <td>
+                  <code>contained</code>, <code>uncontained</code>, or
+                  <code>hero</code>
+                </td>
+              </tr>
+              <tr>
+                <td><code>show-navigation</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Shows previous and next buttons</td>
+              </tr>
+              <tr>
+                <td><code>show-indicators</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Shows indicator controls</td>
+              </tr>
+              <tr>
+                <td><code>auto-play</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Auto-advances slides</td>
+              </tr>
+              <tr>
+                <td><code>auto-play-interval</code></td>
+                <td>number</td>
+                <td>5000</td>
+                <td>Auto-play delay in milliseconds</td>
+              </tr>
+              <tr>
+                <td><code>loop</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Enables looped navigation</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>Gets/sets variant</td>
+              </tr>
+              <tr>
+                <td><code>showNavigation</code></td>
+                <td>boolean</td>
+                <td>Gets/sets navigation visibility</td>
+              </tr>
+              <tr>
+                <td><code>showIndicators</code></td>
+                <td>boolean</td>
+                <td>Gets/sets indicators visibility</td>
+              </tr>
+              <tr>
+                <td><code>autoPlay</code></td>
+                <td>boolean</td>
+                <td>Gets/sets autoplay state</td>
+              </tr>
+              <tr>
+                <td><code>autoPlayInterval</code></td>
+                <td>number</td>
+                <td>Gets/sets autoplay interval</td>
+              </tr>
+              <tr>
+                <td><code>loop</code></td>
+                <td>boolean</td>
+                <td>Gets/sets looping state</td>
+              </tr>
+              <tr>
+                <td><code>currentIndex</code></td>
+                <td>number</td>
+                <td>Current slide index (read only)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-carousel:change</code></td>
+                <td><code>{ index, total }</code></td>
+                <td>Fired when active slide changes</td>
+              </tr>
+              <tr>
+                <td><code>ds-carousel:scroll</code></td>
+                <td><code>{ index, total }</code></td>
+                <td>Fired while scrolling updates active slide</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>Main container</td>
+              </tr>
+              <tr>
+                <td><code>viewport</code></td>
+                <td>Scrollable viewport</td>
+              </tr>
+              <tr>
+                <td><code>navigation</code></td>
+                <td>Navigation controls container</td>
+              </tr>
+              <tr>
+                <td><code>nav-button</code></td>
+                <td>Navigation buttons</td>
+              </tr>
+              <tr>
+                <td><code>indicators</code></td>
+                <td>Indicator list</td>
+              </tr>
+              <tr>
+                <td><code>indicator</code></td>
+                <td>Single indicator</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-carousel-height</code></td>
+                <td>Carousel viewport height</td>
+              </tr>
+              <tr>
+                <td><code>--ds-carousel-gap</code></td>
+                <td>Override slide gap</td>
+              </tr>
+              <tr>
+                <td><code>--ds-carousel-nav-button-size</code></td>
+                <td>
+                  Navigation button size (defaults to
+                  <code>--ds-size-control-lg</code>)
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-carousel-nav-icon-size</code></td>
+                <td>
+                  Navigation icon size (defaults to
+                  <code>--ds-size-icon-lg</code>)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <ul>
+            <li>
+              ArrowLeft and ArrowRight provide keyboard navigation between
+              slides.
+            </li>
+            <li>
+              Navigation buttons include descriptive
+              <code>aria-label</code> attributes.
+            </li>
+            <li>
+              Indicators use tablist and tab semantics with selected state.
+            </li>
+            <li>
+              Focus-visible styles are applied to host, controls, and
+              indicators.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              Use contained variant for product or content cards in standard
+              layouts.
+            </li>
+            <li>
+              Use hero variant for prominent landing sections with immersive
+              visuals.
+            </li>
+            <li>
+              Enable autoplay only when slides are informational and not
+              task-critical.
+            </li>
+            <li>
+              Keep slide content concise to support quick scanning and
+              accessibility.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const carousel = document.getElementById("interactive-carousel");
+      const eventLog = document.getElementById("event-log");
+
+      carousel.addEventListener("ds-carousel:change", (event) => {
+        eventLog.textContent = `change: index ${event.detail.index + 1} of ${event.detail.total}`;
+      });
+
+      carousel.addEventListener("ds-carousel:scroll", (event) => {
+        eventLog.textContent = `scroll: index ${event.detail.index + 1} of ${event.detail.total}`;
+      });
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

@@ -1,0 +1,660 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Form - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <style>
+      .form-actions {
+        display: flex;
+        gap: var(--ds-space-3, 12px);
+        margin-block-start: var(--ds-space-4, 16px);
+      }
+
+      .demo-output {
+        margin-block-start: var(--ds-space-4, 16px);
+        padding: var(--ds-space-3, 12px);
+        background: var(--md-sys-color-surface-container);
+        border-radius: var(--ds-radius-sm, 8px);
+        font-size: var(--md-sys-typescale-body-small-size);
+      }
+
+      .form-grid {
+        display: grid;
+        gap: var(--ds-space-3, 12px);
+        grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      }
+
+      .event-log {
+        margin-block-start: var(--ds-space-4, 16px);
+        padding: var(--ds-space-3, 12px);
+        background: var(--md-sys-color-surface-container);
+        border-radius: var(--ds-radius-sm, 8px);
+        font-size: var(--md-sys-typescale-body-small-size);
+      }
+
+      .event-log-list {
+        margin: 8px 0 0 16px;
+      }
+    </style>
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="form">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Form</h1>
+        <p class="description">
+          Material Design 3 form wrapper for collecting values, validating
+          fields, and coordinating submission across multiple inputs. Not
+          intended to replace field-level semantics; labels and constraints must
+          still be defined on individual controls.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            A minimal form with required fields and submit handling. The form
+            wrapper centralizes state, validation, and event flow across child
+            controls.
+          </p>
+          <div class="demo-box">
+            <ds-form id="basicForm" name="basic">
+              <ds-text-field
+                name="email"
+                label="Email"
+                type="email"
+                required
+                placeholder="example@domain.com"></ds-text-field>
+              <ds-text-field
+                name="password"
+                label="Password"
+                type="password"
+                required
+                minlength="8"
+                placeholder="At least 8 characters"></ds-text-field>
+              <div class="form-actions">
+                <ds-button type="submit">Sign In</ds-button>
+                <ds-button id="resetBasic" variant="secondary">Clear</ds-button>
+              </div>
+            </ds-form>
+            <div id="basicOutput" class="demo-output">
+              <strong>Output:</strong>
+              <span data-output>Submit the form to see collected data.</span>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-form name="basic"&gt;
+  &lt;ds-text-field name="email" type="email" required&gt;&lt;/ds-text-field&gt;
+  &lt;ds-text-field name="password" type="password" required minlength="8"&gt;&lt;/ds-text-field&gt;
+  &lt;ds-button type="submit"&gt;Sign In&lt;/ds-button&gt;
+&lt;/ds-form&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Use value and checked attributes to prefill fields.</p>
+          <div class="demo-box">
+            <ds-form id="initialForm" name="prefilled">
+              <ds-text-field
+                name="firstName"
+                label="First Name"
+                value="Jamie"></ds-text-field>
+              <ds-text-field
+                name="lastName"
+                label="Last Name"
+                value="Rios"></ds-text-field>
+              <ds-checkbox name="newsletter" checked
+                >Subscribe to updates</ds-checkbox
+              >
+            </ds-form>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-form name="prefilled"&gt;
+  &lt;ds-text-field name="firstName" value="Jamie"&gt;&lt;/ds-text-field&gt;
+  &lt;ds-text-field name="lastName" value="Rios"&gt;&lt;/ds-text-field&gt;
+  &lt;ds-checkbox name="newsletter" checked&gt;Subscribe&lt;/ds-checkbox&gt;
+&lt;/ds-form&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants and Formats</h2>
+          <p>Use layout wrappers to adapt form presentation.</p>
+
+          <h3>Stacked Layout</h3>
+          <div class="demo-box">
+            <ds-form name="stacked">
+              <ds-text-field name="city" label="City"></ds-text-field>
+              <ds-text-field name="state" label="State"></ds-text-field>
+            </ds-form>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-form name="stacked"&gt;
+  &lt;ds-text-field name="city"&gt;&lt;/ds-text-field&gt;
+  &lt;ds-text-field name="state"&gt;&lt;/ds-text-field&gt;
+&lt;/ds-form&gt;</pre
+            >
+          </div>
+
+          <h3>Split Layout</h3>
+          <div class="demo-box">
+            <ds-form name="split">
+              <div class="form-grid">
+                <ds-text-field name="city" label="City"></ds-text-field>
+                <ds-text-field name="state" label="State"></ds-text-field>
+                <ds-text-field name="zip" label="ZIP"></ds-text-field>
+              </div>
+            </ds-form>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-form name="split"&gt;
+  &lt;div class="grid"&gt;
+    &lt;ds-text-field name="city"&gt;&lt;/ds-text-field&gt;
+    &lt;ds-text-field name="state"&gt;&lt;/ds-text-field&gt;
+    &lt;ds-text-field name="zip"&gt;&lt;/ds-text-field&gt;
+  &lt;/div&gt;
+&lt;/ds-form&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Validation feedback and optional validation control.</p>
+
+          <h3>Validation Errors</h3>
+          <div class="demo-box">
+            <ds-form id="validationForm" name="validation">
+              <ds-text-field
+                name="email"
+                label="Email"
+                type="email"
+                required="Email is required"></ds-text-field>
+              <ds-text-field
+                name="username"
+                label="Username"
+                required
+                pattern="^[a-zA-Z0-9_]{3,}$"
+                placeholder="Min 3 chars"></ds-text-field>
+              <ds-button type="submit">Validate</ds-button>
+            </ds-form>
+            <div id="validationOutput" class="demo-output">
+              <strong>Output:</strong>
+              <span data-output>Interact with fields to see validation.</span>
+            </div>
+          </div>
+
+          <h3>Validation Disabled</h3>
+          <div class="demo-box">
+            <ds-form id="novalidateForm" name="novalidate" novalidate>
+              <ds-text-field
+                name="email"
+                label="Email"
+                type="email"
+                required></ds-text-field>
+              <ds-button type="submit">Submit</ds-button>
+            </ds-form>
+            <div id="novalidateOutput" class="demo-output">
+              <strong>Output:</strong>
+              <span data-output
+                >Validation is bypassed when novalidate is set.</span
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Log events as users interact with the form.</p>
+          <div class="demo-box">
+            <ds-form id="interactiveForm" name="interactive">
+              <ds-text-field name="email" label="Email"></ds-text-field>
+              <ds-checkbox name="updates">Receive updates</ds-checkbox>
+              <div class="form-actions">
+                <ds-button type="submit">Send</ds-button>
+                <ds-button id="clearLog" variant="secondary"
+                  >Clear Log</ds-button
+                >
+              </div>
+            </ds-form>
+            <div class="event-log">
+              <strong>Event Log</strong>
+              <ul id="eventLog" class="event-log-list"></ul>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+form.addEventListener("ds-form:change", (event) =&gt; {
+  console.log(event.detail.name, event.detail.value);
+});
+
+form.addEventListener("ds-form:submit", (event) =&gt; {
+  console.log(event.detail.values);
+});</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>name</code></td>
+                <td>string</td>
+                <td>-</td>
+                <td>Form name identifier.</td>
+              </tr>
+              <tr>
+                <td><code>novalidate</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Bypass built-in validation.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-form:submit</code></td>
+                <td><code>{ values: Object, isValid: boolean }</code></td>
+                <td>Fired on form submission with valid data.</td>
+              </tr>
+              <tr>
+                <td><code>ds-form:change</code></td>
+                <td>
+                  <code>{ name: string, value: any, values: Object }</code>
+                </td>
+                <td>Fired when any field value changes.</td>
+              </tr>
+              <tr>
+                <td><code>ds-form:reset</code></td>
+                <td>-</td>
+                <td>Fired when form is reset.</td>
+              </tr>
+              <tr>
+                <td><code>ds-form:validity-change</code></td>
+                <td><code>{ isValid: boolean }</code></td>
+                <td>Fired when overall form validity changes.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Returns</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>getValues()</code></td>
+                <td>Object</td>
+                <td>Get all field values.</td>
+              </tr>
+              <tr>
+                <td><code>getValue(name)</code></td>
+                <td>any</td>
+                <td>Get a specific field value.</td>
+              </tr>
+              <tr>
+                <td><code>setValue(name, value)</code></td>
+                <td>void</td>
+                <td>Set a field value programmatically.</td>
+              </tr>
+              <tr>
+                <td><code>validate()</code></td>
+                <td>boolean</td>
+                <td>Validate all fields.</td>
+              </tr>
+              <tr>
+                <td><code>isValid()</code></td>
+                <td>boolean</td>
+                <td>Return current validity state.</td>
+              </tr>
+              <tr>
+                <td><code>getErrors()</code></td>
+                <td>Object</td>
+                <td>Get current validation errors.</td>
+              </tr>
+              <tr>
+                <td><code>getTouched()</code></td>
+                <td>Set</td>
+                <td>Get touched fields.</td>
+              </tr>
+              <tr>
+                <td><code>getDirty()</code></td>
+                <td>Set</td>
+                <td>Get dirty fields.</td>
+              </tr>
+              <tr>
+                <td><code>markTouched(name)</code></td>
+                <td>void</td>
+                <td>Mark a field as touched.</td>
+              </tr>
+              <tr>
+                <td><code>markAllTouched()</code></td>
+                <td>void</td>
+                <td>Mark all fields as touched.</td>
+              </tr>
+              <tr>
+                <td><code>submit()</code></td>
+                <td>boolean</td>
+                <td>Alias for validate().</td>
+              </tr>
+              <tr>
+                <td><code>reset()</code></td>
+                <td>void</td>
+                <td>Reset field values and internal state.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>Main form container element.</td>
+              </tr>
+              <tr>
+                <td><code>error-summary</code></td>
+                <td>Error summary and list container.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-space-4</code></td>
+                <td>Controls vertical spacing between fields.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-space-2</code></td>
+                <td>Controls error list spacing.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-radius-sm</code></td>
+                <td>Controls error summary corner radius.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-error-container</code></td>
+                <td>Error summary background color.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-on-error-container</code></td>
+                <td>Error summary text color.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-typescale-body-medium-size</code></td>
+                <td>Error summary text size.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Form controls</td>
+                <td>Moves focus through fields and actions in order</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code></td>
+                <td>Form submit context</td>
+                <td>Submits the form through configured validation flow</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>Child controls expose ARIA state and validation semantics.</li>
+            <li>
+              Visible focus indicators are inherited from child components.
+            </li>
+            <li>
+              Validation messaging should remain programmatically associated to
+              fields.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use for multi-field submission flows
+              that require coordinated validation and value collection.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid wrapping isolated
+              single-field interactions that can submit independently.
+            </li>
+            <li>
+              <strong>Composition:</strong> Pair each field with labels/helper
+              text and use <code>novalidate</code> only for custom validation
+              pipelines.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Omitting required field
+              semantics in children causes inconsistent error handling and
+              accessibility output.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const setOutput = (container, message, tone) => {
+        const output = container.querySelector("[data-output]");
+        output.textContent = message;
+        if (tone === "success") {
+          container.style.background =
+            "var(--md-sys-color-success-container, #c6e7d4)";
+        } else if (tone === "error") {
+          container.style.background =
+            "var(--md-sys-color-error-container, #f9dedc)";
+        } else {
+          container.style.background = "var(--md-sys-color-surface-container)";
+        }
+      };
+
+      const basicForm = document.getElementById("basicForm");
+      const basicOutput = document.getElementById("basicOutput");
+      const resetBasic = document.getElementById("resetBasic");
+
+      basicForm
+        .querySelector('[type="submit"]')
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          if (basicForm.validate()) {
+            basicForm.dispatchEvent(
+              new CustomEvent("ds-form:submit", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                  values: basicForm.getValues(),
+                  isValid: true,
+                },
+              }),
+            );
+          }
+        });
+
+      basicForm.addEventListener("ds-form:submit", (event) => {
+        setOutput(basicOutput, JSON.stringify(event.detail.values), "success");
+      });
+
+      resetBasic.addEventListener("click", () => {
+        basicForm.reset();
+        setOutput(basicOutput, "Submit the form to see collected data.");
+      });
+
+      const validationForm = document.getElementById("validationForm");
+      const validationOutput = document.getElementById("validationOutput");
+
+      validationForm
+        .querySelector('[type="submit"]')
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          if (validationForm.validate()) {
+            validationForm.dispatchEvent(
+              new CustomEvent("ds-form:submit", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                  values: validationForm.getValues(),
+                  isValid: true,
+                },
+              }),
+            );
+          }
+        });
+
+      validationForm.addEventListener("ds-form:submit", (event) => {
+        const errors = validationForm.getErrors();
+        if (Object.keys(errors).length > 0) {
+          setOutput(validationOutput, JSON.stringify(errors), "error");
+        } else {
+          setOutput(
+            validationOutput,
+            `Valid: ${JSON.stringify(event.detail.values)}`,
+            "success",
+          );
+        }
+      });
+
+      const novalidateForm = document.getElementById("novalidateForm");
+      const novalidateOutput = document.getElementById("novalidateOutput");
+
+      novalidateForm
+        .querySelector('[type="submit"]')
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          novalidateForm.dispatchEvent(
+            new CustomEvent("ds-form:submit", {
+              bubbles: true,
+              composed: true,
+              detail: {
+                values: novalidateForm.getValues(),
+                isValid: true,
+              },
+            }),
+          );
+        });
+
+      novalidateForm.addEventListener("ds-form:submit", (event) => {
+        setOutput(
+          novalidateOutput,
+          JSON.stringify(event.detail.values),
+          "success",
+        );
+      });
+
+      const interactiveForm = document.getElementById("interactiveForm");
+      const clearLog = document.getElementById("clearLog");
+      const eventLog = document.getElementById("eventLog");
+
+      const addLogEntry = (message) => {
+        const entry = document.createElement("li");
+        entry.textContent = message;
+        eventLog.prepend(entry);
+      };
+
+      interactiveForm
+        .querySelector('[type="submit"]')
+        .addEventListener("click", (e) => {
+          e.preventDefault();
+          if (interactiveForm.validate()) {
+            interactiveForm.dispatchEvent(
+              new CustomEvent("ds-form:submit", {
+                bubbles: true,
+                composed: true,
+                detail: {
+                  values: interactiveForm.getValues(),
+                  isValid: true,
+                },
+              }),
+            );
+          }
+        });
+
+      interactiveForm.addEventListener("ds-form:change", (event) => {
+        addLogEntry(`Change: ${event.detail.name} = ${event.detail.value}`);
+      });
+
+      interactiveForm.addEventListener("ds-form:submit", (event) => {
+        addLogEntry(`Submit: ${JSON.stringify(event.detail.values)}`);
+      });
+
+      clearLog.addEventListener("click", () => {
+        eventLog.innerHTML = "";
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

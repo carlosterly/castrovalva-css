@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Radio - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .radio-item {
+        display: flex;
+        align-items: center;
+        gap: var(--ds-space-2);
+      }
+
+      .radio-group {
+        display: flex;
+        flex-direction: column;
+        gap: var(--ds-space-2);
+      }
+
+      .radio-group.horizontal {
+        flex-direction: row;
+        gap: var(--ds-space-4);
+      }
+
+      .radio-demo-block {
+        display: block;
+      }
+
+      .radio-error-label {
+        color: var(--md-sys-color-error);
+      }
+
+      .radio-output {
+        margin-block-start: var(--ds-space-4);
+        padding: var(--ds-space-3);
+        background: var(--md-sys-color-surface-container);
+        border-radius: var(--ds-border-radius-2);
+        color: var(--md-sys-color-on-surface);
+      }
+    </style>
+  </head>
+  <body data-page="radio">
+    <div class="page-container">
+      <!-- Main Content -->
+      <div class="content-area">
+        <h1>Radio</h1>
+        <p class="description">
+          Material Design 3 radio buttons for single selection from multiple
+          options. Includes keyboard navigation, accessibility support, and all
+          interaction states. Not intended for binary on/off choices; use a
+          switch, or for multi-select, use checkboxes.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use radios for single selection within a group. This is the
+            recommended baseline because it enforces mutual exclusivity within a
+            <code>name</code> group and uses native arrow key navigation.
+          </p>
+          <div class="demo-box">
+            <div class="radio-item">
+              <ds-radio name="basic" value="option"></ds-radio>
+              <label>Single option</label>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-radio name="basic" value="option">&lt;/ds-radio></pre>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Preselect a sensible default option for the group.</p>
+          <div class="demo-box radio-demo-block">
+            <div class="radio-group">
+              <div class="radio-item">
+                <ds-radio name="delivery" value="standard" checked></ds-radio>
+                <label>Standard</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio name="delivery" value="express"></ds-radio>
+                <label>Express</label>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-radio name="delivery" value="standard" checked>&lt;/ds-radio>
+&lt;ds-radio name="delivery" value="express">&lt;/ds-radio></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>
+            Use vertical or horizontal layouts based on space and scanability.
+          </p>
+
+          <h3>Vertical Group</h3>
+          <ul>
+            <li>
+              <strong>Use when:</strong> Options have longer labels requiring
+              full-width layout.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> Fewer than 3 short options can scan
+              faster in a row.
+            </li>
+          </ul>
+          <div class="demo-box radio-demo-block">
+            <div class="radio-group">
+              <div class="radio-item">
+                <ds-radio name="size" value="small" checked></ds-radio>
+                <label>Small</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio name="size" value="medium"></ds-radio>
+                <label>Medium</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio name="size" value="large"></ds-radio>
+                <label>Large</label>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-radio name="size" value="small" checked>&lt;/ds-radio>
+&lt;ds-radio name="size" value="medium">&lt;/ds-radio>
+&lt;ds-radio name="size" value="large">&lt;/ds-radio></pre
+            >
+          </div>
+
+          <h3>Horizontal Group</h3>
+          <ul>
+            <li>
+              <strong>Use when:</strong> 2–3 short labels benefit from
+              side-by-side comparison.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> Labels are long or the layout is
+              narrow.
+            </li>
+          </ul>
+          <div class="demo-box radio-demo-block">
+            <div class="radio-group horizontal">
+              <div class="radio-item">
+                <ds-radio name="color" value="red" checked></ds-radio>
+                <label>Red</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio name="color" value="green"></ds-radio>
+                <label>Green</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio name="color" value="blue"></ds-radio>
+                <label>Blue</label>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-radio name="color" value="red" checked>&lt;/ds-radio>
+&lt;ds-radio name="color" value="green">&lt;/ds-radio>
+&lt;ds-radio name="color" value="blue">&lt;/ds-radio></pre
+            >
+          </div>
+
+          <h3>Sizes</h3>
+          <p>Use size to align with layout density.</p>
+          <div class="demo-box radio-demo-block">
+            <div class="radio-group horizontal">
+              <div class="radio-item">
+                <ds-radio name="size-demo" value="sm" size="sm"></ds-radio>
+                <label>Small</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio
+                  name="size-demo"
+                  value="md"
+                  size="md"
+                  checked></ds-radio>
+                <label>Medium</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio name="size-demo" value="lg" size="lg"></ds-radio>
+                <label>Large</label>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-radio name="size-demo" value="sm" size="sm">&lt;/ds-radio>
+&lt;ds-radio name="size-demo" value="md" size="md" checked>&lt;/ds-radio>
+&lt;ds-radio name="size-demo" value="lg" size="lg">&lt;/ds-radio></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Show unselected, selected, disabled, and error states.</p>
+
+          <h3>Default and Selected</h3>
+          <div class="demo-box">
+            <div class="radio-item">
+              <ds-radio name="basic-demo" value="unselected"></ds-radio>
+              <label>Unselected</label>
+            </div>
+            <div class="radio-item">
+              <ds-radio name="basic-demo" value="selected" checked></ds-radio>
+              <label>Selected</label>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-radio name="group1" value="option1">&lt;/ds-radio>
+&lt;ds-radio name="group1" value="option2" checked>&lt;/ds-radio></pre
+            >
+          </div>
+
+          <h3>Disabled</h3>
+          <div class="demo-box">
+            <div class="radio-item">
+              <ds-radio name="demo3" value="disabled" disabled></ds-radio>
+              <label>Disabled Unselected</label>
+            </div>
+            <div class="radio-item">
+              <ds-radio
+                name="demo4"
+                value="disabled-selected"
+                checked
+                disabled></ds-radio>
+              <label>Disabled Selected</label>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-radio disabled>&lt;/ds-radio>
+&lt;ds-radio checked disabled>&lt;/ds-radio></pre
+            >
+          </div>
+
+          <h3>Error</h3>
+          <div class="demo-box">
+            <div class="radio-item">
+              <ds-radio name="error-demo" value="error" error></ds-radio>
+              <label class="radio-error-label">Error State</label>
+            </div>
+            <div class="radio-item">
+              <ds-radio
+                name="error-demo"
+                value="error-selected"
+                checked
+                error></ds-radio>
+              <label class="radio-error-label">Error Selected</label>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-radio error>&lt;/ds-radio>
+&lt;ds-radio checked error>&lt;/ds-radio></pre
+            >
+          </div>
+        </div>
+
+        <!-- Interactive Example -->
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Select your preferred contact method:</p>
+
+          <div class="demo-box radio-demo-block">
+            <div class="radio-group">
+              <div class="radio-item">
+                <ds-radio
+                  name="contact"
+                  value="email"
+                  id="contact-email"
+                  checked></ds-radio>
+                <label for="contact-email">Email</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio
+                  name="contact"
+                  value="phone"
+                  id="contact-phone"></ds-radio>
+                <label for="contact-phone">Phone</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio
+                  name="contact"
+                  value="sms"
+                  id="contact-sms"></ds-radio>
+                <label for="contact-sms">SMS</label>
+              </div>
+              <div class="radio-item">
+                <ds-radio
+                  name="contact"
+                  value="mail"
+                  id="contact-mail"></ds-radio>
+                <label for="contact-mail">Postal Mail</label>
+              </div>
+            </div>
+            <div id="contact-output" class="radio-output">Selected: Email</div>
+          </div>
+        </div>
+
+        <!-- API Documentation -->
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>checked</code></td>
+                <td>Boolean</td>
+                <td>false</td>
+                <td>Whether the radio is selected</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>Boolean</td>
+                <td>false</td>
+                <td>Whether the radio is disabled</td>
+              </tr>
+              <tr>
+                <td><code>error</code></td>
+                <td>Boolean</td>
+                <td>false</td>
+                <td>Whether the radio has an error state</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>String</td>
+                <td>""</td>
+                <td>Group identifier - radios with same name form a group</td>
+              </tr>
+              <tr>
+                <td><code>value</code></td>
+                <td>String</td>
+                <td>""</td>
+                <td>Value to identify this specific radio option</td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td>String</td>
+                <td>""</td>
+                <td>
+                  Size of the radio (<code>sm</code>, <code>md</code>,
+                  <code>lg</code>)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>checked</code></td>
+                <td>Boolean</td>
+                <td>Get or set the checked state</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>Boolean</td>
+                <td>Get or set the disabled state</td>
+              </tr>
+              <tr>
+                <td><code>error</code></td>
+                <td>Boolean</td>
+                <td>Get or set the error state</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>String</td>
+                <td>Get or set the group name</td>
+              </tr>
+              <tr>
+                <td><code>value</code></td>
+                <td>String</td>
+                <td>Get or set the value</td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td>String</td>
+                <td>Get or set the size</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-radio:change</code></td>
+                <td><code>{ checked, value, name }</code></td>
+                <td>Fired when the radio is selected</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="2">None.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--md-sys-color-primary</code></td>
+                <td>Color of selected radio</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-on-surface-variant</code></td>
+                <td>Color of unselected radio</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-error</code></td>
+                <td>Color for error state</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-state-hover-opacity</code></td>
+                <td>Opacity for hover state layer</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-state-focus-opacity</code></td>
+                <td>Opacity for focus state layer</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-state-pressed-opacity</code></td>
+                <td>Opacity for pressed state layer</td>
+              </tr>
+              <tr>
+                <td><code>--ds-radio-size</code></td>
+                <td>Radio size (default: var(--ds-size-icon-md, 20px))</td>
+              </tr>
+              <tr>
+                <td><code>--ds-radio-dot-size</code></td>
+                <td>
+                  Inner dot size (default: calc(var(--ds-radio-size) / 2))
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-radio-state-layer-size</code></td>
+                <td>
+                  State layer size (default: var(--ds-size-hit-area, 40px))
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Map</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Outside radio group</td>
+                <td>
+                  Focuses the selected radio in the group, or first if none
+                  selected.
+                </td>
+              </tr>
+              <tr>
+                <td><code>Arrow Up</code> / <code>Arrow Left</code></td>
+                <td>Radio focused</td>
+                <td>Moves selection to previous radio in group.</td>
+              </tr>
+              <tr>
+                <td><code>Arrow Down</code> / <code>Arrow Right</code></td>
+                <td>Radio focused</td>
+                <td>Moves selection to next radio in group.</td>
+              </tr>
+              <tr>
+                <td><code>Space</code></td>
+                <td>Radio focused</td>
+                <td>Selects the focused radio.</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>Radio buttons expose <code>role="radio"</code>.</li>
+            <li><code>aria-checked</code> reflects the checked state.</li>
+            <li><code>aria-disabled</code> reflects the disabled state.</li>
+          </ul>
+        </div>
+
+        <!-- Usage Guidelines -->
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> User must select exactly one option
+              from a visible set of 2–7 options.
+            </li>
+            <li>
+              <strong>When not to use:</strong> User can select multiple options
+              (use checkboxes); many options are available (use a select);
+              binary on/off (use a switch).
+            </li>
+            <li>
+              <strong>Composition:</strong> Group radios with the same
+              <code>name</code> attribute to enforce mutual exclusivity.
+              Pre-select a sensible default.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Using radio buttons where no
+              selection is valid, omitting the <code>name</code> attribute, and
+              not providing labels.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Apply saved theme immediately to prevent flash -->
+    <script src="../shared/theme-init.js"></script>
+    <script type="module">
+      // Interactive demo
+      const contactRadios = document.querySelectorAll(
+        'ds-radio[name="contact"]',
+      );
+      const contactOutput = document.getElementById("contact-output");
+
+      contactRadios.forEach((radio) => {
+        radio.addEventListener("ds-radio:change", (e) => {
+          const labels = {
+            email: "Email",
+            phone: "Phone",
+            sms: "SMS",
+            mail: "Postal Mail",
+          };
+          contactOutput.textContent = `Selected: ${
+            labels[e.detail.value] || e.detail.value
+          }`;
+        });
+      });
+    </script>
+  </body>
+</html>

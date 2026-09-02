@@ -1,0 +1,404 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scrollbar - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="scrollbar">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Scrollbar</h1>
+        <p class="description">
+          Utility wrapper that applies Material Design 3 themed scrollbar styles
+          to overflow content. Not intended to alter scrolling mechanics or
+          replace native accessibility behavior.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Wrap long content to show a vertical scrollbar. This preserves
+            native scrolling while aligning visuals with MD3 tokens.
+          </p>
+          <div class="demo-box">
+            <ds-scrollbar
+              style="
+                inline-size: 260px;
+                block-size: 160px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div style="block-size: 420px; padding: 12px">
+                <p>Scrollable content line 1</p>
+                <p>Scrollable content line 2</p>
+                <p>Scrollable content line 3</p>
+                <p>Scrollable content line 4</p>
+                <p>Scrollable content line 5</p>
+                <p>Scrollable content line 6</p>
+              </div>
+            </ds-scrollbar>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-scrollbar style="block-size: 160px"&gt;
+  &lt;div style="block-size: 420px"&gt;...&lt;/div&gt;
+&lt;/ds-scrollbar&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Initialize with direction, color, and size attributes.</p>
+          <div class="demo-box">
+            <ds-scrollbar
+              size="thick"
+              color="secondary"
+              direction="vertical"
+              style="
+                inline-size: 260px;
+                block-size: 160px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div style="block-size: 420px; padding: 12px">
+                <p>Secondary thick scrollbar sample.</p>
+                <p>Scroll to inspect thumb style.</p>
+                <p>Additional sample line.</p>
+                <p>Additional sample line.</p>
+              </div>
+            </ds-scrollbar>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Adjust size and direction for different layout needs.</p>
+
+          <h3>Sizes</h3>
+          <div class="demo-box" style="display: grid; gap: 12px">
+            <ds-scrollbar
+              size="thin"
+              style="
+                inline-size: 260px;
+                block-size: 110px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div style="block-size: 260px; padding: 12px">Thin size</div>
+            </ds-scrollbar>
+            <ds-scrollbar
+              size="medium"
+              style="
+                inline-size: 260px;
+                block-size: 110px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div style="block-size: 260px; padding: 12px">Medium size</div>
+            </ds-scrollbar>
+            <ds-scrollbar
+              size="thick"
+              style="
+                inline-size: 260px;
+                block-size: 110px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div style="block-size: 260px; padding: 12px">Thick size</div>
+            </ds-scrollbar>
+          </div>
+
+          <h3>Directions</h3>
+          <div class="demo-box" style="display: grid; gap: 12px">
+            <ds-scrollbar
+              direction="horizontal"
+              style="
+                inline-size: 260px;
+                block-size: 90px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div
+                style="inline-size: 620px; padding: 12px; white-space: nowrap">
+                Horizontal scrolling content extends beyond the viewport.
+              </div>
+            </ds-scrollbar>
+            <ds-scrollbar
+              direction="both"
+              style="
+                inline-size: 260px;
+                block-size: 130px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div style="inline-size: 560px; block-size: 280px; padding: 12px">
+                Both axes enabled.
+              </div>
+            </ds-scrollbar>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Use color and hover visibility states.</p>
+          <div class="demo-box" style="display: grid; gap: 12px">
+            <ds-scrollbar
+              color="tertiary"
+              hover
+              style="
+                inline-size: 260px;
+                block-size: 120px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div style="block-size: 280px; padding: 12px">
+                Hover state (default)
+              </div>
+            </ds-scrollbar>
+            <ds-scrollbar
+              color="outline"
+              hover="false"
+              style="
+                inline-size: 260px;
+                block-size: 120px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div style="block-size: 280px; padding: 12px">
+                Always visible state
+              </div>
+            </ds-scrollbar>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Toggle size, color, and direction live.</p>
+          <div class="demo-box" style="display: grid; gap: 12px">
+            <label>
+              Size
+              <select id="size-control">
+                <option value="thin">thin</option>
+                <option value="medium" selected>medium</option>
+                <option value="thick">thick</option>
+              </select>
+            </label>
+            <label>
+              Color
+              <select id="color-control">
+                <option value="primary" selected>primary</option>
+                <option value="secondary">secondary</option>
+                <option value="tertiary">tertiary</option>
+                <option value="outline">outline</option>
+              </select>
+            </label>
+            <label>
+              Direction
+              <select id="direction-control">
+                <option value="vertical" selected>vertical</option>
+                <option value="horizontal">horizontal</option>
+                <option value="both">both</option>
+              </select>
+            </label>
+            <ds-scrollbar
+              id="interactive-scrollbar"
+              style="
+                inline-size: 280px;
+                block-size: 140px;
+                border: 1px solid var(--md-sys-color-outline);
+              ">
+              <div style="inline-size: 560px; block-size: 360px; padding: 12px">
+                Interactive scrollbar region
+              </div>
+            </ds-scrollbar>
+            <pre id="event-log" style="margin: 0">Event log:</pre>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>size</code></td>
+                <td>string</td>
+                <td><code>medium</code></td>
+                <td>
+                  <code>thin</code>, <code>medium</code>, <code>thick</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>color</code></td>
+                <td>string</td>
+                <td><code>primary</code></td>
+                <td>Scrollbar thumb color mapping.</td>
+              </tr>
+              <tr>
+                <td><code>hover</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Hover-only visibility toggle.</td>
+              </tr>
+              <tr>
+                <td><code>direction</code></td>
+                <td>string</td>
+                <td><code>vertical</code></td>
+                <td>
+                  <code>vertical</code>, <code>horizontal</code>,
+                  <code>both</code>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>None</td>
+                <td>-</td>
+                <td>Utility component emits no custom events.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>Scrollable content wrapper.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>getScrollbarSize()</code></td>
+                <td>Returns active scrollbar size token expression.</td>
+              </tr>
+              <tr>
+                <td><code>getColorVariable()</code></td>
+                <td>Returns active color variable name.</td>
+              </tr>
+              <tr>
+                <td><code>getHoverOpacity()</code></td>
+                <td>Returns hover-state opacity value.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-scrollbar-size-thin</code></td>
+                <td>Thin scrollbar thickness fallback mapping.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-scrollbar-size-medium</code></td>
+                <td>Medium scrollbar thickness fallback mapping.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-scrollbar-size-thick</code></td>
+                <td>Thick scrollbar thickness fallback mapping.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <ul>
+            <li>Preserves native scroll behavior and keyboard scrolling.</li>
+            <li>Does not alter semantic structure of slotted content.</li>
+            <li>Supports screen readers through normal DOM flow.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              Set explicit container dimensions on <code>ds-scrollbar</code>.
+            </li>
+            <li>Use <code>direction="both"</code> only when necessary.</li>
+            <li>
+              Prefer <code>hover="false"</code> for always-visible data-heavy
+              views.
+            </li>
+            <li>Choose color variants with sufficient contrast.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const scrollbar = document.querySelector("#interactive-scrollbar");
+      const sizeControl = document.querySelector("#size-control");
+      const colorControl = document.querySelector("#color-control");
+      const directionControl = document.querySelector("#direction-control");
+      const log = document.querySelector("#event-log");
+
+      const appendLog = (line) => {
+        log.textContent += `\n${line}`;
+      };
+
+      sizeControl.addEventListener("change", () => {
+        scrollbar.size = sizeControl.value;
+        appendLog(`size -> ${scrollbar.size}`);
+      });
+
+      colorControl.addEventListener("change", () => {
+        scrollbar.color = colorControl.value;
+        appendLog(`color -> ${scrollbar.color}`);
+      });
+
+      directionControl.addEventListener("change", () => {
+        scrollbar.direction = directionControl.value;
+        appendLog(`direction -> ${scrollbar.direction}`);
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

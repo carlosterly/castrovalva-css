@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dialog - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="dialog">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Dialog</h1>
+        <p class="description">
+          Material Design 3 dialog for focused confirmations, alerts, and
+          task-specific modal flows. Not intended for persistent navigation or
+          long-lived side-panel interactions.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use the default <code>basic</code> variant for standard modal tasks.
+            This is the recommended baseline because it balances flexibility,
+            readable width, and predictable focus trapping.
+          </p>
+          <div class="demo-box">
+            <ds-button id="open-basic">Open Basic Dialog</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-dialog id="dialog-basic" variant="basic"&gt;
+  &lt;span slot="title"&gt;Settings&lt;/span&gt;
+  &lt;p&gt;Update your preferences.&lt;/p&gt;
+  &lt;div slot="actions"&gt;
+    &lt;button type="button"&gt;Cancel&lt;/button&gt;
+    &lt;button type="button"&gt;Save&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/ds-dialog&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>
+            Pre-configure behavior with dismissal attributes for stricter
+            workflows.
+          </p>
+          <div class="demo-box">
+            <ds-button id="open-configured">Open Configured Dialog</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-dialog
+  variant="basic"
+  dismiss-on-backdrop-click="false"
+  dismiss-on-esc="false"&gt;
+  &lt;span slot="title"&gt;Review Required&lt;/span&gt;
+  &lt;p&gt;This dialog must be closed with explicit action buttons.&lt;/p&gt;
+&lt;/ds-dialog&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>
+            Dialog supports <code>basic</code>, <code>alert</code>, and
+            <code>full-screen</code> variants.
+          </p>
+
+          <h3>Basic</h3>
+          <ul>
+            <li>
+              <strong>Use when:</strong> You need a standard confirmation or
+              short form.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> The workflow is destructive and needs
+              stronger caution semantics.
+            </li>
+          </ul>
+
+          <h3>Alert</h3>
+          <ul>
+            <li>
+              <strong>Use when:</strong> You need high-attention confirmation,
+              especially destructive actions.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> User input is long or multi-step.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-button id="open-alert">Open Alert Dialog</ds-button>
+          </div>
+
+          <h3>Full-screen</h3>
+          <ul>
+            <li>
+              <strong>Use when:</strong> Content or forms require full mobile
+              viewport space.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> A short, simple confirmation would
+              suffice.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-button id="open-fullscreen">Open Full-screen Dialog</ds-button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>
+            Dialog behavior changes by state. Open state traps focus and locks
+            body scrolling, and dismissal attributes control whether Escape and
+            backdrop interactions close the dialog.
+          </p>
+          <div class="demo-box">
+            <ds-button id="open-state">Open State Demo</ds-button>
+            <ds-button id="close-state">Close State Demo</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+const dialog = document.querySelector('#dialog-state');
+dialog.show();
+dialog.close();</pre
+            >
+          </div>
+          <ul>
+            <li>
+              <strong>Default (closed):</strong> No focus trap, no scroll lock.
+            </li>
+            <li>
+              <strong>Open:</strong> Focus is trapped in the modal and page
+              scroll is locked.
+            </li>
+            <li>
+              <strong>Dismiss-locked:</strong>
+              <code>dismiss-on-backdrop-click="false"</code> and
+              <code>dismiss-on-esc="false"</code> require explicit actions.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>
+            Open dialogs and inspect lifecycle events emitted by the component.
+          </p>
+          <div class="demo-box">
+            <ds-button id="open-interactive">Open Interactive Dialog</ds-button>
+          </div>
+          <div class="demo-box" style="margin-block-start: 12px">
+            <pre id="event-log" style="margin: 0">
+Event log:
+</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API Reference</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td><code>basic</code></td>
+                <td>
+                  Dialog style: <code>basic</code>, <code>alert</code>,
+                  <code>full-screen</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>open</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Controls whether the dialog is visible.</td>
+              </tr>
+              <tr>
+                <td><code>dismiss-on-backdrop-click</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>
+                  Closes when the transparent modal backdrop area is clicked
+                  unless set to
+                  <code>false</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>dismiss-on-esc</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Closes on Escape key unless set to <code>false</code>.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-dialog:open</code></td>
+                <td><code>{}</code></td>
+                <td>Fired when dialog opens.</td>
+              </tr>
+              <tr>
+                <td><code>ds-dialog:close</code></td>
+                <td><code>{}</code></td>
+                <td>Fired when dialog closes.</td>
+              </tr>
+              <tr>
+                <td><code>ds-dialog:confirm</code></td>
+                <td><code>{}</code></td>
+                <td>Fired when default confirm button is clicked.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>show()</code></td>
+                <td>Opens the dialog and traps keyboard focus.</td>
+              </tr>
+              <tr>
+                <td><code>close()</code></td>
+                <td>Closes the dialog and restores previous focus.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>title</code></td>
+                <td>Dialog title content.</td>
+              </tr>
+              <tr>
+                <td><code>icon</code></td>
+                <td>Optional icon in full-screen header.</td>
+              </tr>
+              <tr>
+                <td><code>actions</code></td>
+                <td>Action area for cancel/confirm controls.</td>
+              </tr>
+              <tr>
+                <td>(default)</td>
+                <td>Main dialog body content.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-dialog-close-button-size</code></td>
+                <td>Close icon button size.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-dialog-icon-size</code></td>
+                <td>Header icon size for full-screen variant.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-dialog-action-gap</code></td>
+                <td>Spacing between action controls.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-dialog-surface-color</code></td>
+                <td>Dialog panel background color (defaults to white).</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Theming</h3>
+          <p>Override dialog surface color without changing global tokens.</p>
+          <div class="code-block">
+            <pre>
+ds-dialog {
+  --ds-dialog-surface-color: #ffffff;
+}</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Map</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Dialog open</td>
+                <td>Moves focus within dialog controls only.</td>
+              </tr>
+              <tr>
+                <td><code>Escape</code></td>
+                <td>Dialog open, dismiss enabled</td>
+                <td>Closes the dialog.</td>
+              </tr>
+              <tr>
+                <td><code>Escape</code></td>
+                <td>Dialog open, <code>dismiss-on-esc="false"</code></td>
+                <td>Dialog remains open until explicit action.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Semantics and Focus</h3>
+          <ul>
+            <li>
+              Uses <code>role="dialog"</code> with
+              <code>aria-modal="true"</code>.
+            </li>
+            <li>Traps focus inside the dialog while open.</li>
+            <li>Restores focus to the previous element on close.</li>
+            <li>Supports keyboard dismissal with Escape (configurable).</li>
+            <li>No visible scrim is rendered behind the dialog.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong>
+              Use <code>alert</code> for short confirmations and destructive
+              warnings.
+            </li>
+            <li>
+              <strong>When to use:</strong> Use <code>basic</code> for moderate
+              forms and settings.
+            </li>
+            <li>
+              <strong>When to use:</strong>
+              Use <code>full-screen</code> for long forms or mobile-first task
+              flows.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid dialogs for persistent
+              navigation, background monitoring, or non-blocking status updates.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Stacking multiple dialogs,
+              omitting explicit close actions in dismiss-locked flows, and using
+              long uncontrolled content without full-screen variant.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Known Limitations</h2>
+          <ul>
+            <li>
+              This implementation renders a transparent backdrop (no visible
+              scrim), which may differ from strict MD3 visual expectations.
+            </li>
+            <li>
+              Dialog open state is managed per page and closes any other open
+              dialogs automatically.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <ds-dialog id="dialog-basic" variant="basic">
+      <span slot="title">Settings</span>
+      <p>Update your preferences before continuing.</p>
+      <div slot="actions">
+        <button type="button" id="basic-cancel">Cancel</button>
+        <button type="button" id="basic-save">Save</button>
+      </div>
+    </ds-dialog>
+
+    <ds-dialog
+      id="dialog-configured"
+      variant="basic"
+      dismiss-on-backdrop-click="false"
+      dismiss-on-esc="false">
+      <span slot="title">Review Required</span>
+      <p>Confirm or cancel to exit this modal.</p>
+      <div slot="actions">
+        <button type="button" id="configured-cancel">Cancel</button>
+        <button type="button" id="configured-confirm">Confirm</button>
+      </div>
+    </ds-dialog>
+
+    <ds-dialog id="dialog-alert" variant="alert">
+      <span slot="title">Delete item?</span>
+      <p>This action cannot be undone.</p>
+      <div slot="actions">
+        <button type="button" id="alert-cancel">Cancel</button>
+        <button type="button" id="alert-delete">Delete</button>
+      </div>
+    </ds-dialog>
+
+    <ds-dialog id="dialog-fullscreen" variant="full-screen">
+      <span slot="icon" class="material-symbols-outlined">edit</span>
+      <span slot="title">Create Item</span>
+      <p>Collect extended form details in a full-screen workflow.</p>
+      <div slot="actions">
+        <button type="button" id="fullscreen-cancel">Cancel</button>
+        <button type="button" id="fullscreen-save">Save</button>
+      </div>
+    </ds-dialog>
+
+    <ds-dialog id="dialog-state" variant="basic">
+      <span slot="title">State Demo</span>
+      <p>Use external controls to open and close this dialog.</p>
+      <div slot="actions">
+        <button type="button" id="state-close">Close</button>
+      </div>
+    </ds-dialog>
+
+    <ds-dialog id="dialog-interactive" variant="basic">
+      <span slot="title">Interactive Dialog</span>
+      <p>Watch open/close events in the log.</p>
+      <div slot="actions">
+        <button type="button" id="interactive-cancel">Cancel</button>
+        <button type="button" id="interactive-confirm">Confirm</button>
+      </div>
+    </ds-dialog>
+
+    <script type="module">
+      const byId = (id) => document.getElementById(id);
+      const appendLog = (message) => {
+        const log = byId("event-log");
+        log.textContent += `${message}\n`;
+      };
+
+      const basicDialog = byId("dialog-basic");
+      const configuredDialog = byId("dialog-configured");
+      const alertDialog = byId("dialog-alert");
+      const fullDialog = byId("dialog-fullscreen");
+      const stateDialog = byId("dialog-state");
+      const interactiveDialog = byId("dialog-interactive");
+
+      byId("open-basic").addEventListener("click", () => basicDialog.show());
+      byId("basic-cancel").addEventListener("click", () => basicDialog.close());
+      byId("basic-save").addEventListener("click", () => basicDialog.close());
+
+      byId("open-configured").addEventListener("click", () =>
+        configuredDialog.show(),
+      );
+      byId("configured-cancel").addEventListener("click", () =>
+        configuredDialog.close(),
+      );
+      byId("configured-confirm").addEventListener("click", () =>
+        configuredDialog.close(),
+      );
+
+      byId("open-alert").addEventListener("click", () => alertDialog.show());
+      byId("alert-cancel").addEventListener("click", () => alertDialog.close());
+      byId("alert-delete").addEventListener("click", () => alertDialog.close());
+
+      byId("open-fullscreen").addEventListener("click", () =>
+        fullDialog.show(),
+      );
+      byId("fullscreen-cancel").addEventListener("click", () =>
+        fullDialog.close(),
+      );
+      byId("fullscreen-save").addEventListener("click", () =>
+        fullDialog.close(),
+      );
+
+      byId("open-state").addEventListener("click", () => stateDialog.show());
+      byId("close-state").addEventListener("click", () => stateDialog.close());
+      byId("state-close").addEventListener("click", () => stateDialog.close());
+
+      byId("open-interactive").addEventListener("click", () =>
+        interactiveDialog.show(),
+      );
+      byId("interactive-cancel").addEventListener("click", () =>
+        interactiveDialog.close(),
+      );
+      byId("interactive-confirm").addEventListener("click", () => {
+        appendLog("Manual confirm action clicked");
+        interactiveDialog.close();
+      });
+
+      interactiveDialog.addEventListener("ds-dialog:open", () => {
+        appendLog("ds-dialog:open");
+      });
+
+      interactiveDialog.addEventListener("ds-dialog:close", () => {
+        appendLog("ds-dialog:close");
+      });
+
+      interactiveDialog.addEventListener("ds-dialog:confirm", () => {
+        appendLog("ds-dialog:confirm");
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

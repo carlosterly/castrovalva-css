@@ -1,0 +1,462 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Image - Material Design 3 Component Library</title>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='14' fill='%236755A0'/%3E%3C/svg%3E" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="responsive-image">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Responsive Image</h1>
+        <p class="description">
+          Material Design 3 responsive image with lazy loading, art direction,
+          loading states, and graceful error handling. Not intended for purely
+          decorative backgrounds that belong in CSS.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Render a responsive image with source and alt text. The component
+            handles loading states and aspect ratio to reduce layout shift.
+          </p>
+          <div
+            class="demo-box"
+            style="max-inline-size: 640px; padding: 0; overflow: hidden">
+            <ds-responsive-image
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop"
+              alt="Mountain landscape"
+              aspect-ratio="4/3"></ds-responsive-image>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-responsive-image
+  src="image.jpg"
+  alt="Mountain landscape"
+  aspect-ratio="4/3"&gt;
+&lt;/ds-responsive-image&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Configure fit and ratio at initialization time.</p>
+          <div
+            class="demo-box"
+            style="max-inline-size: 640px; padding: 0; overflow: hidden">
+            <ds-responsive-image
+              src="https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=800&h=600&fit=crop"
+              alt="City skyline"
+              aspect-ratio="16/9"
+              fit="contain"></ds-responsive-image>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-responsive-image
+  src="image.jpg"
+  alt="City skyline"
+  aspect-ratio="16/9"
+  fit="contain"&gt;
+&lt;/ds-responsive-image&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Choose fit mode and source strategy based on layout needs.</p>
+
+          <h3>Object Fit Modes</h3>
+          <div
+            class="demo-box"
+            style="display: grid; gap: 12px; max-inline-size: 640px">
+            <ds-responsive-image
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&h=600&fit=crop"
+              alt="Cover mode"
+              aspect-ratio="16/9"
+              fit="cover"></ds-responsive-image>
+            <ds-responsive-image
+              src="https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=600&h=600&fit=crop"
+              alt="Contain mode"
+              aspect-ratio="16/9"
+              fit="contain"></ds-responsive-image>
+          </div>
+
+          <h3>Picture Sources</h3>
+          <div
+            class="demo-box"
+            style="max-inline-size: 640px; padding: 0; overflow: hidden">
+            <ds-responsive-image alt="Art directed image" aspect-ratio="16/9">
+              <source
+                media="(max-inline-size: 600px)"
+                srcset="
+                  https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=600&fit=crop
+                " />
+              <source
+                media="(min-inline-size: 601px)"
+                srcset="
+                  https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=900&h=506&fit=crop
+                " />
+              <source
+                srcset="
+                  https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=900&h=506&fit=crop
+                " />
+            </ds-responsive-image>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Support lazy loading and error display states.</p>
+          <div
+            class="demo-box"
+            style="display: grid; gap: 12px; max-inline-size: 640px">
+            <ds-responsive-image
+              lazy
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop"
+              alt="Lazy image"
+              aspect-ratio="4/3"></ds-responsive-image>
+            <ds-responsive-image
+              id="state-error-demo"
+              alt="Broken image"
+              aspect-ratio="4/3"></ds-responsive-image>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Adjust fit and aspect ratio to preview responsive behavior.</p>
+          <div
+            class="demo-box"
+            style="display: grid; gap: 12px; max-inline-size: 640px">
+            <label>
+              Aspect Ratio
+              <select id="ratio-control">
+                <option value="auto">auto</option>
+                <option value="16/9" selected>16/9</option>
+                <option value="4/3">4/3</option>
+                <option value="1/1">1/1</option>
+              </select>
+            </label>
+            <label>
+              Object Fit
+              <select id="fit-control">
+                <option value="cover" selected>cover</option>
+                <option value="contain">contain</option>
+                <option value="fill">fill</option>
+                <option value="scale-down">scale-down</option>
+              </select>
+            </label>
+            <ds-responsive-image
+              id="responsive-demo"
+              src="https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop"
+              alt="Interactive responsive image"
+              aspect-ratio="16/9"
+              fit="cover"></ds-responsive-image>
+          </div>
+          <div class="demo-box" style="margin-block-start: 12px">
+            <pre id="responsive-event-log" style="margin: 0">
+Event log:
+</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>src</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Main image URL.</td>
+              </tr>
+              <tr>
+                <td><code>srcset</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Responsive source set string.</td>
+              </tr>
+              <tr>
+                <td><code>sizes</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Sizes descriptor for srcset selection.</td>
+              </tr>
+              <tr>
+                <td><code>alt</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Alternative text for accessibility.</td>
+              </tr>
+              <tr>
+                <td><code>lazy</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Enable lazy loading with IntersectionObserver.</td>
+              </tr>
+              <tr>
+                <td><code>aspect-ratio</code></td>
+                <td>string</td>
+                <td><code>auto</code></td>
+                <td>Container aspect ratio (e.g. <code>16/9</code>).</td>
+              </tr>
+              <tr>
+                <td><code>fit</code></td>
+                <td>string</td>
+                <td><code>cover</code></td>
+                <td>
+                  <code>cover</code>, <code>contain</code>, <code>fill</code>,
+                  <code>scale-down</code>, <code>none</code>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>src</code></td>
+                <td>string</td>
+                <td>Source URL.</td>
+              </tr>
+              <tr>
+                <td><code>srcset</code></td>
+                <td>string</td>
+                <td>Source set value.</td>
+              </tr>
+              <tr>
+                <td><code>sizes</code></td>
+                <td>string</td>
+                <td>Sizes descriptor.</td>
+              </tr>
+              <tr>
+                <td><code>alt</code></td>
+                <td>string</td>
+                <td>Alternative text.</td>
+              </tr>
+              <tr>
+                <td><code>lazy</code></td>
+                <td>boolean</td>
+                <td>Lazy loading toggle.</td>
+              </tr>
+              <tr>
+                <td><code>aspectRatio</code></td>
+                <td>string</td>
+                <td>Aspect ratio mapping to <code>aspect-ratio</code>.</td>
+              </tr>
+              <tr>
+                <td><code>fit</code></td>
+                <td>string</td>
+                <td>Object fit mode.</td>
+              </tr>
+              <tr>
+                <td><code>loaded</code></td>
+                <td>boolean</td>
+                <td>Read-only loaded state.</td>
+              </tr>
+              <tr>
+                <td><code>error</code></td>
+                <td>boolean</td>
+                <td>Read-only error state.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>image-loading</code></td>
+                <td><code>{ src }</code></td>
+                <td>Fired when loading starts.</td>
+              </tr>
+              <tr>
+                <td><code>image-loaded</code></td>
+                <td><code>{ src }</code></td>
+                <td>Fired when image loads successfully.</td>
+              </tr>
+              <tr>
+                <td><code>image-error</code></td>
+                <td><code>{ src }</code></td>
+                <td>Fired when image fails to load.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>reload()</code></td>
+                <td>Resets state and retries current image load.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>None</td>
+                <td>This component currently does not expose shadow parts.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-responsive-image-loading-padding</code></td>
+                <td>
+                  Error/loading content padding (default
+                  <code>var(--ds-space-4)</code>).
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-responsive-image-loading-gap</code></td>
+                <td>
+                  Gap in placeholder layout (default
+                  <code>var(--ds-space-2)</code>).
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-responsive-image-icon-size</code></td>
+                <td>
+                  Placeholder/error icon size (default
+                  <code>var(--ds-size-icon-lg)</code>).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <ul>
+            <li>
+              Always provide meaningful <code>alt</code> text for non-decorative
+              images.
+            </li>
+            <li>Image element keeps semantic <code>role="img"</code>.</li>
+            <li>Error state exposes readable text fallback.</li>
+            <li>Use external captions for additional context where needed.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              Use <code>aspect-ratio</code> to reduce layout shift during
+              loading.
+            </li>
+            <li>Prefer <code>lazy</code> for below-the-fold images.</li>
+            <li>
+              Use <code>srcset</code> and <code>sizes</code> for
+              bandwidth-efficient responsive images.
+            </li>
+            <li>
+              Choose <code>fit="cover"</code> for media crops and
+              <code>fit="contain"</code> when full content must remain visible.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const demo = document.querySelector("#responsive-demo");
+      const ratioControl = document.querySelector("#ratio-control");
+      const fitControl = document.querySelector("#fit-control");
+      const log = document.querySelector("#responsive-event-log");
+
+      const appendLog = (message) => {
+        log.textContent += `${message}\n`;
+      };
+
+      ratioControl.addEventListener("change", () => {
+        demo.aspectRatio = ratioControl.value;
+        appendLog(`aspect-ratio -> ${demo.aspectRatio}`);
+      });
+
+      fitControl.addEventListener("change", () => {
+        demo.fit = fitControl.value;
+        appendLog(`fit -> ${demo.fit}`);
+      });
+
+      demo.addEventListener("image-loading", (event) => {
+        appendLog(`loading: ${event.detail.src || "picture source"}`);
+      });
+
+      demo.addEventListener("image-loaded", (event) => {
+        appendLog(`loaded: ${event.detail.src}`);
+      });
+
+      demo.addEventListener("image-error", (event) => {
+        appendLog(`error: ${event.detail.src || "unknown source"}`);
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

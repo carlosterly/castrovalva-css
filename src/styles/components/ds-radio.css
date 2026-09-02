@@ -1,0 +1,42 @@
+/* Material Design 3 Radio Button Styles */
+
+/* The styles are embedded in the component's shadow DOM */
+/* This file can be used for any global radio-related utilities if needed */
+
+/* Radio Group Container */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ds-space-2);
+}
+
+.radio-group.horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--ds-space-4);
+}
+
+/* Radio with Label */
+.radio-item {
+  display: flex;
+  align-items: center;
+  gap: var(--ds-space-2);
+  cursor: pointer;
+}
+
+.radio-item[data-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.38;
+}
+
+.radio-item label {
+  cursor: pointer;
+  user-select: none;
+  font-size: var(--md-sys-typescale-body-medium-size);
+  color: var(--md-sys-color-on-surface);
+}
+
+.radio-item[data-disabled="true"] label {
+  cursor: not-allowed;
+  color: var(--md-sys-color-on-surface);
+}

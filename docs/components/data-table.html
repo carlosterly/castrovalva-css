@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Data Table - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="data-table">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Data Table</h1>
+        <p class="description">
+          Material Design 3 data table for sortable, filterable, paginated, and
+          selectable tabular data. Not intended for hierarchical tree data or
+          dense spreadsheet editing workflows.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Render a simple table with data and column definitions. This
+            provides a consistent shell for sorting, filtering, and pagination
+            in data-heavy views.
+          </p>
+          <div class="demo-box">
+            <ds-data-table id="basic-table"></ds-data-table>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-data-table
+  data='[{"name":"Alice","age":30},{"name":"Bob","age":25}]'
+  columns='[{"key":"name","label":"Name"},{"key":"age","label":"Age"}]'&gt;
+&lt;/ds-data-table&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>
+            Set initial data and columns from JavaScript for richer
+            configurations.
+          </p>
+          <div class="demo-box">
+            <ds-data-table id="initial-table"></ds-data-table>
+          </div>
+          <div class="code-block">
+            <pre>
+const table = document.querySelector('#initial-table');
+table.data = [{ id: 1, name: 'Alice', age: 30 }];
+table.columns = [
+  { key: 'name', label: 'Name' },
+  { key: 'age', label: 'Age' }
+];</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants/Formats</h2>
+          <p>
+            Use configuration flags and column formatting for different display
+            needs.
+          </p>
+
+          <h3>Sortable and Filterable</h3>
+          <div class="demo-box">
+            <ds-data-table
+              id="sortable-filterable"
+              sortable
+              filterable></ds-data-table>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-data-table sortable filterable&gt;&lt;/ds-data-table&gt;</pre
+            >
+          </div>
+
+          <h3>Custom Column Formatting</h3>
+          <div class="demo-box">
+            <ds-data-table id="formatted-table"></ds-data-table>
+          </div>
+          <div class="code-block">
+            <pre>
+const columns = [
+  { key: 'name', label: 'Name' },
+  {
+    key: 'salary',
+    label: 'Salary',
+    format: (value) =&gt; `$${value.toLocaleString()}`
+  },
+  {
+    key: 'active',
+    label: 'Active',
+    format: (value) =&gt; (value ? 'Yes' : 'No')
+  }
+];</pre
+            >
+          </div>
+
+          <h3>Density Options</h3>
+          <div class="demo-box">
+            <ds-data-table id="density-default"></ds-data-table>
+            <ds-data-table
+              id="density-comfortable"
+              density="comfortable"></ds-data-table>
+            <ds-data-table
+              id="density-compact"
+              density="compact"></ds-data-table>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-data-table density="default"&gt;&lt;/ds-data-table&gt;
+&lt;ds-data-table density="comfortable"&gt;&lt;/ds-data-table&gt;
+&lt;ds-data-table density="compact"&gt;&lt;/ds-data-table&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Common state combinations for real application tables.</p>
+
+          <h3>No Pagination</h3>
+          <div class="demo-box">
+            <ds-data-table
+              id="state-no-pagination"
+              paginated="false"></ds-data-table>
+          </div>
+
+          <h3>No Filtering</h3>
+          <div class="demo-box">
+            <ds-data-table
+              id="state-no-filter"
+              filterable="false"></ds-data-table>
+          </div>
+
+          <h3>Selectable Rows</h3>
+          <div class="demo-box">
+            <ds-data-table id="state-selectable" selectable></ds-data-table>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-data-table paginated="false"&gt;&lt;/ds-data-table&gt;
+&lt;ds-data-table filterable="false"&gt;&lt;/ds-data-table&gt;
+&lt;ds-data-table selectable&gt;&lt;/ds-data-table&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Interact with the table and inspect emitted events.</p>
+          <div class="demo-box">
+            <ds-data-table
+              id="interactive-table"
+              sortable
+              filterable
+              paginated
+              selectable
+              page-size="5"></ds-data-table>
+          </div>
+          <div class="demo-box">
+            <pre id="event-output">Waiting for events...</pre>
+          </div>
+          <div class="code-block">
+            <pre>
+const table = document.querySelector('#interactive-table');
+
+['ds-data-table:sort', 'ds-data-table:filter', 'ds-data-table:page', 'ds-data-table:select']
+  .forEach((eventName) =&gt; {
+    table.addEventListener(eventName, (event) =&gt; {
+      console.log(eventName, event.detail);
+    });
+  });</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API Reference</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>data</code></td>
+                <td>string (JSON)</td>
+                <td><code>[]</code></td>
+                <td>JSON array of row objects</td>
+              </tr>
+              <tr>
+                <td><code>columns</code></td>
+                <td>string (JSON)</td>
+                <td><code>[]</code></td>
+                <td>JSON array of column definitions</td>
+              </tr>
+              <tr>
+                <td><code>sortable</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Enable header sorting</td>
+              </tr>
+              <tr>
+                <td><code>filterable</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Enable filter input</td>
+              </tr>
+              <tr>
+                <td><code>paginated</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Enable pagination footer</td>
+              </tr>
+              <tr>
+                <td><code>page-size</code></td>
+                <td>number</td>
+                <td>10</td>
+                <td>Rows per page</td>
+              </tr>
+              <tr>
+                <td><code>selectable</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Enable row selection checkboxes</td>
+              </tr>
+              <tr>
+                <td><code>density</code></td>
+                <td>string</td>
+                <td><code>default</code></td>
+                <td>
+                  <code>default</code>, <code>comfortable</code>, or
+                  <code>compact</code>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>data</code></td>
+                <td>Array</td>
+                <td>Gets or sets table row data</td>
+              </tr>
+              <tr>
+                <td><code>columns</code></td>
+                <td>Array</td>
+                <td>Gets or sets table column definitions</td>
+              </tr>
+              <tr>
+                <td><code>selectedRows</code></td>
+                <td>Array</td>
+                <td>Returns selected row indexes</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-data-table:sort</code></td>
+                <td><code>{ column, direction }</code></td>
+                <td>Emitted after sort changes</td>
+              </tr>
+              <tr>
+                <td><code>ds-data-table:filter</code></td>
+                <td><code>{ value }</code></td>
+                <td>Emitted after filter value changes</td>
+              </tr>
+              <tr>
+                <td><code>ds-data-table:page</code></td>
+                <td><code>{ page, pageSize }</code></td>
+                <td>Emitted after page navigation</td>
+              </tr>
+              <tr>
+                <td><code>ds-data-table:select</code></td>
+                <td><code>{ selectedRows, indices }</code></td>
+                <td>Emitted after row selection changes</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>Outer container wrapping toolbar, table, and footer</td>
+              </tr>
+              <tr>
+                <td><code>toolbar</code></td>
+                <td>Top toolbar containing filter controls</td>
+              </tr>
+              <tr>
+                <td><code>table</code></td>
+                <td>Table element</td>
+              </tr>
+              <tr>
+                <td><code>header</code></td>
+                <td>Table header section</td>
+              </tr>
+              <tr>
+                <td><code>body</code></td>
+                <td>Table body section</td>
+              </tr>
+              <tr>
+                <td><code>footer</code></td>
+                <td>Pagination footer</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>getTotalPages()</code></td>
+                <td>
+                  Returns total pages based on filtered data and page size
+                </td>
+              </tr>
+              <tr>
+                <td><code>getPageData()</code></td>
+                <td>Returns the data slice for the current page</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Toolbar, table, pagination</td>
+                <td>
+                  Moves focus across filter, header controls, rows, and paging
+                  buttons
+                </td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Sort headers / row selection controls</td>
+                <td>Triggers sort direction changes or row selection</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>Uses semantic table markup and <code>role="table"</code>.</li>
+            <li>
+              Filter and pagination controls include descriptive
+              <code>aria-label</code> values.
+            </li>
+            <li>Interactive controls maintain visible focus indicators.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use for structured, comparable
+              datasets where users need sorting, filtering, and page-level
+              navigation.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid for card-first mobile
+              layouts, unstructured content feeds, or deeply nested hierarchies.
+            </li>
+            <li>
+              <strong>Composition:</strong> Combine filtering and sorting for
+              large datasets, use compact density only where scan speed is
+              prioritized, and enable selection only with bulk actions.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Overloading columns hurts
+              readability. Define formatting logic in JavaScript for consistent
+              value rendering.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const sampleData = [
+        {
+          id: 1,
+          name: "Alice Johnson",
+          age: 30,
+          city: "New York",
+          dept: "Engineering",
+          salary: 98000,
+          active: true,
+        },
+        {
+          id: 2,
+          name: "Bob Smith",
+          age: 25,
+          city: "Los Angeles",
+          dept: "Design",
+          salary: 82000,
+          active: true,
+        },
+        {
+          id: 3,
+          name: "Charlie Brown",
+          age: 35,
+          city: "Chicago",
+          dept: "Marketing",
+          salary: 91000,
+          active: false,
+        },
+        {
+          id: 4,
+          name: "Diana Prince",
+          age: 28,
+          city: "Houston",
+          dept: "Engineering",
+          salary: 106000,
+          active: true,
+        },
+        {
+          id: 5,
+          name: "Eve Wilson",
+          age: 32,
+          city: "Phoenix",
+          dept: "Sales",
+          salary: 88000,
+          active: false,
+        },
+        {
+          id: 6,
+          name: "Frank Miller",
+          age: 29,
+          city: "Philadelphia",
+          dept: "Design",
+          salary: 79000,
+          active: true,
+        },
+        {
+          id: 7,
+          name: "Grace Lee",
+          age: 31,
+          city: "San Antonio",
+          dept: "Engineering",
+          salary: 102000,
+          active: true,
+        },
+        {
+          id: 8,
+          name: "Henry Davis",
+          age: 27,
+          city: "San Diego",
+          dept: "Marketing",
+          salary: 84000,
+          active: false,
+        },
+        {
+          id: 9,
+          name: "Iris Chen",
+          age: 33,
+          city: "Dallas",
+          dept: "Sales",
+          salary: 87000,
+          active: true,
+        },
+        {
+          id: 10,
+          name: "Jack Taylor",
+          age: 26,
+          city: "San Jose",
+          dept: "Engineering",
+          salary: 93000,
+          active: true,
+        },
+      ];
+
+      const baseColumns = [
+        { key: "name", label: "Name" },
+        { key: "age", label: "Age" },
+        { key: "city", label: "City" },
+        { key: "dept", label: "Department" },
+      ];
+
+      const basicTable = document.getElementById("basic-table");
+      basicTable.data = sampleData.slice(0, 3);
+      basicTable.columns = baseColumns;
+
+      const initialTable = document.getElementById("initial-table");
+      initialTable.data = sampleData.slice(0, 4);
+      initialTable.columns = baseColumns;
+
+      const sortableFilterable = document.getElementById("sortable-filterable");
+      sortableFilterable.data = sampleData;
+      sortableFilterable.columns = baseColumns;
+
+      const formattedTable = document.getElementById("formatted-table");
+      formattedTable.data = sampleData.slice(0, 5);
+      formattedTable.columns = [
+        { key: "name", label: "Name" },
+        {
+          key: "salary",
+          label: "Salary",
+          format: (value) => `$${value.toLocaleString()}`,
+        },
+        {
+          key: "active",
+          label: "Active",
+          format: (value) => (value ? "Yes" : "No"),
+        },
+      ];
+
+      const densityDefault = document.getElementById("density-default");
+      densityDefault.data = sampleData.slice(0, 3);
+      densityDefault.columns = baseColumns;
+
+      const densityComfortable = document.getElementById("density-comfortable");
+      densityComfortable.data = sampleData.slice(0, 3);
+      densityComfortable.columns = baseColumns;
+
+      const densityCompact = document.getElementById("density-compact");
+      densityCompact.data = sampleData.slice(0, 3);
+      densityCompact.columns = baseColumns;
+
+      const stateNoPagination = document.getElementById("state-no-pagination");
+      stateNoPagination.data = sampleData.slice(0, 6);
+      stateNoPagination.columns = baseColumns;
+
+      const stateNoFilter = document.getElementById("state-no-filter");
+      stateNoFilter.data = sampleData.slice(0, 6);
+      stateNoFilter.columns = baseColumns;
+
+      const stateSelectable = document.getElementById("state-selectable");
+      stateSelectable.data = sampleData.slice(0, 6);
+      stateSelectable.columns = baseColumns;
+
+      const interactiveTable = document.getElementById("interactive-table");
+      interactiveTable.data = sampleData;
+      interactiveTable.columns = baseColumns;
+
+      const eventOutput = document.getElementById("event-output");
+      const trackedEvents = [
+        "ds-data-table:sort",
+        "ds-data-table:filter",
+        "ds-data-table:page",
+        "ds-data-table:select",
+      ];
+
+      trackedEvents.forEach((eventName) => {
+        interactiveTable.addEventListener(eventName, (event) => {
+          eventOutput.textContent = `${eventName}\n${JSON.stringify(event.detail, null, 2)}`;
+        });
+      });
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

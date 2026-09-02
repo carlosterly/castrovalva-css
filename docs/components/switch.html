@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Switch - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="switch">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Switch</h1>
+        <p class="description">
+          Material Design 3 toggle switch for binary on/off states with smooth
+          animations and clear visual feedback. Not intended for multi-option
+          selection; use checkboxes or radios for those scenarios.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use switches for binary settings. This is the recommended baseline
+            because switches communicate on/off state more directly than a
+            checkbox and apply the setting immediately without requiring a
+            submit action.
+          </p>
+          <div class="demo-box">
+            <div class="switch-group">
+              <div class="switch-item">
+                <ds-switch id="switch-basic"></ds-switch>
+                <label for="switch-basic">Enable alerts</label>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-switch id="switch-basic"&gt;&lt;/ds-switch&gt;
+&lt;label for="switch-basic"&gt;Enable alerts&lt;/label&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Use icons when the state should be explicit.</p>
+
+          <h3>With Icons</h3>
+          <p>Shows a checkmark for the on state.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> The on/off status needs extra clarity,
+              especially in accessibility-sensitive contexts.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> Simple context makes the state
+              self-evident and icons would add visual noise.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <div class="switch-group">
+              <div class="switch-item">
+                <ds-switch id="switch-icon-off" show-icons></ds-switch>
+                <label for="switch-icon-off">Off with icon</label>
+              </div>
+              <div class="switch-item">
+                <ds-switch id="switch-icon-on" checked show-icons></ds-switch>
+                <label for="switch-icon-on">On with icon</label>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-switch show-icons&gt;&lt;/ds-switch&gt;
+&lt;ds-switch checked show-icons&gt;&lt;/ds-switch&gt;</pre
+            >
+          </div>
+
+          <h3>Sizes</h3>
+          <p>Use size to align with layout density.</p>
+          <div class="demo-box">
+            <div class="switch-group">
+              <div class="switch-item">
+                <ds-switch id="switch-size-sm" size="sm"></ds-switch>
+                <label for="switch-size-sm">Small</label>
+              </div>
+              <div class="switch-item">
+                <ds-switch id="switch-size-md" size="md" checked></ds-switch>
+                <label for="switch-size-md">Medium</label>
+              </div>
+              <div class="switch-item">
+                <ds-switch id="switch-size-lg" size="lg"></ds-switch>
+                <label for="switch-size-lg">Large</label>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-switch size="sm"&gt;&lt;/ds-switch&gt;
+&lt;ds-switch size="md" checked&gt;&lt;/ds-switch&gt;
+&lt;ds-switch size="lg"&gt;&lt;/ds-switch&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Show on, off, and disabled states clearly.</p>
+
+          <h3>On and Off</h3>
+          <p>Default switch behavior with on and off states.</p>
+          <div class="demo-box">
+            <div class="switch-group">
+              <div class="switch-item">
+                <ds-switch id="switch-off"></ds-switch>
+                <label for="switch-off">Off</label>
+              </div>
+              <div class="switch-item">
+                <ds-switch id="switch-on" checked></ds-switch>
+                <label for="switch-on">On</label>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-switch&gt;&lt;/ds-switch&gt;
+&lt;ds-switch checked&gt;&lt;/ds-switch&gt;</pre
+            >
+          </div>
+
+          <h3>Disabled</h3>
+          <p>Switches can be disabled in both on and off states.</p>
+          <div class="demo-box">
+            <div class="switch-group">
+              <div class="switch-item">
+                <ds-switch id="switch-disabled-off" disabled></ds-switch>
+                <label for="switch-disabled-off">Disabled off</label>
+              </div>
+              <div class="switch-item">
+                <ds-switch id="switch-disabled-on" checked disabled></ds-switch>
+                <label for="switch-disabled-on">Disabled on</label>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-switch disabled&gt;&lt;/ds-switch&gt;
+&lt;ds-switch checked disabled&gt;&lt;/ds-switch&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Live example showing switches in a settings panel.</p>
+          <div class="demo-box">
+            <div class="switch-group">
+              <div class="switch-item">
+                <ds-switch id="notifications" checked></ds-switch>
+                <label for="notifications">Enable notifications</label>
+              </div>
+              <div class="switch-item">
+                <ds-switch id="darkmode" show-icons></ds-switch>
+                <label for="darkmode">Dark mode</label>
+              </div>
+              <div class="switch-item">
+                <ds-switch id="autosave" checked show-icons></ds-switch>
+                <label for="autosave">Auto-save</label>
+              </div>
+              <div class="switch-item">
+                <ds-switch id="bluetooth"></ds-switch>
+                <label for="bluetooth">Bluetooth</label>
+              </div>
+            </div>
+
+            <div id="status" class="status-box"></div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th scope="col">Attribute</th>
+                <th scope="col">Type</th>
+                <th scope="col">Default</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>checked</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Whether the switch is on.</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Whether the switch is disabled.</td>
+              </tr>
+              <tr>
+                <td><code>show-icons</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Whether to show the selected icon.</td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>
+                  Size of the switch (<code>sm</code>, <code>md</code>,
+                  <code>lg</code>).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th scope="col">Property</th>
+                <th scope="col">Type</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>checked</code></td>
+                <td>boolean</td>
+                <td>Get or set the checked state.</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>Get or set the disabled state.</td>
+              </tr>
+              <tr>
+                <td><code>showIcons</code></td>
+                <td>boolean</td>
+                <td>Get or set whether icons are shown.</td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td>string</td>
+                <td>Get or set the size.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th scope="col">Event</th>
+                <th scope="col">Detail</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-switch:change</code></td>
+                <td><code>{ checked: boolean }</code></td>
+                <td>Fired when the switch state changes.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th scope="col">Method</th>
+                <th scope="col">Returns</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>toggle()</code></td>
+                <td>void</td>
+                <td>Toggle the switch state.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th scope="col">Part</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td colspan="2">None.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th scope="col">Property</th>
+                <th scope="col">Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--md-sys-color-primary</code></td>
+                <td>Track color for the on state.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-on-primary</code></td>
+                <td>Handle color for the on state.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-outline</code></td>
+                <td>Track border color for the off state.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-surface-container-highest</code></td>
+                <td>Track background for the off state.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-on-surface</code></td>
+                <td>Disabled state color.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-shadow-1</code></td>
+                <td>Handle elevation shadow.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-switch-track-width</code></td>
+                <td>
+                  Track width (default: calc(var(--ds-switch-track-height,
+                  var(--ds-size-control-sm, 32px)) + 20px)).
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-switch-track-height</code></td>
+                <td>
+                  Track height (default: var(--ds-size-control-sm, 32px)).
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-switch-icon-size</code></td>
+                <td>Base icon size (default: var(--ds-size-icon-md, 18px)).</td>
+              </tr>
+              <tr>
+                <td><code>--ds-switch-state-layer-size</code></td>
+                <td>
+                  State layer size (default: var(--ds-size-hit-area, 40px)).
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-switch-handle-size-off</code></td>
+                <td>
+                  Handle size when off (default: calc(var(--ds-switch-icon-size)
+                  - 2px)).
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-switch-handle-size-on</code></td>
+                <td>
+                  Handle size when on (default: calc(var(--ds-switch-icon-size)
+                  + 6px)).
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-switch-handle-size-pressed</code></td>
+                <td>
+                  Handle size when pressed (default:
+                  calc(var(--ds-switch-icon-size) + 10px)).
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-switch-handle-icon-size</code></td>
+                <td>Handle icon size (default: var(--ds-switch-icon-size)).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Map</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Switch not focused</td>
+                <td>Moves focus to the switch.</td>
+              </tr>
+              <tr>
+                <td><code>Space</code> / <code>Enter</code></td>
+                <td>Switch focused</td>
+                <td>Toggles on/off state and emits change event.</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Uses <code>role="switch"</code>, <code>aria-checked</code>, and
+              <code>aria-disabled</code>.
+            </li>
+            <li>Screen readers announce the on/off state.</li>
+            <li>Visible focus indicator supports keyboard navigation.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Immediately-applied binary settings
+              such as notifications, dark mode, or Wi-Fi.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Actions that need explicit
+              confirmation before taking effect; use a button and dialog.
+            </li>
+            <li>
+              <strong>Composition:</strong> Always pair with a visible label so
+              the setting is clear without interaction.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Using switches for multi-select
+              or non-binary choices, and omitting labels.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script type="module">
+      // Interactive example status updates
+      const statusBox = document.getElementById("status");
+      const switches = ["notifications", "darkmode", "autosave", "bluetooth"];
+
+      function updateStatus() {
+        const states = switches.map((id) => {
+          const sw = document.getElementById(id);
+          const label = sw.nextElementSibling.textContent;
+          return `${label}: ${sw.checked ? "ON" : "OFF"}`;
+        });
+        statusBox.innerHTML = `<strong>Current Settings:</strong><br>${states.join(
+          "<br>",
+        )}`;
+      }
+
+      // Listen for changes on all switches
+      switches.forEach((id) => {
+        const switchEl = document.getElementById(id);
+        switchEl.addEventListener("ds-switch:change", updateStatus);
+      });
+
+      // Initial status
+      updateStatus();
+
+      // Make labels clickable
+      document.querySelectorAll("label[for]").forEach((label) => {
+        label.addEventListener("click", (e) => {
+          e.preventDefault();
+          const switchEl = document.getElementById(label.getAttribute("for"));
+          if (!switchEl.disabled) {
+            switchEl.toggle();
+          }
+        });
+      });
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

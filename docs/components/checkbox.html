@@ -1,0 +1,389 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkbox - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="checkbox">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Checkbox</h1>
+        <p class="description">
+          Material Design 3 checkbox for binary selection with checked,
+          unchecked, and indeterminate states. Not intended for mutually
+          exclusive single-choice scenarios; use radio buttons instead.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use checkboxes for independent boolean choices. This is the
+            recommended baseline because each checkbox operates independently
+            and supports three states: checked, unchecked, and indeterminate.
+          </p>
+          <div class="demo-box">
+            <ds-checkbox label="Subscribe to newsletter"></ds-checkbox>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-checkbox label="Subscribe to newsletter">&lt;/ds-checkbox></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Use the label to describe the choice and optional value.</p>
+
+          <h3>Default (Unchecked)</h3>
+          <p>Default unselected state.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> The user should opt in with no default
+              commitment.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> One of multiple exclusive options
+              must be selected; use a radio group.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-checkbox label="Receive product updates"></ds-checkbox>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-checkbox label="Receive product updates">&lt;/ds-checkbox></pre
+            >
+          </div>
+
+          <h3>Checked</h3>
+          <p>Selected state for active choices.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> Pre-selecting items that are on by
+              default.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> Pre-selection might obscure the
+              user's actual preference.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-checkbox label="Remember me" checked></ds-checkbox>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-checkbox label="Remember me" checked>&lt;/ds-checkbox></pre
+            >
+          </div>
+
+          <h3>Sizes</h3>
+          <p>Use size to align with layout density.</p>
+          <div class="demo-box">
+            <ds-checkbox label="Small" size="sm"></ds-checkbox>
+            <ds-checkbox label="Medium" size="md"></ds-checkbox>
+            <ds-checkbox label="Large" size="lg"></ds-checkbox>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-checkbox label="Small" size="sm">&lt;/ds-checkbox>
+&lt;ds-checkbox label="Medium" size="md">&lt;/ds-checkbox>
+&lt;ds-checkbox label="Large" size="lg">&lt;/ds-checkbox></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Show indeterminate, error, and disabled states clearly.</p>
+
+          <h3>Indeterminate</h3>
+          <p>Use for partial selection (such as select-all lists).</p>
+          <div class="demo-box">
+            <ds-checkbox label="Select all" indeterminate></ds-checkbox>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-checkbox label="Select all" indeterminate>&lt;/ds-checkbox></pre
+            >
+          </div>
+
+          <h3>Error</h3>
+          <p>Highlight validation issues.</p>
+          <div class="demo-box">
+            <ds-checkbox label="I agree to the terms" error></ds-checkbox>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-checkbox label="I agree to the terms" error>&lt;/ds-checkbox></pre
+            >
+          </div>
+
+          <h3>Disabled</h3>
+          <p>Disable inputs that cannot be changed.</p>
+          <div class="demo-box">
+            <ds-checkbox label="Disabled unchecked" disabled></ds-checkbox>
+            <ds-checkbox
+              label="Disabled checked"
+              checked
+              disabled></ds-checkbox>
+            <ds-checkbox
+              label="Disabled indeterminate"
+              indeterminate
+              disabled></ds-checkbox>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-checkbox label="Disabled checked" checked disabled>&lt;/ds-checkbox></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>With Labels</h2>
+          <p>Labels provide accessible names for screen readers.</p>
+          <div class="demo-box">
+            <ds-checkbox label="Email notifications"></ds-checkbox>
+            <ds-checkbox label="SMS notifications"></ds-checkbox>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-checkbox label="Email notifications">&lt;/ds-checkbox></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Label text displayed next to the checkbox.</td>
+              </tr>
+              <tr>
+                <td><code>name</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Form field name.</td>
+              </tr>
+              <tr>
+                <td><code>value</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Form value when checked.</td>
+              </tr>
+              <tr>
+                <td><code>checked</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Checked state.</td>
+              </tr>
+              <tr>
+                <td><code>indeterminate</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Indeterminate state.</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables the checkbox.</td>
+              </tr>
+              <tr>
+                <td><code>error</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Shows error state.</td>
+              </tr>
+              <tr>
+                <td><code>required</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Makes the checkbox required.</td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>
+                  Size of the checkbox (<code>sm</code>, <code>md</code>,
+                  <code>lg</code>).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-checkbox:change</code></td>
+                <td>
+                  <code
+                    >{ checked: boolean, indeterminate: boolean, value: string
+                    }</code
+                  >
+                </td>
+                <td>Fired when the checkbox state changes.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>The checkbox container.</td>
+              </tr>
+              <tr>
+                <td><code>input</code></td>
+                <td>The hidden native input.</td>
+              </tr>
+              <tr>
+                <td><code>icon</code></td>
+                <td>The checkbox icon.</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>The label text element.</td>
+              </tr>
+              <tr>
+                <td><code>state-layer</code></td>
+                <td>The interaction state layer.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-checkbox-size</code></td>
+                <td>Checkbox size (default: var(--ds-size-icon-md, 18px)).</td>
+              </tr>
+              <tr>
+                <td><code>--ds-checkbox-icon-size</code></td>
+                <td>
+                  Checkbox icon size (default: var(--ds-size-icon-md, 18px)).
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-checkbox-state-layer-size</code></td>
+                <td>
+                  State layer size (default: var(--ds-size-hit-area, 40px)).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Map</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Checkbox not focused</td>
+                <td>Moves focus to the checkbox.</td>
+              </tr>
+              <tr>
+                <td><code>Space</code></td>
+                <td>Checkbox focused</td>
+                <td>Toggles checked/unchecked state.</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Exposes <code>role="checkbox"</code> and
+              <code>aria-checked</code>.
+            </li>
+            <li>
+              Uses <code>aria-disabled</code> and
+              <code>aria-required</code> when set.
+            </li>
+            <li>Focus indicators meet WCAG 2.2 requirements.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Multiple independent options that
+              can each be on or off, such as feature toggles or multi-select
+              lists.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Single exclusive choice from a
+              set; use radio buttons. Binary on/off settings; consider a switch.
+            </li>
+            <li>
+              <strong>Composition:</strong> Group checkboxes with a parent
+              checkbox to support indeterminate state for bulk selection.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Using checkboxes where only one
+              option should be active, and omitting labels.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

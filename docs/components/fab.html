@@ -1,0 +1,681 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAB - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <style>
+      .demo-row {
+        display: flex;
+        gap: var(--ds-space-4, 16px);
+        align-items: center;
+        flex-wrap: wrap;
+      }
+
+      .demo-column {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--ds-space-2, 8px);
+      }
+
+      .demo-caption {
+        margin: 0;
+        font-size: var(--md-sys-typescale-body-small-size);
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .demo-stage {
+        position: relative;
+        min-block-size: 200px;
+        padding: var(--ds-space-4, 16px);
+        background: var(--md-sys-color-surface-container-low);
+        border-radius: var(--ds-radius-sm, 8px);
+      }
+
+      .demo-stage--tall {
+        min-block-size: 260px;
+      }
+
+      .demo-stage--xl {
+        min-block-size: 320px;
+      }
+
+      .demo-output {
+        margin-block-start: var(--ds-space-4, 16px);
+        padding: var(--ds-space-4, 16px);
+        background: var(--md-sys-color-surface-container);
+        border-radius: var(--ds-radius-sm, 8px);
+        min-block-size: 48px;
+      }
+
+      .fab-absolute {
+        position: absolute;
+        inset-block-end: var(--ds-space-4, 16px);
+        inset-inline-start: var(--ds-space-4, 16px);
+      }
+
+      .fab-fixed-wrapper {
+        position: fixed;
+        inset-block-end: var(--ds-space-4, 16px);
+        inset-inline-end: var(--ds-space-4, 16px);
+        z-index: 1000;
+      }
+
+      .demo-note {
+        margin: 0;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+    </style>
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="fab">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>FAB</h1>
+        <p class="description">
+          Material Design 3 Floating Action Button for promoting a primary
+          action above surrounding content. Not intended for secondary or
+          frequent inline actions; use standard buttons for those interactions.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use a single FAB to highlight the most important action. The FAB
+            floats above content to keep a single high-priority action
+            consistently discoverable.
+          </p>
+          <div class="demo-box">
+            <ds-fab position="none">
+              <ds-icon>add</ds-icon>
+            </ds-fab>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-fab position="none"&gt;
+  &lt;ds-icon&gt;add&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Use the label attribute to prefill extended FAB text.</p>
+          <div class="demo-box">
+            <ds-fab size="extended" label="Compose" position="none">
+              <ds-icon>edit</ds-icon>
+            </ds-fab>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-fab size="extended" label="Compose" position="none"&gt;
+  &lt;ds-icon&gt;edit&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants and Formats</h2>
+          <p>Choose size, color, and layout formats to match the surface.</p>
+
+          <h3>Sizes</h3>
+          <div class="demo-box demo-row">
+            <div class="demo-column">
+              <ds-fab size="small" position="none">
+                <ds-icon>edit</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Small</p>
+            </div>
+            <div class="demo-column">
+              <ds-fab position="none">
+                <ds-icon>add</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Default</p>
+            </div>
+            <div class="demo-column">
+              <ds-fab size="large" position="none">
+                <ds-icon>chat</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Large</p>
+            </div>
+            <div class="demo-column">
+              <ds-fab size="extended" label="Create" position="none">
+                <ds-icon>add</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Extended</p>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-fab size="small" position="none"&gt;
+  &lt;ds-icon&gt;edit&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;
+
+&lt;ds-fab position="none"&gt;
+  &lt;ds-icon&gt;add&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;
+
+&lt;ds-fab size="large" position="none"&gt;
+  &lt;ds-icon&gt;chat&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;
+
+&lt;ds-fab size="extended" label="Create" position="none"&gt;
+  &lt;ds-icon&gt;add&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;</pre
+            >
+          </div>
+
+          <h3>Colors</h3>
+          <div class="demo-box demo-row">
+            <div class="demo-column">
+              <ds-fab color="primary" position="none">
+                <ds-icon>add</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Primary</p>
+            </div>
+            <div class="demo-column">
+              <ds-fab color="secondary" position="none">
+                <ds-icon>edit</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Secondary</p>
+            </div>
+            <div class="demo-column">
+              <ds-fab color="tertiary" position="none">
+                <ds-icon>favorite</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Tertiary</p>
+            </div>
+            <div class="demo-column">
+              <ds-fab color="surface" position="none">
+                <ds-icon>share</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Surface</p>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-fab color="primary" position="none"&gt;
+  &lt;ds-icon&gt;add&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;
+
+&lt;ds-fab color="secondary" position="none"&gt;
+  &lt;ds-icon&gt;edit&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;
+
+&lt;ds-fab color="tertiary" position="none"&gt;
+  &lt;ds-icon&gt;favorite&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;
+
+&lt;ds-fab color="surface" position="none"&gt;
+  &lt;ds-icon&gt;share&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;</pre
+            >
+          </div>
+
+          <h3>Speed Dial</h3>
+          <div class="demo-box demo-stage demo-stage--tall">
+            <p class="demo-note">
+              Click the FAB to reveal related actions. Click outside or select
+              an action to close.
+            </p>
+            <ds-fab
+              speed-dial
+              position="none"
+              id="fab-speed-dial"
+              class="fab-absolute">
+              <ds-icon>add</ds-icon>
+            </ds-fab>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-fab speed-dial id="fabSpeed" position="none"&gt;
+  &lt;ds-icon&gt;add&lt;/ds-icon&gt;
+&lt;/ds-fab&gt;
+
+&lt;script type="module"&gt;
+  const fab = document.getElementById("fabSpeed");
+  fab.addAction({ icon: "edit", label: "Edit" });
+  fab.addAction({ icon: "share", label: "Share" });
+&lt;/script&gt;</pre
+            >
+          </div>
+
+          <h3>Positioning</h3>
+          <p>
+            Fixed-position FAB with speed dial menu (bottom-right corner).
+            <strong>Recommended approach:</strong> Use a fixed-positioned
+            wrapper with <code>position="none"</code> to avoid rendering context
+            issues.
+          </p>
+          <div class="demo-box demo-stage demo-stage--tall">
+            <div class="fab-fixed-wrapper">
+              <ds-fab speed-dial position="none" id="fab-bottom-positioned">
+                <ds-icon>add</ds-icon>
+              </ds-fab>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;div style="position: fixed; inset-block-end: 16px; inset-inline-end: 16px; z-index: 1000;"&gt;
+  &lt;ds-fab speed-dial position="none"&gt;
+    &lt;ds-icon&gt;add&lt;/ds-icon&gt;
+  &lt;/ds-fab&gt;
+&lt;/div&gt;
+
+&lt;script type="module"&gt;
+  const fab = document.querySelector("ds-fab[speed-dial]");
+  fab.addAction({ icon: "edit", label: "Edit" });
+  fab.addAction({ icon: "share", label: "Share" });
+  fab.addAction({ icon: "archive", label: "Archive" });
+&lt;/script&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Use disabled and lowered states for visual hierarchy.</p>
+
+          <h3>Disabled</h3>
+          <div class="demo-box">
+            <ds-fab disabled position="none">
+              <ds-icon>add</ds-icon>
+            </ds-fab>
+          </div>
+
+          <h3>Lowered</h3>
+          <div class="demo-box demo-row">
+            <div class="demo-column">
+              <ds-fab position="none">
+                <ds-icon>add</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Normal</p>
+            </div>
+            <div class="demo-column">
+              <ds-fab lowered position="none">
+                <ds-icon>add</ds-icon>
+              </ds-fab>
+              <p class="demo-caption">Lowered</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Listen for click events and update UI feedback.</p>
+          <div class="demo-box demo-row">
+            <ds-fab position="none" id="fab-interactive-default">
+              <ds-icon>add</ds-icon>
+            </ds-fab>
+            <ds-fab
+              size="extended"
+              label="Create"
+              position="none"
+              id="fab-interactive-extended">
+              <ds-icon>add</ds-icon>
+            </ds-fab>
+            <ds-fab
+              size="small"
+              color="secondary"
+              position="none"
+              id="fab-interactive-small">
+              <ds-icon>edit</ds-icon>
+            </ds-fab>
+          </div>
+          <div id="fab-output" class="demo-output">
+            Click a FAB to see output.
+          </div>
+          <div class="code-block">
+            <pre>
+const fab = document.querySelector("ds-fab");
+
+fab.addEventListener("ds-fab:click", (event) =&gt; {
+  console.log(event.detail.size, event.detail.color);
+});</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>size</code></td>
+                <td>string</td>
+                <td>default</td>
+                <td>small, default, large, or extended.</td>
+              </tr>
+              <tr>
+                <td><code>color</code></td>
+                <td>string</td>
+                <td>primary</td>
+                <td>primary, secondary, tertiary, or surface.</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>-</td>
+                <td>Text label for extended FABs.</td>
+              </tr>
+              <tr>
+                <td><code>position</code></td>
+                <td>string</td>
+                <td>bottom-right</td>
+                <td>
+                  bottom-right, bottom-left, top-right, top-left, or none.
+                </td>
+              </tr>
+              <tr>
+                <td><code>lowered</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Reduces elevation when overlays are present.</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables interaction.</td>
+              </tr>
+              <tr>
+                <td><code>speed-dial</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Enables Speed Dial actions.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>isOpen</code></td>
+                <td>boolean</td>
+                <td>Read-only open state for Speed Dial mode.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>addAction(action)</code></td>
+                <td>Add a Speed Dial action.</td>
+              </tr>
+              <tr>
+                <td><code>clearActions()</code></td>
+                <td>Remove all Speed Dial actions.</td>
+              </tr>
+              <tr>
+                <td><code>open()</code></td>
+                <td>Open the Speed Dial.</td>
+              </tr>
+              <tr>
+                <td><code>close()</code></td>
+                <td>Close the Speed Dial.</td>
+              </tr>
+              <tr>
+                <td><code>toggle()</code></td>
+                <td>Toggle Speed Dial state.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-fab:click</code></td>
+                <td><code>{ size, color }</code></td>
+                <td>Fired when a standard FAB is clicked.</td>
+              </tr>
+              <tr>
+                <td><code>ds-fab:open</code></td>
+                <td>-</td>
+                <td>Fired when Speed Dial opens.</td>
+              </tr>
+              <tr>
+                <td><code>ds-fab:close</code></td>
+                <td>-</td>
+                <td>Fired when Speed Dial closes.</td>
+              </tr>
+              <tr>
+                <td><code>ds-fab-action:click</code></td>
+                <td><code>{ action, index }</code></td>
+                <td>Fired when a Speed Dial action is clicked.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>none</code></td>
+                <td>No CSS parts are exposed.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-fab-size-sm</code></td>
+                <td>Small FAB size.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-size-md</code></td>
+                <td>Default FAB size.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-size-lg</code></td>
+                <td>Large FAB size.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-icon-size-sm</code></td>
+                <td>Icon size for small FABs.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-icon-size-md</code></td>
+                <td>Icon size for default/extended FABs.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-icon-size-lg</code></td>
+                <td>Icon size for large FABs.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-extended-padding</code></td>
+                <td>Horizontal padding for extended FABs.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-extended-gap</code></td>
+                <td>Gap between icon and label in extended FABs.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-action-size</code></td>
+                <td>Speed Dial action button size.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-action-gap</code></td>
+                <td>Spacing between Speed Dial actions.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-action-offset</code></td>
+                <td>Offset for Speed Dial action stack.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-fab-action-radius</code></td>
+                <td>Corner radius for Speed Dial action buttons.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Page with FAB</td>
+                <td>Moves focus to the FAB</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on FAB</td>
+                <td>Activates FAB action</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Provides <code>aria-label</code> from label or fallback text.
+            </li>
+            <li>Disabled state blocks keyboard and pointer interaction.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use one FAB for the highest-priority
+              screen action such as create, compose, or add.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid FABs for secondary
+              actions, dense toolbars, or workflows with many competing
+              priorities.
+            </li>
+            <li>
+              <strong>Composition:</strong> Prefer extended FABs when extra
+              clarity is needed; switch to lowered state when overlays appear.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Multiple FABs on one view dilute
+              action hierarchy and obstruct content.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const output = document.getElementById("fab-output");
+
+      const setOutput = (message) => {
+        output.textContent = message;
+      };
+
+      [
+        "fab-interactive-default",
+        "fab-interactive-extended",
+        "fab-interactive-small",
+      ].forEach((id) => {
+        const fab = document.getElementById(id);
+        fab.addEventListener("ds-fab:click", (event) => {
+          setOutput(
+            `Clicked: ${event.detail.size} / ${event.detail.color} at ${new Date().toLocaleTimeString()}`,
+          );
+        });
+      });
+
+      const speedDial = document.getElementById("fab-speed-dial");
+      const positionedFab = document.getElementById("fab-bottom-positioned");
+
+      customElements.whenDefined("ds-fab").then(() => {
+        speedDial.addAction({ icon: "edit", label: "Edit" });
+        speedDial.addAction({ icon: "share", label: "Share" });
+        speedDial.addAction({ icon: "archive", label: "Archive" });
+
+        speedDial.addEventListener("ds-fab-action:click", (event) => {
+          setOutput(`Speed Dial: ${event.detail.action.label}`);
+        });
+
+        positionedFab.addAction({ icon: "edit", label: "Edit" });
+        positionedFab.addAction({ icon: "share", label: "Share" });
+        positionedFab.addAction({ icon: "archive", label: "Archive" });
+
+        // Manually apply labels-left for right-positioned wrapper
+        const actionsContainer = positionedFab.shadowRoot.querySelector(
+          ".speed-dial-actions",
+        );
+        if (actionsContainer) {
+          actionsContainer.classList.add("labels-left");
+        }
+
+        positionedFab.addEventListener("ds-fab-action:click", (event) => {
+          setOutput(`Fixed FAB: ${event.detail.action.label}`);
+        });
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

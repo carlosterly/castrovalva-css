@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Animation Presets - Material Design 3 Component Library</title>
+    <link rel="icon" href="data:," />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .demo-stack {
+        display: grid;
+        gap: var(--ds-space-3, 12px);
+      }
+      .animation-item {
+        inline-size: 80px;
+        block-size: 80px;
+        background: var(--md-sys-color-primary-container);
+        color: var(--md-sys-color-on-primary-container);
+        border-radius: var(--md-sys-shape-corner-small);
+        display: grid;
+        place-items: center;
+        font-size: 24px;
+        font-weight: 500;
+        user-select: none;
+      }
+
+      .preset-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ds-space-2, 8px);
+      }
+
+      .animation-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: var(--ds-space-2, 8px);
+      }
+
+      .control-group {
+        display: grid;
+        gap: var(--ds-space-2, 8px);
+        padding: var(--ds-space-3, 12px);
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: var(--md-sys-shape-corner-small);
+      }
+
+      .control-group input[type="range"],
+      .control-group select {
+        inline-size: 100%;
+      }
+
+      .event-log {
+        min-block-size: 96px;
+        max-block-size: 180px;
+        overflow-y: auto;
+        padding: var(--ds-space-2, 8px);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: var(--md-sys-shape-corner-small);
+        background: var(--md-sys-color-surface-container);
+        font-family: monospace;
+        font-size: 12px;
+      }
+    </style>
+  </head>
+  <body data-page="animation-presets">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Animation Presets</h1>
+        <p class="description">
+          Utility library with Material Design 3 motion presets for fade, slide,
+          scale, emphasis, sequence, and class-based animations. Not intended to
+          communicate required state changes on its own; pair motion with
+          persistent visual cues and text.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Run a preset animation on a single element with
+            <code>animate</code>. This keeps motion consistent with shared MD3
+            timing and easing tokens.
+          </p>
+          <div class="demo-box demo-stack">
+            <div id="basic-demo-item" class="animation-item">A</div>
+            <div class="preset-row">
+              <ds-button type="button" data-basic-preset="fadeIn"
+                >Fade In</ds-button
+              >
+              <ds-button type="button" data-basic-preset="slideInUp"
+                >Slide Up</ds-button
+              >
+              <ds-button type="button" data-basic-preset="scaleIn"
+                >Scale In</ds-button
+              >
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+await animate(element, "fadeIn");
+await animate(element, "slideInUp");
+await animate(element, "scaleIn");</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Use explicit options for duration, easing, and delay.</p>
+          <div class="demo-box demo-stack">
+            <div id="config-demo-item" class="animation-item">B</div>
+            <div class="control-group">
+              <label for="duration-slider"
+                >Duration: <span id="duration-value">300</span>ms</label
+              >
+              <input
+                id="duration-slider"
+                type="range"
+                min="50"
+                max="1000"
+                step="50"
+                value="300" />
+              <label for="easing-select">Easing</label>
+              <select id="easing-select">
+                <option value="standard">standard</option>
+                <option value="emphasized">emphasized</option>
+                <option value="emphasizedDecelerate">
+                  emphasizedDecelerate
+                </option>
+                <option value="emphasizedAccelerate">
+                  emphasizedAccelerate
+                </option>
+              </select>
+              <ds-button type="button" id="config-run"
+                >Run Configured Animation</ds-button
+              >
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Pick from entrance, exit, and emphasis presets.</p>
+
+          <h3>Entrance Presets</h3>
+          <div class="demo-box animation-grid">
+            <div class="animation-item" data-variant-preset="fadeIn">Fade</div>
+            <div class="animation-item" data-variant-preset="slideInDown">
+              Down
+            </div>
+            <div class="animation-item" data-variant-preset="slideInLeft">
+              Start
+            </div>
+            <div class="animation-item" data-variant-preset="slideInRight">
+              End
+            </div>
+          </div>
+
+          <h3>Emphasis Presets</h3>
+          <div class="demo-box animation-grid">
+            <div class="animation-item" data-variant-preset="bounceIn">
+              Bounce
+            </div>
+            <div class="animation-item" data-variant-preset="flipIn">Flip</div>
+            <div class="animation-item" data-variant-preset="shake">Shake</div>
+            <div class="animation-item" data-variant-preset="glow">Glow</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>
+            Class-based presets are useful for looping and manual stop/resume
+            states.
+          </p>
+          <div class="demo-box demo-stack">
+            <div id="state-demo-item" class="animation-item">C</div>
+            <div class="preset-row">
+              <ds-button type="button" id="state-start">Start Pulse</ds-button>
+              <ds-button type="button" id="state-pause">Pause</ds-button>
+              <ds-button type="button" id="state-resume">Resume</ds-button>
+              <ds-button type="button" id="state-stop">Stop</ds-button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Animate a sequence and log each step.</p>
+          <div class="demo-box demo-stack">
+            <div class="preset-row">
+              <div class="animation-item js-sequence-item">1</div>
+              <div class="animation-item js-sequence-item">2</div>
+              <div class="animation-item js-sequence-item">3</div>
+            </div>
+            <div class="preset-row">
+              <ds-button type="button" id="run-sequence"
+                >Run Sequence</ds-button
+              >
+              <ds-button type="button" id="clear-log">Clear Log</ds-button>
+            </div>
+            <div id="event-log" class="event-log">Event log:</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>None</td>
+                <td>-</td>
+                <td>-</td>
+                <td>
+                  Utility functions are configured via JavaScript arguments.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>animationend</code></td>
+                <td>native</td>
+                <td>
+                  Used internally by <code>animate</code> promise resolution.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Functions</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>initAnimationPresets()</code></td>
+                <td>Injects keyframes and utility classes once.</td>
+              </tr>
+              <tr>
+                <td><code>animate(element, preset, options)</code></td>
+                <td>Runs a single preset and resolves when complete.</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>animateWithClass(element, presetName, options)</code>
+                </td>
+                <td>
+                  Applies class-based animation with remove/pause/resume
+                  controls.
+                </td>
+              </tr>
+              <tr>
+                <td><code>animateSequence(elements, preset, options)</code></td>
+                <td>Runs staggered animation across multiple elements.</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>animateSequenceOnElement(element, sequence)</code>
+                </td>
+                <td>Runs multiple presets in order for one element.</td>
+              </tr>
+              <tr>
+                <td><code>getPresets()</code>, <code>getPreset(name)</code></td>
+                <td>Reads available presets.</td>
+              </tr>
+              <tr>
+                <td>
+                  <code>getDuration(key)</code>, <code>getEasing(key)</code>
+                </td>
+                <td>Reads token values.</td>
+              </tr>
+              <tr>
+                <td><code>createPreset(config)</code></td>
+                <td>Creates a custom preset object.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>None</td>
+                <td>Utility does not expose shadow parts.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--md-sys-motion-duration-*</code></td>
+                <td>Generated duration tokens.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-motion-easing-*</code></td>
+                <td>Generated easing tokens.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Preset demo controls</td>
+                <td>Moves focus between animation control buttons</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on control button</td>
+                <td>Runs selected animation preset</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>Animations are asynchronous and do not block interaction.</li>
+            <li>Duration can be reduced for motion sensitivity.</li>
+            <li>Use non-essential motion for emphasis only.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use entrance and exit presets to
+              reinforce content transitions and hierarchy in response to user
+              actions.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid decorative motion in dense
+              workflows or where it delays critical interactions.
+            </li>
+            <li>
+              <strong>Composition:</strong> Prefer shared MD3 duration/easing
+              tokens and staggered sequences for grouped content reveals.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Overusing infinite animations
+              reduces clarity and can increase motion fatigue.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./animation-presets-demo.js"></script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

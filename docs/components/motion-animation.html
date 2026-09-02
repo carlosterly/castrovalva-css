@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motion &amp; Animation - Design System</title>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="../../src/styles.css">
+    <link rel="stylesheet" href="../shared/pattern-library.css">
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="motion-animation">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Motion &amp; Animation</h1>
+        <p class="description">
+          Material Design 3 motion system with duration tokens and easing
+          curves. Motion helps guide focus, express hierarchy, and reinforce
+          spatial relationships.
+        </p>
+
+        <div class="section">
+          <h2>Overview</h2>
+          <p>
+            The Material Design 3 motion system uses carefully crafted duration
+            and easing values to create smooth, natural animations. Motion helps
+            guide focus, express hierarchy, and reinforce spatial relationships.
+          </p>
+        </div>
+
+        <div class="section">
+          <h2>Duration Tokens</h2>
+
+          <h3>Short (50-200ms)</h3>
+          <p>For icon state changes, checkboxes, simple toggles</p>
+
+          <div class="demo-container flex gap-4 flex-wrap">
+            <button type="button"
+              onclick="this.classList.add('fade-in'); setTimeout(() => this.classList.remove('fade-in'), 200)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-primary);
+                color: var(--md-sys-color-on-primary);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+                animation-duration: var(--md-sys-motion-duration-short1);
+              ">
+              50ms (short1)
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('fade-in'); setTimeout(() => this.classList.remove('fade-in'), 200)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-primary);
+                color: var(--md-sys-color-on-primary);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+                animation-duration: var(--md-sys-motion-duration-short2);
+              ">
+              100ms (short2)
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('fade-in'); setTimeout(() => this.classList.remove('fade-in'), 200)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-primary);
+                color: var(--md-sys-color-on-primary);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+                animation-duration: var(--md-sys-motion-duration-short3);
+              ">
+              150ms (short3)
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('fade-in'); setTimeout(() => this.classList.remove('fade-in'), 250)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-primary);
+                color: var(--md-sys-color-on-primary);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+                animation-duration: var(--md-sys-motion-duration-short4);
+              ">
+              200ms (short4)
+            </button>
+          </div>
+
+          <h3>Medium (250-400ms)</h3>
+          <p>For dropdowns, tooltips, simple dialogs</p>
+
+          <div class="demo-container flex gap-4 flex-wrap">
+            <button type="button"
+              onclick="this.classList.add('scale-in'); setTimeout(() => this.classList.remove('scale-in'), 350)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-secondary);
+                color: var(--md-sys-color-on-secondary);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+                animation-duration: var(--md-sys-motion-duration-medium1);
+              ">
+              250ms (medium1)
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('scale-in'); setTimeout(() => this.classList.remove('scale-in'), 400)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-secondary);
+                color: var(--md-sys-color-on-secondary);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+                animation-duration: var(--md-sys-motion-duration-medium2);
+              ">
+              300ms (medium2)
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('scale-in'); setTimeout(() => this.classList.remove('scale-in'), 450)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-secondary);
+                color: var(--md-sys-color-on-secondary);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+                animation-duration: var(--md-sys-motion-duration-medium3);
+              ">
+              350ms (medium3)
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('scale-in'); setTimeout(() => this.classList.remove('scale-in'), 500)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-secondary);
+                color: var(--md-sys-color-on-secondary);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+                animation-duration: var(--md-sys-motion-duration-medium4);
+              ">
+              400ms (medium4)
+            </button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Easing Curves</h2>
+
+          <div class="demo-container flex gap-4 flex-wrap">
+            <div style="flex: 1; min-width: 200px">
+              <h4 style="margin-bottom: var(--ds-space-2)">Standard</h4>
+              <button type="button"
+                onclick="this.style.animation = 'slideInRight 400ms var(--md-sys-motion-easing-standard)'; setTimeout(() => this.style.animation = '', 400)"
+                style="
+                  width: 100%;
+                  padding: var(--ds-space-3);
+                  background: var(--md-sys-color-tertiary-container);
+                  color: var(--md-sys-color-on-tertiary-container);
+                  border: none;
+                  border-radius: var(--ds-radius-sm);
+                  cursor: pointer;
+                ">
+                Gentle ease
+              </button>
+            </div>
+
+            <div style="flex: 1; min-width: 200px">
+              <h4 style="margin-bottom: var(--ds-space-2)">Decelerate</h4>
+              <button type="button"
+                onclick="this.style.animation = 'slideInRight 400ms var(--md-sys-motion-easing-emphasized-decelerate)'; setTimeout(() => this.style.animation = '', 400)"
+                style="
+                  width: 100%;
+                  padding: var(--ds-space-3);
+                  background: var(--md-sys-color-tertiary-container);
+                  color: var(--md-sys-color-on-tertiary-container);
+                  border: none;
+                  border-radius: var(--ds-radius-sm);
+                  cursor: pointer;
+                ">
+                Entering
+              </button>
+            </div>
+
+            <div style="flex: 1; min-width: 200px">
+              <h4 style="margin-bottom: var(--ds-space-2)">Accelerate</h4>
+              <button type="button"
+                onclick="this.style.animation = 'slideOutRight 400ms var(--md-sys-motion-easing-emphasized-accelerate)'; setTimeout(() => this.style.animation = '', 400)"
+                style="
+                  width: 100%;
+                  padding: var(--ds-space-3);
+                  background: var(--md-sys-color-tertiary-container);
+                  color: var(--md-sys-color-on-tertiary-container);
+                  border: none;
+                  border-radius: var(--ds-radius-sm);
+                  cursor: pointer;
+                ">
+                Exiting
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Animation Utilities</h2>
+
+          <h3>Fade Animations</h3>
+          <div class="demo-container flex gap-4">
+            <button type="button"
+              onclick="this.classList.add('fade-in'); setTimeout(() => this.classList.remove('fade-in'), 400)"
+              class="fade-in"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-primary-container);
+                color: var(--md-sys-color-on-primary-container);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+              ">
+              Fade In
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('fade-out'); setTimeout(() => this.classList.remove('fade-out'), 300)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-primary-container);
+                color: var(--md-sys-color-on-primary-container);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+              ">
+              Fade Out
+            </button>
+          </div>
+
+          <h3>Slide Animations</h3>
+          <div class="demo-container flex gap-4 flex-wrap">
+            <button type="button"
+              onclick="this.classList.add('slide-in-left'); setTimeout(() => this.classList.remove('slide-in-left'), 400)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-secondary-container);
+                color: var(--md-sys-color-on-secondary-container);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+              ">
+              Slide In Left
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('slide-in-right'); setTimeout(() => this.classList.remove('slide-in-right'), 400)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-secondary-container);
+                color: var(--md-sys-color-on-secondary-container);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+              ">
+              Slide In Right
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('slide-in-up'); setTimeout(() => this.classList.remove('slide-in-up'), 400)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-secondary-container);
+                color: var(--md-sys-color-on-secondary-container);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+              ">
+              Slide In Up
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('slide-in-down'); setTimeout(() => this.classList.remove('slide-in-down'), 400)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-secondary-container);
+                color: var(--md-sys-color-on-secondary-container);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+              ">
+              Slide In Down
+            </button>
+          </div>
+
+          <h3>Scale Animations</h3>
+          <div class="demo-container flex gap-4">
+            <button type="button"
+              onclick="this.classList.add('scale-in'); setTimeout(() => this.classList.remove('scale-in'), 400)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-tertiary-container);
+                color: var(--md-sys-color-on-tertiary-container);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+              ">
+              Scale In
+            </button>
+
+            <button type="button"
+              onclick="this.classList.add('scale-out'); setTimeout(() => this.classList.remove('scale-out'), 300)"
+              style="
+                padding: var(--ds-space-3) var(--ds-space-4);
+                background: var(--md-sys-color-tertiary-container);
+                color: var(--md-sys-color-on-tertiary-container);
+                border: none;
+                border-radius: var(--ds-radius-sm);
+                cursor: pointer;
+              ">
+              Scale Out
+            </button>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Motion Tokens Reference</h2>
+
+          <h3>Duration Tokens</h3>
+          <table
+            style="
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: var(--ds-space-3);
+            ">
+            <thead>
+              <tr
+                style="
+                  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <th
+                  style="
+                    text-align: left;
+                    padding: var(--ds-space-3);
+                    color: var(--md-sys-color-on-surface);
+                  ">
+                  Token
+                </th>
+                <th
+                  style="
+                    text-align: left;
+                    padding: var(--ds-space-3);
+                    color: var(--md-sys-color-on-surface);
+                  ">
+                  Value
+                </th>
+                <th
+                  style="
+                    text-align: left;
+                    padding: var(--ds-space-3);
+                    color: var(--md-sys-color-on-surface);
+                  ">
+                  Use Case
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                style="
+                  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <td style="padding: var(--ds-space-3)">
+                  <code>--md-sys-motion-duration-short1</code>
+                </td>
+                <td style="padding: var(--ds-space-3)">50ms</td>
+                <td style="padding: var(--ds-space-3)">
+                  Icon state changes, quick toggles
+                </td>
+              </tr>
+              <tr
+                style="
+                  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <td style="padding: var(--ds-space-3)">
+                  <code>--md-sys-motion-duration-short2</code>
+                </td>
+                <td style="padding: var(--ds-space-3)">100ms</td>
+                <td style="padding: var(--ds-space-3)">Checkboxes, switches</td>
+              </tr>
+              <tr
+                style="
+                  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <td style="padding: var(--ds-space-3)">
+                  <code>--md-sys-motion-duration-medium1</code>
+                </td>
+                <td style="padding: var(--ds-space-3)">250ms</td>
+                <td style="padding: var(--ds-space-3)">
+                  Dropdowns, small dialogs
+                </td>
+              </tr>
+              <tr
+                style="
+                  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <td style="padding: var(--ds-space-3)">
+                  <code>--md-sys-motion-duration-medium2</code>
+                </td>
+                <td style="padding: var(--ds-space-3)">300ms</td>
+                <td style="padding: var(--ds-space-3)">Tooltips, snackbars</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin-top: var(--ds-space-6)">Easing Tokens</h3>
+          <table
+            style="
+              width: 100%;
+              border-collapse: collapse;
+              margin-top: var(--ds-space-3);
+            ">
+            <thead>
+              <tr
+                style="
+                  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <th
+                  style="
+                    text-align: left;
+                    padding: var(--ds-space-3);
+                    color: var(--md-sys-color-on-surface);
+                  ">
+                  Token
+                </th>
+                <th
+                  style="
+                    text-align: left;
+                    padding: var(--ds-space-3);
+                    color: var(--md-sys-color-on-surface);
+                  ">
+                  Curve
+                </th>
+                <th
+                  style="
+                    text-align: left;
+                    padding: var(--ds-space-3);
+                    color: var(--md-sys-color-on-surface);
+                  ">
+                  Use Case
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                style="
+                  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <td style="padding: var(--ds-space-3)">
+                  <code>--md-sys-motion-easing-standard</code>
+                </td>
+                <td style="padding: var(--ds-space-3)">
+                  cubic-bezier(0.2, 0, 0, 1)
+                </td>
+                <td style="padding: var(--ds-space-3)">Default transitions</td>
+              </tr>
+              <tr
+                style="
+                  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <td style="padding: var(--ds-space-3)">
+                  <code>--md-sys-motion-easing-emphasized-decelerate</code>
+                </td>
+                <td style="padding: var(--ds-space-3)">
+                  cubic-bezier(0.05, 0.7, 0.1, 1)
+                </td>
+                <td style="padding: var(--ds-space-3)">Elements entering</td>
+              </tr>
+              <tr
+                style="
+                  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+                ">
+                <td style="padding: var(--ds-space-3)">
+                  <code>--md-sys-motion-easing-emphasized-accelerate</code>
+                </td>
+                <td style="padding: var(--ds-space-3)">
+                  cubic-bezier(0.3, 0, 0.8, 0.15)
+                </td>
+                <td style="padding: var(--ds-space-3)">Elements exiting</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

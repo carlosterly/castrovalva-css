@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drag and Drop Utility - Material Design 3 Component Library</title>
+    <link rel="icon" href="data:," />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .demo-board {
+        display: grid;
+        gap: var(--ds-space-3, 12px);
+      }
+
+      .drop-zone {
+        min-block-size: 140px;
+        padding: var(--ds-space-3, 12px);
+        border: 2px dashed var(--md-sys-color-outline);
+        border-radius: var(--md-sys-shape-corner-medium);
+        background: var(--md-sys-color-surface-container-low);
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ds-space-2, 8px);
+        align-content: flex-start;
+      }
+
+      .drop-zone.ds-drop-active {
+        border-color: var(--md-sys-color-primary);
+        background: var(--md-sys-color-primary-container);
+      }
+
+      .drop-zone.ds-drop-hover {
+        border-style: solid;
+      }
+
+      .draggable-item {
+        padding: var(--ds-space-2, 8px) var(--ds-space-3, 12px);
+        border-radius: var(--md-sys-shape-corner-small);
+        background: var(--md-sys-color-secondary-container);
+        color: var(--md-sys-color-on-secondary-container);
+        cursor: grab;
+        user-select: none;
+      }
+
+      .draggable-item.ds-dragging {
+        opacity: 0.5;
+      }
+
+      .drag-handle {
+        margin-inline-end: var(--ds-space-2, 8px);
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .kbd-help {
+        padding: var(--ds-space-3, 12px);
+        border-radius: var(--md-sys-shape-corner-small);
+        background: var(--md-sys-color-tertiary-container);
+        color: var(--md-sys-color-on-tertiary-container);
+      }
+
+      .event-log {
+        max-block-size: 160px;
+        overflow-y: auto;
+        padding: var(--ds-space-2, 8px);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: var(--md-sys-shape-corner-small);
+        font-family: monospace;
+        font-size: 12px;
+        background: var(--md-sys-color-surface-container);
+      }
+    </style>
+  </head>
+  <body data-page="drag-drop">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Drag and Drop Utility</h1>
+        <p class="description">
+          Utility for adding draggable elements and drop zones with mouse,
+          touch, and keyboard support. Not intended to replace full board-style
+          state management frameworks.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Mark draggables and drop zones with data attributes. Dropping an
+            item into the target zone moves it there. This is the recommended
+            baseline because it has minimal setup and preserves progressive
+            enhancement.
+          </p>
+          <div class="demo-box demo-board">
+            <div class="drop-zone" id="basic-source">
+              <div class="draggable-item" data-draggable>Item 1</div>
+              <div class="draggable-item" data-draggable>Item 2</div>
+              <div class="draggable-item" data-draggable>Item 3</div>
+            </div>
+            <div class="drop-zone" id="basic-target" data-drop-zone>
+              <p id="basic-target-hint">Drop target area</p>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;div class="draggable-item" data-draggable&gt;Item&lt;/div&gt;
+&lt;div class="drop-zone" data-drop-zone&gt;&lt;/div&gt;
+
+initDragDrop(document);</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Provide axis and handle config through data attributes.</p>
+          <div class="demo-box">
+            <div class="drop-zone">
+              <div class="draggable-item" data-draggable data-drag-axis="x">
+                Horizontal only
+              </div>
+              <div
+                class="draggable-item"
+                data-draggable
+                data-drag-handle=".drag-handle">
+                <span class="drag-handle material-symbols-outlined"
+                  >drag_indicator</span
+                >
+                Handle drag
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>
+            Use sortable and accept-filter drop zones based on data behavior.
+          </p>
+
+          <h3>Sortable List</h3>
+          <ul>
+            <li>
+              <strong>Use when:</strong> Items need manual prioritization and
+              reordering in one container.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> Reordering is not user-visible or
+              automatic sorting is expected.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <div class="drop-zone" data-drop-zone data-drop-sortable="true">
+              <div class="draggable-item" data-draggable>First</div>
+              <div class="draggable-item" data-draggable>Second</div>
+              <div class="draggable-item" data-draggable>Third</div>
+            </div>
+          </div>
+
+          <h3>Accept Filter</h3>
+          <ul>
+            <li>
+              <strong>Use when:</strong> Only specific item classes should be
+              dropped into a zone.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> Rules are dynamic and require complex
+              runtime validation logic.
+            </li>
+          </ul>
+          <div class="demo-box demo-board">
+            <div class="drop-zone">
+              <div class="draggable-item type-a" data-draggable>Type A</div>
+              <div class="draggable-item type-b" data-draggable>Type B</div>
+            </div>
+            <div class="drop-zone" data-drop-zone data-drop-accept=".type-a">
+              Accepts only <code>.type-a</code>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>
+            Drop zones use active and hover classes while dragging, and
+            draggable elements receive a drag class while in-flight.
+          </p>
+          <div class="demo-box">
+            <div class="drop-zone" data-drop-zone>
+              <div class="draggable-item" data-draggable>Drag over me</div>
+            </div>
+          </div>
+          <ul>
+            <li><strong>Default:</strong> No drag-related classes applied.</li>
+            <li>
+              <strong>Dragging:</strong> Draggable gets
+              <code>ds-dragging</code>; screen reader announcement is emitted.
+            </li>
+            <li>
+              <strong>Drop active:</strong> Zone gets
+              <code>ds-drop-active</code> and may apply acceptance filtering.
+            </li>
+            <li>
+              <strong>Drop hover:</strong> Zone gets
+              <code>ds-drop-hover</code> when pointer intersects target.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Track drag lifecycle callbacks from imperative setup.</p>
+          <div class="demo-box demo-board">
+            <div class="drop-zone" id="interactive-source">
+              <div class="draggable-item" id="interactive-item">
+                Interactive item
+              </div>
+            </div>
+            <div class="drop-zone" id="interactive-zone">Drop here</div>
+            <div class="event-log" id="event-log">Event log:</div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>data-draggable</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Marks draggable elements.</td>
+              </tr>
+              <tr>
+                <td><code>data-drop-zone</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Marks drop zones.</td>
+              </tr>
+              <tr>
+                <td><code>data-drag-axis</code></td>
+                <td>string</td>
+                <td>none</td>
+                <td><code>x</code> or <code>y</code> axis lock.</td>
+              </tr>
+              <tr>
+                <td><code>data-drop-sortable</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Enables sortable mode in a zone.</td>
+              </tr>
+              <tr>
+                <td><code>data-drop-accept</code></td>
+                <td>string</td>
+                <td><code>*</code></td>
+                <td>Selector filter for accepted draggables.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>None</td>
+                <td>-</td>
+                <td>
+                  Utility uses callback options (`onDragStart`, `onDrop`, etc.).
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Functions</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>makeDraggable(element, options)</code></td>
+                <td>Configures one draggable element.</td>
+              </tr>
+              <tr>
+                <td><code>makeDropZone(element, options)</code></td>
+                <td>Configures one drop zone.</td>
+              </tr>
+              <tr>
+                <td><code>removeDraggable(element)</code></td>
+                <td>Removes draggable behavior.</td>
+              </tr>
+              <tr>
+                <td><code>removeDropZone(element)</code></td>
+                <td>Removes drop zone behavior.</td>
+              </tr>
+              <tr>
+                <td><code>initDragDrop(root?)</code></td>
+                <td>Initializes nodes with data attributes.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            Invalid or missing options fall back to utility defaults, for
+            example <code>accept: "*"</code>, <code>sortable: false</code>, and
+            <code>axis: null</code>.
+          </p>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>None</td>
+                <td>Utility does not expose shadow parts.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--md-sys-color-primary</code></td>
+                <td>Active drop zone accent color.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-color-outline</code></td>
+                <td>Drop zone outline color.</td>
+              </tr>
+              <tr>
+                <td><code>--md-sys-shape-corner-medium</code></td>
+                <td>Zone radius token.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Map</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Before draggable</td>
+                <td>Moves focus to next draggable item.</td>
+              </tr>
+              <tr>
+                <td><code>Space</code> / <code>Enter</code></td>
+                <td>Focused draggable</td>
+                <td>Toggles grab/drop behavior in keyboard mode.</td>
+              </tr>
+              <tr>
+                <td><code>Arrow keys</code></td>
+                <td>Keyboard drag mode active</td>
+                <td>Moves draggable by step increments.</td>
+              </tr>
+              <tr>
+                <td><code>Escape</code></td>
+                <td>Keyboard drag mode active</td>
+                <td>Cancels keyboard drag mode.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Semantics and Announcements</h3>
+          <ul>
+            <li>
+              Draggables receive <code>role="button"</code> and
+              <code>aria-grabbed</code>.
+            </li>
+            <li>
+              Drop zones receive <code>role="region"</code> and
+              <code>aria-dropeffect</code>.
+            </li>
+            <li>Keyboard controls: Space/Enter, Arrow keys, and Escape.</li>
+            <li>Live region announcements provide drag status updates.</li>
+            <li>
+              Consumers should provide clear item labels so announcements remain
+              meaningful.
+            </li>
+          </ul>
+          <div class="kbd-help">
+            <strong>Keyboard:</strong> Tab to focus, Space/Enter to grab or
+            drop, Arrows to move, Escape to cancel.
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Reordering or moving items where
+              spatial interaction is expected.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Simple binary assignments where
+              explicit buttons are clearer and more accessible.
+            </li>
+            <li>
+              <strong>Composition:</strong> Prefer drag handles for dense rows
+              and pair drop zones with acceptance rules.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Relying on drag-only input,
+              omitting keyboard parity, and skipping announcement labels.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Known Limitations</h2>
+          <ul>
+            <li>
+              Utility callbacks are imperative and do not emit custom DOM events
+              by default.
+            </li>
+            <li>
+              Complex cross-container business rules should be handled in
+              consumer logic via <code>onDrop</code> and related callbacks.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./drag-drop-demo.js"></script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

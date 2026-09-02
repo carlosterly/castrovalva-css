@@ -1,0 +1,570 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tabs - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="tabs">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Tabs</h1>
+        <p class="description">
+          Material Design 3 tabs for organizing content into separate views.
+          Tabs enable navigation between groups of related content within a
+          single context. Not intended for multi-page routing between distinct
+          URL destinations; use anchor navigation or a router for that.
+        </p>
+
+        <!-- Basic Usage -->
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Simple tabs that organize content into separate views. Tab content
+            panels are slotted, so any markup can appear in a panel without page
+            navigation:
+          </p>
+
+          <div class="demo-box">
+            <ds-tabs id="primary-tabs">
+              <button type="button" slot="tab">Flights</button>
+              <button type="button" slot="tab">Hotels</button>
+              <button type="button" slot="tab">Explore</button>
+
+              <div slot="panel">
+                <h3>Flights</h3>
+                <p>
+                  Search for flights to your destination. Compare prices across
+                  airlines and find the best deals for your travel dates.
+                </p>
+              </div>
+              <div slot="panel">
+                <h3>Hotels</h3>
+                <p>
+                  Browse hotels and accommodations. Filter by price, rating,
+                  amenities, and location to find your perfect stay.
+                </p>
+              </div>
+              <div slot="panel">
+                <h3>Explore</h3>
+                <p>
+                  Discover popular destinations and travel inspiration. See
+                  trending places and plan your next adventure.
+                </p>
+              </div>
+            </ds-tabs>
+          </div>
+
+          <pre><code>&lt;ds-tabs>
+  &lt;button slot="tab">Flights&lt;/button>
+  &lt;button slot="tab">Hotels&lt;/button>
+  &lt;button slot="tab">Explore&lt;/button>
+
+  &lt;div slot="panel">Flights content...&lt;/div>
+  &lt;div slot="panel">Hotels content...&lt;/div>
+  &lt;div slot="panel">Explore content...&lt;/div>
+&lt;/ds-tabs></code></pre>
+        </div>
+
+        <!-- Variants -->
+        <div class="section">
+          <h2>Variants</h2>
+          <p>
+            Two primary tab variants with different visual emphasis and
+            indicator placement.
+          </p>
+
+          <h3>Primary Tabs</h3>
+          <p>
+            Default tab style with indicator at the bottom. High emphasis for
+            main navigation.
+          </p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> tabs are the primary navigation
+              mechanism for a page or view and need strong visual emphasis.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> tabs serve only a secondary filtering
+              role — use Secondary tabs instead to reduce visual competition.
+            </li>
+          </ul>
+
+          <div class="demo-box">
+            <ds-tabs>
+              <button type="button" slot="tab">Flights</button>
+              <button type="button" slot="tab">Hotels</button>
+              <button type="button" slot="tab">Explore</button>
+
+              <div slot="panel">
+                <p>Flights content</p>
+              </div>
+              <div slot="panel">
+                <p>Hotels content</p>
+              </div>
+              <div slot="panel">
+                <p>Explore content</p>
+              </div>
+            </ds-tabs>
+          </div>
+
+          <pre><code>&lt;ds-tabs>
+  &lt;button slot="tab">Tab 1&lt;/button>
+  &lt;button slot="tab">Tab 2&lt;/button>
+  ...
+&lt;/ds-tabs></code></pre>
+
+          <h3>Secondary Tabs</h3>
+          <p>
+            Lower emphasis variant with indicator at the top for secondary
+            navigation.
+          </p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> filtering or sorting content within a
+              section that already uses Primary tabs at a higher level.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> these are the first level of
+              navigation — Primary tabs carry the visual weight that role
+              requires.
+            </li>
+          </ul>
+
+          <div class="demo-box">
+            <ds-tabs variant="secondary">
+              <button type="button" slot="tab">All</button>
+              <button type="button" slot="tab">Photos</button>
+              <button type="button" slot="tab">Videos</button>
+              <button type="button" slot="tab">Documents</button>
+
+              <div slot="panel">
+                <p>Showing all files in your library.</p>
+              </div>
+              <div slot="panel">
+                <p>Showing only photo files (.jpg, .png, .gif).</p>
+              </div>
+              <div slot="panel">
+                <p>Showing only video files (.mp4, .mov, .avi).</p>
+              </div>
+              <div slot="panel">
+                <p>Showing only document files (.pdf, .doc, .txt).</p>
+              </div>
+            </ds-tabs>
+          </div>
+
+          <pre><code>&lt;ds-tabs variant="secondary">
+  &lt;button slot="tab">Tab 1&lt;/button>
+  &lt;button slot="tab">Tab 2&lt;/button>
+  ...
+&lt;/ds-tabs></code></pre>
+
+          <h3>Tabs with Icons</h3>
+          <p>
+            Tabs can include icons alongside labels for better visual
+            recognition.
+          </p>
+
+          <div class="demo-box">
+            <ds-tabs>
+              <button type="button" slot="tab">
+                <span class="material-symbols-outlined">phone</span>
+                Recents
+              </button>
+              <button type="button" slot="tab">
+                <span class="material-symbols-outlined">favorite</span>
+                Favorites
+              </button>
+              <button type="button" slot="tab">
+                <span class="material-symbols-outlined">contacts</span>
+                Contacts
+              </button>
+
+              <div slot="panel">
+                <p>Your recent calls will appear here.</p>
+              </div>
+              <div slot="panel">
+                <p>Your favorite contacts are listed here.</p>
+              </div>
+              <div slot="panel">
+                <p>Browse all your contacts.</p>
+              </div>
+            </ds-tabs>
+          </div>
+
+          <pre><code>&lt;ds-tabs>
+  &lt;button slot="tab">
+    &lt;span class="material-symbols-outlined">icon&lt;/span>
+    Label
+  &lt;/button>
+  ...
+&lt;/ds-tabs></code></pre>
+
+          <h3>Icon-Only Tabs</h3>
+          <p>
+            Tabs with icons only for compact layouts. Include
+            <code>aria-label</code> for accessibility.
+          </p>
+
+          <div class="demo-box">
+            <ds-tabs>
+              <button type="button" slot="tab" aria-label="Home">
+                <span class="material-symbols-outlined">home</span>
+              </button>
+              <button type="button" slot="tab" aria-label="Search">
+                <span class="material-symbols-outlined">search</span>
+              </button>
+              <button type="button" slot="tab" aria-label="Notifications">
+                <span class="material-symbols-outlined">notifications</span>
+              </button>
+              <button type="button" slot="tab" aria-label="Settings">
+                <span class="material-symbols-outlined">settings</span>
+              </button>
+
+              <div slot="panel"><p>Home content</p></div>
+              <div slot="panel"><p>Search content</p></div>
+              <div slot="panel"><p>Notifications content</p></div>
+              <div slot="panel"><p>Settings content</p></div>
+            </ds-tabs>
+          </div>
+
+          <pre><code>&lt;ds-tabs>
+  &lt;button slot="tab" aria-label="Home">
+    &lt;span class="material-symbols-outlined">home&lt;/span>
+  &lt;/button>
+  ...
+&lt;/ds-tabs></code></pre>
+
+          <h3>Fixed Width Tabs</h3>
+          <p>
+            Tabs that fill available width equally using the
+            <code>fixed</code> attribute.
+          </p>
+
+          <div class="demo-box">
+            <ds-tabs fixed>
+              <button type="button" slot="tab">Tab One</button>
+              <button type="button" slot="tab">Tab Two</button>
+              <button type="button" slot="tab">Tab Three</button>
+
+              <div slot="panel"><p>Content for tab one.</p></div>
+              <div slot="panel"><p>Content for tab two.</p></div>
+              <div slot="panel"><p>Content for tab three.</p></div>
+            </ds-tabs>
+          </div>
+
+          <pre><code>&lt;ds-tabs fixed>
+  &lt;button slot="tab">Tab 1&lt;/button>
+  &lt;button slot="tab">Tab 2&lt;/button>
+  ...
+&lt;/ds-tabs></code></pre>
+        </div>
+
+        <!-- States -->
+        <div class="section">
+          <h2>States</h2>
+          <p>Tabs support various interactive states.</p>
+
+          <h3>Disabled Tab</h3>
+          <p>
+            Individual tabs can be disabled using the
+            <code>disabled</code> attribute:
+          </p>
+
+          <div class="demo-box">
+            <ds-tabs>
+              <button type="button" slot="tab">Active</button>
+              <button type="button" slot="tab" disabled>Disabled</button>
+              <button type="button" slot="tab">Another Active</button>
+
+              <div slot="panel"><p>First tab content.</p></div>
+              <div slot="panel"><p>This tab is disabled.</p></div>
+              <div slot="panel"><p>Third tab content.</p></div>
+            </ds-tabs>
+          </div>
+
+          <pre><code>&lt;ds-tabs>
+  &lt;button slot="tab">Active&lt;/button>
+  &lt;button slot="tab" disabled>Disabled&lt;/button>
+  ...
+&lt;/ds-tabs></code></pre>
+        </div>
+
+        <!-- Advanced Usage -->
+        <div class="section">
+          <h2>Advanced Usage</h2>
+          <p>Programmatic control and advanced tab management:</p>
+
+          <div class="demo-box">
+            <ds-tabs id="controlled-tabs" selected-index="0">
+              <button type="button" slot="tab">First</button>
+              <button type="button" slot="tab">Second</button>
+              <button type="button" slot="tab">Third</button>
+
+              <div slot="panel"><p>First panel content.</p></div>
+              <div slot="panel"><p>Second panel content.</p></div>
+              <div slot="panel"><p>Third panel content.</p></div>
+            </ds-tabs>
+
+            <div style="margin-block-start: 16px; display: flex; gap: 8px">
+              <ds-button id="go-first" variant="outlined"
+                >Go to First</ds-button
+              >
+              <ds-button id="go-second" variant="outlined"
+                >Go to Second</ds-button
+              >
+              <ds-button id="go-third" variant="outlined"
+                >Go to Third</ds-button
+              >
+            </div>
+          </div>
+
+          <pre><code>// Set selected tab programmatically
+const tabs = document.getElementById('my-tabs');
+tabs.selectedIndex = 1;
+
+// Listen for tab changes
+tabs.addEventListener('tab-change', (e) => {
+  console.log('Selected:', e.detail.selectedIndex);
+});</code></pre>
+        </div>
+
+        <!-- API -->
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>"primary"</td>
+                <td>Tab style: "primary" or "secondary"</td>
+              </tr>
+              <tr>
+                <td><code>selected-index</code></td>
+                <td>number</td>
+                <td>0</td>
+                <td>Index of the currently selected tab</td>
+              </tr>
+              <tr>
+                <td><code>fixed</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>When present, tabs fill available width equally</td>
+              </tr>
+              <tr>
+                <td><code>scrollable</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Enable horizontal scrolling for many tabs</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>tab-change</code></td>
+                <td><code>{ selectedIndex, previousIndex, tab }</code></td>
+                <td>Fired when the selected tab changes</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>tab</code></td>
+                <td>Tab buttons (use <code>&lt;button slot="tab"></code>)</td>
+              </tr>
+              <tr>
+                <td><code>panel</code></td>
+                <td>
+                  Tab panel content (use <code>&lt;div slot="panel"></code>)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Keyboard Navigation</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>←</code> / <code>→</code></td>
+                <td>Navigate between tabs</td>
+              </tr>
+              <tr>
+                <td><code>Home</code></td>
+                <td>Go to first tab</td>
+              </tr>
+              <tr>
+                <td><code>End</code></td>
+                <td>Go to last tab</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Activate focused tab</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Focus outside tab list</td>
+                <td>Moves focus to the active tab</td>
+              </tr>
+              <tr>
+                <td><code>←</code> / <code>→</code></td>
+                <td>Focus on a tab</td>
+                <td>Moves focus to the previous / next tab</td>
+              </tr>
+              <tr>
+                <td><code>Home</code></td>
+                <td>Focus on a tab</td>
+                <td>Moves focus to the first tab</td>
+              </tr>
+              <tr>
+                <td><code>End</code></td>
+                <td>Focus on a tab</td>
+                <td>Moves focus to the last tab</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on a tab</td>
+                <td>Activates the focused tab and reveals its panel</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Tab list uses <code>role="tablist"</code>; each tab uses
+              <code>role="tab"</code>; each panel uses
+              <code>role="tabpanel"</code>.
+            </li>
+            <li>
+              <code>aria-selected</code> and <code>aria-controls</code> are
+              managed automatically.
+            </li>
+            <li>
+              Focus is managed via <code>tabindex</code> so only the active tab
+              is in the tab sequence.
+            </li>
+            <li>RTL layout is supported.</li>
+          </ul>
+        </div>
+
+        <!-- Usage Guidelines -->
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use tabs to organize content into
+              mutually exclusive views within the same context — for example,
+              filtering a result set or switching between related sections of a
+              page.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid tabs for multi-page
+              routing with distinct URLs. Avoid tabs when fewer than two views
+              are presented, as a single tab provides no navigational value.
+            </li>
+            <li>
+              <strong>Composition:</strong> Choose Primary tabs for top-level
+              main navigation; use Secondary tabs for sub-filtering within a
+              section. Pair each tab with a corresponding panel slot.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Avoid more than five or six tabs
+              in a single row. Do not use icon-only tabs without an
+              <code>aria-label</code> on each button.
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <script type="module">
+        // Example: Listen for tab changes (ds-tabs is already registered via ../../src/index.js in the head)
+        document
+          .getElementById("primary-tabs")
+          .addEventListener("tab-change", (e) => {
+            console.log("Tab changed:", e.detail);
+          });
+
+        // Programmatic control demo buttons
+        const controlledTabs = document.getElementById("controlled-tabs");
+        const goFirst = document.getElementById("go-first");
+        const goSecond = document.getElementById("go-second");
+        const goThird = document.getElementById("go-third");
+
+        goFirst?.addEventListener(
+          "click",
+          () => (controlledTabs.selectedIndex = 0),
+        );
+        goSecond?.addEventListener(
+          "click",
+          () => (controlledTabs.selectedIndex = 1),
+        );
+        goThird?.addEventListener(
+          "click",
+          () => (controlledTabs.selectedIndex = 2),
+        );
+      </script>
+    </div>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

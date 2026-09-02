@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Card - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .card-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+        gap: var(--ds-space-4, 16px);
+      }
+
+      .card-wrap {
+        max-inline-size: 360px;
+      }
+
+      .card-media {
+        aspect-ratio: 16 / 9;
+        object-fit: cover;
+        inline-size: 100%;
+      }
+
+      .action-row {
+        display: flex;
+        gap: var(--ds-space-2, 8px);
+      }
+
+      .event-output {
+        margin-block-start: var(--ds-space-3, 12px);
+        padding: var(--ds-space-3, 12px);
+        border-radius: var(--ds-radius-sm, 8px);
+        background: var(--md-sys-color-surface-container-low);
+        border: 1px solid var(--md-sys-color-outline-variant);
+      }
+    </style>
+  </head>
+  <body data-page="card">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Card</h1>
+        <p class="description">
+          Material Design 3 card surface for grouping related content and
+          actions. Not intended for dense tabular data or long-form flows; use
+          dedicated layout containers and lists for those cases.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use the default elevated card for general-purpose content grouping.
+            Cards provide a single visual container for related media, text, and
+            actions without requiring nested surfaces.
+          </p>
+          <div class="demo-box">
+            <div class="card-wrap">
+              <ds-card variant="elevated">
+                <span slot="title">Card Title</span>
+                <span slot="subhead">Subhead text</span>
+                <p>Card content is displayed in the default slot.</p>
+              </ds-card>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-card variant="elevated"&gt;
+  &lt;span slot="title"&gt;Card Title&lt;/span&gt;
+  &lt;span slot="subhead"&gt;Subhead text&lt;/span&gt;
+  &lt;p&gt;Card content...&lt;/p&gt;
+&lt;/ds-card&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>
+            Cards can render pre-populated media, content, and actions
+            immediately.
+          </p>
+          <div class="demo-box">
+            <div class="card-wrap">
+              <ds-card variant="elevated">
+                <img
+                  slot="media"
+                  class="card-media"
+                  src="https://placehold.co/360x200/6750A4/FFFFFF/png?text=Card+Media"
+                  alt="Example card media" />
+                <span slot="title">Preloaded Card</span>
+                <span slot="subhead">Data available on first render</span>
+                <p>This card starts with full media, text, and actions.</p>
+                <div slot="actions" class="action-row">
+                  <ds-button variant="text">Action</ds-button>
+                </div>
+              </ds-card>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-card variant="elevated"&gt;
+  &lt;img slot="media" src="..." alt="..."&gt;
+  &lt;span slot="title"&gt;Preloaded Card&lt;/span&gt;
+  &lt;span slot="subhead"&gt;Data available on first render&lt;/span&gt;
+  &lt;p&gt;Card content...&lt;/p&gt;
+  &lt;div slot="actions"&gt;
+    &lt;ds-button variant="text"&gt;Action&lt;/ds-button&gt;
+  &lt;/div&gt;
+&lt;/ds-card&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants/Formats</h2>
+          <p>
+            Choose visual emphasis with elevated, filled, or outlined variants.
+          </p>
+          <div class="demo-box">
+            <div class="card-grid">
+              <ds-card variant="elevated">
+                <span slot="title">Elevated</span>
+                <p>Default card with elevation.</p>
+              </ds-card>
+              <ds-card variant="filled">
+                <span slot="title">Filled</span>
+                <p>Card with surface container background.</p>
+              </ds-card>
+              <ds-card variant="outlined">
+                <span slot="title">Outlined</span>
+                <p>Card with outline and minimal elevation.</p>
+              </ds-card>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-card variant="elevated"&gt;...&lt;/ds-card&gt;
+&lt;ds-card variant="filled"&gt;...&lt;/ds-card&gt;
+&lt;ds-card variant="outlined"&gt;...&lt;/ds-card&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Cards support static and interactive states.</p>
+          <div class="demo-box">
+            <div class="card-grid">
+              <ds-card variant="elevated">
+                <span slot="title">Static Card</span>
+                <p>Non-interactive display content.</p>
+              </ds-card>
+              <ds-card id="state-interactive" variant="outlined" interactive>
+                <span slot="title">Interactive Card</span>
+                <p>Supports click and keyboard activation.</p>
+              </ds-card>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-card variant="elevated"&gt;...&lt;/ds-card&gt;
+&lt;ds-card variant="outlined" interactive&gt;...&lt;/ds-card&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Interactive cards emit <code>ds-card:click</code>.</p>
+          <div class="demo-box">
+            <div class="card-wrap">
+              <ds-card id="interactive-card" variant="filled" interactive>
+                <span slot="title">Click Me</span>
+                <span slot="subhead">Click or press Enter/Space</span>
+                <p>Event output updates below.</p>
+              </ds-card>
+              <div id="event-output" class="event-output">
+                Waiting for event...
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+const card = document.querySelector('#interactive-card');
+card.addEventListener('ds-card:click', () =&gt; {
+  console.log('Card activated');
+});</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API Reference</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td><code>elevated</code></td>
+                <td>
+                  Visual style: <code>elevated</code>, <code>filled</code>,
+                  <code>outlined</code>
+                </td>
+              </tr>
+              <tr>
+                <td><code>interactive</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Enables clickable behavior and keyboard activation</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>Gets or sets the card variant</td>
+              </tr>
+              <tr>
+                <td><code>interactive</code></td>
+                <td>boolean</td>
+                <td>Gets or sets interactive mode</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>media</code></td>
+                <td>Media content shown at the top</td>
+              </tr>
+              <tr>
+                <td><code>title</code></td>
+                <td>Card title text</td>
+              </tr>
+              <tr>
+                <td><code>subhead</code></td>
+                <td>Supporting text below title</td>
+              </tr>
+              <tr>
+                <td><code>header-action</code></td>
+                <td>Optional action in the header area</td>
+              </tr>
+              <tr>
+                <td>(default)</td>
+                <td>Main card content</td>
+              </tr>
+              <tr>
+                <td><code>actions</code></td>
+                <td>Bottom action area</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-card:click</code></td>
+                <td>none</td>
+                <td>Fired when interactive card is activated</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>(none)</code></td>
+                <td>This component currently does not expose shadow parts</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-card-touch-target-size</code></td>
+                <td>
+                  Minimum interactive/action hit area (defaults to
+                  <code>--ds-size-hit-area</code>)
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-card-padding</code></td>
+                <td>Card inner section padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-card-action-gap</code></td>
+                <td>Spacing between actions</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Interactive card present</td>
+                <td>Moves focus to the interactive card</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on interactive card</td>
+                <td>Activates card and emits <code>ds-card:click</code></td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Interactive cards receive <code>role="button"</code> and
+              <code>tabindex="0"</code>.
+            </li>
+            <li>
+              Visible focus and state-layer feedback are applied on interaction.
+            </li>
+            <li>
+              Provide descriptive alt text for media content in the
+              <code>media</code> slot.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Group related content and actions
+              for a single subject, such as a product, article, or profile
+              summary.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid cards for highly dense
+              data tables, long multi-step forms, or layouts where a full-width
+              section is more readable.
+            </li>
+            <li>
+              <strong>Composition:</strong> Prefer elevated cards by default;
+              use outlined for lower emphasis and filled for container contrast.
+              Keep actions concise.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Making every card interactive by
+              default can create accidental taps. Only enable
+              <code>interactive</code> when the full surface is a clear action
+              target.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const interactiveCard = document.getElementById("interactive-card");
+      const stateInteractive = document.getElementById("state-interactive");
+      const output = document.getElementById("event-output");
+
+      [interactiveCard, stateInteractive].forEach((card) => {
+        card.addEventListener("ds-card:click", () => {
+          output.textContent = `Event fired from card id: ${card.id}`;
+        });
+      });
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

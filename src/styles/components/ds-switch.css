@@ -1,0 +1,28 @@
+/**
+ * Helper classes for switch component
+ */
+
+.switch-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.switch-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.switch-item label {
+  cursor: pointer;
+  font-family: var(--md-sys-typescale-body-large-font-family-name);
+  font-size: var(--md-sys-typescale-body-large-font-size);
+  line-height: var(--md-sys-typescale-body-large-line-height);
+  color: var(--md-sys-color-on-surface);
+}
+
+.switch-item ds-switch[disabled] + label {
+  cursor: not-allowed;
+  opacity: 0.38;
+}

@@ -1,0 +1,726 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Navigation Drawer - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      /* Demo container for standard drawer with content */
+      .drawer-demo-container {
+        display: flex;
+        gap: 0;
+        background: var(--md-sys-color-surface-container-low, #f7f2fa);
+        border-radius: var(--md-sys-shape-corner-large, 16px);
+        overflow: hidden;
+        min-block-size: 400px;
+      }
+
+      /* Override standard drawer height for demo purposes */
+      .drawer-demo-container ds-navigation-drawer[variant="standard"] {
+        min-block-size: auto;
+        block-size: 100%;
+      }
+
+      /* Content area next to drawer */
+      .demo-content {
+        flex: 1;
+        padding: var(--md-sys-spacing-6, 24px);
+        background: var(--md-sys-color-surface, #fffbfe);
+        color: var(--md-sys-color-on-surface, #1d1b20);
+        z-index: 0;
+        position: relative;
+      }
+
+      .demo-content h3 {
+        margin-block-start: 0;
+      }
+    </style>
+  </head>
+  <body data-page="navigation-drawer">
+    <div class="page-container">
+      <!-- Main Content -->
+      <div class="content-area">
+        <h1>Navigation Drawer</h1>
+        <p class="description">
+          Material Design 3 navigation drawer for app navigation. Provides modal
+          and standard variants supporting mobile and desktop experiences with
+          smooth animations and accessibility features. Not intended for
+          contextual menus or settings panels — use <code>ds-menu</code> for
+          action menus and <code>ds-side-sheet</code> for supplemental content.
+        </p>
+
+        <!-- Basic Usage -->
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            A simple modal drawer with navigation items. The modal variant
+            overlays content with a scrim and traps focus until the user selects
+            a destination or dismisses it — ideal for infrequent navigation on
+            mobile.
+          </p>
+          <div class="demo-box">
+            <ds-button id="open-basic-drawer" variant="filled">
+              Open Drawer
+            </ds-button>
+
+            <ds-navigation-drawer id="basic-drawer" variant="modal">
+              <div
+                slot="header"
+                style="
+                  padding: 16px 12px;
+                  border-block-end: 1px solid
+                    var(--md-sys-color-outline-variant, #c9c5ca);
+                ">
+                <h3 style="margin: 0">Menu</h3>
+              </div>
+              <ds-nav-item icon="home" active>Home</ds-nav-item>
+              <ds-nav-item icon="search">Search</ds-nav-item>
+              <ds-nav-item icon="settings">Settings</ds-nav-item>
+            </ds-navigation-drawer>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-button id="open-drawer" variant="filled">
+  Open Drawer
+&lt;/ds-button>
+
+&lt;ds-navigation-drawer id="drawer" variant="modal">
+  &lt;div slot="header">
+    &lt;h3>Menu&lt;/h3>
+  &lt;/div>
+  &lt;ds-nav-item icon="home" active>Home&lt;/ds-nav-item>
+  &lt;ds-nav-item icon="search">Search&lt;/ds-nav-item>
+&lt;/ds-navigation-drawer></pre
+            >
+          </div>
+        </div>
+
+        <!-- Variants -->
+        <div class="section">
+          <h2>Variants</h2>
+          <p>
+            Navigation drawers support two main variants for different layouts
+          </p>
+
+          <h3>Modal Variant</h3>
+          <p>
+            Overlay drawer with semi-transparent scrim background. Recommended
+            for mobile and tablet layouts.
+          </p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> the app is mobile or tablet-first and
+              navigation is accessed infrequently through a hamburger or menu
+              button.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> users navigate destinations
+              frequently — the repeated open/close overhead degrades the
+              experience; use the Standard variant on wider layouts instead.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-button
+              id="open-modal-drawer"
+              variant="filled"
+              style="margin-block-end: 16px">
+              Open Modal Drawer
+            </ds-button>
+
+            <ds-navigation-drawer id="modal-drawer" variant="modal">
+              <div
+                slot="header"
+                style="
+                  padding: 16px 12px;
+                  border-block-end: 1px solid
+                    var(--md-sys-color-outline-variant, #c9c5ca);
+                ">
+                <h3 style="margin: 0">Menu</h3>
+              </div>
+              <ds-nav-item icon="home" active>Home</ds-nav-item>
+              <ds-nav-item icon="search">Search</ds-nav-item>
+              <ds-nav-item icon="settings">Settings</ds-nav-item>
+              <ds-nav-item icon="favorite">Favorites</ds-nav-item>
+            </ds-navigation-drawer>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-navigation-drawer variant="modal">
+  &lt;ds-nav-item icon="home" active>Home&lt;/ds-nav-item>
+  &lt;ds-nav-item icon="search">Search&lt;/ds-nav-item>
+&lt;/ds-navigation-drawer></pre
+            >
+          </div>
+
+          <h3>Standard Variant</h3>
+          <p>
+            Persistent side drawer that remains visible. Recommended for desktop
+            layouts.
+          </p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> the layout has enough horizontal space
+              for a side panel and users switch destinations frequently.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> screen real estate is limited — the
+              persistent drawer crowds mobile viewports.
+            </li>
+          </ul>
+          <div class="drawer-demo-container">
+            <ds-navigation-drawer variant="standard" open>
+              <div
+                slot="header"
+                style="
+                  padding: 16px 12px;
+                  border-block-end: 1px solid
+                    var(--md-sys-color-outline-variant, #c9c5ca);
+                ">
+                <h3 style="margin: 0; font-size: 1.25rem">Navigation</h3>
+              </div>
+              <ds-nav-item icon="dashboard" active>Dashboard</ds-nav-item>
+              <ds-nav-item icon="analytics">Analytics</ds-nav-item>
+              <ds-nav-item icon="report">Reports</ds-nav-item>
+              <ds-nav-item icon="people">Team</ds-nav-item>
+            </ds-navigation-drawer>
+
+            <div class="demo-content">
+              <h3>Main Content Area</h3>
+              <p>
+                The standard drawer variant is persistent and doesn't have a
+                scrim overlay. It's ideal for desktop layouts where the drawer
+                remains visible.
+              </p>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-navigation-drawer variant="standard" open>
+  &lt;ds-nav-item icon="dashboard" active>Dashboard&lt;/ds-nav-item>
+  &lt;ds-nav-item icon="analytics">Analytics&lt;/ds-nav-item>
+&lt;/ds-navigation-drawer></pre
+            >
+          </div>
+        </div>
+
+        <!-- Position -->
+        <div class="section">
+          <h2>Position</h2>
+          <p>
+            Drawers can be positioned on the left or right side of the screen
+          </p>
+          <div class="demo-box">
+            <div style="display: flex; gap: 12px">
+              <ds-button id="open-left-drawer" variant="filled">
+                Open Left Drawer
+              </ds-button>
+              <ds-button id="open-right-drawer" variant="filled">
+                Open Right Drawer
+              </ds-button>
+            </div>
+
+            <ds-navigation-drawer
+              id="left-drawer"
+              variant="modal"
+              position="left">
+              <div
+                slot="header"
+                style="
+                  padding: 16px 12px;
+                  border-block-end: 1px solid
+                    var(--md-sys-color-outline-variant, #c9c5ca);
+                ">
+                <h3 style="margin: 0">Left Menu</h3>
+              </div>
+              <ds-nav-item icon="home">Home</ds-nav-item>
+              <ds-nav-item icon="search">Search</ds-nav-item>
+              <ds-nav-item icon="settings">Settings</ds-nav-item>
+            </ds-navigation-drawer>
+
+            <ds-navigation-drawer
+              id="right-drawer"
+              variant="modal"
+              position="right">
+              <div
+                slot="header"
+                style="
+                  padding: 16px 12px;
+                  border-block-end: 1px solid
+                    var(--md-sys-color-outline-variant, #c9c5ca);
+                ">
+                <h3 style="margin: 0">Right Menu</h3>
+              </div>
+              <ds-nav-item icon="notifications">Notifications</ds-nav-item>
+              <ds-nav-item icon="account_circle">Profile</ds-nav-item>
+              <ds-nav-item icon="logout">Sign Out</ds-nav-item>
+            </ds-navigation-drawer>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-navigation-drawer position="left">...&lt;/ds-navigation-drawer>
+&lt;ds-navigation-drawer position="right">...&lt;/ds-navigation-drawer></pre
+            >
+          </div>
+        </div>
+
+        <!-- Custom Width -->
+        <div class="section">
+          <h2>Custom Width</h2>
+          <p>Customize drawer width with CSS custom property</p>
+          <div class="demo-box">
+            <ds-button
+              id="open-custom-drawer"
+              variant="filled"
+              style="margin-block-end: 16px">
+              Open Custom Width Drawer
+            </ds-button>
+
+            <ds-navigation-drawer
+              id="custom-drawer"
+              variant="modal"
+              style="--ds-navigation-drawer-width: 280px">
+              <div
+                slot="header"
+                style="
+                  padding: 16px 12px;
+                  border-block-end: 1px solid
+                    var(--md-sys-color-outline-variant, #c9c5ca);
+                ">
+                <h3 style="margin: 0; font-size: 1rem">Compact Menu</h3>
+              </div>
+              <ds-nav-item icon="dashboard">Dashboard</ds-nav-item>
+              <ds-nav-item icon="analytics">Analytics</ds-nav-item>
+              <ds-nav-item icon="report">Reports</ds-nav-item>
+            </ds-navigation-drawer>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-navigation-drawer style="--ds-navigation-drawer-width: 280px">
+  ...
+&lt;/ds-navigation-drawer></pre
+            >
+          </div>
+        </div>
+
+        <!-- API Documentation -->
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Navigation Drawer Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>'modal'</td>
+                <td>
+                  Drawer type: 'modal' (overlay) or 'standard' (persistent)
+                </td>
+              </tr>
+              <tr>
+                <td><code>position</code></td>
+                <td>string</td>
+                <td>'left'</td>
+                <td>Drawer position: 'left' or 'right'</td>
+              </tr>
+              <tr>
+                <td><code>open</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Opens/closes the drawer</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Navigation Drawer Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>show()</code></td>
+                <td>Opens the drawer</td>
+              </tr>
+              <tr>
+                <td><code>close()</code></td>
+                <td>Closes the drawer</td>
+              </tr>
+              <tr>
+                <td><code>toggle()</code></td>
+                <td>Toggles drawer open/closed</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Navigation Drawer Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-navigation-drawer:open</code></td>
+                <td>Fired when drawer opens</td>
+              </tr>
+              <tr>
+                <td><code>ds-navigation-drawer:close</code></td>
+                <td>Fired when drawer closes</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Navigation Item Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>href</code></td>
+                <td>string</td>
+                <td>''</td>
+                <td>Link destination</td>
+              </tr>
+              <tr>
+                <td><code>icon</code></td>
+                <td>string</td>
+                <td>''</td>
+                <td>Material Symbol icon name</td>
+              </tr>
+              <tr>
+                <td><code>active</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Highlights as current page</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables the item</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Navigation Item Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-nav-item:click</code></td>
+                <td>Fired when item is clicked</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-navigation-drawer-width</code></td>
+                <td>360px</td>
+                <td>Drawer width</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>Main drawer container</td>
+              </tr>
+              <tr>
+                <td><code>scrim</code></td>
+                <td>Overlay/scrim (modal variant only)</td>
+              </tr>
+              <tr>
+                <td><code>header</code></td>
+                <td>Header slot area</td>
+              </tr>
+              <tr>
+                <td><code>content</code></td>
+                <td>Content area for navigation items</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>(default)</td>
+                <td>Main content area (typically navigation items)</td>
+              </tr>
+              <tr>
+                <td><code>header</code></td>
+                <td>Optional header content above navigation items</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Browser Support -->
+        <div class="section">
+          <h2>Browser Support</h2>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Browser</th>
+                <th>Minimum Version</th>
+                <th>Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Chrome</td>
+                <td>90+</td>
+                <td>Full support</td>
+              </tr>
+              <tr>
+                <td>Firefox</td>
+                <td>88+</td>
+                <td>Full support</td>
+              </tr>
+              <tr>
+                <td>Safari</td>
+                <td>14+</td>
+                <td>Full support</td>
+              </tr>
+              <tr>
+                <td>Edge</td>
+                <td>90+</td>
+                <td>Full support</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="section">
+          <h2>Accessibility</h2>
+
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Drawer open</td>
+                <td>
+                  Moves focus to the next focusable element within the drawer
+                </td>
+              </tr>
+              <tr>
+                <td><code>Shift+Tab</code></td>
+                <td>Drawer open</td>
+                <td>Moves focus to the previous focusable element</td>
+              </tr>
+              <tr>
+                <td><code>Escape</code></td>
+                <td>Modal drawer open</td>
+                <td>
+                  Closes the drawer and restores focus to the trigger element
+                </td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on a nav item</td>
+                <td>Activates the focused navigation item</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>ARIA Attributes</h3>
+          <ul>
+            <li>
+              <code>role="navigation"</code> - Identifies drawer as navigation
+              region
+            </li>
+            <li>
+              <code>aria-hidden="true/false"</code> - Visibility to screen
+              readers
+            </li>
+            <li>
+              <code>aria-current="page"</code> - Marks active navigation item
+            </li>
+            <li><code>aria-disabled="true"</code> - Marks disabled items</li>
+          </ul>
+
+          <h3>Focus Management</h3>
+          <ul>
+            <li>✅ Focus trap in modal variant keeps focus within drawer</li>
+            <li>✅ Focus restored to trigger button when modal closes</li>
+            <li>✅ First focusable element receives focus when drawer opens</li>
+            <li>✅ Focus indicators meet WCAG 2.2 standards</li>
+          </ul>
+
+          <h3>Screen Reader Support</h3>
+          <ul>
+            <li>✅ Announces drawer open/close events</li>
+            <li>✅ Announces navigation item labels and icon names</li>
+            <li>✅ Announces active state with aria-current</li>
+            <li>✅ Announces disabled state with aria-disabled</li>
+          </ul>
+        </div>
+
+        <!-- Usage Guidelines -->
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Choose the navigation drawer for
+              apps with five or more primary destinations, hierarchical
+              navigation structures, or when destination labels are long and
+              need full visibility in a side panel.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid for fewer than five
+              destinations — a navigation bar or rail provides faster access. Do
+              not use a drawer as a context menu, settings panel, or filter
+              surface.
+            </li>
+            <li>
+              <strong>Composition:</strong> Use the Modal variant on mobile and
+              Standard on desktop. Provide a <code>slot="header"</code> for
+              branding or account details. Group related items with visual
+              separators.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Forgetting to restore focus when
+              the modal drawer closes. Using a drawer for non-navigational
+              content like filters — use <code>ds-side-sheet</code> for that
+              purpose.
+            </li>
+          </ul>
+        </div>
+
+        <!-- MD3 Specification -->
+        <div class="section">
+          <h2>MD3 Specification</h2>
+          <p>
+            For complete Material Design 3 guidelines and specifications, visit:
+            <a
+              href="https://m3.material.io/components/navigation-drawer"
+              target="_blank"
+              rel="noopener"
+              >Navigation Drawer - Material Design 3</a
+            >
+          </p>
+        </div>
+      </div>
+    </div>
+    <!-- Apply saved theme immediately to prevent flash -->
+    <script src="../shared/theme-init.js"></script>
+    <script>
+      // Demo interactions
+      const basicDrawer = document.getElementById("basic-drawer");
+      const modalDrawer = document.getElementById("modal-drawer");
+      const leftDrawer = document.getElementById("left-drawer");
+      const rightDrawer = document.getElementById("right-drawer");
+      const customDrawer = document.getElementById("custom-drawer");
+
+      document
+        .getElementById("open-basic-drawer")
+        ?.addEventListener("click", () => basicDrawer.show());
+      document
+        .getElementById("open-modal-drawer")
+        ?.addEventListener("click", () => modalDrawer.show());
+      document
+        .getElementById("open-left-drawer")
+        ?.addEventListener("click", () => leftDrawer.show());
+      document
+        .getElementById("open-right-drawer")
+        ?.addEventListener("click", () => rightDrawer.show());
+      document
+        .getElementById("open-custom-drawer")
+        ?.addEventListener("click", () => customDrawer.show());
+
+      // Handle nav item clicks to update active state
+      function handleNavItemClick(drawer) {
+        const navItems = drawer.querySelectorAll("ds-nav-item");
+        navItems.forEach((item) => {
+          item.addEventListener("ds-nav-item:click", (e) => {
+            // Remove active from all items in this drawer
+            navItems.forEach((navItem) => navItem.removeAttribute("active"));
+            // Add active to clicked item
+            item.setAttribute("active", "");
+          });
+        });
+      }
+
+      // Apply to all drawers
+      [basicDrawer, modalDrawer, leftDrawer, rightDrawer, customDrawer].forEach(
+        (drawer) => {
+          if (drawer) handleNavItemClick(drawer);
+        },
+      );
+
+      // Also handle standard drawer
+      const standardDrawer = document.querySelector(
+        'ds-navigation-drawer[variant="standard"]',
+      );
+      if (standardDrawer) handleNavItemClick(standardDrawer);
+    </script>
+  </body>
+</html>

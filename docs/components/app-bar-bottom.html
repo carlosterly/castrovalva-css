@@ -1,0 +1,440 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bottom App Bar - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      /* Demo helpers: avoid inline styles in examples */
+      .fab-button {
+        inline-size: 56px;
+        block-size: 56px;
+        border-radius: 50%;
+        border: none;
+        background: var(--md-sys-color-primary, #6750a4);
+        color: white;
+        font-family: "Material Symbols Outlined";
+        font-size: 24px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: transform 0.2s;
+      }
+
+      .demo-log {
+        margin-block-start: 12px;
+        padding: 12px;
+        background: var(--md-sys-color-surface-variant, #f3ebe9);
+        border-radius: 8px;
+      }
+
+      .demo-log p {
+        margin: 0;
+        font-size: 0.875rem;
+      }
+
+      .demo-log #action-log {
+        font-weight: 500;
+      }
+    </style>
+  </head>
+  <body data-page="app-bar-bottom">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Bottom App Bar</h1>
+        <p class="description">
+          Bottom app bars display primary actions at the bottom of the screen.
+          Supports standard layout and with-FAB cutout variant for prominent
+          primary actions. Not intended for large navigation sets where a
+          dedicated navigation bar should be used.
+        </p>
+
+        <!-- Basic Usage -->
+        <div class="section">
+          <h2>Basic Usage (Standard)</h2>
+          <p>
+            Default bottom app bar with action buttons aligned to the right. It
+            keeps high-frequency actions reachable on mobile layouts.
+          </p>
+          <div class="demo-box">
+            <ds-app-bar-bottom>
+              <button
+                type="button"
+                slot="actions"
+                aria-label="Search"
+                class="material-symbols-outlined">
+                search
+              </button>
+              <button
+                type="button"
+                slot="actions"
+                aria-label="More"
+                class="material-symbols-outlined">
+                more_vert
+              </button>
+            </ds-app-bar-bottom>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-app-bar-bottom>
+  &lt;button slot="actions" aria-label="Search" class="material-symbols-outlined">search&lt;/button>
+  &lt;button slot="actions" aria-label="More" class="material-symbols-outlined">more_vert&lt;/button>
+&lt;/ds-app-bar-bottom></pre
+            >
+          </div>
+        </div>
+
+        <!-- Initial Value -->
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>
+            Actions are populated from slot content. Multiple buttons display in
+            order from left to right.
+          </p>
+          <div class="demo-box">
+            <ds-app-bar-bottom>
+              <button
+                type="button"
+                slot="actions"
+                aria-label="Save"
+                class="material-symbols-outlined">
+                save
+              </button>
+              <button
+                type="button"
+                slot="actions"
+                aria-label="Undo"
+                class="material-symbols-outlined">
+                undo
+              </button>
+              <button
+                type="button"
+                slot="actions"
+                aria-label="Redo"
+                class="material-symbols-outlined">
+                redo
+              </button>
+            </ds-app-bar-bottom>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-app-bar-bottom>
+  &lt;button slot="actions" aria-label="Save" class="material-symbols-outlined">save&lt;/button>
+  &lt;button slot="actions" aria-label="Undo" class="material-symbols-outlined">undo&lt;/button>
+  &lt;button slot="actions" aria-label="Redo" class="material-symbols-outlined">redo&lt;/button>
+&lt;/ds-app-bar-bottom></pre
+            >
+          </div>
+        </div>
+
+        <!-- With FAB Variant -->
+        <div class="section">
+          <h2>With FAB Cutout</h2>
+          <p>
+            The with-fab variant creates a centered cutout for a floating action
+            button, emphasizing a primary action.
+          </p>
+          <div class="demo-box">
+            <ds-app-bar-bottom variant="with-fab">
+              <ds-fab slot="fab" position="none">
+                <span class="material-symbols-outlined">add</span>
+              </ds-fab>
+              <button
+                type="button"
+                slot="actions"
+                aria-label="Favorites"
+                class="material-symbols-outlined">
+                favorite
+              </button>
+              <button
+                type="button"
+                slot="actions"
+                aria-label="Music"
+                class="material-symbols-outlined">
+                music_note
+              </button>
+            </ds-app-bar-bottom>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-app-bar-bottom variant="with-fab">
+  &lt;button slot="fab" aria-label="Add" class="fab-button">add&lt;/button>
+  &lt;button slot="actions" aria-label="Favorites" class="material-symbols-outlined">favorite&lt;/button>
+  &lt;button slot="actions" aria-label="Music" class="material-symbols-outlined">music_note&lt;/button>
+&lt;/ds-app-bar-bottom></pre
+            >
+          </div>
+        </div>
+
+        <!-- Variants -->
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Choose between standard and with-fab layouts.</p>
+          <div class="demo-box" style="display: grid; gap: 24px">
+            <div>
+              <h4>Standard</h4>
+              <ds-app-bar-bottom>
+                <button
+                  type="button"
+                  slot="actions"
+                  aria-label="Delete"
+                  class="material-symbols-outlined">
+                  delete
+                </button>
+                <button
+                  type="button"
+                  slot="actions"
+                  aria-label="Edit"
+                  class="material-symbols-outlined">
+                  edit
+                </button>
+              </ds-app-bar-bottom>
+            </div>
+
+            <div>
+              <h4>With FAB</h4>
+              <ds-app-bar-bottom variant="with-fab">
+                <ds-fab slot="fab" position="none">
+                  <span class="material-symbols-outlined">create</span>
+                </ds-fab>
+                <button
+                  type="button"
+                  slot="actions"
+                  aria-label="Settings"
+                  class="material-symbols-outlined">
+                  settings
+                </button>
+              </ds-app-bar-bottom>
+            </div>
+          </div>
+        </div>
+
+        <!-- Interactive Example -->
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Click actions to see state changes. FAB appears centered.</p>
+          <div class="demo-box">
+            <ds-app-bar-bottom id="interactive-bar" variant="with-fab">
+              <ds-fab slot="fab" id="fab-action" position="none">
+                <span class="material-symbols-outlined">edit</span>
+              </ds-fab>
+              <button
+                type="button"
+                slot="actions"
+                aria-label="Archive"
+                class="material-symbols-outlined">
+                archive
+              </button>
+              <button
+                type="button"
+                slot="actions"
+                aria-label="Trash"
+                class="material-symbols-outlined">
+                delete
+              </button>
+            </ds-app-bar-bottom>
+            <div class="demo-log">
+              <p>
+                Last action:
+                <span id="action-log">None</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Usage Guidelines -->
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+
+          <h3>When to Use</h3>
+          <ul>
+            <li>Quick access to secondary actions at bottom of screen</li>
+            <li>Mobile-friendly action placement (thumb reach)</li>
+            <li>Prominent primary action with with-fab variant</li>
+          </ul>
+
+          <h3>Best Practices</h3>
+          <ul>
+            <li>
+              <strong>Keep it simple:</strong> Limit to 2-4 action buttons
+            </li>
+            <li>
+              <strong>Use with-fab:</strong> For one prominent primary action
+            </li>
+            <li>
+              <strong>Icon buttons:</strong> Use Material Symbols with
+              aria-labels
+            </li>
+            <li>
+              <strong>Mobile first:</strong> Position actions within thumb reach
+            </li>
+          </ul>
+
+          <h3>When Not to Use</h3>
+          <ul>
+            <li>Top-level navigation (use top app bar instead)</li>
+            <li>
+              More than one primary action (FAB is for single primary action)
+            </li>
+            <li>On pages without significant bottom space</li>
+          </ul>
+        </div>
+
+        <!-- API Documentation -->
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>DSAppBarBottom</h3>
+          <p>Container for bottom app bar variants.</p>
+
+          <h4>Attributes</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>"standard" | "with-fab"</td>
+                <td>"standard"</td>
+                <td>Layout variant (with or without FAB cutout)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>Slots</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>actions</code></td>
+                <td>Trailing action buttons (right side)</td>
+              </tr>
+              <tr>
+                <td><code>fab</code></td>
+                <td>FAB element (center cutout, with-fab variant only)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>CSS Parts</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>App bar container</td>
+              </tr>
+              <tr>
+                <td><code>fab-area</code></td>
+                <td>FAB cutout area (with-fab variant)</td>
+              </tr>
+              <tr>
+                <td><code>actions</code></td>
+                <td>Trailing actions region</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h4>CSS Custom Properties</h4>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-app-bar-bg</code></td>
+                <td><code>--md-sys-color-surface</code></td>
+                <td>Background color</td>
+              </tr>
+              <tr>
+                <td><code>--ds-app-bar-color</code></td>
+                <td><code>--md-sys-color-on-surface</code></td>
+                <td>Foreground color</td>
+              </tr>
+              <tr>
+                <td><code>--ds-app-bar-shadow</code></td>
+                <td><code>0 4px 12px rgba(0,0,0,0.12)</code></td>
+                <td>Box shadow/elevation</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="section">
+          <h2>Accessibility</h2>
+          <ul>
+            <li>
+              <strong>Landmark:</strong> App bar uses
+              <code>role="contentinfo"</code>
+            </li>
+            <li>
+              <strong>Actions:</strong> Provide clear
+              <code>aria-label</code> for each action button
+            </li>
+            <li>
+              <strong>FAB:</strong> Ensure FAB has descriptive
+              <code>aria-label</code> for primary action
+            </li>
+            <li>
+              <strong>Keyboard:</strong> Tab to buttons, activate with
+              Enter/Space
+            </li>
+            <li><strong>Focus:</strong> Visible focus rings on all controls</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const bar = document.getElementById("interactive-bar");
+      const fabBtn = document.getElementById("fab-action");
+      const actionLog = document.getElementById("action-log");
+      const allActions = bar.querySelectorAll('[slot="actions"]');
+
+      if (fabBtn) {
+        fabBtn.addEventListener("ds-fab:click", () => {
+          actionLog.textContent = "FAB: Compose";
+        });
+      }
+
+      allActions.forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const label = btn.getAttribute("aria-label");
+          actionLog.textContent = `Action: ${label}`;
+        });
+      });
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

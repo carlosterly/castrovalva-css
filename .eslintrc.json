@@ -1,0 +1,26 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true,
+    "mocha": true
+  },
+  "extends": ["eslint:recommended"],
+  "plugins": ["wc"],
+  "parserOptions": {
+    "ecmaVersion": 2022,
+    "sourceType": "module"
+  },
+  "rules": {
+    "wc/guard-super-call": "error",
+    "wc/no-closed-shadow-root": "error",
+    "wc/no-constructor-attributes": "error",
+    "wc/no-invalid-element-name": "error",
+    "wc/no-self-class": "error",
+    "semi": ["error", "always"],
+    "quotes": ["error", "single"],
+    "linebreak-style": ["error", "unix"],
+    "eol-last": ["error", "always"],
+    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
+    "no-console": ["warn", { "allow": ["warn", "error"] }]
+  }
+}

@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Date Picker - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .date-picker-row {
+        display: flex;
+        flex-direction: column;
+        gap: var(--ds-space-3);
+      }
+
+      .date-picker-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: var(--ds-space-4);
+      }
+
+      .date-picker-output {
+        margin-top: var(--ds-space-4);
+        padding: var(--ds-space-4);
+        background: var(--md-sys-color-surface-variant);
+        border-radius: var(--ds-border-radius-2);
+        min-height: 60px;
+      }
+    </style>
+  </head>
+  <body data-page="date-picker">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Date Picker</h1>
+        <p class="description">
+          Material Design 3 date picker for selecting a single date with a
+          calendar overlay. Not intended for date-range planning with complex
+          constraints or timeline editing workflows.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use a date picker to select a single date. The calendar overlay
+            reduces input errors compared to manual date typing.
+          </p>
+          <div class="demo-box">
+            <ds-date-picker label="Select a date"></ds-date-picker>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-date-picker label="Select a date"&gt;&lt;/ds-date-picker&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Provide a pre-selected value in ISO format.</p>
+          <div class="demo-box">
+            <ds-date-picker
+              label="Event date"
+              value="2024-12-25"></ds-date-picker>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-date-picker label="Event date" value="2024-12-25"&gt;&lt;/ds-date-picker&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Use constraints and localization for different contexts.</p>
+
+          <h3>Date Constraints</h3>
+          <div class="demo-box">
+            <div class="date-picker-grid">
+              <ds-date-picker
+                label="Future dates"
+                min="2025-01-01"></ds-date-picker>
+              <ds-date-picker
+                label="Past dates"
+                max="2024-12-31"></ds-date-picker>
+              <ds-date-picker
+                label="Within range"
+                min="2024-12-01"
+                max="2024-12-31"
+                value="2024-12-15"></ds-date-picker>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-date-picker label="Future dates" min="2025-01-01"&gt;&lt;/ds-date-picker&gt;
+&lt;ds-date-picker label="Past dates" max="2024-12-31"&gt;&lt;/ds-date-picker&gt;
+&lt;ds-date-picker
+  label="Within range"
+  min="2024-12-01"
+  max="2024-12-31"
+  value="2024-12-15"&gt;&lt;/ds-date-picker&gt;</pre
+            >
+          </div>
+
+          <h3>Localization</h3>
+          <p>Set the locale for the formatted date display.</p>
+          <div class="demo-box">
+            <div class="date-picker-grid">
+              <ds-date-picker
+                label="US"
+                value="2024-12-25"
+                locale="en-US"></ds-date-picker>
+              <ds-date-picker
+                label="UK"
+                value="2024-12-25"
+                locale="en-GB"></ds-date-picker>
+              <ds-date-picker
+                label="DE"
+                value="2024-12-25"
+                locale="de-DE"></ds-date-picker>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-date-picker locale="en-US"&gt;&lt;/ds-date-picker&gt;
+&lt;ds-date-picker locale="en-GB"&gt;&lt;/ds-date-picker&gt;
+&lt;ds-date-picker locale="de-DE"&gt;&lt;/ds-date-picker&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Use disabled or required where appropriate.</p>
+          <div class="demo-box">
+            <div class="date-picker-grid">
+              <ds-date-picker
+                label="Disabled"
+                value="2024-12-25"
+                disabled></ds-date-picker>
+              <ds-date-picker label="Required" required></ds-date-picker>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-date-picker label="Disabled" value="2024-12-25" disabled&gt;&lt;/ds-date-picker&gt;
+&lt;ds-date-picker label="Required" required&gt;&lt;/ds-date-picker&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Listen to change events for the selected date.</p>
+          <div class="demo-box">
+            <div class="date-picker-row">
+              <ds-date-picker
+                id="interactive-picker"
+                label="Pick a date"></ds-date-picker>
+              <div id="event-output" class="date-picker-output">
+                <em>Select a date to see details...</em>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>value</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Selected date in YYYY-MM-DD format</td>
+              </tr>
+              <tr>
+                <td><code>min</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Minimum selectable date</td>
+              </tr>
+              <tr>
+                <td><code>max</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Maximum selectable date</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>"Select date"</td>
+                <td>Input label text</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables the picker</td>
+              </tr>
+              <tr>
+                <td><code>required</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Marks the field as required</td>
+              </tr>
+              <tr>
+                <td><code>locale</code></td>
+                <td>string</td>
+                <td>"en-US"</td>
+                <td>Locale for formatting</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>value</code></td>
+                <td>string</td>
+                <td>Get/set the selected date string</td>
+              </tr>
+              <tr>
+                <td><code>min</code></td>
+                <td>string</td>
+                <td>Get/set the minimum selectable date</td>
+              </tr>
+              <tr>
+                <td><code>max</code></td>
+                <td>string</td>
+                <td>Get/set the maximum selectable date</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>Get/set the input label</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>Get/set disabled state</td>
+              </tr>
+              <tr>
+                <td><code>required</code></td>
+                <td>boolean</td>
+                <td>Get/set required state</td>
+              </tr>
+              <tr>
+                <td><code>locale</code></td>
+                <td>string</td>
+                <td>Get/set locale for formatting</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-date-picker:change</code></td>
+                <td><code>{ value, date }</code></td>
+                <td>Fired when a date is selected</td>
+              </tr>
+              <tr>
+                <td><code>ds-date-picker:open</code></td>
+                <td>—</td>
+                <td>Fired when the calendar opens</td>
+              </tr>
+              <tr>
+                <td><code>ds-date-picker:close</code></td>
+                <td>—</td>
+                <td>Fired when the calendar closes</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Parameters</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>openCalendar()</code></td>
+                <td>none</td>
+                <td>Opens the calendar dropdown</td>
+              </tr>
+              <tr>
+                <td><code>closeCalendar()</code></td>
+                <td>none</td>
+                <td>Closes the calendar dropdown</td>
+              </tr>
+              <tr>
+                <td><code>selectDate(date)</code></td>
+                <td>date: Date</td>
+                <td>Selects a date programmatically</td>
+              </tr>
+              <tr>
+                <td><code>previousMonth()</code></td>
+                <td>none</td>
+                <td>Navigate to the previous month</td>
+              </tr>
+              <tr>
+                <td><code>nextMonth()</code></td>
+                <td>none</td>
+                <td>Navigate to the next month</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>input</code></td>
+                <td>Input field element</td>
+              </tr>
+              <tr>
+                <td><code>calendar</code></td>
+                <td>Calendar dropdown container</td>
+              </tr>
+              <tr>
+                <td><code>day</code></td>
+                <td>Calendar day buttons</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-date-picker-width</code></td>
+                <td>Width of the input field</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-input-padding-y</code></td>
+                <td>Input vertical padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-input-padding-x</code></td>
+                <td>Input horizontal padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-input-icon-padding</code></td>
+                <td>Right padding for calendar icon</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-label-offset-x</code></td>
+                <td>Label left offset</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-label-padding-x</code></td>
+                <td>Label horizontal padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-label-bg</code></td>
+                <td>Label background color</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-icon-offset-x</code></td>
+                <td>Icon right offset</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-icon-size</code></td>
+                <td>Calendar icon size</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-calendar-width</code></td>
+                <td>Minimum calendar width</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-calendar-padding</code></td>
+                <td>Calendar padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-calendar-gap</code></td>
+                <td>Calendar grid gap</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-header-gap</code></td>
+                <td>Header spacing</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-nav-size</code></td>
+                <td>Navigation button size</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-day-header-padding</code></td>
+                <td>Day header padding</td>
+              </tr>
+              <tr>
+                <td><code>--ds-date-picker-day-font-size</code></td>
+                <td>Day number font size</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <ul>
+            <li>✅ Escape key closes the calendar</li>
+            <li>✅ Date buttons include full aria-labels</li>
+            <li>✅ Calendar uses dialog role</li>
+            <li>✅ Disabled state prevents interaction</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+
+          <h3>When to Use</h3>
+          <ul>
+            <li>When users need to select a specific date</li>
+            <li>For scheduling and booking interfaces</li>
+            <li>When date context is important</li>
+          </ul>
+
+          <h3>Best Practices</h3>
+          <ul>
+            <li>Always provide a clear label</li>
+            <li>Use min/max to prevent invalid dates</li>
+            <li>Match locale to the user context</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const picker = document.getElementById("interactive-picker");
+      const output = document.getElementById("event-output");
+
+      picker.addEventListener("ds-date-picker:change", (event) => {
+        output.innerHTML = `
+          <strong>Date Selected:</strong> ${event.detail.value}<br>
+          <strong>Formatted:</strong> ${event.detail.date.toLocaleDateString(
+            "en-US",
+            {
+              weekday: "long",
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            },
+          )}<br>
+          <strong>ISO Format:</strong> ${event.detail.date.toISOString()}<br>
+          <strong>Time:</strong> ${new Date().toLocaleTimeString()}
+        `;
+      });
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

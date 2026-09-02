@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Text Field - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="text-field">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Text Field</h1>
+        <p class="description">
+          Material Design 3 text field for single-line input with validation,
+          icons, and character counting. Not intended for multi-line prose; use
+          <code>ds-textarea</code> for longer input.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use a label for accessible, consistent input affordances. Always
+            include a label — it provides the field's accessible name and
+            anchors error messages. This is the recommended minimum.
+          </p>
+          <div class="demo-box">
+            <ds-text-field label="Full Name"></ds-text-field>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-text-field label="Full Name">&lt;/ds-text-field></pre>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Prefill inputs to reflect existing data.</p>
+          <div class="demo-box">
+            <ds-text-field
+              label="Email"
+              value="alex@example.com"></ds-text-field>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-text-field
+  label="Email"
+  value="alex@example.com">
+&lt;/ds-text-field></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Choose filled or outlined to match layout density and emphasis.</p>
+
+          <h3>Filled</h3>
+          <p>Default variant with filled background.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> The input sits on a flat or neutral
+              surface.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> The input must stand out on an
+              elevated or tonal surface.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-text-field variant="filled" label="First Name"></ds-text-field>
+            <ds-text-field
+              variant="filled"
+              label="Email"
+              type="email"></ds-text-field>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-text-field variant="filled" label="First Name">&lt;/ds-text-field></pre
+            >
+          </div>
+
+          <h3>Outlined</h3>
+          <p>Outlined variant with a visible border.</p>
+          <ul>
+            <li>
+              <strong>Use when:</strong> Inputs appear on elevated or tonal
+              surfaces where filled background would blend in.
+            </li>
+            <li>
+              <strong>Avoid when:</strong> The filled variant already meets the
+              visual hierarchy requirements.
+            </li>
+          </ul>
+          <div class="demo-box">
+            <ds-text-field variant="outlined" label="Last Name"></ds-text-field>
+            <ds-text-field
+              variant="outlined"
+              label="Phone"
+              type="tel"></ds-text-field>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-text-field variant="outlined" label="Last Name">&lt;/ds-text-field></pre
+            >
+          </div>
+
+          <h3>Input Types</h3>
+          <p>Use native input types for built-in validation.</p>
+          <div class="demo-box">
+            <ds-text-field label="Text" type="text"></ds-text-field>
+            <ds-text-field label="Email" type="email"></ds-text-field>
+            <ds-text-field label="Password" type="password"></ds-text-field>
+            <ds-text-field label="Number" type="number"></ds-text-field>
+            <ds-text-field label="URL" type="url"></ds-text-field>
+            <ds-text-field label="Tel" type="tel"></ds-text-field>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Icons</h2>
+          <p>Provide leading or trailing icons for context.</p>
+          <div class="demo-box">
+            <ds-text-field label="Search">
+              <ds-icon slot="leading-icon" name="search"></ds-icon>
+            </ds-text-field>
+            <ds-text-field label="Email" type="email">
+              <ds-icon slot="leading-icon" name="mail"></ds-icon>
+              <ds-icon slot="trailing-icon" name="visibility"></ds-icon>
+            </ds-text-field>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-text-field label="Search">
+  &lt;ds-icon slot="leading-icon" name="search">&lt;/ds-icon>
+&lt;/ds-text-field></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Supporting Text</h2>
+          <p>Use helper text and validation messages for guidance.</p>
+          <div class="demo-box">
+            <ds-text-field
+              label="Username"
+              supporting-text="Choose a unique username"></ds-text-field>
+            <ds-text-field
+              label="Email"
+              type="email"
+              error
+              error-text="Please enter a valid email"
+              value="invalid-email"></ds-text-field>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-text-field
+  label="Email"
+  type="email"
+  error
+  error-text="Please enter a valid email">
+&lt;/ds-text-field></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Character Counter</h2>
+          <p>Show a live count when a maximum length is set.</p>
+          <div class="demo-box">
+            <ds-text-field
+              label="Bio"
+              maxlength="100"
+              show-counter></ds-text-field>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-text-field
+  label="Bio"
+  maxlength="100"
+  show-counter>
+&lt;/ds-text-field></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Show disabled, required, and error states clearly.</p>
+
+          <h3>Disabled</h3>
+          <div class="demo-box">
+            <ds-text-field
+              label="Disabled Field"
+              value="Cannot edit"
+              disabled></ds-text-field>
+          </div>
+
+          <h3>Required</h3>
+          <div class="demo-box">
+            <ds-text-field label="Required Field" required></ds-text-field>
+          </div>
+
+          <h3>Error</h3>
+          <div class="demo-box">
+            <ds-text-field
+              label="Email"
+              type="email"
+              error
+              error-text="Please enter a valid email"
+              value="invalid-email"></ds-text-field>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Listen for input and change events to update UI state.</p>
+          <div class="demo-box">
+            <ds-text-field
+              id="event-field"
+              label="Project Name"
+              supporting-text="Start typing to see events"></ds-text-field>
+            <p>Event: <span id="event-type">none</span></p>
+            <p>Value: <span id="event-value">none</span></p>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-text-field id="event-field" label="Project Name">&lt;/ds-text-field>
+&lt;p>Event: &lt;span id="event-type">none&lt;/span>&lt;/p>
+&lt;p>Value: &lt;span id="event-value">none&lt;/span>&lt;/p></pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>"filled"</td>
+                <td>Visual style: "filled" or "outlined".</td>
+              </tr>
+              <tr>
+                <td><code>type</code></td>
+                <td>string</td>
+                <td>"text"</td>
+                <td>Input type: text, email, password, number, tel, url.</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Floating label text.</td>
+              </tr>
+              <tr>
+                <td><code>value</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Input value.</td>
+              </tr>
+              <tr>
+                <td><code>placeholder</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Placeholder text.</td>
+              </tr>
+              <tr>
+                <td><code>supporting-text</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Helper text below the input.</td>
+              </tr>
+              <tr>
+                <td><code>error-text</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Error message shown when <code>error</code> is set.</td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables the field.</td>
+              </tr>
+              <tr>
+                <td><code>error</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Shows error state.</td>
+              </tr>
+              <tr>
+                <td><code>required</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Marks the field as required.</td>
+              </tr>
+              <tr>
+                <td><code>maxlength</code></td>
+                <td>number</td>
+                <td>-</td>
+                <td>Maximum character length.</td>
+              </tr>
+              <tr>
+                <td><code>show-counter</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Shows the character counter.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-text-field:input</code></td>
+                <td><code>{ value: string }</code></td>
+                <td>Fired on input.</td>
+              </tr>
+              <tr>
+                <td><code>ds-text-field:change</code></td>
+                <td><code>{ value: string }</code></td>
+                <td>Fired when value commits.</td>
+              </tr>
+              <tr>
+                <td><code>ds-text-field:focus</code></td>
+                <td><code>{ value: string }</code></td>
+                <td>Fired when the input receives focus.</td>
+              </tr>
+              <tr>
+                <td><code>ds-text-field:blur</code></td>
+                <td><code>{ value: string }</code></td>
+                <td>Fired when the input loses focus.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>leading-icon</code></td>
+                <td>Icon before the input.</td>
+              </tr>
+              <tr>
+                <td><code>trailing-icon</code></td>
+                <td>Icon after the input.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>input</code></td>
+                <td>Native input element.</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>Floating label.</td>
+              </tr>
+              <tr>
+                <td><code>leading-icon</code></td>
+                <td>Leading icon container.</td>
+              </tr>
+              <tr>
+                <td><code>trailing-icon</code></td>
+                <td>Trailing icon container.</td>
+              </tr>
+              <tr>
+                <td><code>supporting-text-container</code></td>
+                <td>Helper text wrapper.</td>
+              </tr>
+              <tr>
+                <td><code>supporting-text</code></td>
+                <td>Helper or error text.</td>
+              </tr>
+              <tr>
+                <td><code>character-counter</code></td>
+                <td>Character counter label.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-text-field-width</code></td>
+                <td>Controls the field width (default: 100%).</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>focus()</code></td>
+                <td>Moves focus to the input.</td>
+              </tr>
+              <tr>
+                <td><code>blur()</code></td>
+                <td>Removes focus from the input.</td>
+              </tr>
+              <tr>
+                <td><code>select()</code></td>
+                <td>Selects the input text.</td>
+              </tr>
+              <tr>
+                <td><code>checkValidity()</code></td>
+                <td>Returns the input validity state.</td>
+              </tr>
+              <tr>
+                <td><code>reportValidity()</code></td>
+                <td>Reports the input validity state.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Map</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Field not focused</td>
+                <td>Moves focus to the input.</td>
+              </tr>
+              <tr>
+                <td><code>Shift+Tab</code></td>
+                <td>Field focused</td>
+                <td>Moves focus to previous element.</td>
+              </tr>
+              <tr>
+                <td>Any printable key</td>
+                <td>Field focused</td>
+                <td>Appends to input value.</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>Uses native <code>&lt;input&gt;</code> element semantics.</li>
+            <li>Error state is exposed via <code>aria-invalid</code>.</li>
+            <li>Focus indicators follow MD3 contrast requirements.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Short, single-line input for names,
+              emails, or free-form text.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Multi-line prose or notes; use
+              <code>ds-textarea</code> instead.
+            </li>
+            <li>
+              <strong>Composition:</strong> Pair with <code>error</code> and
+              <code>supporting-text</code> for inline validation guidance.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Omitting labels, using only
+              placeholder text, and missing error feedback.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const field = document.getElementById("event-field");
+      const eventType = document.getElementById("event-type");
+      const eventValue = document.getElementById("event-value");
+
+      if (field && eventType && eventValue) {
+        field.addEventListener("ds-text-field:input", (event) => {
+          eventType.textContent = "input";
+          eventValue.textContent = event.detail.value || "none";
+        });
+
+        field.addEventListener("ds-text-field:change", (event) => {
+          eventType.textContent = "change";
+          eventValue.textContent = event.detail.value || "none";
+        });
+      }
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

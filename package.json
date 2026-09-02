@@ -1,0 +1,59 @@
+{
+  "name": "castrovalva",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Vanilla Design System with Web Components",
+  "author": "Carl",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js"
+    },
+    "./button": {
+      "import": "./dist/button.js"
+    },
+    "./input": {
+      "import": "./dist/input.js"
+    },
+    "./icon": {
+      "import": "./dist/icon.js"
+    },
+    "./css": "./dist/design-system.css"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "web-test-runner --node-resolve",
+    "test:watch": "npm run test -- --watch",
+    "test:all": "web-test-runner --node-resolve --config web-test-runner.full.config.js",
+    "test:a11y": "playwright test test/accessibility",
+    "lint": "eslint src/**/*.js",
+    "lint:fix": "eslint src/**/*.js --fix"
+  },
+  "keywords": [
+    "design-system",
+    "web-components",
+    "vanilla",
+    "ui-components"
+  ],
+  "devDependencies": {
+    "@axe-core/playwright": "^4.11.0",
+    "@open-wc/testing": "^4.0.0",
+    "@web/test-runner": "^0.18.3",
+    "@web/test-runner-playwright": "^0.11.1",
+    "eslint": "^8.57.1",
+    "eslint-plugin-wc": "^2.2.1",
+    "playwright": "^1.57.0",
+    "terser": "^5.44.1",
+    "vite": "^5.4.21"
+  }
+}

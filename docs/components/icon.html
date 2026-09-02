@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Icon - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="icon">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Icon</h1>
+        <p class="description">
+          Material Symbols icon wrapper with variant, size, color, and font
+          variation controls. Not intended to replace text labels for critical
+          actions without accessible naming.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Render an outlined icon using the icon name. The wrapper
+            standardizes symbol style and sizing with MD3 tokens.
+          </p>
+          <div class="demo-box">
+            <ds-icon name="favorite"></ds-icon>
+          </div>
+          <div class="code-block">
+            <pre>&lt;ds-icon name="favorite"&gt;&lt;/ds-icon&gt;</pre>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Set icon style and accessibility label through attributes.</p>
+          <div class="demo-box">
+            <ds-icon
+              name="settings"
+              variant="rounded"
+              size="large"
+              label="Settings"></ds-icon>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-icon
+  name="settings"
+  variant="rounded"
+  size="large"
+  label="Settings"&gt;
+&lt;/ds-icon&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>
+            Switch icon glyph style using the <code>variant</code> attribute.
+          </p>
+          <div
+            class="demo-box"
+            style="display: flex; gap: 16px; align-items: center">
+            <ds-icon name="star" variant="outlined"></ds-icon>
+            <ds-icon name="star" variant="filled"></ds-icon>
+            <ds-icon name="star" variant="rounded"></ds-icon>
+            <ds-icon name="star" variant="sharp"></ds-icon>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-icon name="star" variant="outlined"&gt;&lt;/ds-icon&gt;
+&lt;ds-icon name="star" variant="filled"&gt;&lt;/ds-icon&gt;
+&lt;ds-icon name="star" variant="rounded"&gt;&lt;/ds-icon&gt;
+&lt;ds-icon name="star" variant="sharp"&gt;&lt;/ds-icon&gt;</pre
+            >
+          </div>
+
+          <h3>Sizes</h3>
+          <div
+            class="demo-box"
+            style="display: flex; gap: 16px; align-items: center">
+            <ds-icon name="favorite" size="small"></ds-icon>
+            <ds-icon name="favorite" size="medium"></ds-icon>
+            <ds-icon name="favorite" size="large"></ds-icon>
+            <ds-icon name="favorite" size="xlarge"></ds-icon>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-icon name="favorite" size="small"&gt;&lt;/ds-icon&gt;
+&lt;ds-icon name="favorite" size="medium"&gt;&lt;/ds-icon&gt;
+&lt;ds-icon name="favorite" size="large"&gt;&lt;/ds-icon&gt;
+&lt;ds-icon name="favorite" size="xlarge"&gt;&lt;/ds-icon&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Use animation host attributes and color overrides as needed.</p>
+          <div
+            class="demo-box"
+            style="display: flex; gap: 16px; align-items: center">
+            <ds-icon name="sync" spin label="Syncing"></ds-icon>
+            <ds-icon
+              name="notifications"
+              pulse
+              color="var(--md-sys-color-error)"></ds-icon>
+            <ds-icon
+              name="check_circle"
+              color="var(--md-sys-color-tertiary)"></ds-icon>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-icon name="sync" spin label="Syncing"&gt;&lt;/ds-icon&gt;
+&lt;ds-icon name="notifications" pulse color="var(--md-sys-color-error)"&gt;&lt;/ds-icon&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Change icon name, variant, and size to preview configuration.</p>
+          <div
+            class="demo-box"
+            style="display: grid; gap: 12px; max-inline-size: 440px">
+            <label>
+              Icon Name
+              <input id="icon-name-input" type="text" value="home" />
+            </label>
+            <label>
+              Variant
+              <select id="icon-variant-input">
+                <option value="outlined">outlined</option>
+                <option value="filled">filled</option>
+                <option value="rounded">rounded</option>
+                <option value="sharp">sharp</option>
+              </select>
+            </label>
+            <label>
+              Size
+              <select id="icon-size-input">
+                <option value="small">small</option>
+                <option value="medium" selected>medium</option>
+                <option value="large">large</option>
+                <option value="xlarge">xlarge</option>
+              </select>
+            </label>
+            <div
+              style="
+                display: flex;
+                justify-content: center;
+                padding-block: 8px;
+              ">
+              <ds-icon id="icon-demo" name="home" label="Home"></ds-icon>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>name</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Material Symbol icon name.</td>
+              </tr>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td><code>outlined</code></td>
+                <td>
+                  <code>outlined</code>, <code>filled</code>,
+                  <code>rounded</code>, <code>sharp</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td>string | number</td>
+                <td><code>medium</code></td>
+                <td>
+                  <code>small</code>, <code>medium</code>, <code>large</code>,
+                  <code>xlarge</code>, or custom pixel number.
+                </td>
+              </tr>
+              <tr>
+                <td><code>color</code></td>
+                <td>string</td>
+                <td><code>currentColor</code></td>
+                <td>Icon color value.</td>
+              </tr>
+              <tr>
+                <td><code>weight</code></td>
+                <td>number</td>
+                <td>400</td>
+                <td>Font weight from 100-700.</td>
+              </tr>
+              <tr>
+                <td><code>grade</code></td>
+                <td>number</td>
+                <td>0</td>
+                <td>Grade from -25 to 200.</td>
+              </tr>
+              <tr>
+                <td><code>fill</code></td>
+                <td>number</td>
+                <td>0</td>
+                <td>Fill state: 0 or 1.</td>
+              </tr>
+              <tr>
+                <td><code>optical-size</code></td>
+                <td>number</td>
+                <td>size-based</td>
+                <td>Optical size from 20-48.</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Accessible label for meaningful icons.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>name</code></td>
+                <td>string</td>
+                <td>Icon name.</td>
+              </tr>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>Icon variant.</td>
+              </tr>
+              <tr>
+                <td><code>size</code></td>
+                <td>string</td>
+                <td>Icon size token or numeric string.</td>
+              </tr>
+              <tr>
+                <td><code>color</code></td>
+                <td>string</td>
+                <td>Icon color.</td>
+              </tr>
+              <tr>
+                <td><code>weight</code></td>
+                <td>number</td>
+                <td>Font weight.</td>
+              </tr>
+              <tr>
+                <td><code>grade</code></td>
+                <td>number</td>
+                <td>Font grade.</td>
+              </tr>
+              <tr>
+                <td><code>fill</code></td>
+                <td>number</td>
+                <td>Fill setting.</td>
+              </tr>
+              <tr>
+                <td><code>opticalSize</code></td>
+                <td>number</td>
+                <td>Optical size.</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>Accessible label.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>None</td>
+                <td>N/A</td>
+                <td>This component does not emit custom events.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>getSizeConfig()</code></td>
+                <td>Returns computed CSS/px size mapping.</td>
+              </tr>
+              <tr>
+                <td><code>getVariantClass()</code></td>
+                <td>Returns Material Symbols class for current variant.</td>
+              </tr>
+              <tr>
+                <td><code>getFontVariationSettings()</code></td>
+                <td>Builds font variation settings string.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>icon</code></td>
+                <td>Inner span containing glyph text.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-icon-size-small</code></td>
+                <td>Small icon size token mapping.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-icon-size-medium</code></td>
+                <td>Medium icon size token mapping.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-icon-size-large</code></td>
+                <td>Large icon size token mapping.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-icon-size-xlarge</code></td>
+                <td>Extra-large icon size token mapping.</td>
+              </tr>
+              <tr>
+                <td><code>--icon-font-family</code></td>
+                <td>Material Symbols font family override.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <ul>
+            <li>
+              Decorative icons are hidden with <code>aria-hidden="true"</code>.
+            </li>
+            <li>
+              Meaningful icons should provide <code>label</code> to expose
+              <code>role="img"</code> and <code>aria-label</code>.
+            </li>
+            <li>
+              Color inherits from <code>currentColor</code> by default to
+              support contrast themes.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              Prefer commonly recognized symbols for faster comprehension.
+            </li>
+            <li>Always pair critical actions with visible text labels.</li>
+            <li>
+              Use animation attributes (`spin`, `pulse`) sparingly for state
+              emphasis.
+            </li>
+            <li>Use consistent icon size tokens within a given layout area.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const iconDemo = document.querySelector("#icon-demo");
+      const nameInput = document.querySelector("#icon-name-input");
+      const variantInput = document.querySelector("#icon-variant-input");
+      const sizeInput = document.querySelector("#icon-size-input");
+
+      nameInput.addEventListener("input", () => {
+        iconDemo.name = nameInput.value || "home";
+      });
+
+      variantInput.addEventListener("change", () => {
+        iconDemo.variant = variantInput.value;
+      });
+
+      sizeInput.addEventListener("change", () => {
+        iconDemo.size = sizeInput.value;
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

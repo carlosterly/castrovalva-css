@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bottom Sheet - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="bottom-sheet">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Bottom Sheet</h1>
+        <p class="description">
+          Material Design 3 bottom sheet for presenting actions and supporting
+          content from the bottom edge of the viewport. Not intended for
+          full-application navigation; use drawers or dedicated pages when users
+          need to browse many destinations.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Open a standard bottom sheet with header, content, and actions. This
+            pattern keeps users in context while exposing short supporting
+            tasks.
+          </p>
+          <div class="demo-box">
+            <ds-button id="open-standard-sheet">Open Standard Sheet</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-bottom-sheet id="sheet-standard" variant="standard"&gt;
+  &lt;div slot="header"&gt;
+    &lt;h2&gt;Sheet Title&lt;/h2&gt;
+  &lt;/div&gt;
+  &lt;p&gt;Supporting content goes here.&lt;/p&gt;
+  &lt;div slot="actions"&gt;
+    &lt;button type="button"&gt;Cancel&lt;/button&gt;
+    &lt;button type="button"&gt;Confirm&lt;/button&gt;
+  &lt;/div&gt;
+&lt;/ds-bottom-sheet&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Pre-configure behavior with drag settings before opening.</p>
+          <div class="demo-box">
+            <ds-button id="open-configured-sheet"
+              >Open Configured Sheet</ds-button
+            >
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-bottom-sheet
+  variant="standard"
+  draggable="false"
+  drag-threshold="150"&gt;
+  &lt;p&gt;This sheet disables drag-to-dismiss.&lt;/p&gt;
+&lt;/ds-bottom-sheet&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Bottom sheets support standard and modal interaction patterns.</p>
+
+          <h3>Standard</h3>
+          <div class="demo-box">
+            <ds-button id="open-variant-standard"
+              >Open Standard Variant</ds-button
+            >
+          </div>
+
+          <h3>Modal</h3>
+          <div class="demo-box">
+            <ds-button id="open-variant-modal">Open Modal Variant</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-bottom-sheet variant="modal"&gt;
+  &lt;p&gt;Modal variant requires explicit close actions.&lt;/p&gt;
+&lt;/ds-bottom-sheet&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Control open and close state programmatically.</p>
+          <div class="demo-box">
+            <ds-button id="open-state-sheet">Open State Demo</ds-button>
+            <ds-button id="close-state-sheet">Close State Demo</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+const sheet = document.querySelector('#sheet-state');
+sheet.show();
+sheet.close();</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>
+            Open and interact with the sheet to view emitted lifecycle events.
+          </p>
+          <div class="demo-box">
+            <ds-button id="open-interactive-sheet"
+              >Open Interactive Sheet</ds-button
+            >
+          </div>
+          <div class="demo-box" style="margin-block-start: 12px">
+            <pre id="sheet-event-log" style="margin: 0">
+Event log:
+</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td><code>standard</code></td>
+                <td><code>standard</code> or <code>modal</code>.</td>
+              </tr>
+              <tr>
+                <td><code>open</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Controls whether the sheet is visible.</td>
+              </tr>
+              <tr>
+                <td><code>draggable</code></td>
+                <td>boolean</td>
+                <td>true</td>
+                <td>Enables drag-to-dismiss for standard variant.</td>
+              </tr>
+              <tr>
+                <td><code>drag-threshold</code></td>
+                <td>number</td>
+                <td>100</td>
+                <td>Drag distance in pixels required before close.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-bottom-sheet:open</code></td>
+                <td><code>{}</code></td>
+                <td>Fired when the sheet opens.</td>
+              </tr>
+              <tr>
+                <td><code>ds-bottom-sheet:close</code></td>
+                <td><code>{}</code></td>
+                <td>Fired when the sheet closes.</td>
+              </tr>
+              <tr>
+                <td><code>ds-bottom-sheet:drag</code></td>
+                <td><code>{ progress }</code></td>
+                <td>Fired while dragging with progress from 0 to 1.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>show()</code></td>
+                <td>Opens the sheet.</td>
+              </tr>
+              <tr>
+                <td><code>close()</code></td>
+                <td>Closes the sheet.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>container</code></td>
+                <td>Outer fixed-position host layer.</td>
+              </tr>
+              <tr>
+                <td><code>scrim</code></td>
+                <td>Background overlay layer.</td>
+              </tr>
+              <tr>
+                <td><code>sheet</code></td>
+                <td>Main bottom sheet surface.</td>
+              </tr>
+              <tr>
+                <td><code>header</code></td>
+                <td>Header slot wrapper.</td>
+              </tr>
+              <tr>
+                <td><code>content</code></td>
+                <td>Default content slot wrapper.</td>
+              </tr>
+              <tr>
+                <td><code>actions</code></td>
+                <td>Actions slot wrapper.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-bottom-sheet-max-width</code></td>
+                <td>Maximum sheet width.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-bottom-sheet-max-height</code></td>
+                <td>Maximum sheet height.</td>
+              </tr>
+              <tr>
+                <td><code>--ds-bottom-sheet-header-padding</code></td>
+                <td>Header padding (mapped to global spacing tokens).</td>
+              </tr>
+              <tr>
+                <td><code>--ds-bottom-sheet-actions-gap</code></td>
+                <td>Action row spacing (mapped to global spacing tokens).</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Sheet open</td>
+                <td>Moves focus through controls within the sheet</td>
+              </tr>
+              <tr>
+                <td><code>Escape</code></td>
+                <td>Sheet open</td>
+                <td>Closes the sheet and restores focus to the trigger</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on action button</td>
+                <td>Activates the focused action</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Sheet surface uses <code>role="dialog"</code> and
+              <code>aria-modal="true"</code>.
+            </li>
+            <li>
+              Focus is restored to the previously focused element on close.
+            </li>
+            <li>
+              Drag interactions support touch and pointer input and can be
+              disabled.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use standard bottom sheets for
+              supplemental actions and short non-destructive tasks that should
+              not navigate away.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid bottom sheets for deep
+              workflows, large forms, or complex navigation trees.
+            </li>
+            <li>
+              <strong>Composition:</strong> Use modal variant for
+              higher-priority decisions requiring explicit confirmation. Keep
+              action counts low and place primary action last.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Overloading sheet content with
+              long scrolling text. Tune <code>drag-threshold</code> when
+              accidental dismissal is observed.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <ds-bottom-sheet id="sheet-standard" variant="standard">
+      <div slot="header">
+        <h2 id="sheet-title-standard">Sheet Title</h2>
+      </div>
+      <p>Supporting content goes here.</p>
+      <div slot="actions">
+        <button type="button" id="sheet-standard-cancel">Cancel</button>
+        <button type="button" id="sheet-standard-confirm">Confirm</button>
+      </div>
+    </ds-bottom-sheet>
+
+    <ds-bottom-sheet
+      id="sheet-configured"
+      variant="standard"
+      draggable="false"
+      drag-threshold="150">
+      <div slot="header">
+        <h2 id="sheet-title-configured">Configured Sheet</h2>
+      </div>
+      <p>This sheet disables drag-to-dismiss with a custom threshold.</p>
+      <div slot="actions">
+        <button type="button" id="sheet-configured-close">Close</button>
+      </div>
+    </ds-bottom-sheet>
+
+    <ds-bottom-sheet id="sheet-modal" variant="modal">
+      <div slot="header">
+        <h2 id="sheet-title-modal">Modal Sheet</h2>
+      </div>
+      <p>Modal sheets require explicit close actions.</p>
+      <div slot="actions">
+        <button type="button" id="sheet-modal-close">Close</button>
+      </div>
+    </ds-bottom-sheet>
+
+    <ds-bottom-sheet id="sheet-state" variant="standard">
+      <div slot="header">
+        <h2 id="sheet-title-state">State Demo</h2>
+      </div>
+      <p>Use external controls to open and close this sheet.</p>
+    </ds-bottom-sheet>
+
+    <ds-bottom-sheet id="sheet-interactive" variant="standard">
+      <div slot="header">
+        <h2 id="sheet-title-interactive">Interactive Sheet</h2>
+      </div>
+      <p>Observe emitted lifecycle and drag events in the log.</p>
+      <div slot="actions">
+        <button type="button" id="sheet-interactive-close">Close</button>
+      </div>
+    </ds-bottom-sheet>
+
+    <script type="module">
+      const byId = (id) => document.getElementById(id);
+      const openSheet = (sheetId) => byId(sheetId).show();
+      const closeSheet = (sheetId) => byId(sheetId).close();
+
+      byId("open-standard-sheet").addEventListener("click", () =>
+        openSheet("sheet-standard"),
+      );
+      byId("sheet-standard-cancel").addEventListener("click", () =>
+        closeSheet("sheet-standard"),
+      );
+      byId("sheet-standard-confirm").addEventListener("click", () =>
+        closeSheet("sheet-standard"),
+      );
+
+      byId("open-configured-sheet").addEventListener("click", () =>
+        openSheet("sheet-configured"),
+      );
+      byId("sheet-configured-close").addEventListener("click", () =>
+        closeSheet("sheet-configured"),
+      );
+
+      byId("open-variant-standard").addEventListener("click", () =>
+        openSheet("sheet-standard"),
+      );
+      byId("open-variant-modal").addEventListener("click", () =>
+        openSheet("sheet-modal"),
+      );
+      byId("sheet-modal-close").addEventListener("click", () =>
+        closeSheet("sheet-modal"),
+      );
+
+      byId("open-state-sheet").addEventListener("click", () =>
+        openSheet("sheet-state"),
+      );
+      byId("close-state-sheet").addEventListener("click", () =>
+        closeSheet("sheet-state"),
+      );
+
+      byId("open-interactive-sheet").addEventListener("click", () =>
+        openSheet("sheet-interactive"),
+      );
+      byId("sheet-interactive-close").addEventListener("click", () =>
+        closeSheet("sheet-interactive"),
+      );
+
+      const eventLog = byId("sheet-event-log");
+      const interactiveSheet = byId("sheet-interactive");
+
+      interactiveSheet.addEventListener("ds-bottom-sheet:open", () => {
+        eventLog.textContent += "ds-bottom-sheet:open\n";
+      });
+
+      interactiveSheet.addEventListener("ds-bottom-sheet:close", () => {
+        eventLog.textContent += "ds-bottom-sheet:close\n";
+      });
+
+      interactiveSheet.addEventListener("ds-bottom-sheet:drag", (event) => {
+        const progress = Number(event.detail.progress).toFixed(2);
+        eventLog.textContent += `ds-bottom-sheet:drag (${progress})\n`;
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

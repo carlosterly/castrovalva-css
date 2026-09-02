@@ -1,0 +1,523 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Snackbar - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+  </head>
+  <body data-page="snackbar">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Snackbar</h1>
+        <p class="description">
+          Material Design 3 snackbar for brief feedback and optional single-step
+          actions at the bottom of the viewport. Not intended for critical
+          blocking decisions; use dialogs or banners when confirmation must
+          persist.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Show a simple message with default timing. Snackbars provide
+            lightweight, non-blocking confirmation without shifting layout.
+          </p>
+          <div class="demo-box">
+            <ds-button id="show-basic-snackbar">Show Basic Snackbar</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-snackbar id="snackbar-basic"&gt;&lt;/ds-snackbar&gt;
+
+&lt;script type="module"&gt;
+  document.querySelector('#show-basic-snackbar').addEventListener('click', () =&gt; {
+    document.querySelector('#snackbar-basic').show({
+      message: 'Message sent successfully'
+    });
+  });
+&lt;/script&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>Configure message, action label, and duration as attributes.</p>
+          <div class="demo-box">
+            <ds-button id="show-initial-snackbar"
+              >Show Configured Snackbar</ds-button
+            >
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-snackbar
+  id="snackbar-initial"
+  message="Draft saved"
+  action-label="Undo"
+  duration="6000"&gt;
+&lt;/ds-snackbar&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Use action and duration options to match workflow needs.</p>
+
+          <h3>Message Only</h3>
+          <div class="demo-box">
+            <ds-button id="show-message-only">Message Only</ds-button>
+          </div>
+
+          <h3>With Action</h3>
+          <div class="demo-box">
+            <ds-button id="show-with-action">With Undo Action</ds-button>
+          </div>
+
+          <h3>Queued Messages</h3>
+          <div class="demo-box">
+            <ds-button id="show-queued">Show 3 Queued Messages</ds-button>
+          </div>
+          <div class="code-block">
+            <pre>
+const snack1 = document.querySelector('#snackbar-queue-1');
+const snack2 = document.querySelector('#snackbar-queue-2');
+const snack3 = document.querySelector('#snackbar-queue-3');
+
+snack1.show({ message: 'First message' });
+snack2.show({ message: 'Second message' });
+snack3.show({ message: 'Third message' });</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Control visibility timing, including indefinite messages.</p>
+          <div
+            class="demo-box"
+            style="display: flex; gap: 12px; flex-wrap: wrap">
+            <ds-button id="show-short">Short (2s)</ds-button>
+            <ds-button id="show-default">Default (4s)</ds-button>
+            <ds-button id="show-indefinite"
+              >Indefinite (manual close)</ds-button
+            >
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;!-- No auto-dismiss -->
+&lt;ds-snackbar id="snackbar-indefinite" duration="0"&gt;&lt;/ds-snackbar&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>
+            Trigger snackbars and inspect emitted lifecycle and action events.
+          </p>
+          <div
+            class="demo-box"
+            style="display: flex; gap: 12px; flex-wrap: wrap">
+            <ds-button id="show-interactive-success">Show Success</ds-button>
+            <ds-button id="show-interactive-error"
+              >Show Error + Retry</ds-button
+            >
+          </div>
+          <div class="demo-box" style="margin-block-start: 12px">
+            <pre id="snackbar-event-log" style="margin: 0">
+Event log:
+</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>message</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Message content shown in the snackbar body.</td>
+              </tr>
+              <tr>
+                <td><code>action-label</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Optional action button label.</td>
+              </tr>
+              <tr>
+                <td><code>duration</code></td>
+                <td>number</td>
+                <td>4000</td>
+                <td>
+                  Auto-dismiss delay in milliseconds. Use <code>0</code> to
+                  disable.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Type</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>message</code></td>
+                <td>string</td>
+                <td>Reflects the <code>message</code> attribute.</td>
+              </tr>
+              <tr>
+                <td><code>actionLabel</code></td>
+                <td>string</td>
+                <td>Reflects the <code>action-label</code> attribute.</td>
+              </tr>
+              <tr>
+                <td><code>duration</code></td>
+                <td>number</td>
+                <td>Reflects the <code>duration</code> attribute.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-snackbar:show</code></td>
+                <td><code>{ message, duration, hasAction }</code></td>
+                <td>Fired when the snackbar becomes visible.</td>
+              </tr>
+              <tr>
+                <td><code>ds-snackbar:action</code></td>
+                <td><code>{ message, actionLabel }</code></td>
+                <td>Fired when the action button is clicked.</td>
+              </tr>
+              <tr>
+                <td><code>ds-snackbar:dismiss</code></td>
+                <td><code>{ message }</code></td>
+                <td>Fired when the snackbar begins dismissal.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>show(options)</code></td>
+                <td>
+                  Queues and shows the snackbar with optional message/action
+                  callbacks.
+                </td>
+              </tr>
+              <tr>
+                <td><code>dismiss()</code></td>
+                <td>
+                  Dismisses the current snackbar and advances queue processing.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>None</td>
+                <td>This component currently does not expose shadow parts.</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-snackbar-min-block-size</code></td>
+                <td>
+                  Minimum height of the snackbar surface. Default
+                  <code>var(--ds-size-control-lg)</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-snackbar-padding-inline</code></td>
+                <td>
+                  Horizontal content padding. Default
+                  <code>var(--ds-space-4)</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-snackbar-padding-block</code></td>
+                <td>
+                  Vertical content padding. Default
+                  <code>var(--ds-space-3)</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-snackbar-gap</code></td>
+                <td>
+                  Gap between message and actions. Default
+                  <code>var(--ds-space-2)</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-snackbar-close-size</code></td>
+                <td>
+                  Close button size. Default
+                  <code>var(--ds-size-icon-lg)</code>.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Snackbar visible with actions</td>
+                <td>Moves focus through action and close controls</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on action or close button</td>
+                <td>Activates the focused control</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Snackbar surface uses <code>role="alert"</code> with polite live
+              announcements.
+            </li>
+            <li>
+              An additional status live region improves announcement
+              reliability.
+            </li>
+            <li>
+              Snackbar does not force focus changes, reducing interruption.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use snackbars for brief contextual
+              feedback such as successful saves, sends, or recoverable errors.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid snackbars for critical
+              warnings, multi-action decisions, or information that users must
+              read in detail.
+            </li>
+            <li>
+              <strong>Composition:</strong> Keep message text short, provide at
+              most one action (typically undo or retry), and rely on queueing
+              for multiple events.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Making snackbars persistent by
+              default can become intrusive. Use <code>duration="0"</code> only
+              when explicit dismissal is truly required.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <ds-snackbar id="snackbar-basic"></ds-snackbar>
+    <ds-snackbar
+      id="snackbar-initial"
+      message="Draft saved"
+      action-label="Undo"
+      duration="6000"></ds-snackbar>
+    <ds-snackbar id="snackbar-message-only"></ds-snackbar>
+    <ds-snackbar id="snackbar-action"></ds-snackbar>
+    <ds-snackbar id="snackbar-queue-1"></ds-snackbar>
+    <ds-snackbar id="snackbar-queue-2"></ds-snackbar>
+    <ds-snackbar id="snackbar-queue-3"></ds-snackbar>
+    <ds-snackbar id="snackbar-short"></ds-snackbar>
+    <ds-snackbar id="snackbar-default"></ds-snackbar>
+    <ds-snackbar id="snackbar-indefinite" duration="0"></ds-snackbar>
+    <ds-snackbar id="snackbar-interactive"></ds-snackbar>
+
+    <script type="module">
+      const log = document.querySelector("#snackbar-event-log");
+      const interactive = document.querySelector("#snackbar-interactive");
+
+      const appendLog = (message) => {
+        log.textContent += `${message}\n`;
+      };
+
+      const showBasic = document.querySelector("#show-basic-snackbar");
+      const showInitial = document.querySelector("#show-initial-snackbar");
+      const showMessageOnly = document.querySelector("#show-message-only");
+      const showWithAction = document.querySelector("#show-with-action");
+      const showQueued = document.querySelector("#show-queued");
+      const showShort = document.querySelector("#show-short");
+      const showDefault = document.querySelector("#show-default");
+      const showIndefinite = document.querySelector("#show-indefinite");
+      const showInteractiveSuccess = document.querySelector(
+        "#show-interactive-success",
+      );
+      const showInteractiveError = document.querySelector(
+        "#show-interactive-error",
+      );
+
+      showBasic.addEventListener("click", () => {
+        document.querySelector("#snackbar-basic").show({
+          message: "Message sent successfully",
+        });
+      });
+
+      showInitial.addEventListener("click", () => {
+        document.querySelector("#snackbar-initial").show();
+      });
+
+      showMessageOnly.addEventListener("click", () => {
+        document.querySelector("#snackbar-message-only").show({
+          message: "Preferences saved",
+        });
+      });
+
+      showWithAction.addEventListener("click", () => {
+        document.querySelector("#snackbar-action").show({
+          message: "Item archived",
+          actionLabel: "Undo",
+          onAction: () => {
+            appendLog("callback: undo clicked");
+          },
+        });
+      });
+
+      showQueued.addEventListener("click", () => {
+        document
+          .querySelector("#snackbar-queue-1")
+          .show({ message: "First queued message" });
+        document
+          .querySelector("#snackbar-queue-2")
+          .show({ message: "Second queued message" });
+        document
+          .querySelector("#snackbar-queue-3")
+          .show({ message: "Third queued message" });
+      });
+
+      showShort.addEventListener("click", () => {
+        document.querySelector("#snackbar-short").show({
+          message: "Short message",
+          duration: 2000,
+        });
+      });
+
+      showDefault.addEventListener("click", () => {
+        document.querySelector("#snackbar-default").show({
+          message: "Default timing (4 seconds)",
+        });
+      });
+
+      showIndefinite.addEventListener("click", () => {
+        document.querySelector("#snackbar-indefinite").show({
+          message: "Manual dismissal required",
+          actionLabel: "Dismiss",
+          duration: 0,
+        });
+      });
+
+      showInteractiveSuccess.addEventListener("click", () => {
+        interactive.show({
+          message: "Changes saved successfully",
+        });
+      });
+
+      showInteractiveError.addEventListener("click", () => {
+        interactive.show({
+          message: "Failed to sync changes",
+          actionLabel: "Retry",
+          duration: 6000,
+        });
+      });
+
+      interactive.addEventListener("ds-snackbar:show", (event) => {
+        appendLog(
+          `show: ${event.detail.message} (duration=${event.detail.duration})`,
+        );
+      });
+
+      interactive.addEventListener("ds-snackbar:action", (event) => {
+        appendLog(`action: ${event.detail.actionLabel || "none"}`);
+      });
+
+      interactive.addEventListener("ds-snackbar:dismiss", (event) => {
+        appendLog(`dismiss: ${event.detail.message}`);
+      });
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

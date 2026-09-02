@@ -1,0 +1,16 @@
+/**
+ * Helper classes for textarea component
+ */
+
+.textarea-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+}
+
+.textarea-group {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

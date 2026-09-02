@@ -1,0 +1,16 @@
+/**
+ * Helper classes for chip component
+ */
+
+.chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.chip-set {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}

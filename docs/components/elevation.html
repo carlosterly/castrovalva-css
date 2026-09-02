@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Elevation Utility - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+
+    <style>
+      /* Elevation-specific overrides */
+      .demo-box {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1.5rem;
+      }
+
+      .elevation-box {
+        inline-size: 150px;
+        block-size: 150px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--md-sys-color-surface-container-low);
+        border-radius: 8px;
+        border: 1px solid var(--md-sys-color-outline);
+        cursor: pointer;
+        transition: background-color 150ms;
+      }
+
+      .elevation-box:hover {
+        background: var(--md-sys-color-surface-container);
+      }
+
+      .elevation-box-label {
+        font-size: 0.875rem;
+        color: var(--md-sys-color-on-surface);
+        font-weight: 500;
+        text-align: center;
+      }
+
+      .elevation-box-sublabel {
+        font-size: 0.75rem;
+        color: var(--md-sys-color-on-surface-variant);
+        margin-block-start: 0.5rem;
+      }
+
+      .demo-card {
+        inline-size: 200px;
+        block-size: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--md-sys-color-surface-container-low);
+        border-radius: 8px;
+        color: var(--md-sys-color-on-surface);
+        font-size: 0.875rem;
+        font-weight: 500;
+        text-align: center;
+        padding: 1rem;
+        user-select: none;
+        cursor: pointer;
+      }
+
+      .demo-card:hover {
+        background: var(--md-sys-color-surface-container);
+      }
+
+      .controls {
+        display: flex;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-block-end: 1rem;
+      }
+
+      .control-group {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+      }
+
+      .control-group label {
+        font-size: 0.875rem;
+        font-weight: 500;
+        color: var(--md-sys-color-on-surface);
+      }
+
+      .control-group input[type="range"] {
+        inline-size: 150px;
+      }
+
+      .button {
+        padding: 0.5rem 1rem;
+        background: var(--md-sys-color-primary);
+        color: var(--md-sys-color-on-primary);
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 0.875rem;
+        font-weight: 500;
+        transition: background-color 200ms;
+      }
+
+      .button:hover {
+        background: var(--md-sys-color-primary-container);
+        color: var(--md-sys-color-on-primary-container);
+      }
+
+      .button:active {
+        opacity: 0.9;
+      }
+
+      .output {
+        background: var(--md-sys-color-surface-container);
+        padding: 1rem;
+        border-radius: 4px;
+        border-inline-start: 4px solid var(--md-sys-color-primary);
+        margin-block-start: 1rem;
+        font-family: "Courier New", monospace;
+        font-size: 0.8125rem;
+        color: var(--md-sys-color-on-surface);
+        word-break: break-all;
+      }
+    </style>
+  </head>
+  <body data-page="elevation">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Elevation Utility</h1>
+        <p class="description">
+          Programmatic control over Material Design 3 elevation levels using
+          shadow depth. Not intended as a substitute for semantic hierarchy;
+          pair elevation with spacing, typography, and labeling.
+        </p>
+
+        <div class="section">
+          <h2>Variants</h2>
+
+          <h3>All Elevation Levels (0-5)</h3>
+          <p>Click any box to see its elevation level displayed below.</p>
+          <div class="demo-box">
+            <div class="elevation-box" data-level="0">
+              <div>
+                <div class="elevation-box-label">Level 0</div>
+                <div class="elevation-box-sublabel">No shadow</div>
+              </div>
+            </div>
+            <div class="elevation-box" data-level="1">
+              <div>
+                <div class="elevation-box-label">Level 1</div>
+                <div class="elevation-box-sublabel">1dp</div>
+              </div>
+            </div>
+            <div class="elevation-box" data-level="2">
+              <div>
+                <div class="elevation-box-label">Level 2</div>
+                <div class="elevation-box-sublabel">3dp</div>
+              </div>
+            </div>
+            <div class="elevation-box" data-level="3">
+              <div>
+                <div class="elevation-box-label">Level 3</div>
+                <div class="elevation-box-sublabel">6dp</div>
+              </div>
+            </div>
+            <div class="elevation-box" data-level="4">
+              <div>
+                <div class="elevation-box-label">Level 4</div>
+                <div class="elevation-box-sublabel">8dp</div>
+              </div>
+            </div>
+            <div class="elevation-box" data-level="5">
+              <div>
+                <div class="elevation-box-label">Level 5</div>
+                <div class="elevation-box-sublabel">12dp</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="output" id="elevation-output">
+            Click an elevation box above to see its shadow value
+          </div>
+
+          <div class="code-block">
+            <pre><code>// Apply elevation to an element
+applyElevation(element, 2);</code></pre>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+
+          <h3>Interactive Card with Hover Elevation</h3>
+          <p>Hover over the card to see elevation increase smoothly.</p>
+          <div class="demo-card" id="hover-card">Hover to elevate</div>
+          <p
+            style="
+              margin-block-start: 1rem;
+              font-size: 0.875rem;
+              color: var(--md-sys-color-on-surface-variant);
+            ">
+            Current elevation: <strong id="hover-level">0</strong>
+          </p>
+
+          <h3 style="margin-block-start: 2rem">Dynamic Elevation Controller</h3>
+          <p>Adjust elevation level dynamically.</p>
+          <div class="control-group">
+            <label for="elevation-slider">Target Level:</label>
+            <input
+              type="range"
+              id="elevation-slider"
+              min="0"
+              max="5"
+              value="0" />
+            <span id="slider-value">0</span>
+          </div>
+          <div class="controls">
+            <ds-button id="apply-elevation-btn"> Apply Direct </ds-button>
+            <ds-button id="apply-var-btn">Apply CSS Var</ds-button>
+            <ds-button id="animate-btn">Animate</ds-button>
+            <ds-button id="remove-btn">Remove</ds-button>
+          </div>
+          <div class="demo-card" id="controller-card">Controlled Card</div>
+          <div class="output" id="controller-output">
+            Adjust elevation with controls above
+          </div>
+
+          <h3 style="margin-block-start: 2rem">Manager with Auto States</h3>
+          <p>
+            Card automatically elevates on hover, focus, and click using
+            ElevationManager.
+          </p>
+          <div class="controls">
+            <div class="control-group">
+              <label for="manager-hover">Hover Level:</label>
+              <input
+                type="range"
+                id="manager-hover"
+                min="0"
+                max="5"
+                value="2" />
+              <span id="manager-hover-value">2</span>
+            </div>
+            <div class="control-group">
+              <label for="manager-active">Active Level:</label>
+              <input
+                type="range"
+                id="manager-active"
+                min="0"
+                max="5"
+                value="3" />
+              <span id="manager-active-value">3</span>
+            </div>
+            <ds-button id="update-manager-btn"> Update Manager </ds-button>
+          </div>
+          <div class="demo-card" id="manager-card" tabindex="0">
+            Managed Card (hover/focus/click)
+          </div>
+          <p
+            style="
+              margin-block-start: 1rem;
+              font-size: 0.875rem;
+              color: var(--md-sys-color-on-surface-variant);
+            ">
+            Current elevation: <strong id="manager-level">0</strong>
+          </p>
+        </div>
+
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Functions</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Function</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>getElevation(level)</code></td>
+                <td>Get box-shadow value for a level (0-5)</td>
+              </tr>
+              <tr>
+                <td><code>getCSSVariable(level)</code></td>
+                <td>Get CSS custom property name for a level</td>
+              </tr>
+              <tr>
+                <td><code>applyElevation(element, level)</code></td>
+                <td>Apply elevation directly to element</td>
+              </tr>
+              <tr>
+                <td><code>applyElevationVar(element, level)</code></td>
+                <td>Apply elevation using CSS custom property</td>
+              </tr>
+              <tr>
+                <td><code>removeElevation(element)</code></td>
+                <td>Remove elevation from element</td>
+              </tr>
+              <tr>
+                <td><code>getElementElevation(element)</code></td>
+                <td>Get current elevation level from element</td>
+              </tr>
+              <tr>
+                <td>
+                  <code
+                    >applyElevationWithTransition(element, fromLevel, toLevel,
+                    duration)</code
+                  >
+                </td>
+                <td>Apply elevation with smooth animation</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin-block-start: 1.5rem">ElevationManager Class</h3>
+          <p>Manages elevation with automatic state changes on interaction.</p>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Purpose</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>constructor(element, options)</code></td>
+                <td>Create manager with configuration</td>
+              </tr>
+              <tr>
+                <td><code>setElevation(level)</code></td>
+                <td>Set elevation with transition</td>
+              </tr>
+              <tr>
+                <td><code>getElevation()</code></td>
+                <td>Get current elevation level</td>
+              </tr>
+              <tr>
+                <td><code>reset()</code></td>
+                <td>Reset to default elevation</td>
+              </tr>
+              <tr>
+                <td><code>updateOptions(options)</code></td>
+                <td>Update configuration</td>
+              </tr>
+              <tr>
+                <td><code>detach()</code></td>
+                <td>Remove event listeners</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin-block-start: 1.5rem">Configuration Options</h3>
+          <p>Options passed to <code>ElevationManager</code> constructor:</p>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Option</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>defaultLevel</code></td>
+                <td>number</td>
+                <td>0</td>
+                <td>Base elevation level</td>
+              </tr>
+              <tr>
+                <td><code>hoverLevel</code></td>
+                <td>number</td>
+                <td>2</td>
+                <td>Elevation on hover</td>
+              </tr>
+              <tr>
+                <td><code>activeLevel</code></td>
+                <td>number</td>
+                <td>3</td>
+                <td>Elevation when pressed/active</td>
+              </tr>
+              <tr>
+                <td><code>focusLevel</code></td>
+                <td>number</td>
+                <td>2</td>
+                <td>Elevation on focus</td>
+              </tr>
+              <tr>
+                <td><code>duration</code></td>
+                <td>number</td>
+                <td>300</td>
+                <td>Transition duration (ms)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Interactive elevation demo</td>
+                <td>Moves focus to interactive cards and controls</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on actionable control</td>
+                <td>Applies selected elevation behavior</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Elevation is visual only and should be paired with semantic cues.
+            </li>
+            <li>
+              Use sufficient contrast and explicit focus indicators alongside
+              shadow changes.
+            </li>
+            <li>Compatible with mouse, touch, and keyboard interactions.</li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use elevation to communicate
+              hierarchy, interactive affordance, and transient state changes
+              like hover or drag.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid relying on elevation alone
+              for critical state or grouping differences.
+            </li>
+            <li>
+              <strong>Composition:</strong> Keep elevation levels consistent
+              across similar surfaces and transition smoothly between states.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Jumping across too many levels
+              creates visual noise and weakens hierarchy.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./elevation-demo.js"></script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

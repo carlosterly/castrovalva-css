@@ -1,0 +1,1234 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Design Tokens - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .token-intro {
+        display: grid;
+        gap: var(--ds-space-4);
+        padding: var(--ds-space-5);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: var(--ds-radius-lg);
+        background: linear-gradient(
+          135deg,
+          var(--md-sys-color-surface-container-low),
+          var(--md-sys-color-surface)
+        );
+      }
+
+      .token-callout {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: var(--ds-space-4);
+      }
+
+      .token-callout-card {
+        padding: var(--ds-space-4);
+        border-radius: var(--ds-radius-md);
+        background: var(--md-sys-color-surface-container);
+        border: 1px solid var(--md-sys-color-outline-variant);
+      }
+
+      .token-callout-card strong,
+      .token-callout-card span {
+        display: block;
+      }
+
+      .token-callout-card span {
+        margin-block-start: var(--ds-space-2);
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .token-role-grid,
+      .type-grid,
+      .scale-grid,
+      .elevation-grid,
+      .motion-grid,
+      .state-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: var(--ds-space-4);
+        margin-block-start: var(--ds-space-4);
+      }
+
+      .role-card,
+      .type-card,
+      .scale-card,
+      .elevation-card,
+      .motion-card,
+      .state-card {
+        overflow: hidden;
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: var(--ds-radius-lg);
+        background: var(--md-sys-color-surface);
+      }
+
+      .role-preview {
+        padding: var(--ds-space-5);
+        min-block-size: 140px;
+        display: grid;
+        align-content: end;
+        gap: var(--ds-space-2);
+        background: var(--role-bg);
+        color: var(--role-fg);
+        border-block-end: 1px solid
+          color-mix(in srgb, var(--role-fg) 18%, transparent);
+      }
+
+      .role-preview small {
+        opacity: 0.85;
+      }
+
+      .role-meta,
+      .type-meta,
+      .scale-meta,
+      .elevation-meta,
+      .motion-meta,
+      .state-meta {
+        padding: var(--ds-space-4);
+      }
+
+      .token-name {
+        font-family: "Courier New", monospace;
+        font-size: 0.8125rem;
+        color: var(--md-sys-color-on-surface-variant);
+        word-break: break-word;
+      }
+
+      .surface-stack {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: var(--ds-space-3);
+        margin-block-start: var(--ds-space-4);
+      }
+
+      .surface-chip {
+        padding: var(--ds-space-4);
+        min-block-size: 96px;
+        border-radius: var(--ds-radius-md);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        display: grid;
+        align-content: end;
+        gap: var(--ds-space-1);
+      }
+
+      .type-sample {
+        margin: 0;
+        padding: var(--ds-space-4) var(--ds-space-4) 0;
+        font-family: var(--md-sys-typescale-font-family);
+        font-size: var(--type-size);
+        line-height: var(--type-line-height);
+        font-weight: var(--type-weight);
+        letter-spacing: var(--type-tracking);
+        color: var(--md-sys-color-on-surface);
+      }
+
+      .type-usage {
+        color: var(--md-sys-color-on-surface-variant);
+        margin-block-start: var(--ds-space-2);
+      }
+
+      .bar-scale {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: var(--ds-space-4);
+        align-items: end;
+        margin-block-start: var(--ds-space-4);
+      }
+
+      .space-bar {
+        padding: var(--ds-space-3);
+        border-radius: var(--ds-radius-md);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        background: var(--md-sys-color-surface-container-low);
+        display: grid;
+        gap: var(--ds-space-3);
+        justify-items: center;
+      }
+
+      .space-bar-visual {
+        inline-size: 100%;
+        max-inline-size: 48px;
+        block-size: var(--bar-size);
+        border-radius: var(--ds-radius-sm);
+        background: linear-gradient(
+          180deg,
+          var(--md-sys-color-primary),
+          var(--md-sys-color-tertiary)
+        );
+      }
+
+      .size-demo {
+        display: flex;
+        align-items: center;
+        gap: var(--ds-space-3);
+        margin-block-start: var(--ds-space-3);
+      }
+
+      .size-token-chip {
+        inline-size: var(--chip-size);
+        block-size: var(--chip-size);
+        border-radius: 999px;
+        background: var(--md-sys-color-primary-container);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        flex-shrink: 0;
+      }
+
+      .shape-demo {
+        min-block-size: 132px;
+        padding: var(--ds-space-4);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        background: linear-gradient(
+          180deg,
+          var(--md-sys-color-surface-container-low),
+          var(--md-sys-color-surface-container)
+        );
+        display: grid;
+        gap: var(--ds-space-3);
+      }
+
+      .shape-demo-surface {
+        min-block-size: 64px;
+        background: var(--md-sys-color-primary-container);
+        border: 1px solid
+          color-mix(in srgb, var(--md-sys-color-primary) 24%, transparent);
+      }
+
+      .shape-demo-row {
+        display: flex;
+        gap: var(--ds-space-2);
+        align-items: center;
+      }
+
+      .shape-demo-chip {
+        inline-size: 42px;
+        block-size: 42px;
+        background: var(--md-sys-color-secondary-container);
+        border: 1px solid
+          color-mix(in srgb, var(--md-sys-color-secondary) 24%, transparent);
+        flex-shrink: 0;
+      }
+
+      .shape-demo-pill {
+        flex: 1;
+        min-block-size: 42px;
+        background: var(--md-sys-color-tertiary-container);
+        border: 1px solid
+          color-mix(in srgb, var(--md-sys-color-tertiary) 24%, transparent);
+      }
+
+      .elevation-preview {
+        margin: var(--ds-space-4);
+        padding: var(--ds-space-4);
+        min-block-size: 112px;
+        border-radius: var(--ds-radius-lg);
+        background: var(--md-sys-color-surface-container-lowest);
+        box-shadow: var(--elevation-shadow);
+        display: grid;
+        align-content: end;
+      }
+
+      .motion-token {
+        font-family: "Courier New", monospace;
+        color: var(--md-sys-color-primary);
+        font-size: 0.875rem;
+      }
+
+      .motion-preview {
+        margin: var(--ds-space-4);
+        padding: var(--ds-space-4);
+        border-radius: var(--ds-radius-md);
+        background: var(--md-sys-color-surface-container-low);
+      }
+
+      .motion-track {
+        block-size: 8px;
+        border-radius: 999px;
+        background: var(--md-sys-color-surface-container-high);
+        overflow: hidden;
+        margin-block-end: var(--ds-space-3);
+      }
+
+      .motion-fill {
+        inline-size: 60%;
+        block-size: 100%;
+        border-radius: inherit;
+        background: linear-gradient(
+          90deg,
+          var(--md-sys-color-primary),
+          var(--md-sys-color-secondary)
+        );
+      }
+
+      .state-preview {
+        position: relative;
+        margin: var(--ds-space-4);
+        padding: var(--ds-space-5);
+        border-radius: var(--ds-radius-full);
+        background: var(--md-sys-color-primary-container);
+        color: var(--md-sys-color-on-primary-container);
+        overflow: hidden;
+      }
+
+      .state-preview::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: currentColor;
+        opacity: var(--state-opacity);
+      }
+
+      .state-preview span {
+        position: relative;
+        z-index: 1;
+      }
+
+      .foundation-links {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: var(--ds-space-4);
+        margin-block-start: var(--ds-space-4);
+      }
+
+      .foundation-links a {
+        display: block;
+        padding: var(--ds-space-4);
+        text-decoration: none;
+        color: inherit;
+        background: var(--md-sys-color-surface-container-low);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: var(--ds-radius-md);
+      }
+
+      .foundation-links a strong,
+      .foundation-links a span {
+        display: block;
+      }
+
+      .foundation-links a span {
+        margin-block-start: var(--ds-space-2);
+        color: var(--md-sys-color-on-surface-variant);
+      }
+    </style>
+  </head>
+  <body data-page="design-tokens">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Design Tokens</h1>
+        <p class="description">
+          Core design values that define the visual foundation of the design
+          system. This page turns the token reference into a practical visual
+          showcase so semantic roles, type styles, spacing, motion, and shape
+          choices are easier to evaluate in context.
+        </p>
+
+        <div class="section">
+          <h2>How to Read This Page</h2>
+          <div class="token-intro">
+            <p>
+              Tokens work best when shown as relationships, not isolated values.
+              Color roles are presented as semantic pairs, typography is shown
+              as complete specimens with line-height and tracking, and system
+              utilities like spacing and size are shown as reusable scales.
+            </p>
+            <div class="token-callout">
+              <div class="token-callout-card">
+                <strong>Semantic first</strong>
+                <span
+                  >Use <code>--md-sys-*</code> roles in components instead of
+                  hardcoded values.</span
+                >
+              </div>
+              <div class="token-callout-card">
+                <strong>Utilities stay global</strong>
+                <span
+                  >Use <code>--ds-space-*</code> and
+                  <code>--ds-size-*</code> for rhythm and control sizing.</span
+                >
+              </div>
+              <div class="token-callout-card">
+                <strong>Pairs matter</strong>
+                <span
+                  ><code>on-*</code> roles are foreground tokens and should be
+                  previewed on their matching surfaces.</span
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Color Roles</h2>
+          <p>
+            These previews show background and foreground roles together. This
+            is the correct way to evaluate semantic color relationships.
+          </p>
+
+          <h3>Brand and Feedback Pairs</h3>
+          <div class="token-role-grid">
+            <article
+              class="role-card"
+              style="
+                --role-bg: var(--md-sys-color-primary);
+                --role-fg: var(--md-sys-color-on-primary);
+              ">
+              <div class="role-preview">
+                <strong>Primary action</strong>
+                <small>Used for prominent calls to action and emphasis.</small>
+              </div>
+              <div class="role-meta">
+                <strong>Primary / On Primary</strong>
+                <div class="token-name">
+                  --md-sys-color-primary + --md-sys-color-on-primary
+                </div>
+              </div>
+            </article>
+            <article
+              class="role-card"
+              style="
+                --role-bg: var(--md-sys-color-primary-container);
+                --role-fg: var(--md-sys-color-on-primary-container);
+              ">
+              <div class="role-preview">
+                <strong>Primary container</strong>
+                <small
+                  >Used for standout containers with lower intensity.</small
+                >
+              </div>
+              <div class="role-meta">
+                <strong>Primary Container Pair</strong>
+                <div class="token-name">
+                  --md-sys-color-primary-container +
+                  --md-sys-color-on-primary-container
+                </div>
+              </div>
+            </article>
+            <article
+              class="role-card"
+              style="
+                --role-bg: var(--md-sys-color-secondary);
+                --role-fg: var(--md-sys-color-on-secondary);
+              ">
+              <div class="role-preview">
+                <strong>Secondary</strong>
+                <small
+                  >Used for supporting emphasis and alternate actions.</small
+                >
+              </div>
+              <div class="role-meta">
+                <strong>Secondary Pair</strong>
+                <div class="token-name">
+                  --md-sys-color-secondary + --md-sys-color-on-secondary
+                </div>
+              </div>
+            </article>
+            <article
+              class="role-card"
+              style="
+                --role-bg: var(--md-sys-color-tertiary-container);
+                --role-fg: var(--md-sys-color-on-tertiary-container);
+              ">
+              <div class="role-preview">
+                <strong>Tertiary container</strong>
+                <small
+                  >Useful for complementary accents and differentiated
+                  sections.</small
+                >
+              </div>
+              <div class="role-meta">
+                <strong>Tertiary Container Pair</strong>
+                <div class="token-name">
+                  --md-sys-color-tertiary-container +
+                  --md-sys-color-on-tertiary-container
+                </div>
+              </div>
+            </article>
+            <article
+              class="role-card"
+              style="
+                --role-bg: var(--md-sys-color-error);
+                --role-fg: var(--md-sys-color-on-error);
+              ">
+              <div class="role-preview">
+                <strong>Error</strong>
+                <small
+                  >Reserved for validation, destructive actions, and critical
+                  feedback.</small
+                >
+              </div>
+              <div class="role-meta">
+                <strong>Error Pair</strong>
+                <div class="token-name">
+                  --md-sys-color-error + --md-sys-color-on-error
+                </div>
+              </div>
+            </article>
+            <article
+              class="role-card"
+              style="
+                --role-bg: var(--md-sys-color-error-container);
+                --role-fg: var(--md-sys-color-on-error-container);
+              ">
+              <div class="role-preview">
+                <strong>Error container</strong>
+                <small
+                  >Use for inline error panels or supportive validation
+                  messaging.</small
+                >
+              </div>
+              <div class="role-meta">
+                <strong>Error Container Pair</strong>
+                <div class="token-name">
+                  --md-sys-color-error-container +
+                  --md-sys-color-on-error-container
+                </div>
+              </div>
+            </article>
+          </div>
+
+          <h3>Surface Hierarchy</h3>
+          <div class="surface-stack">
+            <div
+              class="surface-chip"
+              style="
+                background: var(--md-sys-color-surface);
+                color: var(--md-sys-color-on-surface);
+              ">
+              <strong>Surface</strong>
+              <div class="token-name">
+                --md-sys-color-surface / --md-sys-color-on-surface
+              </div>
+            </div>
+            <div
+              class="surface-chip"
+              style="
+                background: var(--md-sys-color-surface-container-low);
+                color: var(--md-sys-color-on-surface);
+              ">
+              <strong>Surface Container Low</strong>
+              <div class="token-name">--md-sys-color-surface-container-low</div>
+            </div>
+            <div
+              class="surface-chip"
+              style="
+                background: var(--md-sys-color-surface-container);
+                color: var(--md-sys-color-on-surface);
+              ">
+              <strong>Surface Container</strong>
+              <div class="token-name">--md-sys-color-surface-container</div>
+            </div>
+            <div
+              class="surface-chip"
+              style="
+                background: var(--md-sys-color-surface-container-high);
+                color: var(--md-sys-color-on-surface);
+              ">
+              <strong>Surface Container High</strong>
+              <div class="token-name">
+                --md-sys-color-surface-container-high
+              </div>
+            </div>
+            <div
+              class="surface-chip"
+              style="
+                background: var(--md-sys-color-surface-container-highest);
+                color: var(--md-sys-color-on-surface);
+              ">
+              <strong>Surface Container Highest</strong>
+              <div class="token-name">
+                --md-sys-color-surface-container-highest
+              </div>
+            </div>
+            <div
+              class="surface-chip"
+              style="
+                background: var(--md-sys-color-inverse-surface);
+                color: var(--md-sys-color-inverse-on-surface);
+              ">
+              <strong>Inverse Surface</strong>
+              <div class="token-name">
+                --md-sys-color-inverse-surface /
+                --md-sys-color-inverse-on-surface
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Typography Scale</h2>
+          <p>
+            These specimens show the real type tokens with line-height and
+            tracking so the hierarchy can be judged at a glance.
+          </p>
+          <div class="type-grid">
+            <article class="type-card">
+              <p
+                class="type-sample"
+                style="
+                  --type-size: var(--md-sys-typescale-display-large-size);
+                  --type-line-height: var(
+                    --md-sys-typescale-display-large-line-height
+                  );
+                  --type-weight: var(--md-sys-typescale-display-large-weight);
+                  --type-tracking: var(
+                    --md-sys-typescale-display-large-tracking
+                  );
+                ">
+                Display Large
+              </p>
+              <div class="type-meta">
+                <strong>Display Large</strong>
+                <div class="token-name">57 / 64 / 400 / -0.25px</div>
+                <div class="type-usage">
+                  Hero headlines and expressive top-level statements.
+                </div>
+              </div>
+            </article>
+            <article class="type-card">
+              <p
+                class="type-sample"
+                style="
+                  --type-size: var(--md-sys-typescale-headline-large-size);
+                  --type-line-height: var(
+                    --md-sys-typescale-headline-large-line-height
+                  );
+                  --type-weight: var(--md-sys-typescale-headline-large-weight);
+                  --type-tracking: var(
+                    --md-sys-typescale-headline-large-tracking
+                  );
+                ">
+                Headline Large
+              </p>
+              <div class="type-meta">
+                <strong>Headline Large</strong>
+                <div class="token-name">32 / 40 / 400</div>
+                <div class="type-usage">
+                  Page titles, major section headers, and dialogs.
+                </div>
+              </div>
+            </article>
+            <article class="type-card">
+              <p
+                class="type-sample"
+                style="
+                  --type-size: var(--md-sys-typescale-headline-medium-size);
+                  --type-line-height: var(
+                    --md-sys-typescale-headline-medium-line-height
+                  );
+                  --type-weight: var(--md-sys-typescale-headline-medium-weight);
+                  --type-tracking: var(
+                    --md-sys-typescale-headline-medium-tracking
+                  );
+                ">
+                Headline Medium
+              </p>
+              <div class="type-meta">
+                <strong>Headline Medium</strong>
+                <div class="token-name">28 / 36 / 400</div>
+                <div class="type-usage">
+                  Section starts, feature blocks, and secondary headlines.
+                </div>
+              </div>
+            </article>
+            <article class="type-card">
+              <p
+                class="type-sample"
+                style="
+                  --type-size: var(--md-sys-typescale-title-large-size);
+                  --type-line-height: var(
+                    --md-sys-typescale-title-large-line-height
+                  );
+                  --type-weight: var(--md-sys-typescale-title-large-weight);
+                  --type-tracking: var(--md-sys-typescale-title-large-tracking);
+                ">
+                Title Large
+              </p>
+              <div class="type-meta">
+                <strong>Title Large</strong>
+                <div class="token-name">22 / 28 / 400</div>
+                <div class="type-usage">
+                  Cards, panels, and grouped content headers.
+                </div>
+              </div>
+            </article>
+            <article class="type-card">
+              <p
+                class="type-sample"
+                style="
+                  --type-size: var(--md-sys-typescale-title-medium-size);
+                  --type-line-height: var(
+                    --md-sys-typescale-title-medium-line-height
+                  );
+                  --type-weight: var(--md-sys-typescale-title-medium-weight);
+                  --type-tracking: var(
+                    --md-sys-typescale-title-medium-tracking
+                  );
+                ">
+                Title Medium
+              </p>
+              <div class="type-meta">
+                <strong>Title Medium</strong>
+                <div class="token-name">16 / 24 / 500 / 0.15px</div>
+                <div class="type-usage">
+                  Compact headers, form groups, and emphasized labels.
+                </div>
+              </div>
+            </article>
+            <article class="type-card">
+              <p
+                class="type-sample"
+                style="
+                  --type-size: var(--md-sys-typescale-body-large-size);
+                  --type-line-height: var(
+                    --md-sys-typescale-body-large-line-height
+                  );
+                  --type-weight: var(--md-sys-typescale-body-large-weight);
+                  --type-tracking: var(--md-sys-typescale-body-large-tracking);
+                ">
+                Body Large supports comfortable reading and UI explanation.
+              </p>
+              <div class="type-meta">
+                <strong>Body Large</strong>
+                <div class="token-name">16 / 24 / 400 / 0.5px</div>
+                <div class="type-usage">
+                  Primary paragraph text and descriptive UI copy.
+                </div>
+              </div>
+            </article>
+            <article class="type-card">
+              <p
+                class="type-sample"
+                style="
+                  --type-size: var(--md-sys-typescale-body-medium-size);
+                  --type-line-height: var(
+                    --md-sys-typescale-body-medium-line-height
+                  );
+                  --type-weight: var(--md-sys-typescale-body-medium-weight);
+                  --type-tracking: var(--md-sys-typescale-body-medium-tracking);
+                ">
+                Body Medium is used for compact supporting text and list detail.
+              </p>
+              <div class="type-meta">
+                <strong>Body Medium</strong>
+                <div class="token-name">14 / 20 / 400 / 0.25px</div>
+                <div class="type-usage">
+                  Supporting copy, helper text, and concise descriptions.
+                </div>
+              </div>
+            </article>
+            <article class="type-card">
+              <p
+                class="type-sample"
+                style="
+                  --type-size: var(--md-sys-typescale-label-large-size);
+                  --type-line-height: var(
+                    --md-sys-typescale-label-large-line-height
+                  );
+                  --type-weight: var(--md-sys-typescale-label-large-weight);
+                  --type-tracking: var(--md-sys-typescale-label-large-tracking);
+                ">
+                Label Large
+              </p>
+              <div class="type-meta">
+                <strong>Label Large</strong>
+                <div class="token-name">14 / 20 / 500 / 0.1px</div>
+                <div class="type-usage">
+                  Buttons, tabs, compact controls, and actionable UI labels.
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Spacing and Size Utilities</h2>
+          <p>
+            Layout rhythm and control density come from the global utility token
+            set. These are shared across multiple components and should stay
+            consistent across the system.
+          </p>
+
+          <h3>Spacing Scale</h3>
+          <div class="bar-scale">
+            <div class="space-bar" style="--bar-size: var(--ds-space-2)">
+              <div class="space-bar-visual"></div>
+              <strong>Space 2</strong>
+              <div class="token-name">--ds-space-2 / 8px</div>
+            </div>
+            <div class="space-bar" style="--bar-size: var(--ds-space-3)">
+              <div class="space-bar-visual"></div>
+              <strong>Space 3</strong>
+              <div class="token-name">--ds-space-3 / 12px</div>
+            </div>
+            <div class="space-bar" style="--bar-size: var(--ds-space-4)">
+              <div class="space-bar-visual"></div>
+              <strong>Space 4</strong>
+              <div class="token-name">--ds-space-4 / 16px</div>
+            </div>
+            <div class="space-bar" style="--bar-size: var(--ds-space-6)">
+              <div class="space-bar-visual"></div>
+              <strong>Space 6</strong>
+              <div class="token-name">--ds-space-6 / 24px</div>
+            </div>
+            <div class="space-bar" style="--bar-size: var(--ds-space-8)">
+              <div class="space-bar-visual"></div>
+              <strong>Space 8</strong>
+              <div class="token-name">--ds-space-8 / 32px</div>
+            </div>
+            <div class="space-bar" style="--bar-size: var(--ds-space-12)">
+              <div class="space-bar-visual"></div>
+              <strong>Space 12</strong>
+              <div class="token-name">--ds-space-12 / 48px</div>
+            </div>
+          </div>
+
+          <h3>Interactive Size Tokens</h3>
+          <div class="scale-grid">
+            <article class="scale-card">
+              <div class="scale-meta">
+                <strong>Icon Scale</strong>
+                <div class="size-demo">
+                  <div
+                    class="size-token-chip"
+                    style="--chip-size: var(--ds-size-icon-sm)"></div>
+                  <div class="token-name">--ds-size-icon-sm / 14px</div>
+                </div>
+                <div class="size-demo">
+                  <div
+                    class="size-token-chip"
+                    style="--chip-size: var(--ds-size-icon-md)"></div>
+                  <div class="token-name">--ds-size-icon-md / 18px</div>
+                </div>
+                <div class="size-demo">
+                  <div
+                    class="size-token-chip"
+                    style="--chip-size: var(--ds-size-icon-lg)"></div>
+                  <div class="token-name">--ds-size-icon-lg / 24px</div>
+                </div>
+              </div>
+            </article>
+            <article class="scale-card">
+              <div class="scale-meta">
+                <strong>Control Scale</strong>
+                <div class="size-demo">
+                  <div
+                    class="size-token-chip"
+                    style="--chip-size: var(--ds-size-control-sm)"></div>
+                  <div class="token-name">--ds-size-control-sm / 32px</div>
+                </div>
+                <div class="size-demo">
+                  <div
+                    class="size-token-chip"
+                    style="--chip-size: var(--ds-size-control-md)"></div>
+                  <div class="token-name">--ds-size-control-md / 40px</div>
+                </div>
+                <div class="size-demo">
+                  <div
+                    class="size-token-chip"
+                    style="--chip-size: var(--ds-size-control-lg)"></div>
+                  <div class="token-name">--ds-size-control-lg / 48px</div>
+                </div>
+              </div>
+            </article>
+            <article class="scale-card">
+              <div class="scale-meta">
+                <strong>Hit Area</strong>
+                <div class="size-demo">
+                  <div
+                    class="size-token-chip"
+                    style="--chip-size: var(--ds-size-hit-area)"></div>
+                  <div>
+                    <div class="token-name">--ds-size-hit-area / 40px</div>
+                    <div class="type-usage">
+                      Use this as the minimum comfortable touch target.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Shape and Elevation</h2>
+          <p>
+            Shape tokens define corner personality while elevation tokens define
+            depth and surface hierarchy.
+          </p>
+
+          <h3>Shape Scale</h3>
+          <div class="scale-grid">
+            <article class="scale-card">
+              <div class="scale-meta">
+                <strong>None</strong>
+                <div
+                  class="shape-demo"
+                  style="border-radius: var(--ds-radius-none)">
+                  <div
+                    class="shape-demo-surface"
+                    style="border-radius: var(--ds-radius-none)"></div>
+                  <div class="shape-demo-row">
+                    <div
+                      class="shape-demo-chip"
+                      style="border-radius: var(--ds-radius-none)"></div>
+                    <div
+                      class="shape-demo-pill"
+                      style="border-radius: var(--ds-radius-none)"></div>
+                  </div>
+                </div>
+                <div class="token-name">--ds-radius-none / 0px</div>
+              </div>
+            </article>
+            <article class="scale-card">
+              <div class="scale-meta">
+                <strong>Small</strong>
+                <div
+                  class="shape-demo"
+                  style="border-radius: var(--ds-radius-sm)">
+                  <div
+                    class="shape-demo-surface"
+                    style="border-radius: var(--ds-radius-sm)"></div>
+                  <div class="shape-demo-row">
+                    <div
+                      class="shape-demo-chip"
+                      style="border-radius: var(--ds-radius-sm)"></div>
+                    <div
+                      class="shape-demo-pill"
+                      style="border-radius: var(--ds-radius-sm)"></div>
+                  </div>
+                </div>
+                <div class="token-name">--ds-radius-sm / 4px</div>
+              </div>
+            </article>
+            <article class="scale-card">
+              <div class="scale-meta">
+                <strong>Medium</strong>
+                <div
+                  class="shape-demo"
+                  style="border-radius: var(--ds-radius-md)">
+                  <div
+                    class="shape-demo-surface"
+                    style="border-radius: var(--ds-radius-md)"></div>
+                  <div class="shape-demo-row">
+                    <div
+                      class="shape-demo-chip"
+                      style="border-radius: var(--ds-radius-md)"></div>
+                    <div
+                      class="shape-demo-pill"
+                      style="border-radius: var(--ds-radius-md)"></div>
+                  </div>
+                </div>
+                <div class="token-name">--ds-radius-md / 8px</div>
+              </div>
+            </article>
+            <article class="scale-card">
+              <div class="scale-meta">
+                <strong>Large</strong>
+                <div
+                  class="shape-demo"
+                  style="border-radius: var(--ds-radius-lg)">
+                  <div
+                    class="shape-demo-surface"
+                    style="border-radius: var(--ds-radius-lg)"></div>
+                  <div class="shape-demo-row">
+                    <div
+                      class="shape-demo-chip"
+                      style="border-radius: var(--ds-radius-lg)"></div>
+                    <div
+                      class="shape-demo-pill"
+                      style="border-radius: var(--ds-radius-lg)"></div>
+                  </div>
+                </div>
+                <div class="token-name">--ds-radius-lg / 16px</div>
+              </div>
+            </article>
+            <article class="scale-card">
+              <div class="scale-meta">
+                <strong>Extra Large</strong>
+                <div
+                  class="shape-demo"
+                  style="border-radius: var(--ds-radius-xl)">
+                  <div
+                    class="shape-demo-surface"
+                    style="border-radius: var(--ds-radius-xl)"></div>
+                  <div class="shape-demo-row">
+                    <div
+                      class="shape-demo-chip"
+                      style="border-radius: var(--ds-radius-xl)"></div>
+                    <div
+                      class="shape-demo-pill"
+                      style="border-radius: var(--ds-radius-xl)"></div>
+                  </div>
+                </div>
+                <div class="token-name">--ds-radius-xl / 24px</div>
+              </div>
+            </article>
+            <article class="scale-card">
+              <div class="scale-meta">
+                <strong>Full</strong>
+                <div
+                  class="shape-demo"
+                  style="border-radius: var(--ds-radius-full)">
+                  <div
+                    class="shape-demo-surface"
+                    style="border-radius: var(--ds-radius-full)"></div>
+                  <div class="shape-demo-row">
+                    <div
+                      class="shape-demo-chip"
+                      style="border-radius: var(--ds-radius-full)"></div>
+                    <div
+                      class="shape-demo-pill"
+                      style="border-radius: var(--ds-radius-full)"></div>
+                  </div>
+                </div>
+                <div class="token-name">--ds-radius-full / 9999px</div>
+              </div>
+            </article>
+          </div>
+
+          <h3>Elevation Levels</h3>
+          <div class="elevation-grid">
+            <article
+              class="elevation-card"
+              style="--elevation-shadow: var(--md-sys-elevation-level0)">
+              <div class="elevation-preview">
+                <strong>Level 0</strong>
+                <span>No elevation</span>
+              </div>
+              <div class="elevation-meta">
+                <div class="token-name">--md-sys-elevation-level0</div>
+              </div>
+            </article>
+            <article
+              class="elevation-card"
+              style="--elevation-shadow: var(--md-sys-elevation-level1)">
+              <div class="elevation-preview">
+                <strong>Level 1</strong>
+                <span>Resting cards and small raised surfaces</span>
+              </div>
+              <div class="elevation-meta">
+                <div class="token-name">--md-sys-elevation-level1</div>
+              </div>
+            </article>
+            <article
+              class="elevation-card"
+              style="--elevation-shadow: var(--md-sys-elevation-level2)">
+              <div class="elevation-preview">
+                <strong>Level 2</strong>
+                <span
+                  >Hover states, elevated controls, and stronger
+                  separation</span
+                >
+              </div>
+              <div class="elevation-meta">
+                <div class="token-name">--md-sys-elevation-level2</div>
+              </div>
+            </article>
+            <article
+              class="elevation-card"
+              style="--elevation-shadow: var(--md-sys-elevation-level3)">
+              <div class="elevation-preview">
+                <strong>Level 3</strong>
+                <span>Menus, raised panels, and active overlays</span>
+              </div>
+              <div class="elevation-meta">
+                <div class="token-name">--md-sys-elevation-level3</div>
+              </div>
+            </article>
+            <article
+              class="elevation-card"
+              style="--elevation-shadow: var(--md-sys-elevation-level4)">
+              <div class="elevation-preview">
+                <strong>Level 4</strong>
+                <span
+                  >Prominent overlays and high-emphasis floating surfaces</span
+                >
+              </div>
+              <div class="elevation-meta">
+                <div class="token-name">--md-sys-elevation-level4</div>
+              </div>
+            </article>
+            <article
+              class="elevation-card"
+              style="--elevation-shadow: var(--md-sys-elevation-level5)">
+              <div class="elevation-preview">
+                <strong>Level 5</strong>
+                <span>Dialogs and topmost surfaces</span>
+              </div>
+              <div class="elevation-meta">
+                <div class="token-name">--md-sys-elevation-level5</div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Motion and State Layers</h2>
+          <p>
+            Motion tokens establish tempo, while state-layer tokens define the
+            amount of interaction feedback applied to a surface.
+          </p>
+
+          <h3>Motion Tokens</h3>
+          <div class="motion-grid">
+            <article class="motion-card">
+              <div class="motion-preview">
+                <div class="motion-track"><div class="motion-fill"></div></div>
+                <strong>Short Duration</strong>
+                <div class="motion-token">
+                  --md-sys-motion-duration-short2 = 100ms
+                </div>
+              </div>
+              <div class="motion-meta">
+                Use for hover, pressed, and small state changes.
+              </div>
+            </article>
+            <article class="motion-card">
+              <div class="motion-preview">
+                <div class="motion-track"><div class="motion-fill"></div></div>
+                <strong>Medium Duration</strong>
+                <div class="motion-token">
+                  --md-sys-motion-duration-medium3 = 350ms
+                </div>
+              </div>
+              <div class="motion-meta">
+                Use for panels, sheets, and moderate transitions.
+              </div>
+            </article>
+            <article class="motion-card">
+              <div class="motion-preview">
+                <div class="motion-track"><div class="motion-fill"></div></div>
+                <strong>Standard Easing</strong>
+                <div class="motion-token">cubic-bezier(0.2, 0, 0, 1)</div>
+              </div>
+              <div class="motion-meta">
+                Default easing for general movement and state change.
+              </div>
+            </article>
+            <article class="motion-card">
+              <div class="motion-preview">
+                <div class="motion-track"><div class="motion-fill"></div></div>
+                <strong>Emphasized Decelerate</strong>
+                <div class="motion-token">cubic-bezier(0.05, 0.7, 0.1, 1)</div>
+              </div>
+              <div class="motion-meta">
+                Use when surfaces enter the screen or expand into view.
+              </div>
+            </article>
+          </div>
+
+          <h3>State Layer Opacities</h3>
+          <div class="state-grid">
+            <article class="state-card">
+              <div
+                class="state-preview"
+                style="--state-opacity: var(--md-sys-state-hover-opacity)">
+                <span>Hover</span>
+              </div>
+              <div class="state-meta">
+                <div class="token-name">
+                  --md-sys-state-hover-opacity / 0.08
+                </div>
+              </div>
+            </article>
+            <article class="state-card">
+              <div
+                class="state-preview"
+                style="--state-opacity: var(--md-sys-state-focus-opacity)">
+                <span>Focus</span>
+              </div>
+              <div class="state-meta">
+                <div class="token-name">
+                  --md-sys-state-focus-opacity / 0.12
+                </div>
+              </div>
+            </article>
+            <article class="state-card">
+              <div
+                class="state-preview"
+                style="--state-opacity: var(--md-sys-state-pressed-opacity)">
+                <span>Pressed</span>
+              </div>
+              <div class="state-meta">
+                <div class="token-name">
+                  --md-sys-state-pressed-opacity / 0.12
+                </div>
+              </div>
+            </article>
+            <article class="state-card">
+              <div
+                class="state-preview"
+                style="--state-opacity: var(--md-sys-state-dragged-opacity)">
+                <span>Dragged</span>
+              </div>
+              <div class="state-meta">
+                <div class="token-name">
+                  --md-sys-state-dragged-opacity / 0.16
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Usage Example</h2>
+          <p>
+            Foundation tokens should be combined semantically. A surface should
+            pair its background, text color, spacing, radius, and elevation
+            instead of mixing unrelated values.
+          </p>
+          <div class="code-block">
+            <pre><code>.token-card {
+  background: var(--md-sys-color-surface-container-low);
+  color: var(--md-sys-color-on-surface);
+  padding: var(--ds-space-4);
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--md-sys-elevation-level1);
+  transition:
+    box-shadow var(--md-sys-motion-duration-short2)
+      var(--md-sys-motion-easing-standard),
+    background-color var(--md-sys-motion-duration-short2)
+      var(--md-sys-motion-easing-standard);
+}</code></pre>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Related Foundation Docs</h2>
+          <div class="foundation-links">
+            <a href="../tokens.md">
+              <strong>Token Reference</strong>
+              <span>Full taxonomy, naming guidance, and usage rules.</span>
+            </a>
+            <a href="../motion.md">
+              <strong>Motion System</strong>
+              <span
+                >Timing and easing guidance for choreography decisions.</span
+              >
+            </a>
+            <a href="../state-layers.md">
+              <strong>State Layers</strong>
+              <span
+                >Interaction feedback rules, opacity guidance, and usage
+                patterns.</span
+              >
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

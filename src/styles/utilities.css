@@ -1,0 +1,638 @@
+/* Utility Classes */
+
+/* Screen Reader Only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+:root {
+  --ds-focus-ring-color: var(--md-sys-color-primary);
+  --ds-focus-ring-width: 2px;
+  --ds-focus-ring-offset: 2px;
+  --ds-focus-ring-radius: var(--ds-radius-sm);
+  --ds-focus-ring-transition: box-shadow var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized);
+}
+
+.ds-focus-ring-target {
+  position: relative;
+  outline: none;
+}
+
+.ds-focus-ring-target:focus-visible {
+  outline: none;
+}
+
+.ds-focus-visible {
+  box-shadow:
+    0 0 0 var(--ds-focus-ring-offset, 2px) transparent,
+    0 0 0 calc(var(--ds-focus-ring-offset, 2px) + var(--ds-focus-ring-width, 2px))
+      var(--ds-focus-ring-color, var(--md-sys-color-primary));
+  border-radius: var(--ds-focus-ring-radius, var(--ds-radius-sm));
+  transition: var(
+    --ds-focus-ring-transition,
+    box-shadow var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-emphasized)
+  );
+}
+
+/* Container */
+.container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: var(--ds-space-4);
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-inline: var(--ds-space-6);
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    padding-inline: var(--ds-space-8);
+  }
+}
+
+/* Flexbox Utilities */
+.flex {
+  display: flex;
+}
+
+.inline-flex {
+  display: inline-flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.flex-row {
+  flex-direction: row;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.items-start {
+  align-items: flex-start;
+}
+
+.items-end {
+  align-items: flex-end;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.justify-start {
+  justify-content: flex-start;
+}
+
+.justify-end {
+  justify-content: flex-end;
+}
+
+/* Gap Utilities */
+.gap-1 {
+  gap: var(--ds-space-1);
+}
+
+.gap-2 {
+  gap: var(--ds-space-2);
+}
+
+.gap-3 {
+  gap: var(--ds-space-3);
+}
+
+.gap-4 {
+  gap: var(--ds-space-4);
+}
+
+.gap-6 {
+  gap: var(--ds-space-6);
+}
+
+.gap-8 {
+  gap: var(--ds-space-8);
+}
+
+/* Text Alignment */
+.text-left {
+  text-align: left;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+/* Text Truncation */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Display Utilities */
+.block {
+  display: block;
+}
+
+.inline {
+  display: inline;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.hidden {
+  display: none;
+}
+
+/* Visibility */
+.invisible {
+  visibility: hidden;
+}
+
+/* Responsive Visibility */
+@media (max-width: 767px) {
+  .hide-mobile {
+    display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .show-mobile {
+    display: none;
+  }
+}
+
+/* Spacing Utilities */
+.m-0 {
+  margin: 0;
+}
+.m-auto {
+  margin: auto;
+}
+.mx-auto {
+  margin-inline: auto;
+}
+
+.mt-2 {
+  margin-block-start: var(--ds-space-2);
+}
+.mt-4 {
+  margin-block-start: var(--ds-space-4);
+}
+.mt-6 {
+  margin-block-start: var(--ds-space-6);
+}
+.mt-8 {
+  margin-block-start: var(--ds-space-8);
+}
+
+.mb-2 {
+  margin-block-end: var(--ds-space-2);
+}
+.mb-4 {
+  margin-block-end: var(--ds-space-4);
+}
+.mb-6 {
+  margin-block-end: var(--ds-space-6);
+}
+.mb-8 {
+  margin-block-end: var(--ds-space-8);
+}
+
+.p-0 {
+  padding: 0;
+}
+.p-2 {
+  padding: var(--ds-space-2);
+}
+.p-4 {
+  padding: var(--ds-space-4);
+}
+.p-6 {
+  padding: var(--ds-space-6);
+}
+.p-8 {
+  padding: var(--ds-space-8);
+}
+
+/* Stack - Vertical spacing */
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap, var(--ds-space-4));
+}
+
+.stack-sm {
+  --stack-gap: var(--ds-space-2);
+}
+
+.stack-lg {
+  --stack-gap: var(--ds-space-8);
+}
+
+/* Cluster - Horizontal spacing with wrap */
+.cluster {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--cluster-gap, var(--ds-space-2));
+  align-items: center;
+}
+
+/* ==================== Material Design 3 Elevation Utilities ==================== */
+
+/* Elevation classes with surface tint overlay in dark mode */
+.elevation-0 {
+  box-shadow: var(--md-sys-elevation-level0);
+}
+
+.elevation-1 {
+  box-shadow: var(--md-sys-elevation-level1);
+  background-color: var(--md-sys-color-surface-container-low);
+}
+
+.elevation-2 {
+  box-shadow: var(--md-sys-elevation-level2);
+  background-color: var(--md-sys-color-surface-container);
+}
+
+.elevation-3 {
+  box-shadow: var(--md-sys-elevation-level3);
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.elevation-4 {
+  box-shadow: var(--md-sys-elevation-level4);
+  background-color: var(--md-sys-color-surface-container-high);
+}
+
+.elevation-5 {
+  box-shadow: var(--md-sys-elevation-level5);
+  background-color: var(--md-sys-color-surface-container-highest);
+}
+
+/* ==================== Material Design 3 State Layer Utilities ==================== */
+
+/* Base state layer setup */
+.state-layer {
+  position: relative;
+  overflow: hidden;
+}
+
+.state-layer::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-color: currentColor;
+  opacity: 0;
+  transition: opacity var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.state-layer:hover:not(:disabled):not(.disabled)::before {
+  opacity: var(--md-sys-state-hover-opacity);
+}
+
+.state-layer:focus-visible:not(:disabled):not(.disabled)::before {
+  opacity: var(--md-sys-state-focus-opacity);
+}
+
+.state-layer:active:not(:disabled):not(.disabled)::before {
+  opacity: var(--md-sys-state-pressed-opacity);
+}
+
+/* State layer with custom color */
+.state-layer-primary::before {
+  background-color: var(--md-sys-color-primary);
+}
+
+.state-layer-secondary::before {
+  background-color: var(--md-sys-color-secondary);
+}
+
+.state-layer-tertiary::before {
+  background-color: var(--md-sys-color-tertiary);
+}
+
+.state-layer-error::before {
+  background-color: var(--md-sys-color-error);
+}
+
+/* ==================== Material Design 3 Ripple Effect ==================== */
+
+/* Ripple container */
+.ripple-container,
+[data-ripple] {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background-color: currentColor;
+  opacity: 0.3;
+  transform: scale(0);
+  animation: ripple-animation 0.6s ease-out;
+  pointer-events: none;
+}
+
+@keyframes ripple-animation {
+  to {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ==================== Material Design 3 Motion Utilities ==================== */
+
+/* Fade Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+.fade-in {
+  animation: fadeIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.fade-out {
+  animation: fadeOut var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-accelerate);
+}
+
+/* Slide Animations */
+@keyframes slideInUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideOutLeft {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+}
+
+@keyframes slideOutRight {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+.slide-in-up {
+  animation: slideInUp var(--md-sys-motion-duration-medium3) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.slide-in-down {
+  animation: slideInDown var(--md-sys-motion-duration-medium3) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.slide-in-left {
+  animation: slideInLeft var(--md-sys-motion-duration-medium3) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.slide-in-right {
+  animation: slideInRight var(--md-sys-motion-duration-medium3) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.slide-out-up {
+  animation: slideOutUp var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-emphasized-accelerate);
+}
+
+.slide-out-down {
+  animation: slideOutDown var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-emphasized-accelerate);
+}
+
+.slide-out-left {
+  animation: slideOutLeft var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-emphasized-accelerate);
+}
+
+.slide-out-right {
+  animation: slideOutRight var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-emphasized-accelerate);
+}
+
+/* Scale Animations */
+@keyframes scaleIn {
+  from {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    transform: scale(1);
+    opacity: 1;
+  }
+  to {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+}
+
+.scale-in {
+  animation: scaleIn var(--md-sys-motion-duration-medium2) var(--md-sys-motion-easing-emphasized-decelerate);
+}
+
+.scale-out {
+  animation: scaleOut var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-emphasized-accelerate);
+}
+
+/* Expand/Collapse Animations */
+@keyframes expandVertical {
+  from {
+    max-block-size: 0;
+    opacity: 0;
+  }
+  to {
+    max-block-size: 500px;
+    opacity: 1;
+  }
+}
+
+@keyframes collapseVertical {
+  from {
+    max-block-size: 500px;
+    opacity: 1;
+  }
+  to {
+    max-block-size: 0;
+    opacity: 0;
+  }
+}
+
+.expand-vertical {
+  animation: expandVertical var(--md-sys-motion-duration-medium3) var(--md-sys-motion-easing-emphasized-decelerate);
+  overflow: hidden;
+}
+
+.collapse-vertical {
+  animation: collapseVertical var(--md-sys-motion-duration-medium1) var(--md-sys-motion-easing-emphasized-accelerate);
+  overflow: hidden;
+}
+
+/* Transition Utilities - Apply smooth transitions to elements */
+.transition-all {
+  transition: all var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.transition-colors {
+  transition:
+    color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+    background-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard),
+    border-color var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.transition-transform {
+  transition: transform var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+.transition-opacity {
+  transition: opacity var(--md-sys-motion-duration-short3) var(--md-sys-motion-easing-standard);
+}
+
+/* Duration Modifiers */
+.duration-short {
+  animation-duration: var(--md-sys-motion-duration-short3);
+}
+
+.duration-medium {
+  animation-duration: var(--md-sys-motion-duration-medium2);
+}
+
+.duration-long {
+  animation-duration: var(--md-sys-motion-duration-long2);
+}
+
+/* Animation Control */
+.animation-paused {
+  animation-play-state: paused;
+}
+
+.animation-infinite {
+  animation-iteration-count: infinite;
+}
+
+.animation-delay-short {
+  animation-delay: var(--md-sys-motion-duration-short2);
+}
+
+.animation-delay-medium {
+  animation-delay: var(--md-sys-motion-duration-medium1);
+}

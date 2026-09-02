@@ -1,0 +1,298 @@
+/* Pattern Library Shared Styles */
+
+/* Reset & Base */
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto", sans-serif;
+  background-color: var(--md-sys-color-surface, #fffbfe);
+  color: var(--md-sys-color-on-surface, #1d1b20);
+}
+
+/* Layout Containers */
+.page-container {
+  display: flex;
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.content-area {
+  flex: 1;
+  padding: var(--md-sys-spacing-8, 32px);
+  max-width: 1200px;
+}
+
+/* Mobile Header (for navigation drawer toggle) */
+.mobile-header {
+  display: none;
+  padding: var(--md-sys-spacing-4, 16px);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant, #c9c5ca);
+  align-items: center;
+  gap: var(--md-sys-spacing-3, 12px);
+}
+
+@media (max-width: 840px) {
+  .mobile-header {
+    display: flex;
+  }
+  .content-area {
+    padding: var(--md-sys-spacing-4, 16px);
+  }
+}
+
+/* Typography */
+h1 {
+  font-size: 2.5rem;
+  font-weight: 400;
+  margin: 0 0 var(--md-sys-spacing-2, 8px) 0;
+  color: var(--md-sys-color-on-surface, #1d1b20);
+}
+
+h2 {
+  font-size: 1.75rem;
+  font-weight: 400;
+  margin: 0 0 var(--md-sys-spacing-4, 16px) 0;
+}
+
+h3 {
+  font-size: 1.25rem;
+  font-weight: 500;
+  margin: var(--md-sys-spacing-6, 24px) 0 var(--md-sys-spacing-3, 12px) 0;
+}
+
+.description,
+.subtitle {
+  font-size: 1rem;
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+  margin: 0 0 var(--md-sys-spacing-6, 24px) 0;
+}
+
+/* Sections */
+.section {
+  margin-top: var(--md-sys-spacing-8, 32px);
+}
+
+/* Demo Boxes */
+.demo-box {
+  padding: var(--md-sys-spacing-6, 24px);
+  background: var(--md-sys-color-surface-container-low, #f7f2fa);
+  border-radius: var(--md-sys-shape-corner-large, 16px);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--md-sys-spacing-3, 12px);
+  align-items: center;
+}
+
+.demo-section {
+  margin-block: var(--ds-space-8);
+  padding: var(--ds-space-6);
+  background: var(--md-sys-color-surface);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-shadow-1);
+}
+
+.demo-section h2 {
+  margin-bottom: var(--ds-space-4);
+  padding-bottom: var(--ds-space-3);
+  border-bottom: 2px solid var(--md-sys-color-outline-variant);
+}
+
+.demo-grid {
+  display: grid;
+  gap: var(--ds-space-4);
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+/* Code Blocks */
+.code-block {
+  background: var(--md-sys-color-surface-variant, #e7e0ec);
+  padding: var(--md-sys-spacing-4, 16px);
+  border-radius: var(--md-sys-shape-corner-medium, 12px);
+  overflow-x: auto;
+  margin-top: var(--md-sys-spacing-3, 12px);
+}
+
+pre {
+  margin: 0;
+  font-family: "Courier New", monospace;
+  font-size: 0.875rem;
+}
+
+code {
+  font-family: "Courier New", monospace;
+  background: var(--md-sys-color-surface-variant, #e7e0ec);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+}
+
+/* Tables */
+.api-table,
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: var(--md-sys-spacing-3, 12px);
+}
+
+.api-table th,
+.api-table td,
+table th,
+table td {
+  text-align: left;
+  padding: var(--md-sys-spacing-3, 12px);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant, #c9c5ca);
+}
+
+.api-table th,
+table th {
+  background: var(--md-sys-color-surface-variant, #e7e0ec);
+  font-weight: 500;
+}
+
+/* Theme Switcher (for home page) */
+.theme-switcher {
+  position: fixed;
+  top: var(--ds-space-4);
+  right: var(--ds-space-4);
+  display: flex;
+  gap: var(--ds-space-2);
+  padding: var(--ds-space-2);
+  background: var(--md-sys-color-surface-container);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--ds-radius-md);
+  box-shadow: var(--ds-shadow-2);
+  z-index: 1000;
+}
+
+.theme-btn {
+  padding: var(--ds-space-2) var(--ds-space-3);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--ds-radius-sm);
+  background: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+  transition: all var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
+}
+
+.theme-btn:hover {
+  background: var(--md-sys-color-surface-container-high);
+}
+
+.theme-btn.active {
+  background: var(--md-sys-color-primary);
+  color: var(--md-sys-color-on-primary);
+  border-color: var(--md-sys-color-primary);
+}
+
+/* Mobile Navigation */
+#mobile-nav-toggle {
+  display: none;
+}
+
+@media (max-width: 840px) {
+  #mobile-nav-toggle {
+    display: inline-flex;
+  }
+}
+
+/* Color Swatches (for design tokens page) */
+.color-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--md-sys-spacing-4, 16px);
+  margin-top: var(--md-sys-spacing-4, 16px);
+}
+
+.color-swatch {
+  border: 1px solid var(--md-sys-color-outline-variant, #c9c5ca);
+  border-radius: var(--md-sys-shape-corner-medium, 12px);
+  overflow: hidden;
+}
+
+.color-preview {
+  height: 80px;
+}
+
+.color-info {
+  padding: var(--md-sys-spacing-3, 12px);
+  background: var(--md-sys-color-surface, #fffbfe);
+}
+
+.color-name {
+  font-weight: 500;
+  margin-bottom: var(--md-sys-spacing-1, 4px);
+}
+
+.color-value {
+  font-size: 0.875rem;
+  color: var(--md-sys-color-on-surface-variant, #49454f);
+  font-family: "Courier New", monospace;
+}
+
+/* Utility Classes */
+.flex {
+  display: flex;
+}
+
+.gap-4 {
+  gap: var(--ds-space-4);
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+.align-items-center {
+  align-items: center;
+}
+
+.align-items-end {
+  align-items: flex-end;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--ds-space-4);
+}
+
+/* Home component tiles */
+.md3-group-heading {
+  grid-column: 1/-1;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--md-sys-color-primary);
+  margin: 24px 0 8px 0;
+}
+
+.tile-card {
+  text-decoration: none;
+  color: inherit;
+  padding: var(--ds-space-5);
+  border: 1px solid var(--md-sys-color-outline-variant);
+  border-radius: var(--ds-radius-md);
+  transition: all 0.2s;
+  background: var(--md-sys-color-surface);
+  display: block;
+}
+
+.tile-card:hover {
+  background-color: var(--md-sys-color-surface-variant);
+  border-color: var(--md-sys-color-outline);
+}
+
+.tile-card h3 {
+  margin: 0 0 8px 0;
+  color: var(--md-sys-color-primary);
+}
+
+.tile-card p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--md-sys-color-on-surface-variant);
+}

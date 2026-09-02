@@ -1,0 +1,528 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Split Button - Design System</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&amp;display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .event-output {
+        margin-block-start: 16px;
+        padding: 12px;
+        background: var(--md-sys-color-surface-variant);
+        border-radius: 8px;
+      }
+    </style>
+  </head>
+  <body data-page="split-button">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Split Button</h1>
+        <p class="description">
+          Material Design 3 split button combining a primary action with a
+          dropdown menu for related actions. Provides quick access to a default
+          action while offering additional options through the menu. Not
+          intended when all actions have equal priority; use separate buttons in
+          those scenarios.
+        </p>
+
+        <!-- Basic Usage -->
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Combines a primary action button with a dropdown menu trigger so the
+            most common action stays one click away while alternatives remain
+            discoverable.
+          </p>
+          <div class="demo-box">
+            <ds-split-button id="basic-split">
+              Save
+              <ds-menu-item slot="menu" value="save-as"
+                >Save As...</ds-menu-item
+              >
+              <ds-menu-item slot="menu" value="save-all">Save All</ds-menu-item>
+              <ds-menu-item slot="menu" value="save-copy"
+                >Save a Copy</ds-menu-item
+              >
+            </ds-split-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-split-button>
+  Save
+  &lt;ds-menu-item slot="menu" value="save-as">Save As...&lt;/ds-menu-item>
+  &lt;ds-menu-item slot="menu" value="save-all">Save All&lt;/ds-menu-item>
+  &lt;ds-menu-item slot="menu" value="save-copy">Save a Copy&lt;/ds-menu-item>
+&lt;/ds-split-button></pre
+            >
+          </div>
+        </div>
+
+        <!-- Variants -->
+        <div class="section">
+          <h2>Variants</h2>
+          <p>Split buttons support all standard button variants</p>
+
+          <h3>Filled</h3>
+          <p>High emphasis for primary actions</p>
+          <div class="demo-box">
+            <ds-split-button variant="filled">
+              Send Email
+              <ds-menu-item slot="menu">Send and Archive</ds-menu-item>
+              <ds-menu-item slot="menu">Schedule Send</ds-menu-item>
+              <ds-menu-item slot="menu">Send to Multiple</ds-menu-item>
+            </ds-split-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-split-button variant="filled">Send Email&lt;/ds-split-button></pre
+            >
+          </div>
+
+          <h3>Filled Tonal</h3>
+          <p>Medium emphasis with tonal background</p>
+          <div class="demo-box">
+            <ds-split-button variant="filled-tonal">
+              Export
+              <ds-menu-item slot="menu">Export as PDF</ds-menu-item>
+              <ds-menu-item slot="menu">Export as CSV</ds-menu-item>
+              <ds-menu-item slot="menu">Export as JSON</ds-menu-item>
+            </ds-split-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-split-button variant="filled-tonal">Export&lt;/ds-split-button></pre
+            >
+          </div>
+
+          <h3>Outlined</h3>
+          <p>Medium emphasis with border</p>
+          <div class="demo-box">
+            <ds-split-button variant="outlined">
+              Share
+              <ds-menu-item slot="menu">Share Link</ds-menu-item>
+              <ds-menu-item slot="menu">Share via Email</ds-menu-item>
+              <ds-menu-item slot="menu">Copy to Clipboard</ds-menu-item>
+            </ds-split-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-split-button variant="outlined">Share&lt;/ds-split-button></pre
+            >
+          </div>
+
+          <h3>Elevated</h3>
+          <p>Medium emphasis with shadow</p>
+          <div class="demo-box">
+            <ds-split-button variant="elevated">
+              Download
+              <ds-menu-item slot="menu">Download High Quality</ds-menu-item>
+              <ds-menu-item slot="menu">Download Original</ds-menu-item>
+              <ds-menu-item slot="menu">Download All</ds-menu-item>
+            </ds-split-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-split-button variant="elevated">Download&lt;/ds-split-button></pre
+            >
+          </div>
+
+          <h3>Text</h3>
+          <p>Low emphasis for less prominent actions</p>
+          <div class="demo-box">
+            <ds-split-button variant="text">
+              More
+              <ds-menu-item slot="menu">View Details</ds-menu-item>
+              <ds-menu-item slot="menu">Edit</ds-menu-item>
+              <ds-menu-item slot="menu">Delete</ds-menu-item>
+            </ds-split-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-split-button variant="text">More&lt;/ds-split-button></pre
+            >
+          </div>
+        </div>
+
+        <!-- Menu Position -->
+        <div class="section">
+          <h2>Menu Position</h2>
+          <p>Control where the menu appears relative to the button</p>
+          <p>Only one menu can be open at a time in this demo.</p>
+
+          <div
+            id="menu-position-demo"
+            class="demo-box"
+            style="display: flex; gap: 16px; flex-wrap: wrap">
+            <ds-split-button position="bottom-start">
+              Bottom Start
+              <ds-menu-item slot="menu">Option 1</ds-menu-item>
+              <ds-menu-item slot="menu">Option 2</ds-menu-item>
+              <ds-menu-item slot="menu">Option 3</ds-menu-item>
+            </ds-split-button>
+
+            <ds-split-button position="bottom-end">
+              Bottom End
+              <ds-menu-item slot="menu">Option 1</ds-menu-item>
+              <ds-menu-item slot="menu">Option 2</ds-menu-item>
+              <ds-menu-item slot="menu">Option 3</ds-menu-item>
+            </ds-split-button>
+
+            <ds-split-button position="top-start">
+              Top Start
+              <ds-menu-item slot="menu">Option 1</ds-menu-item>
+              <ds-menu-item slot="menu">Option 2</ds-menu-item>
+              <ds-menu-item slot="menu">Option 3</ds-menu-item>
+            </ds-split-button>
+
+            <ds-split-button position="top-end">
+              Top End
+              <ds-menu-item slot="menu">Option 1</ds-menu-item>
+              <ds-menu-item slot="menu">Option 2</ds-menu-item>
+              <ds-menu-item slot="menu">Option 3</ds-menu-item>
+            </ds-split-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-split-button position="bottom-start">Bottom Start&lt;/ds-split-button>
+&lt;ds-split-button position="bottom-end">Bottom End&lt;/ds-split-button>
+&lt;ds-split-button position="top-start">Top Start&lt;/ds-split-button>
+&lt;ds-split-button position="top-end">Top End&lt;/ds-split-button></pre
+            >
+          </div>
+        </div>
+
+        <!-- States -->
+        <div class="section">
+          <h2>States</h2>
+
+          <h3>Disabled</h3>
+          <p>Disabled state for both buttons</p>
+          <div class="demo-box">
+            <ds-split-button disabled>
+              Disabled
+              <ds-menu-item slot="menu">Option 1</ds-menu-item>
+              <ds-menu-item slot="menu">Option 2</ds-menu-item>
+            </ds-split-button>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-split-button disabled>Disabled&lt;/ds-split-button></pre
+            >
+          </div>
+        </div>
+
+        <!-- Interactive Example -->
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>Click the primary button or menu items to see events</p>
+
+          <div class="demo-box">
+            <ds-split-button id="interactive-split" variant="filled">
+              Primary Action
+              <ds-menu-item slot="menu" value="action-1"
+                >Secondary Action 1</ds-menu-item
+              >
+              <ds-menu-item slot="menu" value="action-2"
+                >Secondary Action 2</ds-menu-item
+              >
+              <ds-menu-item slot="menu" value="action-3"
+                >Secondary Action 3</ds-menu-item
+              >
+            </ds-split-button>
+
+            <div id="event-output" class="event-output">
+              <em>Click buttons to see events</em>
+            </div>
+          </div>
+
+          <div class="code-block">
+            <pre>
+const splitBtn = document.querySelector('ds-split-button');
+
+splitBtn.addEventListener('ds-split-button:click', (e) => {
+  console.log('Primary action clicked');
+});
+
+splitBtn.addEventListener('ds-split-button:menu-select', (e) => {
+  console.log('Menu item selected:', e.detail);
+});</pre
+            >
+          </div>
+        </div>
+
+        <!-- API -->
+        <div class="section">
+          <h2>API</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>variant</code></td>
+                <td>string</td>
+                <td>'filled'</td>
+                <td>
+                  Button style: 'filled' | 'filled-tonal' | 'outlined' |
+                  'elevated' | 'text'
+                </td>
+              </tr>
+              <tr>
+                <td><code>disabled</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Disables both buttons</td>
+              </tr>
+              <tr>
+                <td><code>position</code></td>
+                <td>string</td>
+                <td>'bottom-end'</td>
+                <td>
+                  Menu position: 'bottom-start' | 'bottom-end' | 'top-start' |
+                  'top-end'
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Slots</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Slot</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>(default)</td>
+                <td>Primary button content</td>
+              </tr>
+              <tr>
+                <td><code>menu</code></td>
+                <td>Menu items (use ds-menu-item elements)</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>ds-split-button:click</code></td>
+                <td><code>{ originalEvent }</code></td>
+                <td>Fired when primary button is clicked</td>
+              </tr>
+              <tr>
+                <td><code>ds-split-button:menu-select</code></td>
+                <td><code>{ item, value, label }</code></td>
+                <td>Fired when menu item is selected</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Parameters</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>openMenu()</code></td>
+                <td>none</td>
+                <td>Opens the dropdown menu</td>
+              </tr>
+              <tr>
+                <td><code>closeMenu()</code></td>
+                <td>none</td>
+                <td>Closes the dropdown menu</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>primary-button</code></td>
+                <td>The primary action button</td>
+              </tr>
+              <tr>
+                <td><code>menu-button</code></td>
+                <td>The dropdown trigger button</td>
+              </tr>
+              <tr>
+                <td><code>menu</code></td>
+                <td>The dropdown menu container</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>None</code></td>
+                <td>No component-specific custom properties</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Accessibility -->
+        <div class="section">
+          <h2>Accessibility</h2>
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Context</th>
+                <th>Expected Result</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Tab</code></td>
+                <td>Split button present</td>
+                <td>Moves focus between primary and menu trigger buttons</td>
+              </tr>
+              <tr>
+                <td><code>Enter</code> / <code>Space</code></td>
+                <td>Focus on primary or menu trigger</td>
+                <td>Activates primary action or opens menu</td>
+              </tr>
+              <tr>
+                <td><code>Escape</code></td>
+                <td>Menu open</td>
+                <td>Closes menu and returns focus to trigger</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Semantics</h3>
+          <ul>
+            <li>
+              Uses <code>aria-haspopup</code> and <code>aria-expanded</code> on
+              the menu trigger.
+            </li>
+            <li>
+              Dropdown surface follows <code>role="menu"</code> semantics.
+            </li>
+            <li>
+              Focus is managed between primary and menu actions with clear
+              visual distinction.
+            </li>
+          </ul>
+        </div>
+
+        <!-- Usage Guidelines -->
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use when a default action is most
+              common and a small set of related alternatives is needed, such as
+              Save with Save As.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid when all actions are
+              equally important or unrelated, and avoid for navigation use
+              cases.
+            </li>
+            <li>
+              <strong>Composition:</strong> Keep the primary action clear, limit
+              menu items to 3-7 options, and group related items with dividers
+              when needed.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Ambiguous primary labels and
+              oversized menus reduce clarity. Prefer concise outcome-oriented
+              action names.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <script src="../shared/theme-init.js"></script>
+
+    <script type="module">
+      // Interactive example
+      const interactiveSplit = document.getElementById("interactive-split");
+      const output = document.getElementById("event-output");
+      const menuPositionDemo = document.getElementById("menu-position-demo");
+
+      interactiveSplit.addEventListener("ds-split-button:click", (e) => {
+        output.innerHTML = `
+          <strong>Primary action clicked</strong><br>
+          <small>Time: ${new Date().toLocaleTimeString()}</small>
+        `;
+      });
+
+      interactiveSplit.addEventListener("ds-split-button:menu-select", (e) => {
+        output.innerHTML = `
+          <strong>Menu item selected:</strong> ${e.detail.label}<br>
+          <strong>Value:</strong> ${e.detail.value}<br>
+          <small>Time: ${new Date().toLocaleTimeString()}</small>
+        `;
+      });
+
+      if (menuPositionDemo) {
+        menuPositionDemo.addEventListener(
+          "click",
+          (e) => {
+            const splitBtn = e.target.closest("ds-split-button");
+            if (!splitBtn) return;
+
+            menuPositionDemo
+              .querySelectorAll("ds-split-button")
+              .forEach((btn) => {
+                if (btn !== splitBtn) {
+                  btn.closeMenu();
+                }
+              });
+          },
+          true,
+        );
+      }
+    </script>
+  </body>
+</html>

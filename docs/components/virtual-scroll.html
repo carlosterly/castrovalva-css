@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Virtual Scroll - Material Design 3 Component Library</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <link rel="stylesheet" href="../shared/pattern-library.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .virtual-scroll-demo {
+        block-size: 300px;
+        inline-size: 100%;
+      }
+
+      .demo-controls {
+        display: flex;
+        gap: var(--ds-space-3);
+        margin-block-end: var(--ds-space-4);
+        flex-wrap: wrap;
+      }
+
+      .demo-controls input {
+        padding: var(--ds-space-2) var(--ds-space-3);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: var(--ds-radius-sm);
+      }
+
+      .stats-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ds-space-3);
+      }
+
+      .stats-row--spaced {
+        margin-block-start: var(--ds-space-4);
+      }
+
+      .stat-box {
+        min-inline-size: 170px;
+        padding: var(--ds-space-3);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: var(--ds-radius-sm);
+        background: var(--md-sys-color-surface-container-low);
+      }
+
+      .stat-label {
+        font-size: var(--md-sys-typescale-label-small-size);
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .stat-value {
+        font-size: var(--md-sys-typescale-title-medium-size);
+        font-weight: var(--md-sys-typescale-title-medium-weight);
+      }
+    </style>
+  </head>
+  <body data-page="virtual-scroll">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Virtual Scroll</h1>
+        <p class="description">
+          High-performance scrolling list that only renders the visible range
+          for large datasets. Not intended for variable-height content that
+          cannot be measured reliably.
+        </p>
+
+        <div class="section">
+          <h2>Basic Usage</h2>
+          <p>
+            Use virtual scroll for long, fixed-height lists. Rendering only
+            visible rows improves performance with large datasets.
+          </p>
+          <div class="demo-box">
+            <ds-virtual-scroll
+              id="basic-demo"
+              class="virtual-scroll-demo"></ds-virtual-scroll>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-virtual-scroll item-height="48" buffer="5"&gt;&lt;/ds-virtual-scroll&gt;
+
+&lt;script&gt;
+  const list = document.querySelector('ds-virtual-scroll');
+  list.setItems([{ label: 'Item 1' }, { label: 'Item 2' }]);
+&lt;/script&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Initial Value</h2>
+          <p>
+            Start with an initial scroll offset to restore previous list
+            position.
+          </p>
+          <div class="demo-box">
+            <ds-virtual-scroll
+              id="initial-offset-demo"
+              class="virtual-scroll-demo"
+              scroll-offset="240"></ds-virtual-scroll>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-virtual-scroll scroll-offset="240"&gt;&lt;/ds-virtual-scroll&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Variants/Formats</h2>
+          <p>
+            Adjust item density and overscan behavior using item height and
+            buffer.
+          </p>
+
+          <h3>Standard Density</h3>
+          <div class="demo-box">
+            <ds-virtual-scroll
+              id="variant-standard"
+              class="virtual-scroll-demo"
+              item-height="48"
+              buffer="5"></ds-virtual-scroll>
+          </div>
+
+          <h3>Compact Density</h3>
+          <div class="demo-box">
+            <ds-virtual-scroll
+              id="variant-compact"
+              class="virtual-scroll-demo"
+              item-height="40"
+              buffer="4"></ds-virtual-scroll>
+          </div>
+
+          <h3>Larger Rows</h3>
+          <div class="demo-box">
+            <ds-virtual-scroll
+              id="variant-large"
+              class="virtual-scroll-demo"
+              item-height="56"
+              buffer="3"></ds-virtual-scroll>
+          </div>
+          <div class="code-block">
+            <pre>
+&lt;ds-virtual-scroll item-height="40" buffer="4"&gt;&lt;/ds-virtual-scroll&gt;
+&lt;ds-virtual-scroll item-height="48" buffer="5"&gt;&lt;/ds-virtual-scroll&gt;
+&lt;ds-virtual-scroll item-height="56" buffer="3"&gt;&lt;/ds-virtual-scroll&gt;</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>States</h2>
+          <p>Common states for empty and populated datasets.</p>
+
+          <h3>Populated List</h3>
+          <div class="demo-box">
+            <ds-virtual-scroll
+              id="state-populated"
+              class="virtual-scroll-demo"></ds-virtual-scroll>
+          </div>
+
+          <h3>Empty List</h3>
+          <div class="demo-box">
+            <ds-virtual-scroll
+              id="state-empty"
+              class="virtual-scroll-demo"></ds-virtual-scroll>
+          </div>
+          <div class="code-block">
+            <pre>
+const emptyList = document.querySelector('#state-empty');
+emptyList.setItems([]);</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Interactive Example</h2>
+          <p>
+            Control virtual scrolling programmatically and observe emitted
+            metrics.
+          </p>
+          <div class="demo-box">
+            <div class="demo-controls">
+              <ds-button id="scroll-top" variant="filled">Top</ds-button>
+              <ds-button id="scroll-middle" variant="outlined"
+                >Middle</ds-button
+              >
+              <ds-button id="scroll-end" variant="outlined">End</ds-button>
+              <input
+                id="jump-index"
+                type="number"
+                min="0"
+                max="999"
+                placeholder="Jump index" />
+            </div>
+
+            <ds-virtual-scroll
+              id="interactive-demo"
+              class="virtual-scroll-demo"
+              item-height="48"
+              buffer="5"></ds-virtual-scroll>
+
+            <div class="stats-row stats-row--spaced">
+              <div class="stat-box">
+                <div class="stat-label">Start Index</div>
+                <div class="stat-value" id="stat-start">0</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">End Index</div>
+                <div class="stat-value" id="stat-end">0</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Viewport Rows</div>
+                <div class="stat-value" id="stat-viewport">0</div>
+              </div>
+              <div class="stat-box">
+                <div class="stat-label">Rendered Rows</div>
+                <div class="stat-value" id="stat-rendered">0</div>
+              </div>
+            </div>
+          </div>
+          <div class="code-block">
+            <pre>
+const list = document.querySelector('#interactive-demo');
+
+list.addEventListener('scroll-change', (event) =&gt; {
+  console.log(event.detail.startIdx, event.detail.endIdx);
+});
+
+list.scrollToIndex(500, 'center');
+list.focusItem(250);</pre
+            >
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>API Reference</h2>
+
+          <h3>Attributes</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Attribute</th>
+                <th>Type</th>
+                <th>Default</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>item-height</code></td>
+                <td>number</td>
+                <td>48</td>
+                <td>Fixed row height in pixels</td>
+              </tr>
+              <tr>
+                <td><code>buffer</code></td>
+                <td>number</td>
+                <td>5</td>
+                <td>Rows rendered above and below visible viewport</td>
+              </tr>
+              <tr>
+                <td><code>scroll-offset</code></td>
+                <td>number</td>
+                <td>0</td>
+                <td>Initial or programmatic scrollTop offset in pixels</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Events</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Event</th>
+                <th>Detail</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>scroll-change</code></td>
+                <td>
+                  <code
+                    >{ startIdx, endIdx, scrollTop, visibleCount, viewportCount,
+                    totalCount }</code
+                  >
+                </td>
+                <td>Emitted when scroll position or visible range changes</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Methods</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Method</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>setItems(items)</code></td>
+                <td>Sets list items and resets scroll position</td>
+              </tr>
+              <tr>
+                <td><code>getVisibleItems()</code></td>
+                <td>Returns currently rendered item data slice</td>
+              </tr>
+              <tr>
+                <td><code>scrollToIndex(index, align)</code></td>
+                <td>
+                  Scrolls to target row with start, center, or end alignment
+                </td>
+              </tr>
+              <tr>
+                <td><code>focusItem(index)</code></td>
+                <td>Scrolls to and focuses an item</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Parts</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Part</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>(none)</code></td>
+                <td>This component currently does not expose shadow parts</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>CSS Custom Properties</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Description</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>--ds-virtual-scroll-item-height</code></td>
+                <td>
+                  Default row height token mapping (defaults to
+                  <code>--ds-size-control-lg</code>)
+                </td>
+              </tr>
+              <tr>
+                <td><code>--ds-virtual-scroll-focus-width</code></td>
+                <td>Focus ring width on virtual rows</td>
+              </tr>
+              <tr>
+                <td><code>--ds-virtual-scroll-focus-color</code></td>
+                <td>Focus ring color on virtual rows</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="section">
+          <h2>Accessibility</h2>
+
+          <h3>Keyboard Interaction</h3>
+          <table class="api-table">
+            <thead>
+              <tr>
+                <th>Key</th>
+                <th>Behavior</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><code>Arrow Down</code></td>
+                <td>Moves focus to the next row and scrolls it into view</td>
+              </tr>
+              <tr>
+                <td><code>Arrow Up</code></td>
+                <td>
+                  Moves focus to the previous row and scrolls it into view
+                </td>
+              </tr>
+              <tr>
+                <td><code>Home</code></td>
+                <td>Moves focus to the first row</td>
+              </tr>
+              <tr>
+                <td><code>End</code></td>
+                <td>Moves focus to the last row</td>
+              </tr>
+              <tr>
+                <td><code>Page Down</code></td>
+                <td>Moves focus down by approximately one viewport of rows</td>
+              </tr>
+              <tr>
+                <td><code>Page Up</code></td>
+                <td>Moves focus up by approximately one viewport of rows</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <h3>Semantic Structure</h3>
+          <ul>
+            <li>
+              The rendered rows container exposes <code>role="listbox"</code>
+              semantics for assistive technologies.
+            </li>
+            <li>
+              Virtualized rows are keyboard-focusable so screen reader and
+              keyboard users can traverse visible content.
+            </li>
+            <li>
+              Focused rows include a visible focus treatment using MD3 focus
+              ring tokens.
+            </li>
+            <li>
+              Native pointer, wheel, and touch scrolling behavior is preserved.
+            </li>
+          </ul>
+        </div>
+
+        <div class="section">
+          <h2>Usage Guidelines</h2>
+          <ul>
+            <li>
+              <strong>When to use:</strong> Use virtual scroll for long,
+              fixed-height lists where rendering all rows at once would hurt
+              performance.
+            </li>
+            <li>
+              <strong>When not to use:</strong> Avoid virtual scroll for
+              variable-height or auto-wrapping rows that cannot be measured
+              consistently.
+            </li>
+            <li>
+              <strong>Composition:</strong> Keep
+              <code>item-height</code> accurate, tune <code>buffer</code> to
+              balance smoothness and render cost, and use
+              <code>scroll-offset</code> for state restoration.
+            </li>
+            <li>
+              <strong>Common mistakes:</strong> Mixing highly dynamic row
+              heights or embedding expensive per-row layout work can negate
+              virtualization benefits.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      const buildItems = (count) =>
+        Array.from({ length: count }, (_, index) => ({
+          id: index,
+          label: `Item ${index + 1}`,
+        }));
+
+      const mediumItems = buildItems(100);
+      const largeItems = buildItems(1000);
+
+      const basicDemo = document.getElementById("basic-demo");
+      basicDemo.setItems(mediumItems);
+
+      const initialOffsetDemo = document.getElementById("initial-offset-demo");
+      initialOffsetDemo.setItems(largeItems);
+
+      const variantStandard = document.getElementById("variant-standard");
+      variantStandard.setItems(mediumItems);
+
+      const variantCompact = document.getElementById("variant-compact");
+      variantCompact.setItems(mediumItems);
+
+      const variantLarge = document.getElementById("variant-large");
+      variantLarge.setItems(mediumItems);
+
+      const statePopulated = document.getElementById("state-populated");
+      statePopulated.setItems(mediumItems);
+
+      const stateEmpty = document.getElementById("state-empty");
+      stateEmpty.setItems([]);
+
+      const interactiveDemo = document.getElementById("interactive-demo");
+      interactiveDemo.setItems(largeItems);
+
+      const statStart = document.getElementById("stat-start");
+      const statEnd = document.getElementById("stat-end");
+      const statViewport = document.getElementById("stat-viewport");
+      const statRendered = document.getElementById("stat-rendered");
+
+      interactiveDemo.addEventListener("scroll-change", (event) => {
+        statStart.textContent = String(event.detail.startIdx);
+        statEnd.textContent = String(event.detail.endIdx);
+        statViewport.textContent = String(event.detail.viewportCount);
+        statRendered.textContent = String(event.detail.visibleCount);
+      });
+
+      document.getElementById("scroll-top").addEventListener("click", () => {
+        interactiveDemo.scrollToIndex(0, "start");
+      });
+
+      document.getElementById("scroll-middle").addEventListener("click", () => {
+        interactiveDemo.scrollToIndex(
+          Math.floor(largeItems.length / 2),
+          "center",
+        );
+      });
+
+      document.getElementById("scroll-end").addEventListener("click", () => {
+        interactiveDemo.scrollToIndex(largeItems.length - 1, "end");
+      });
+
+      document
+        .getElementById("jump-index")
+        .addEventListener("keydown", (event) => {
+          if (event.key !== "Enter") {
+            return;
+          }
+          const index = parseInt(event.target.value, 10);
+          if (
+            Number.isFinite(index) &&
+            index >= 0 &&
+            index < largeItems.length
+          ) {
+            interactiveDemo.scrollToIndex(index, "center");
+          }
+        });
+    </script>
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>
