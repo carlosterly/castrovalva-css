@@ -74,6 +74,7 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 | Deploy `docs/` publicly (GitHub Pages via Actions). The pattern library becomes browsable without cloning. | 6h |
 | Fix whatever the deploy exposes — broken relative paths, missing assets, dev-only `src/` imports that do not survive a static build. | 8h |
 | Add the live URL and a screenshot to the README once the site is up. | 1h |
+| **Component QA triage.** Sweep all 43 demo pages at two viewports in both themes. Fix nothing — log everything to [DEFECTS.md](./DEFECTS.md). The output is not a fix list, it is the *size* of the problem, which is currently unknown and which Q2–Q3 cannot be planned honestly without. | 5h |
 
 **Minimum viable stop:** lint green, CI passing, site deployed. Even if nothing below this line ever happens, the project reads as finished rather than abandoned.
 
@@ -90,11 +91,15 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 | Landing page: what this is, why vanilla web components, live component previews above the fold. Replaces the current card grid. | 10h |
 | Consistent shell across all demo pages — the `shared-nav` drawer exists; make it complete, searchable, and keyboard-navigable. | 8h |
 | Client-side search across components and tokens. | 6h |
-| Mobile pass over every demo page. Currently unverified at small widths. | 8h |
-| Accessibility audit of the **docs site itself** — the components are WCAG AA, the pages around them are untested. Extend `test:a11y` to cover demo pages. | 8h |
 | Performance: font loading strategy, defer non-critical JS, Lighthouse ≥ 95. | 6h |
+| **Component QA, first half** — see the workstream below. Roughly half the 43 components, prioritised by how likely a visitor is to land on them. | 25h |
 
 **Minimum viable stop:** landing page plus working navigation. The rest is refinement.
+
+> The separate "mobile pass over every demo page" line that used to sit here has
+> been folded into the QA workstream — responsive behaviour is one dimension of
+> the per-component check, not a separate activity. The docs-site accessibility
+> audit moved to Q4, where the axe harness that supports it is built.
 
 ---
 
@@ -106,12 +111,16 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 
 | Work | Est. |
 | --- | --- |
-| **Interactive theme playground** — live-edit the MD3 source colour, watch all 78 tonal palette values and every component re-theme in real time. The single highest-leverage portfolio artefact available from what already exists: 250+ tokens and a working theme system. | 20h |
-| Token explorer: browse colour, type, elevation and motion tokens with live values and copy-to-clipboard. | 10h |
-| Visual regression tests (Playwright screenshots) to protect the polish accumulated in Q2. | 10h |
-| One realistic composed demo — a settings page or dashboard built entirely from the library, proving the components work together rather than only in isolation. | 10h |
+| **Interactive theme playground** — live-edit the MD3 source colour, watch all 78 tonal palette values and every component re-theme in real time, with token values and copy-to-clipboard built into the same surface. The single highest-leverage portfolio artefact available from what already exists: 250+ tokens and a working theme system. | 20h |
+| Visual regression tests (Playwright screenshots) — run **after** the QA workstream completes, so the baselines capture a fixed state rather than an unstable one. | 10h |
+| One realistic composed demo — a settings page or dashboard built entirely from the library, proving the components work together rather than only in isolation. This is also the cheapest way to surface composition defects that per-component review cannot see. | 10h |
+| **Component QA, second half** — see the workstream below. | 15h |
 
 **Minimum viable stop:** the theme playground alone justifies the quarter.
+
+> The standalone token explorer has been merged into the theme playground. A
+> playground that shows token values as you edit them is the same build and the
+> better single artefact.
 
 ---
 
@@ -127,10 +136,58 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 | --- | --- |
 | Write 3–4 short engineering notes: why vanilla web components over a framework, the Shadow DOM and theming tension and how it was resolved, the form-association pattern, what accessibility actually cost. This is the portfolio content most people skip and hiring managers actually read. | 12h |
 | Publish real numbers: bundle size, coverage, Lighthouse, browser support — measured, not claimed. | 4h |
-| Fill component gaps only if Q2–Q3 surfaced real ones. | 10h |
+| **Build the accessibility harness.** `playwright.config.js` plus axe run across every demo page, wired into CI. `@axe-core/playwright` is already a dependency and `npm run test:a11y` currently finds zero tests — this is what makes the WCAG 2.1 AA claim in the README true rather than aspirational. | 4h |
+| Accessibility audit of the **docs site itself** — the components carry a11y assertions, the pages around them have none. Runs on the harness above. | 8h |
+| Clear whatever remains in [DEFECTS.md](./DEFECTS.md), and fill component gaps only if Q2–Q3 surfaced real ones. | 10h |
 | Dependency refresh, final accessibility pass, roadmap review. | 6h |
 
 **Minimum viable stop:** the engineering notes. Everything else is maintenance.
+
+---
+
+## Workstream: component QA
+
+Spans Q1–Q4, ~45h total. The largest single block of work in this roadmap, and
+the one most likely to overrun, so it is defined here rather than buried in a
+quarter.
+
+### Why it exists
+
+2,060 passing unit tests prove **behaviour**: attributes reflect, events fire
+with the right `detail`, keyboard handlers respond, ARIA attributes get set.
+
+They prove nothing about whether a component *looks* right, whether its ARIA is
+*correct* rather than merely present, whether it survives a 360px viewport, or
+whether it still works inside a dialog inside a data table. Passing tests on an
+unreviewed component is false confidence, and that is the gap this closes.
+
+### Per-component checklist
+
+A component is done when all of these hold, at 360px and 1280px, in light and
+dark:
+
+- [ ] Matches the MD3 spec visually — elevation, corner radius, state-layer opacity, type scale
+- [ ] Every documented variant and state renders correctly
+- [ ] Interactive states behave — hover, focus-visible, pressed, disabled
+- [ ] Focus indicator is visible and not doubled
+- [ ] Keyboard path works end to end, not just the handlers the tests assert
+- [ ] No layout break, overflow or clipping at either viewport
+- [ ] No console errors or warnings on the demo page
+- [ ] Demo page examples all actually work — it is now the sole API reference
+- [ ] Composes correctly with at least one container (dialog, sheet or card)
+
+### Rules of engagement
+
+**Triage first, fix second.** The Q1 sweep logs and fixes nothing. Reviewing all
+43 before fixing any prevents the classic failure: rabbit-holing on component
+three and never reaching component forty.
+
+**Log to [DEFECTS.md](./DEFECTS.md), fix by visibility.** Order fixes by how
+likely a visitor is to land on the component, not alphabetically or by how
+interesting the bug is.
+
+**Visual regression comes last.** Screenshot baselines taken mid-QA capture
+broken state and entrench it. Q3's regression suite runs once the fixing is done.
 
 ---
 
@@ -142,7 +199,9 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 | **Scope creep into new components.** The most tempting and least valuable work — it feels productive and moves no needle. | Listed as an explicit non-goal. Requires a visible gap on the site to justify. |
 | **The static deploy exposes hidden coupling.** Demo pages import from `src/` directly; a built deploy may not resolve those paths. | Q1 budgets 8h specifically for this. Discover it in month 1, not month 11. |
 | **Docs drift from reality.** Was already happening — the README roadmap sat nine months stale. | Largely structural now: the September 2026 consolidation removed the duplication that caused it. Three maintained docs, and component API lives in exactly one place. |
-| **A wrong demo page has nothing to catch it.** Consolidation made `docs/components/{name}.html` the sole source of API truth; there is no second copy to disagree with it. | Tests cover the behaviour the page describes. The visual regression suite in Q3 extends that to the pages themselves. |
+| **A wrong demo page has nothing to catch it.** Consolidation made `docs/components/{name}.html` the sole source of API truth; there is no second copy to disagree with it. | Tests cover the behaviour the page describes. The QA workstream checks every page's examples actually work, and Q3's visual regression suite locks that in. |
+| **The QA workstream overruns.** ~45h estimated against 43 components nobody has systematically reviewed. If the Q1 triage finds the average component needs more than an hour, the estimate is wrong and so is the rest of the plan. | The triage exists precisely to produce this number early. If it comes back high, cut scope at that point — drop to the top 15 components — rather than discovering the overrun in month nine. |
+| **Slack has thinned.** Adding the QA workstream took planned work from ~147h to ~178h against a realistic ~200h year. Buffer is down from roughly 26% to 11%, and Q2, Q3 and Q4 all now exceed the ~50h/quarter guide. | Accept that Q4's narrative work is the designated casualty — it has the least dependency on anything else and the highest tolerance for slipping into the following year. If the Q1 triage comes back worse than expected, cut QA scope rather than letting every quarter slip. |
 
 ## Revisit triggers
 
