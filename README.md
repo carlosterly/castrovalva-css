@@ -454,36 +454,9 @@ Requires Web Components support (Custom Elements v1, Shadow DOM v1).
 
 ## 🎯 Roadmap
 
-### Phase 1 (Complete) ✅
+See **[docs/ROADMAP.md](./docs/ROADMAP.md)** for the current 12-month direction (September 2026 – August 2027), including quarterly themes and explicit non-goals.
 
-- [x] MD3 Color System - Tonal palettes & semantic roles
-- [x] MD3 Typography - Complete type scale (Display, Headline, Title, Body, Label)
-- [x] MD3 Elevation - 6-level system with surface tints
-- [x] MD3 Motion Tokens - 16 durations + 4 easing curves
-- [x] MD3 State Layers - Hover, focus, pressed, dragged states
-- [x] Button Component - All 5 MD3 variants (filled, filled-tonal, outlined, elevated, text)
-- [x] Icon Component - Material Symbols with variable fonts
-- [x] Testing infrastructure
-- [x] Base styles
-
-### Phase 2 (Next)
-
-- [ ] MD3 Spacing & Shape Tokens
-- [ ] Input/TextField component (MD3)
-- [ ] Select component (MD3)
-- [ ] Checkbox/Radio components (MD3)
-- [ ] Card component (MD3)
-- [ ] Modal/Dialog component (MD3)
-
-### Phase 3 (Future)
-
-- [ ] Data table component
-- [ ] Form validation
-- [ ] Tooltip component
-- [ ] Tabs component
-- [ ] Navigation components (drawer, rail, bar)
-- [ ] FAB (Floating Action Button)
-- [ ] Chips component
+For detailed implementation status — which components exist and what shipped when — see **[docs/md3-component-plan.md](./docs/md3-component-plan.md)**.
 
 ## 🤝 Contributing
 
