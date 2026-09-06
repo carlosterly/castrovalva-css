@@ -75,7 +75,7 @@ export class DSBottomSheet extends HTMLElement {
       case "variant":
         this._variant = newValue || "standard";
         break;
-      case "open":
+      case "open": {
         const shouldOpen = newValue !== null;
         // Only trigger show/close if already connected and state actually changed
         if (this.shadowRoot.innerHTML) {
@@ -86,6 +86,7 @@ export class DSBottomSheet extends HTMLElement {
           }
         }
         return;
+      }
       case "draggable":
         this._draggable = newValue !== "false";
         break;

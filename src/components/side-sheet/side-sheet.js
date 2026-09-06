@@ -80,7 +80,7 @@ export class DSSideSheet extends HTMLElement {
       case "position":
         this._position = newValue || "left";
         break;
-      case "open":
+      case "open": {
         const shouldOpen = newValue !== null;
         if (this.shadowRoot.innerHTML) {
           if (shouldOpen && !this._open) {
@@ -90,6 +90,7 @@ export class DSSideSheet extends HTMLElement {
           }
         }
         return;
+      }
       case "swipeable":
         this._swipeable = newValue !== "false";
         break;

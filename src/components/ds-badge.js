@@ -122,6 +122,10 @@ export class DSBadge extends HTMLElement {
 
     badge.classList.toggle("dot", this._dot);
     badge.classList.toggle("overlap", this._position === "overlap");
+    // `position-overlap` on the host is documented, tested public API and is
+    // targeted by the `:host(.position-overlap)` rule below. Changing it to an
+    // attribute would be a breaking change; see docs/ROADMAP.md.
+    // eslint-disable-next-line wc/no-self-class
     this.classList.toggle("position-overlap", this._position === "overlap");
     badge.style.setProperty("--badge-bg", this._resolveColor(this._color));
   }

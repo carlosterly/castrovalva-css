@@ -39,7 +39,7 @@ export class DSTextarea extends HTMLElement {
     if (oldValue === newValue) return;
 
     switch (name) {
-      case "value":
+      case "value": {
         this._value = newValue || "";
         // Don't re-render on value change from input event
         // Just update the textarea value if it exists
@@ -49,6 +49,7 @@ export class DSTextarea extends HTMLElement {
         }
         this.updateCounter();
         return; // Don't call render() for value changes
+      }
       case "disabled":
         this._disabled = newValue !== null;
         break;

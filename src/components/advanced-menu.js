@@ -12,19 +12,17 @@ export class DSAdvancedMenu extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this._open = false;
-    this._variant = this.getAttribute("variant") || "menu"; // menu | mega
-    this._placement = this.getAttribute("placement") || "bottom-start";
-    this._offset = Number(this.getAttribute("offset")) || 8;
-    this._hoverOpen = this.hasAttribute("hover-open");
-    this._openDelay = Number(this.getAttribute("open-delay")) || 120;
-    this._closeDelay = Number(this.getAttribute("close-delay")) || 180;
-    this._submenuOpenDelay =
-      Number(this.getAttribute("submenu-open-delay")) || 120;
-    this._submenuCloseDelay =
-      Number(this.getAttribute("submenu-close-delay")) || 200;
-    this._collisionPadding = Number(
-      this.getAttribute("collision-padding") || 12,
-    );
+    // Defaults only. Attributes are read in connectedCallback - the custom
+    // element spec does not guarantee they are present in the constructor.
+    this._variant = "menu"; // menu | mega
+    this._placement = "bottom-start";
+    this._offset = 8;
+    this._hoverOpen = false;
+    this._openDelay = 120;
+    this._closeDelay = 180;
+    this._submenuOpenDelay = 120;
+    this._submenuCloseDelay = 200;
+    this._collisionPadding = 12;
     this._openTimer = null;
     this._closeTimer = null;
     this._boundOutside = null;
@@ -42,7 +40,28 @@ export class DSAdvancedMenu extends HTMLElement {
       CSS.supports("anchor-name: --ds-advanced-menu-trigger");
   }
 
+  /**
+   * Read configuration from attributes. Called on connect rather than in the
+   * constructor, where the spec does not guarantee attributes are present.
+   */
+  _readAttributes() {
+    this._variant = this.getAttribute("variant") || "menu"; // menu | mega
+    this._placement = this.getAttribute("placement") || "bottom-start";
+    this._offset = Number(this.getAttribute("offset")) || 8;
+    this._hoverOpen = this.hasAttribute("hover-open");
+    this._openDelay = Number(this.getAttribute("open-delay")) || 120;
+    this._closeDelay = Number(this.getAttribute("close-delay")) || 180;
+    this._submenuOpenDelay =
+      Number(this.getAttribute("submenu-open-delay")) || 120;
+    this._submenuCloseDelay =
+      Number(this.getAttribute("submenu-close-delay")) || 200;
+    this._collisionPadding = Number(
+      this.getAttribute("collision-padding") || 12,
+    );
+  }
+
   connectedCallback() {
+    this._readAttributes();
     this.render();
     this._cache();
     this._wire();
@@ -595,7 +614,7 @@ export class DSAdvancedMenu extends HTMLElement {
     backBtn.type = "button";
     backBtn.role = "menuitem";
     backBtn.setAttribute("data-back", "");
-    backBtn.innerHTML = `<span class="material-symbols-outlined" style="font-size: 18px;">arrow_back</span> Back`;
+    backBtn.innerHTML = "<span class=\"material-symbols-outlined\" style=\"font-size: 18px;\">arrow_back</span> Back";
     backBtn.style.cssText = `
       display: flex;
       align-items: center;

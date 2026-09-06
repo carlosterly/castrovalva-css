@@ -416,7 +416,7 @@ export class DSNavigationBarItem extends HTMLElement {
         <div class="state-layer"></div>
         
         <div class="icon-container">
-          ${icon ? `<span class="icon" part="icon"></span>` : ""}
+          ${icon ? "<span class=\"icon\" part=\"icon\"></span>" : ""}
           ${hasBadge ? `<span class="badge" part="badge">${badge}</span>` : ""}
         </div>
         

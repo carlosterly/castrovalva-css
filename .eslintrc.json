@@ -17,7 +17,7 @@
     "wc/no-invalid-element-name": "error",
     "wc/no-self-class": "error",
     "semi": ["error", "always"],
-    "quotes": ["error", "single"],
+    "quotes": ["error", "double", { "avoidEscape": true }],
     "linebreak-style": ["error", "unix"],
     "eol-last": ["error", "always"],
     "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],

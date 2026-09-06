@@ -432,13 +432,6 @@ export class DSCombobox extends HTMLElement {
     });
   }
 
-  _removeSlotListeners() {
-    const options = this.querySelectorAll('[slot="option"]');
-    options.forEach((option) => {
-      option.removeEventListener("click", this._handleOptionClick);
-    });
-  }
-
   render() {
     const selectedLabel = this._selectedValues.size
       ? Array.from(this._selectedValues)

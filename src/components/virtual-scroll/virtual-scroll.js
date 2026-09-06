@@ -378,16 +378,18 @@ export default class DSVirtualScroll extends HTMLElement {
         e.preventDefault();
         this.focusItem(this._items.length - 1);
         break;
-      case "PageDown":
+      case "PageDown": {
         e.preventDefault();
         const pageSize = Math.floor(this._containerHeight / this._itemHeight);
         this.focusItem(Math.min(currentIdx + pageSize, this._items.length - 1));
         break;
-      case "PageUp":
+      }
+      case "PageUp": {
         e.preventDefault();
         const pageUp = Math.floor(this._containerHeight / this._itemHeight);
         this.focusItem(Math.max(currentIdx - pageUp, 0));
         break;
+      }
     }
   }
 

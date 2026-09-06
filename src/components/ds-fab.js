@@ -618,7 +618,7 @@ export class DSFab extends HTMLElement {
 
       ${
         this.speedDial
-          ? `<div class="speed-dial-actions" role="menu"></div>`
+          ? "<div class=\"speed-dial-actions\" role=\"menu\"></div>"
           : ""
       }
     `;

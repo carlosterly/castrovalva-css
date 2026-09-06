@@ -301,7 +301,7 @@ class DSCheckbox extends HTMLElement {
   }
 
   set disabled(value) {
-    if (Boolean(value)) {
+    if (value) {
       this.setAttribute("disabled", "");
     } else {
       this.removeAttribute("disabled");
@@ -313,7 +313,7 @@ class DSCheckbox extends HTMLElement {
   }
 
   set error(value) {
-    if (Boolean(value)) {
+    if (value) {
       this.setAttribute("error", "");
     } else {
       this.removeAttribute("error");
@@ -325,7 +325,7 @@ class DSCheckbox extends HTMLElement {
   }
 
   set required(value) {
-    if (Boolean(value)) {
+    if (value) {
       this.setAttribute("required", "");
     } else {
       this.removeAttribute("required");

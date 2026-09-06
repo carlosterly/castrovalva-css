@@ -50,56 +50,56 @@ const legacyCollapseBlock = ["collapse", "He", "ight"].join("");
 
 const KEYFRAMES = {
   // Fade animations
-  fadeIn: `@keyframes ds-fade-in { from { opacity: 0; } to { opacity: 1; } }`,
-  fadeOut: `@keyframes ds-fade-out { from { opacity: 1; } to { opacity: 0; } }`,
+  fadeIn: "@keyframes ds-fade-in { from { opacity: 0; } to { opacity: 1; } }",
+  fadeOut: "@keyframes ds-fade-out { from { opacity: 1; } to { opacity: 0; } }",
 
   // Slide animations (from top)
-  slideInUp: `@keyframes ds-slide-in-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }`,
-  slideOutDown: `@keyframes ds-slide-out-down { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(16px); } }`,
+  slideInUp: "@keyframes ds-slide-in-up { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }",
+  slideOutDown: "@keyframes ds-slide-out-down { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(16px); } }",
 
   // Slide animations (inline directions)
-  slideInInlineStart: `@keyframes ds-slide-in-inline-start { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }`,
-  slideOutInlineEnd: `@keyframes ds-slide-out-inline-end { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(16px); } }`,
+  slideInInlineStart: "@keyframes ds-slide-in-inline-start { from { opacity: 0; transform: translateX(-16px); } to { opacity: 1; transform: translateX(0); } }",
+  slideOutInlineEnd: "@keyframes ds-slide-out-inline-end { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(16px); } }",
 
   // Slide animations (inline directions)
-  slideInInlineEnd: `@keyframes ds-slide-in-inline-end { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }`,
-  slideOutInlineStart: `@keyframes ds-slide-out-inline-start { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-16px); } }`,
+  slideInInlineEnd: "@keyframes ds-slide-in-inline-end { from { opacity: 0; transform: translateX(16px); } to { opacity: 1; transform: translateX(0); } }",
+  slideOutInlineStart: "@keyframes ds-slide-out-inline-start { from { opacity: 1; transform: translateX(0); } to { opacity: 0; transform: translateX(-16px); } }",
 
   // Slide animations (from bottom)
-  slideInDown: `@keyframes ds-slide-in-down { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }`,
-  slideOutUp: `@keyframes ds-slide-out-up { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-16px); } }`,
+  slideInDown: "@keyframes ds-slide-in-down { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }",
+  slideOutUp: "@keyframes ds-slide-out-up { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-16px); } }",
 
   // Scale animations
-  scaleIn: `@keyframes ds-scale-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }`,
-  scaleOut: `@keyframes ds-scale-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.95); } }`,
+  scaleIn: "@keyframes ds-scale-in { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }",
+  scaleOut: "@keyframes ds-scale-out { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(0.95); } }",
 
   // Bounce animations
-  bounceIn: `@keyframes ds-bounce-in { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }`,
-  bounceOut: `@keyframes ds-bounce-out { 0% { transform: scale(1); } 25% { transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0; transform: scale(0.3); } }`,
+  bounceIn: "@keyframes ds-bounce-in { 0% { opacity: 0; transform: scale(0.3); } 50% { opacity: 1; transform: scale(1.05); } 70% { transform: scale(0.9); } 100% { transform: scale(1); } }",
+  bounceOut: "@keyframes ds-bounce-out { 0% { transform: scale(1); } 25% { transform: scale(0.9); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0; transform: scale(0.3); } }",
 
   // Flip animations
-  flipIn: `@keyframes ds-flip-in { from { opacity: 0; transform: perspective(400px) rotateY(90deg); } to { opacity: 1; transform: perspective(400px) rotateY(0deg); } }`,
-  flipOut: `@keyframes ds-flip-out { from { opacity: 1; transform: perspective(400px) rotateY(0deg); } to { opacity: 0; transform: perspective(400px) rotateY(90deg); } }`,
+  flipIn: "@keyframes ds-flip-in { from { opacity: 0; transform: perspective(400px) rotateY(90deg); } to { opacity: 1; transform: perspective(400px) rotateY(0deg); } }",
+  flipOut: "@keyframes ds-flip-out { from { opacity: 1; transform: perspective(400px) rotateY(0deg); } to { opacity: 0; transform: perspective(400px) rotateY(90deg); } }",
 
   // Rotate animations
-  rotateIn: `@keyframes ds-rotate-in { from { opacity: 0; transform: rotate(-45deg) scale(0.8); } to { opacity: 1; transform: rotate(0deg) scale(1); } }`,
-  rotateOut: `@keyframes ds-rotate-out { from { opacity: 1; transform: rotate(0deg) scale(1); } to { opacity: 0; transform: rotate(45deg) scale(0.8); } }`,
+  rotateIn: "@keyframes ds-rotate-in { from { opacity: 0; transform: rotate(-45deg) scale(0.8); } to { opacity: 1; transform: rotate(0deg) scale(1); } }",
+  rotateOut: "@keyframes ds-rotate-out { from { opacity: 1; transform: rotate(0deg) scale(1); } to { opacity: 0; transform: rotate(45deg) scale(0.8); } }",
 
   // Shake animation
-  shake: `@keyframes ds-shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); } 20%, 40%, 60%, 80% { transform: translateX(2px); } }`,
+  shake: "@keyframes ds-shake { 0%, 100% { transform: translateX(0); } 10%, 30%, 50%, 70%, 90% { transform: translateX(-2px); } 20%, 40%, 60%, 80% { transform: translateX(2px); } }",
 
   // Pulse animation
-  pulse: `@keyframes ds-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }`,
+  pulse: "@keyframes ds-pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }",
 
   // Expand/Collapse block-size animations
-  expandBlock: `@keyframes ds-expand-block { from { max-block-size: 0; opacity: 0; overflow: hidden; } to { max-block-size: 1000px; opacity: 1; overflow: hidden; } }`,
-  collapseBlock: `@keyframes ds-collapse-block { from { max-block-size: 1000px; opacity: 1; overflow: hidden; } to { max-block-size: 0; opacity: 0; overflow: hidden; } }`,
+  expandBlock: "@keyframes ds-expand-block { from { max-block-size: 0; opacity: 0; overflow: hidden; } to { max-block-size: 1000px; opacity: 1; overflow: hidden; } }",
+  collapseBlock: "@keyframes ds-collapse-block { from { max-block-size: 1000px; opacity: 1; overflow: hidden; } to { max-block-size: 0; opacity: 0; overflow: hidden; } }",
 
   // Glow animation
-  glow: `@keyframes ds-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(var(--md-sys-color-primary-rgb), 0.7); } 50% { box-shadow: 0 0 0 10px rgba(var(--md-sys-color-primary-rgb), 0); } }`,
+  glow: "@keyframes ds-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(var(--md-sys-color-primary-rgb), 0.7); } 50% { box-shadow: 0 0 0 10px rgba(var(--md-sys-color-primary-rgb), 0); } }",
 
   // Shimmer animation
-  shimmer: `@keyframes ds-shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }`,
+  shimmer: "@keyframes ds-shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }",
 };
 
 /**

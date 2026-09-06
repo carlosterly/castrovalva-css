@@ -173,7 +173,7 @@ export class DSAppBarBottom extends HTMLElement {
       </style>
 
       <footer class="app-bar" part="container" role="contentinfo" data-variant="${variant}">
-        ${hasFab ? `<div class="spacer"></div>` : ""}
+        ${hasFab ? "<div class=\"spacer\"></div>" : ""}
         <div class="fab-area" part="fab-area">
           <slot name="fab" class="fab-slot"></slot>
         </div>

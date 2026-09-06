@@ -789,7 +789,7 @@ export class DSDataTable extends HTMLElement {
                 ${col.label || col.key}
                 ${
                   this.sortable && col.sortable !== false
-                    ? `<span class="sort-icon">arrow_upward</span>`
+                    ? "<span class=\"sort-icon\">arrow_upward</span>"
                     : ""
                 }
               </th>
