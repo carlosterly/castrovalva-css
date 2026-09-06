@@ -11,6 +11,8 @@ This is a **roadmap**: direction and intent, deliberately coarse. It says where 
 
 It is not a task tracker. Current status lives in the table below, and the authoritative answer to "what exists" is the filesystem — `src/components/` and `docs/components/`. Build conventions live in [CLAUDE.md](../CLAUDE.md).
 
+**Keeping it current:** when work finishes, *delete* the row and add a clause to that quarter's "Done" line. Do not accumulate ticked or struck-through items — a roadmap that grows a completion log becomes the status tracker this project deliberately removed. Each quarter's table should only ever list work not yet done. Review at quarter boundaries, not per session.
+
 ## Context this roadmap is built on
 
 Three constraints drive every decision below. If any of them change, re-read this document from the top — most of it stops making sense.
@@ -63,15 +65,15 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 
 **At the end of this quarter:** you can put a link on a CV and nothing on it embarrasses you.
 
-| Work | Est. |
+**Done so far:** repo initialised with LF normalisation and `.editorconfig`; lint fixed (28,609 problems to 0 errors, plus two genuine bugs found on the way); documentation consolidated from 16,263 lines to 2,229; README rewritten.
+
+| Remaining | Est. |
 | --- | --- |
-| Fix `npm run lint` — currently 28,609 errors (CRLF working copy, plus a `quotes` rule the codebase has never satisfied). Decide single vs double quotes, renormalise line endings, get to zero. | 3h |
 | Add `LICENSE` (MIT, matching `package.json`). | 15m |
-| Rewrite the stale Roadmap section in `README.md` — it currently lists Card, Dialog and TextField as "next" when all three shipped months ago. Replace with a pointer to this file. | 1h |
 | GitHub Actions CI: lint + `npm test` on push. Proof the tests pass, visible as a badge. | 4h |
 | Deploy `docs/` publicly (GitHub Pages via Actions). The pattern library becomes browsable without cloning. | 6h |
 | Fix whatever the deploy exposes — broken relative paths, missing assets, dev-only `src/` imports that do not survive a static build. | 8h |
-| README rewrite: lead with the live URL and a screenshot. It is the shop window. | 4h |
+| Add the live URL and a screenshot to the README once the site is up. | 1h |
 
 **Minimum viable stop:** lint green, CI passing, site deployed. Even if nothing below this line ever happens, the project reads as finished rather than abandoned.
 
@@ -119,11 +121,12 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 
 **At the end of this quarter:** the project explains its own decisions, and is in a state you can leave alone indefinitely.
 
-| Work | Est. |
+**Done early:** documentation consolidation, completed September 2026 — nine months ahead of schedule, freeing ~10h.
+
+| Remaining | Est. |
 | --- | --- |
 | Write 3–4 short engineering notes: why vanilla web components over a framework, the Shadow DOM and theming tension and how it was resolved, the form-association pattern, what accessibility actually cost. This is the portfolio content most people skip and hiring managers actually read. | 12h |
 | Publish real numbers: bundle size, coverage, Lighthouse, browser support — measured, not claimed. | 4h |
-| ~~Documentation consolidation~~ — **done September 2026.** 58 files / 16,263 lines reduced to 3 maintained docs plus token reference and per-component stubs (2,229 lines total). | ✅ |
 | Fill component gaps only if Q2–Q3 surfaced real ones. | 10h |
 | Dependency refresh, final accessibility pass, roadmap review. | 6h |
 
@@ -138,7 +141,8 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 | **Long gaps between sessions.** The most likely failure mode at 5h/week. | Every quarter has a minimum viable stop. Nothing is left half-migrated across a gap. |
 | **Scope creep into new components.** The most tempting and least valuable work — it feels productive and moves no needle. | Listed as an explicit non-goal. Requires a visible gap on the site to justify. |
 | **The static deploy exposes hidden coupling.** Demo pages import from `src/` directly; a built deploy may not resolve those paths. | Q1 budgets 8h specifically for this. Discover it in month 1, not month 11. |
-| **Docs drift from reality.** Already happening — the README roadmap was roughly nine months stale. | Q1 fixes it; Q4 consolidates the overlapping docs that make drift likely. |
+| **Docs drift from reality.** Was already happening — the README roadmap sat nine months stale. | Largely structural now: the September 2026 consolidation removed the duplication that caused it. Three maintained docs, and component API lives in exactly one place. |
+| **A wrong demo page has nothing to catch it.** Consolidation made `docs/components/{name}.html` the sole source of API truth; there is no second copy to disagree with it. | Tests cover the behaviour the page describes. The visual regression suite in Q3 extends that to the pages themselves. |
 
 ## Revisit triggers
 
