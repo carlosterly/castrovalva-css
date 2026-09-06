@@ -1,7 +1,7 @@
 /**
  * Button Component Test Suite
  * Tests for ds-button action component
- * Following Castrovalva Design System Testing Standard (TEST_PLAN.md)
+ * Following Castrovalva Design System testing standards (CLAUDE.md)
  *
  * Component Type: Action (Button)
  * Minimum Tests: 35

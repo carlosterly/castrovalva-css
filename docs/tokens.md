@@ -557,7 +557,7 @@ This document also serves as the token naming and migration reference.
 
 If token names or families change in the future:
 
-1. Announce the change in [md3-component-plan.md](./md3-component-plan.md).
+1. Announce the change in [ROADMAP.md](./ROADMAP.md).
 2. Document the old and new token names here.
 3. Prefer additive migrations first, then remove deprecated names in a major cleanup.
 

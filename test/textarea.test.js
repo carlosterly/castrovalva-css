@@ -10,7 +10,7 @@ import "../src/components/ds-textarea.js";
 /**
  * Textarea Component Test Suite
  *
- * Focus: behavioral tests per TEST_PLAN.md
+ * Focus: behavioral tests per CLAUDE.md testing standards
  */
 
 describe("ds-textarea", () => {

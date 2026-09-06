@@ -9,7 +9,7 @@
 
 This is a **roadmap**: direction and intent, deliberately coarse. It says where the project is heading and, just as importantly, where it is not.
 
-It is not a task tracker. For current implementation status — which components exist, which phases are complete, what shipped when — see [md3-component-plan.md](./md3-component-plan.md). That file must be accurate; this one is allowed to be approximate.
+It is not a task tracker. Current status lives in the table below, and the authoritative answer to "what exists" is the filesystem — `src/components/` and `docs/components/`. Build conventions live in [CLAUDE.md](../CLAUDE.md).
 
 ## Context this roadmap is built on
 
@@ -23,7 +23,16 @@ Three constraints drive every decision below. If any of them change, re-read thi
 
 ### The honest starting position
 
-The component library is **done enough**. 43 components, 36/36 official MD3, ~1,960 tests. Adding component #44 does nothing for a portfolio.
+The component library is **done enough**. Adding component #44 does nothing for a portfolio.
+
+| Current status | |
+| --- | --- |
+| Components | 43 — 36/36 official MD3, plus enhancements (combobox, banner, responsive image) and 10 utilities |
+| Tests | 49 files, 2,060 passing, 92.19% coverage |
+| Lint | Clean — 0 errors |
+| Deployed | Not yet; see Q1 |
+
+Public component APIs are stable. Token prefixes in [tokens.md](./tokens.md) are the canonical naming scheme, and deprecations should be announced here before removal. Shadow DOM internals and undocumented details carry no stability guarantee.
 
 What does not exist yet is the thing a portfolio actually needs: **a URL someone can open.** Everything in Q1 exists to produce that URL, and everything after it exists to make what sits behind the URL worth looking at.
 
@@ -43,7 +52,7 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 - **Publishing to npm.** `package.json` stays `private: true`. No semver discipline, no changelog obligations, no consumer support burden.
 - **New components**, unless a gap is visible on the docs site itself.
 - **Developer tooling** — the component generator CLI, theme builder, and profiling tools listed as "Phase 10D" in the component plan. Invisible to portfolio viewers, expensive to build.
-- **Token pipeline work** — Style Dictionary, W3C design tokens, `md.ref`/`md.sys` layering. Already deliberately declined in [notes/md3-tokens-architecture-roadmap.md](./notes/md3-tokens-architecture-roadmap.md).
+- **Token pipeline work** — no migration to `md.ref`/`md.sys`/`md.comp` naming layers, no Style Dictionary or W3C Design Tokens pipeline, no dynamic colour generation, no multi-mode expansion. `src/tokens/tokens.css` is the source of truth and [tokens.md](./tokens.md) is the guidance. Prefer additive token changes over renames; add contrast or density modes only for a concrete product need. Revisit only if one of these becomes real: token export to multiple platforms, high-contrast or density modes, formal token governance, or token drift that CSS conventions can no longer manage.
 - **Contribution infrastructure** — issue templates, RFC process, governance. There are no contributors and none are being sought.
 
 ---
@@ -114,7 +123,7 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 | --- | --- |
 | Write 3–4 short engineering notes: why vanilla web components over a framework, the Shadow DOM and theming tension and how it was resolved, the form-association pattern, what accessibility actually cost. This is the portfolio content most people skip and hiring managers actually read. | 12h |
 | Publish real numbers: bundle size, coverage, Lighthouse, browser support — measured, not claimed. | 4h |
-| Documentation consolidation. `README`, `GETTING-STARTED`, `DEPLOYMENT`, `TEST_PLAN`, `docs/README` and `CLAUDE.md` overlap heavily and drift apart. Reduce to one clear entry point per audience. | 10h |
+| ~~Documentation consolidation~~ — **done September 2026.** 58 files / 16,263 lines reduced to 3 maintained docs plus token reference and per-component stubs (2,229 lines total). | ✅ |
 | Fill component gaps only if Q2–Q3 surfaced real ones. | 10h |
 | Dependency refresh, final accessibility pass, roadmap review. | 6h |
 

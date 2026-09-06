@@ -1,66 +1,72 @@
-# CLAUDE.md - Castrovalva Design System
+# CLAUDE.md — Castrovalva Design System
 
-## 🚨 CRITICAL: Read Documentation FIRST
+Conventions for building and documenting components in this repo. This is the
+single source of truth for how things are done here.
 
-**Before building ANY component, you MUST read these files in order:**
+- **What exists and where it's going:** [docs/ROADMAP.md](docs/ROADMAP.md)
+- **Token reference:** [docs/tokens.md](docs/tokens.md), [docs/motion.md](docs/motion.md), [docs/state-layers.md](docs/state-layers.md)
+- **Live component docs:** `docs/components/{name}.html`
 
-1. **[docs/DOCUMENTATION_STANDARD.md](docs/DOCUMENTATION_STANDARD.md)** - Complete documentation standard v1.1 (READ THIS FIRST)
-   - HTML structure requirements (`page-container`, `content-area`, `demo-box`, `code-block`)
-   - Required sections: Title, Variants, States, API, Accessibility
-   - CSS attachment rules (use `../../src/styles.css` for dev builds)
-   - Theme init script placement (before module scripts)
-2. **[docs/md3-component-plan.md](docs/md3-component-plan.md)** - Implementation status and architecture
-   - Current status: 40 components complete (36 MD3 official + 2 enhancements + 5 utilities + text wrapper)
-   - Phase completion tracking
-   - Component architecture patterns
-   - Testing and quality standards
+## What this project is
 
-## Quick Reference Summary
+Vanilla Web Components implementing Material Design 3. Zero runtime
+dependencies, Shadow DOM, MD3 design tokens. Built with Vite, tested with
+`@web/test-runner` + Playwright.
 
-### Component Status (January 2026)
+43 components (36/36 official MD3 plus enhancements and utilities), ~2,060
+tests, ~92% coverage. The library is feature-complete; see the roadmap before
+proposing new components.
 
-- ✅ **36/36 Official MD3 Components** - 100% complete
-- ✅ **All 9 Implementation Phases** - Complete
-- ✨ **Enhancements:** Combobox, Banner, Responsive Image (92.21% coverage)
-- 🔧 **Utilities:** Focus ring, Data table, Form, Elevation, Text wrapper, Animation Presets (31 presets)
-- 📊 **Test Coverage:** 91%+ with 1,960+ unit tests across 19+ test suites
-- 🎨 **Theme System:** All 52 demo pages with light/dark mode support
+---
 
-## Non-Negotiable Requirements
+## Component deliverables
 
-### Component Deliverables (All 4 Required)
+Three required artefacts per component:
 
-1. ✅ **Component JS** - `src/components/{name}/{name}.js`
-2. ✅ **Unit Tests** - `test/{name}.test.js` (40+ test cases minimum)
-3. ✅ **HTML Docs** - `docs/components/{name}.html`
-4. ✅ **README** - `src/components/{name}/README.md`
+1. **Component JS** — `src/components/{name}/{name}.js`
+2. **Unit tests** — `test/{name}.test.js` (40+ cases)
+3. **Demo page** — `docs/components/{name}.html`
 
-### Critical Items Often Forgotten
+Plus a **stub README** at `src/components/{name}/README.md`: one line of
+description and a link to the demo page. Full API documentation lives on the
+demo page only — never maintain it in two places.
 
-#### ❌ Most Common Mistakes:
+### Also update when adding or changing a component
 
-1. **Missing `<script src="../shared/theme-init.js"></script>`** in HTML docs (MUST be before closing body tag)
-   - Symptom: Black background / theme not loading
-2. **Duplicate theme-init.js scripts** - Only include once
-   - Symptom: "Identifier 'themeBtns' has already been declared" error
-3. **HTML entities in JavaScript** - Use `&&` not `&amp;&amp;`, `<` not `&lt;`, `>` not `&gt;` inside `<script>` tags
-   - Symptom: "Unexpected token ';'" or syntax errors
-4. **Redundant imports** - Don't `import "../../src/index.js"` inside inline scripts (already loaded in head)
-5. **HTML entities in tags** - `<h1>Title</h1>` NOT `<h1&gt;Title</h1>`
-   - Symptom: "Unable to parse HTML" errors
-6. **Wrong `data-page` attribute** - Use component name, NOT "playground"
-7. **Lowercase DOCTYPE** - Use `<!DOCTYPE html>` NOT `<!doctype html>`
-8. **Self-closing void elements** - Use `<meta>` NOT `<meta />`
-9. **Wrong import paths** from `docs/components/`:
-   - CSS: `../../src/styles.css`
-   - Pattern CSS: `../shared/pattern-library.css`
-   - Theme script: `../shared/theme-init.js`
-   - Component import: `../../src/index.js`
-10. **Forgetting to register** in `src/index.js` (both export AND import)
-11. **Forgetting to add** component card to `sandbox-v2/index.html`
-12. **Forgetting to update** `docs/md3-component-plan.md` completion status
+- Register the import **and** export in `src/index.js`
+- Add a component card to `index.html`
+- Run `npm test test/{name}.test.js`
 
-#### ✅ HTML Documentation Template:
+---
+
+## Demo page rules
+
+### The mistakes that actually happen
+
+1. **Missing `<script src="../shared/theme-init.js"></script>`** before `</body>`
+   → symptom: black background, theme never loads
+2. **Duplicate theme-init scripts** — include it exactly once
+   → symptom: `Identifier 'themeBtns' has already been declared`
+3. **HTML entities inside `<script>`** — write `&&`, `<`, `>`, never `&amp;&amp;`
+   → symptom: `Unexpected token ';'`
+4. **HTML entities in tags** — `<h1>Title</h1>`, never `<h1&gt;Title</h1>`
+   → symptom: `Unable to parse HTML`
+5. **Redundant imports** — no `import` statements in inline demo scripts; the
+   module is already loaded in `<head>`
+6. **Wrong `data-page`** — use the component name, never `"playground"`
+7. **Lowercase doctype** — `<!DOCTYPE html>`, not `<!doctype html>`
+8. **Self-closing void elements** — `<meta>`, not `<meta />`
+
+### Paths from `docs/components/`
+
+| Target | Path |
+| --- | --- |
+| Component CSS | `../../src/styles.css` |
+| Pattern library CSS | `../shared/pattern-library.css` |
+| Theme script | `../shared/theme-init.js` |
+| Component import | `../../src/index.js` |
+
+### Template
 
 ```html
 <!DOCTYPE html>
@@ -80,14 +86,11 @@
     <script type="module" src="../../src/index.js"></script>
   </head>
   <body data-page="{component-name}">
-    <!-- CRITICAL: Use component name, NOT "playground" -->
-
     <div class="page-container">
       <div class="content-area">
         <h1>{Component Name}</h1>
         <p class="description">Component description here.</p>
 
-        <!-- Demo sections -->
         <div class="section">
           <h2>Basic Usage</h2>
           <div class="demo-box">
@@ -97,61 +100,90 @@
       </div>
     </div>
 
-    <!-- Page-specific JavaScript (NO import statements) -->
+    <!-- Page-specific JS. No import statements. -->
     <script type="module">
-      // Interactive demo code - components already loaded
       const button = document.querySelector("ds-button");
       button.addEventListener("click", () => {
         console.log("clicked");
       });
     </script>
 
-    <!-- CRITICAL: Theme init at end, only once -->
+    <!-- Theme init: at the end, exactly once -->
     <script src="../shared/theme-init.js"></script>
   </body>
 </html>
 ```
 
-**CRITICAL RULES:**
+### Required sections, in order
 
-- ✅ `<!DOCTYPE html>` - uppercase
-- ✅ No self-closing slashes on `<meta>`, `<link>`
-- ✅ Module script in `<head>`
-- ✅ Theme script before `</body>`, only ONCE
-- ✅ NO `import` statements in inline scripts
-- ✅ Use `&&` not `&amp;&amp;` in JavaScript
-- ✅ Use `<h1>Title</h1>` not `<h1&gt;Title</h1>`
+1. **Title + description** — what it is, when to reach for it
+2. **Basic usage** — the minimal working example
+3. **Variants** — the visual/behavioural options
+4. **States** — disabled, required, error, loading
+5. **API** — tables for attributes, events, slots, CSS parts, CSS custom properties
+6. **Accessibility** — keyboard map and screen-reader behaviour
+7. **Usage guidelines** — when to use, when not to
 
-#### Required HTML Sections (in order)
+Optional where they earn their place: Anatomy, Behaviour model, Related
+components, Known limitations.
 
-1. **Header** - Component name and subtitle
-2. **Basic Usage** - Simple default example
-3. **Initial Value** - With pre-populated data
-4. **Variants/Formats** - Different display options
-5. **States** - Disabled, required, error states
-6. **Interactive Example** - With event output logging
-7. **API Reference** - Tables for attributes, events, CSS parts, methods
-8. **Accessibility** - Keyboard support and screen reader info
-9. **Usage Guidelines** - When to use, best practices
+### CSS classes available
 
-### CSS Class Standards
+`page-container` (outer wrapper) · `content-area` (main content) · `section`
+(major section) · `demo-box` (component example) · `code-block` (code snippet)
+· `api-table` (API tables)
 
-- Use `page-container` for outer wrapper
-- Use `content-area` for main content
-- Use `section` for major sections
-- Use `demo-box` for component examples
-- Use `code-block` for code snippets
-- Use `api-table` for API documentation tables
+### Example quality bar
 
-### Sizing System Quick-Start
+Every page needs at least: one minimal baseline example, one realistic
+production-like example, and one interactive example with observable output.
 
-- Global size tokens live in `src/tokens/tokens.css`:
-  - `--ds-size-icon-sm|md|lg`
-  - `--ds-size-control-sm|md|lg`
-  - `--ds-size-hit-area`
-- Component size props should default to the global tokens and only diverge if the spec requires it.
+Use meaningful labels and realistic data. Avoid placeholder prose — "Lorem
+ipsum" and `<ds-button>Button</ds-button>` teach nothing.
 
-**Size attribute convention (when supported):**
+### Emphasis by component category
+
+| Category | Must emphasise |
+| --- | --- |
+| **Action** (button, fab, split-button) | Action hierarchy and emphasis; disabled/loading semantics and event behaviour |
+| **Input & selection** (text-field, combobox, checkbox, radio, switch, slider) | Validation lifecycle; value model and event timing; keyboard detail |
+| **Navigation** (tabs, nav bar/rail/drawer) | Selection model; orientation and responsive behaviour; focus order and roving tabindex |
+| **Container & overlay** (card, dialog, sheets, menu) | Open/close behaviour; focus management and dismissal; scrim interaction |
+| **Utility** (focus-ring, scrollbar, elevation, animation-presets, drag-drop) | Integration contract with host elements; side effects and init requirements; performance and a11y implications |
+
+---
+
+## Component implementation standards
+
+### Web component pattern
+
+- Shadow DOM, `mode: "open"`
+- **Never read attributes in the constructor** — the spec does not guarantee
+  they are present. Set defaults there; read attributes in `connectedCallback`.
+- Declare `observedAttributes` for anything that must react to change, and
+  handle it in `attributeChangedCallback`
+- Never mutate classes on `this` — the host's class list belongs to the consumer
+
+### Event naming
+
+- Custom events: `ds-{component}:{action}` — e.g. `ds-button:click`,
+  `ds-dialog:open`, `ds-date-picker:change`
+- Always `bubbles: true` and `composed: true` so they escape the shadow boundary
+- Put the useful payload in `detail`
+
+### Form-associated components (inputs and selection)
+
+- `static formAssociated = true`
+- Update internals on state change: `this._internals?.setFormValue(...)`
+- Emit `ds-{component}:change` with `{ value, checked, indeterminate }` as applicable
+
+### Sizing
+
+Global size tokens live in `src/tokens/tokens.css`:
+`--ds-size-icon-sm|md|lg`, `--ds-size-control-sm|md|lg`, `--ds-size-hit-area`.
+
+Component sizes default to the global tokens and diverge only where the MD3
+spec requires it.
 
 ```html
 <ds-component size="sm"></ds-component>
@@ -159,18 +191,16 @@
 <ds-component size="lg"></ds-component>
 ```
 
-**Default mapping pattern:**
-
 ```css
 --ds-component-icon-size: var(--ds-size-icon-md);
 --ds-component-control-size: var(--ds-size-control-md);
 --ds-component-hit-area-size: var(--ds-size-hit-area);
 ```
 
-### Focus Ring Convention
+### Focus ring
 
-- Use global focus ring tokens: `--ds-focus-ring-color|width|offset|radius`.
-- Avoid double outlines by removing default `:focus-visible` outlines when using a custom ring.
+Use the global tokens — `--ds-focus-ring-color|width|offset|radius` — and
+remove the default outline to avoid doubling up.
 
 ```css
 :host(:focus-visible) {
@@ -190,56 +220,38 @@
 }
 ```
 
-### Form-Associated Pattern (Inputs + Selection)
+### MD3 compliance
 
-- Use `static formAssociated = true`.
-- Update internals on state changes: `this._internals?.setFormValue(...)`.
-- Emit `ds-{component}:change` with `{ value, checked, indeterminate }` as applicable.
+Use MD3 design tokens (`--md-sys-color-*`, `--md-sys-shape-*`, …). Follow MD3
+motion durations and easing. Implement the elevation system. Support light,
+dark and dynamic colour schemes. Match the component specifications.
 
-### Test Coverage Quick Checklist
+### Accessibility
 
-- **Attributes/Properties:** defaults, coercion, invalid values, reflection
-- **Events:** custom + native, detail accuracy, bubbling
-- **Keyboard:** Space/Enter/Arrow behavior as applicable
-- **Focus:** focusable + focus-visible behavior
-- **State:** disabled, error, required, indeterminate/selected
-- **Integration:** form value + change propagation
+Semantic HTML. Correct ARIA roles and labels. Full keyboard navigation (Tab,
+Enter, Space, Escape, arrows). Managed focus with a visible indicator. Screen
+reader announcements. WCAG 2.1 AA contrast minimum. Disabled state genuinely
+prevents interaction.
 
-### Docs Snippets (copy/paste)
+---
 
-**Sizes section:**
+## Testing standards
 
-```html
-<h3>Sizes</h3>
-<p>Use size to align with layout density.</p>
-<div class="demo-box">
-  <ds-component size="sm"></ds-component>
-  <ds-component size="md"></ds-component>
-  <ds-component size="lg"></ds-component>
-</div>
+### Running tests
+
+```bash
+npm test test/button.test.js   # one component, Chromium only - the dev loop
+npm test                       # all tests, Chromium only
+npm run test:all               # all tests, Chromium + Firefox + WebKit
+npm run test:a11y              # axe accessibility pass
+npm run lint                   # ESLint - must exit 0
 ```
 
-**Accessibility bullets:**
+`web-test-runner.config.js` is the default (Chromium, honours CLI file
+arguments). `web-test-runner.full.config.js` runs all three browsers for
+pre-release regression.
 
-```html
-<ul>
-  <li>Keyboard accessible with Space key.</li>
-  <li>Exposes proper ARIA roles and state attributes.</li>
-  <li>Visible focus indicator for keyboard users.</li>
-</ul>
-```
-
-### Common Updates When Adding/Changing Components
-
-- Register import/export in `src/index.js`
-- Add component card in `index.html`
-- Update `docs/md3-component-plan.md`
-- Add tests + docs + README
-- Run `npm test test/{component}.test.js`
-
-### Testing Standards
-
-#### Test Structure
+### Structure
 
 ```javascript
 import { fixture, html, expect, oneEvent } from "@open-wc/testing";
@@ -253,78 +265,64 @@ describe("DSComponentName", () => {
     });
   });
 
-  // More test suites: Value Management, Events, States, Accessibility, etc.
+  // Then: Attributes & Properties, Methods, Events, Slots, Interactions,
+  // Keyboard, Focus, State, ARIA, Disabled, Validation, Edge cases
 });
 ```
 
-#### Test Workflow
+### What to test
 
-**Fast Component-Focused Testing (Development):**
+✅ Behaviour and user interactions · attribute binding and property changes ·
+event emission and `detail` accuracy · ARIA attributes · keyboard navigation ·
+focus management · state persistence · edge and error cases · integration with
+other components
 
-```bash
-npm test test/combobox.test.js      # Single component, Chromium only
-npm test test/button.test.js        # Single component, Chromium only
-npm test                            # All tests, Chromium only
-```
+❌ Browser APIs · third-party libraries · trivial getters and one-liners ·
+CSS and styling (use visual regression) · 100% coverage for its own sake
 
-**Full Multi-Browser Regression (CI/Pre-Release):**
+### Coverage
 
-```bash
-npm run test:all                    # All tests, all browsers (Chromium, Firefox, Webkit)
-```
+Minimums: 85% statement, 80% branch, 85% function, 85% line.
 
-**Configuration:**
+| Component type | Statement | Branch | Function |
+| --- | --- | --- | --- |
+| Action (button, fab) | 90% | 85% | 90% |
+| Selection (checkbox, radio) | 88% | 82% | 88% |
+| Input (text-field, select) | 85% | 78% | 85% |
+| Display (card, chip) | 82% | 75% | 82% |
+| Navigation (tabs, drawer) | 88% | 85% | 88% |
+| Container (dialog, sheet) | 85% | 80% | 85% |
 
-- Default config: `web-test-runner.config.js` - Single browser (Chromium), honors CLI file arguments
-- Full config: `web-test-runner.full.config.js` - All 3 browsers for comprehensive cross-browser validation
-- CLI file arguments are automatically honored for isolated component testing
+### Keyboard behaviour to verify
 
-### HTML Validation & Common Corruption Issues
+| Key | Expected |
+| --- | --- |
+| `Enter` / `Space` | Trigger the action |
+| `Tab` / `Shift+Tab` | Move to next/previous focusable element |
+| `Escape` | Close menu or modal, where applicable |
+| `↑ ↓ ← →` | Navigate within lists and grids |
+| `Home` / `End` | First / last item |
 
-#### JavaScript in HTML - NEVER Use HTML Entities
+### Practices
 
-**WRONG:**
+Name tests by behaviour, not implementation. Isolate — no shared mutable state
+between tests. Use `beforeEach` for repeated setup and `fixture` for complex
+HTML. Await updates rather than using arbitrary timeouts. Comment *why* a test
+exists when it is guarding a specific bug, not *what* it does.
 
-```html
-<script type="module">
-  if (element &amp;&amp; button) {  // ❌ Causes syntax error
-    console.log('test');
-  }
-</script>
-```
+---
 
-**CORRECT:**
+## Writing style for docs
 
-```html
-<script type="module">
-  if (element && button) {
-    // ✅ Use actual operators
-    console.log("test");
-  }
-</script>
-```
+Second person, present tense, active voice. Describe what the component does,
+not what it "will" do. Attribute descriptions state the effect and the default.
+Avoid marketing language — no "powerful", "seamless", "beautiful".
 
-**Rule:** Inside `<script>` and `<style>` tags, use actual characters (`&&`, `<`, `>`). HTML entities are ONLY for HTML content areas.
+---
 
-#### HTML Tag Corruption
+## HTML corruption recovery
 
-**WRONG:**
-
-```html
-<h1&gt;Title</h1>
-<div&gt;Content</div>
-<button&gt;Click</button&gt;
-```
-
-**CORRECT:**
-
-```html
-<h1>Title</h1>
-<div>Content</div>
-<button>Click</button>
-```
-
-**Fix Command (if corruption occurs):**
+If HTML entities leak into tags or scripts across the demo pages:
 
 ```powershell
 cd "c:\Work\Sites\castrovalva-css\docs\components"
@@ -332,114 +330,32 @@ cd "c:\Work\Sites\castrovalva-css\docs\components"
 (Get-ChildItem *.html).ForEach({(Get-Content $_.FullName) -replace '&amp;&amp;', '&&' | Set-Content $_.FullName})
 ```
 
-### Theme System Requirements
+---
 
-All demo pages MUST have:
+## Reference implementations
 
-1. **Module script in head:**
+When the pattern is unclear, copy the structure from:
 
-   ```html
-   <script type="module" src="../../src/index.js"></script>
-   ```
+- [docs/components/split-button.html](docs/components/split-button.html)
+- [docs/components/date-picker.html](docs/components/date-picker.html)
+- [docs/components/time-picker.html](docs/components/time-picker.html)
 
-2. **Theme script before closing body (only once):**
+## Before calling a component done
 
-   ```html
-   <script src="../shared/theme-init.js"></script>
-   </body>
-   ```
-
-3. **Proper data-page attribute:**
-   ```html
-   <body data-page="button">
-     <!-- Component name -->
-   </body>
-   ```
-
-**Symptoms of missing theme-init.js:**
-
-- Black/dark background on page load
-- Theme doesn't switch between light/dark
-- No theme persistence
-
-### Material Design 3 Compliance
-
-All components MUST:
-
-- Use MD3 design tokens (`--md-sys-color-*`, `--md-sys-shape-*`, etc.)
-- Follow MD3 motion (durations, easing functions)
-- Implement MD3 elevation system
-- Support MD3 color schemes (light/dark/dynamic)
-- Match MD3 component specifications
-
-### Accessibility Requirements
-
-- Semantic HTML elements
-- Proper ARIA labels and roles
-- Keyboard navigation (Tab, Enter, Space, Escape, Arrow keys)
-- Focus management and visible focus indicators
-- Screen reader announcements
-- Color contrast compliance (WCAG AA minimum)
-- Disabled state prevents interaction
-
-### Event Naming Convention
-
-- Custom events: `ds-{component-name}:{action}`
-- Examples: `ds-button:click`, `ds-dialog:open`, `ds-date-picker:change`
-- Always set `bubbles: true` and `composed: true`
-- Include relevant data in `detail` object
-
-### File Path Conventions
-
-From `docs/components/` to:
-
-- CSS: `../../dist/css/index.css` or `../../css/app.css`
-- Pattern Library CSS: `../shared/pattern-library.css`
-- Theme Script: `../shared/theme-init.js`
-- Component Import: `../../src/index.js`
-
-### Quality Checklist (Before Completion)
-
-- [ ] Read DOCUMENTATION_STANDARD.md
-- [ ] Component JavaScript complete with JSDoc
-- [ ] Unit tests with 40+ cases
-- [ ] HTML docs with theme-init.js script
-- [ ] HTML docs with `data-page="{component-name}"` (NOT "playground")
-- [ ] README.md with complete API docs
-- [ ] Registered in src/index.js
-- [ ] Added to index.html home page
-- [ ] Component plan updated
-- [ ] No console errors in browser
-- [ ] Tests pass (`npm test`)
+- [ ] Component JS complete, with JSDoc
+- [ ] 40+ test cases, `npm test test/{name}.test.js` passes
+- [ ] Demo page with theme-init script and correct `data-page`
+- [ ] Stub README linking to the demo page
+- [ ] Registered in `src/index.js` (import **and** export)
+- [ ] Card added to `index.html`
+- [ ] `npm run lint` exits 0
+- [ ] No console errors in the browser
 - [ ] Responsive on mobile
 - [ ] Works in light and dark themes
 - [ ] Keyboard accessible
 
-## Reference Existing Components
+## File organisation
 
-**When in doubt, copy the structure from:**
-
-- ✅ [docs/components/split-button.html](docs/components/split-button.html)
-- ✅ [docs/components/date-picker.html](docs/components/date-picker.html)
-- ✅ [docs/components/time-picker.html](docs/components/time-picker.html)
-
-These follow the correct patterns.
-
-### File Organization
-
-**Test Files:**
-
-- ✅ Unit tests: `test/{component}.test.js`
-- ❌ NO test HTML files in root directory (e.g., `test-bottom-sheet.html`)
-- ✅ Use proper `test/` directory structure
-- ✅ Demo pages belong in `docs/components/`
-
-**Demo Pages:**
-
-- Location: `docs/components/{component}.html`
-- All 52+ demo pages must include theme-init.js
-- Validated and error-free HTML
-
-## Key Principle
-
-**Don't duplicate documentation** - this file is a lightweight enforcer that points to the authoritative docs (DOCUMENTATION_STANDARD.md and md3-component-plan.md).
+- Unit tests: `test/{component}.test.js` — never test HTML files in the repo root
+- Demo pages: `docs/components/{component}.html`
+- Component source: `src/components/{name}/{name}.js`
