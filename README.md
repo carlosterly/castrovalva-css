@@ -1,5 +1,7 @@
 # Castrovalva Design System
 
+[![CI](https://github.com/carlosterly/castrovalva-css/actions/workflows/ci.yml/badge.svg)](https://github.com/carlosterly/castrovalva-css/actions/workflows/ci.yml)
+
 Material Design 3 implemented as vanilla Web Components. Zero runtime
 dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 
