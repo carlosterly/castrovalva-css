@@ -65,16 +65,17 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 
 **At the end of this quarter:** you can put a link on a CV and nothing on it embarrasses you.
 
-**Done so far:** repo initialised with LF normalisation and `.editorconfig`; lint fixed (28,609 problems to 0 errors, plus two genuine bugs found on the way); documentation consolidated from 16,263 lines to 2,229; README rewritten.
+**Done so far:** repo initialised with LF normalisation and `.editorconfig`; lint fixed (28,609 problems to 0 errors, plus two genuine bugs found on the way); documentation consolidated from 16,263 lines to 2,229; README rewritten; `LICENSE` added; GitHub Actions CI (lint + `npm test` on push and PR) green, badge in README.
 
 | Remaining | Est. |
 | --- | --- |
-| Add `LICENSE` (MIT, matching `package.json`). | 15m |
-| GitHub Actions CI: lint + `npm test` on push. Proof the tests pass, visible as a badge. | 4h |
-| Deploy `docs/` publicly (GitHub Pages via Actions). The pattern library becomes browsable without cloning. | 6h |
-| Fix whatever the deploy exposes — broken relative paths, missing assets, dev-only `src/` imports that do not survive a static build. | 8h |
+| **Deploy to GitHub Pages, serve-as-is.** No build step — the source uses only plain relative ES-module imports and runs natively in the browser. A workflow stages `index.html` + `src/` + `docs/` + the root docs and publishes via `actions/*-pages`. | 3h |
+| Fix absolute asset paths that 404 on a project Pages URL — four in `index.html` (`/src/…`, `/docs/shared/…`), eight in `docs/components/shared-nav.html`. Every other demo page already uses relative paths. | 1h |
+| Post-deploy fixes — whatever the live static host exposes that the Vite dev server hid. Budgeted blind; adjust once the site is up. | 4h |
 | Add the live URL and a screenshot to the README once the site is up. | 1h |
 | **Component QA triage.** Sweep all 43 demo pages at two viewports in both themes. Fix nothing — log everything to [DEFECTS.md](./DEFECTS.md). The output is not a fix list, it is the *size* of the problem, which is currently unknown and which Q2–Q3 cannot be planned honestly without. | 5h |
+
+**Decision — serve-as-is, not a Vite build.** Fastest route to a live URL, which is the quarter's whole point. The trade-offs it accepts, all deferred to Q2's site-polish work: the published site is the source tree rather than an optimised bundle; the six raw `.md` links in the home-page "Documentation & Tools" section render as plain text on Pages (logged in [DEFECTS.md](./DEFECTS.md)); no minification, bundling or cache-busting. Revisit if the unbundled module graph loads too slowly to demo well.
 
 **Minimum viable stop:** lint green, CI passing, site deployed. Even if nothing below this line ever happens, the project reads as finished rather than abandoned.
 

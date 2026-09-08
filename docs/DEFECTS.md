@@ -39,7 +39,11 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ## Open defects
 
-_Nothing logged yet. The Q1 triage sweep populates this._
+### home page (index.html)
+
+- **B** — The six links in the "Documentation & Tools" section point at raw `.md` files (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`). On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is Q2 site work.
+
+_The Q1 triage sweep populates the rest._
 
 ---
 
