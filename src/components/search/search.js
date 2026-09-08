@@ -407,13 +407,11 @@ export class DSSearch extends HTMLElement {
     const variant = this.variant;
     const placeholder = this.placeholder;
     const value = this.getAttribute("value") || "";
-    const isActive = this.active;
     const isDisabled = this.disabled;
     const showClear = value.length > 0;
     const hasSuggestions = this._filteredSuggestions.length > 0;
 
     const isFullScreen = variant === "full-screen";
-    const isView = variant === "view";
 
     this.shadowRoot.innerHTML = `
       <style>

@@ -161,5 +161,3 @@ registerComponents();
 
 // Initialize focus rings for any elements marked in the page
 initFocusRings();
-
-console.log("Design System loaded");

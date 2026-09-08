@@ -99,7 +99,7 @@ class DSNavigationDrawer extends HTMLElement {
     document.removeEventListener("keydown", this._handleKeyDown);
   }
 
-  handleScrimClick(event) {
+  handleScrimClick(_event) {
     if (this.variant === "modal" && this.open) {
       this.close();
     }

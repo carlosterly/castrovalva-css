@@ -212,7 +212,7 @@ export class DSSideSheet extends HTMLElement {
       }
     };
 
-    this._handleTouchEnd = (e) => {
+    this._handleTouchEnd = (_e) => {
       if (!this._isScrubbbing) return;
       this._isScrubbbing = false;
 
@@ -328,9 +328,7 @@ export class DSSideSheet extends HTMLElement {
   }
 
   render() {
-    const isModal = this._variant === "modal";
     const isLeft = this._position === "left";
-    const isSwipeable = this._swipeable && !isModal;
 
     this.shadowRoot.innerHTML = `
       <style>

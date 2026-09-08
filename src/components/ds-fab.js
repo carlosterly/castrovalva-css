@@ -323,7 +323,6 @@ export class DSFab extends HTMLElement {
     const lowered = this.lowered;
     const disabled = this.disabled;
     const label = this.label;
-    const position = this.position;
     const isExtended = size === "extended";
 
     // Get container dimensions based on size

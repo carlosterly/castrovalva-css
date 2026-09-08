@@ -119,7 +119,7 @@ export class DSListItem extends HTMLElement {
   }
 
   setupEventListeners() {
-    this.addEventListener("click", (e) => {
+    this.addEventListener("click", (_e) => {
       if (!this.disabled) {
         this.dispatchEvent(
           new CustomEvent("ds-list-item:click", {
@@ -254,7 +254,6 @@ export class DSListItem extends HTMLElement {
     const headline = this.headline || "";
     const supportingText = this.supportingText || "";
     const trailingText = this.trailingText || "";
-    const isSelected = this.selected;
     const isDisabled = this.disabled;
 
     let contentClass = "one-line-content";

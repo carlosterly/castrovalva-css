@@ -126,8 +126,6 @@ export class DSDivider extends HTMLElement {
   }
 
   render() {
-    const variant = this.variant;
-    const orientation = this.orientation;
     const customColor = this.color;
     const customThickness = this.thickness;
 

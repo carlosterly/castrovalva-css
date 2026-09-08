@@ -358,7 +358,6 @@ class DSButtonGroup extends HTMLElement {
   }
 
   render() {
-    const isConnected = this.variant === "connected";
     const isSegmented = this.variant === "segmented";
     const isVertical = this.orientation === "vertical";
 

@@ -189,7 +189,6 @@ export class DSSwitch extends HTMLElement {
 
   render() {
     const checked = this.checked;
-    const disabled = this.disabled;
     const showIcons = this.showIcons;
 
     this.shadowRoot.innerHTML = `

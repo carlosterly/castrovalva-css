@@ -654,7 +654,7 @@ export class DSAdvancedMenu extends HTMLElement {
     if (breadcrumbEl) {
       if (breadcrumb && breadcrumb.length > 0) {
         breadcrumbEl.innerHTML = breadcrumb
-          .map((item, idx) => `<span class="breadcrumb-item">${item}</span>`)
+          .map((item) => `<span class="breadcrumb-item">${item}</span>`)
           .join('<span class="breadcrumb-sep"> / </span>');
         breadcrumbEl.style.display = "block";
       } else {

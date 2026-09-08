@@ -192,9 +192,6 @@ export class DSTextarea extends HTMLElement {
     const error = this._error;
     const showCounter = this._maxlength !== null;
 
-    const isFilled = variant === "filled";
-    const isOutlined = variant === "outlined";
-
     this.shadowRoot.innerHTML = `
       <style>
         :host {

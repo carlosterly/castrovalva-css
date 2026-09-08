@@ -499,8 +499,6 @@ export class DSMenuItem extends HTMLElement {
 
   render() {
     const disabled = this.hasAttribute("disabled");
-    const selected = this.hasAttribute("selected");
-    const focused = this.hasAttribute("focused");
     const divider = this.hasAttribute("divider");
 
     if (divider) {

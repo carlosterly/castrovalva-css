@@ -835,7 +835,7 @@ function endTouchDrag(e, element, config) {
   resetDragState();
 }
 
-function checkTouchDropZones(touch, element, config) {
+function checkTouchDropZones(touch, element, _config) {
   element.style.display = "none";
   const targetElement = document.elementFromPoint(touch.clientX, touch.clientY);
   element.style.display = "";
@@ -904,7 +904,7 @@ function handleSortableOver(e, dropZone, config) {
   }
 }
 
-function handleSortableDrop(draggable, dropZone, config) {
+function handleSortableDrop(draggable, dropZone, _config) {
   if (dragState.placeholder) {
     // Insert draggable at placeholder position
     dropZone.insertBefore(draggable, dragState.placeholder);

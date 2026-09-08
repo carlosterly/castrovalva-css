@@ -278,10 +278,6 @@ export class DSRadio extends HTMLElement {
   }
 
   render() {
-    const checked = this.checked;
-    const disabled = this.disabled;
-    const error = this.error;
-
     this.shadowRoot.innerHTML = `
       <style>
         :host {

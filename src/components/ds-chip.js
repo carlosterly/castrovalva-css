@@ -199,8 +199,6 @@ export class DSChip extends HTMLElement {
     const avatar = this.getAttribute("avatar") || "";
     const variant = this._variant;
     const selected = this._selected;
-    const disabled = this._disabled;
-    const elevated = this._elevated;
 
     const showLeadingIcon =
       (variant === "filter" && selected) || icon || avatar;

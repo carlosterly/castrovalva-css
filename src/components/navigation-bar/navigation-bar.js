@@ -225,7 +225,7 @@ export class DSNavigationBarItem extends HTMLElement {
     this.removeEventListener("click", this._boundHandleClick);
   }
 
-  handleClick(e) {
+  handleClick(_e) {
     if (this.disabled) return;
 
     // Set active on this item FIRST

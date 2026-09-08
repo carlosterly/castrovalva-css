@@ -311,7 +311,7 @@ export class DSCombobox extends HTMLElement {
     const filteredOptions = this._getFilteredOptions();
     const allOptions = Array.from(this.querySelectorAll('[slot="option"]'));
 
-    allOptions.forEach((option, index) => {
+    allOptions.forEach((option, _index) => {
       const value = option.getAttribute("data-value") || option.textContent;
       const isSelected = this._selectedValues.has(value);
       const filteredIndex = filteredOptions.indexOf(option);
