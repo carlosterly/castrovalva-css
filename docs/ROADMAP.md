@@ -30,13 +30,13 @@ The component library is **done enough**. Adding component #44 does nothing for 
 | Current status | |
 | --- | --- |
 | Components | 43 — 36/36 official MD3, plus enhancements (combobox, banner, responsive image) and 10 utilities |
-| Tests | 49 files, 2,060 passing, 92.19% coverage |
-| Lint | Clean — 0 errors |
-| Deployed | Not yet; see Q1 |
+| Tests | 49 files, 2,060 passing, ~92% coverage |
+| Lint | Clean — 0 errors, 0 warnings |
+| Deployed | Live — [carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/) |
 
 Public component APIs are stable. Token prefixes in [tokens.md](./tokens.md) are the canonical naming scheme, and deprecations should be announced here before removal. Shadow DOM internals and undocumented details carry no stability guarantee.
 
-What does not exist yet is the thing a portfolio actually needs: **a URL someone can open.** Everything in Q1 exists to produce that URL, and everything after it exists to make what sits behind the URL worth looking at.
+The thing a portfolio needs — **a URL someone can open** — now exists. The rest of Q1 makes the repo around it read as finished; everything after makes what sits behind the URL worth looking at.
 
 ---
 
@@ -65,19 +65,16 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 
 **At the end of this quarter:** you can put a link on a CV and nothing on it embarrasses you.
 
-**Done so far:** repo initialised with LF normalisation and `.editorconfig`; lint fixed (28,609 problems to 0 errors, plus two genuine bugs found on the way); documentation consolidated from 16,263 lines to 2,229; README rewritten; `LICENSE` added; GitHub Actions CI (lint + `npm test` on push and PR) green, badge in README.
+**Done so far:** repo initialised with LF normalisation and `.editorconfig`; lint fully clean — 28,609 problems to zero (0 errors, 0 warnings), two genuine bugs fixed on the way; documentation consolidated from 16,263 lines to 2,229; README rewritten; `LICENSE` added; GitHub Actions CI (lint + `npm test`) green with a badge; **site deployed and live at [carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/)** — serve-as-is via a Pages workflow, 12 absolute asset paths fixed, one orphaned demo page (`segmented-button.html`, imported a module that never existed) found by crawling the live site and removed. The manual visual pass over the live site came back clean.
 
 | Remaining | Est. |
 | --- | --- |
-| **Deploy to GitHub Pages, serve-as-is.** No build step — the source uses only plain relative ES-module imports and runs natively in the browser. A workflow stages `index.html` + `src/` + `docs/` + the root docs and publishes via `actions/*-pages`. | 3h |
-| Fix absolute asset paths that 404 on a project Pages URL — four in `index.html` (`/src/…`, `/docs/shared/…`), eight in `docs/components/shared-nav.html`. Every other demo page already uses relative paths. | 1h |
-| Post-deploy fixes — whatever the live static host exposes that the Vite dev server hid. Budgeted blind; adjust once the site is up. | 4h |
-| Add the live URL and a screenshot to the README once the site is up. | 1h |
+| Add the live URL and a screenshot to the README. | 1h |
 | **Component QA triage.** Sweep all 43 demo pages at two viewports in both themes. Fix nothing — log everything to [DEFECTS.md](./DEFECTS.md). The output is not a fix list, it is the *size* of the problem, which is currently unknown and which Q2–Q3 cannot be planned honestly without. | 5h |
 
 **Decision — serve-as-is, not a Vite build.** Fastest route to a live URL, which is the quarter's whole point. The trade-offs it accepts, all deferred to Q2's site-polish work: the published site is the source tree rather than an optimised bundle; the six raw `.md` links in the home-page "Documentation & Tools" section render as plain text on Pages (logged in [DEFECTS.md](./DEFECTS.md)); no minification, bundling or cache-busting. Revisit if the unbundled module graph loads too slowly to demo well.
 
-**Minimum viable stop:** lint green, CI passing, site deployed. Even if nothing below this line ever happens, the project reads as finished rather than abandoned.
+**Minimum viable stop:** lint green, CI passing, site deployed — **all reached.** The two remaining items are polish and planning input, not prerequisites for the site reading as finished.
 
 ---
 
