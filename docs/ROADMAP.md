@@ -79,6 +79,8 @@ Delivered:
 
 **At the end of this quarter:** the site navigates like something designed, not like a directory listing.
 
+**Done early (Sep 2026):** the systemic mobile-overflow defect from the Q1 triage — 48 demo pages clipped and scrolling sideways at phone width — fixed with three rules in `pattern-library.css`. Pulled forward because it was the single worst thing a phone visitor saw and the fix was cheap. Only `shared-nav.html` still overflows (its drawer doesn't collapse on mobile — [DEFECTS.md](./DEFECTS.md), for the QA workstream).
+
 | Work | Est. |
 | --- | --- |
 | Landing page: what this is, why vanilla web components, live component previews above the fold. Replaces the current card grid. | 10h |
