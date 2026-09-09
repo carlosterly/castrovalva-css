@@ -65,11 +65,10 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 
 **At the end of this quarter:** you can put a link on a CV and nothing on it embarrasses you.
 
-**Done so far:** repo initialised with LF normalisation and `.editorconfig`; lint fully clean — 28,609 problems to zero (0 errors, 0 warnings), two genuine bugs fixed on the way; documentation consolidated from 16,263 lines to 2,229; README rewritten; `LICENSE` added; GitHub Actions CI (lint + `npm test`) green with a badge; **site deployed and live at [carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/)** — serve-as-is via a Pages workflow, 12 absolute asset paths fixed, one orphaned demo page (`segmented-button.html`, imported a module that never existed) found by crawling the live site and removed. The manual visual pass over the live site came back clean.
+**Done so far:** repo initialised with LF normalisation and `.editorconfig`; lint fully clean — 28,609 problems to zero (0 errors, 0 warnings), two genuine bugs fixed on the way; documentation consolidated from 16,263 lines to 2,229; README rewritten; `LICENSE` added; GitHub Actions CI (lint + `npm test`) green with a badge; **site deployed and live at [carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/)** — serve-as-is via a Pages workflow, 12 absolute asset paths fixed, one orphaned demo page (`segmented-button.html`, imported a module that never existed) found by crawling the live site and removed. The manual visual pass over the live site came back clean. README now leads with the live URL and a component-index screenshot.
 
 | Remaining | Est. |
 | --- | --- |
-| Add the live URL and a screenshot to the README. | 1h |
 | **Component QA triage.** Sweep all 43 demo pages at two viewports in both themes. Fix nothing — log everything to [DEFECTS.md](./DEFECTS.md). The output is not a fix list, it is the *size* of the problem, which is currently unknown and which Q2–Q3 cannot be planned honestly without. | 5h |
 
 **Decision — serve-as-is, not a Vite build.** Fastest route to a live URL, which is the quarter's whole point. The trade-offs it accepts, all deferred to Q2's site-polish work: the published site is the source tree rather than an optimised bundle; the six raw `.md` links in the home-page "Documentation & Tools" section render as plain text on Pages (logged in [DEFECTS.md](./DEFECTS.md)); no minification, bundling or cache-busting. Revisit if the unbundled module graph loads too slowly to demo well.
