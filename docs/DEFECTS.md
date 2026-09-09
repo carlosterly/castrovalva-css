@@ -39,10 +39,6 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ## Open defects
 
-### shared-nav.html — drawer doesn't collapse on mobile
-
-- **B** — At 390px this prototype page overflows by ~24px: the persistent `<ds-navigation-drawer open persistent>` holds a ~360px fixed width, squeezing `.content-area` to a sliver and pushing past the viewport. The real fix is the drawer collapsing to a modal/overlay below its breakpoint — component behaviour, for the Q2 QA workstream, not a pattern-library tweak. Every other page's mobile overflow is fixed.
-
 ### home page (index.html)
 
 - **B** — The six documentation links (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`) point at raw `.md` files. On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is site work.

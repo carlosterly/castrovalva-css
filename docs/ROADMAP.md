@@ -81,17 +81,17 @@ Delivered:
 
 **Done early (Sep 2026):**
 
-- Systemic mobile-overflow defect from the Q1 triage — 48 demo pages clipped and scrolling sideways at phone width — fixed with three rules in `pattern-library.css`. Only `shared-nav.html` still overflows (its drawer doesn't collapse on mobile — [DEFECTS.md](./DEFECTS.md)).
+- Systemic mobile-overflow defect from the Q1 triage — 48 demo pages clipped and scrolling sideways at phone width — fixed with three rules in `pattern-library.css`.
 - Landing page, first pass: hero with the "why vanilla web components" pitch, a stat row, a live "running right now" panel of real components that follow the theme toggle, and CTAs — above the existing catalogue grid, which stayed (it is good navigation). Also cleared the home-page theme-toggle-overlaps-`h1` defect and the dev-era `<title>`. Not a full visual redesign; refine on feedback.
+- **Navigation shell** — [docs/shared/docs-nav.js](./shared/docs-nav.js), one file included by all 50 demo pages. Fixed sidebar on desktop, off-canvas drawer + hamburger on mobile, full 50-component list grouped by category, current page highlighted and scrolled into view, live filter (`/` to focus, `Esc` to clear), arrow-key navigation. Retired the hand-built `shared-nav.html` prototype (only 7 items, linked from nowhere) — which also closed the last open mobile-overflow item.
 
 | Work | Est. |
 | --- | --- |
-| Consistent shell across all demo pages — the `shared-nav` drawer exists; make it complete, searchable, and keyboard-navigable. | 8h |
-| Client-side search across components and tokens. | 6h |
+| Client-side search across components and tokens. Partly covered by the nav filter; this is the fuller version (searches token names and page content, not just component titles). | 6h |
 | Performance: font loading strategy, defer non-critical JS, Lighthouse ≥ 95. | 6h |
 | **Component QA, first half** — see the workstream below. Roughly half the 43 components, prioritised by how likely a visitor is to land on them. | 25h |
 
-**Minimum viable stop:** landing page plus working navigation. The rest is refinement.
+**Minimum viable stop:** landing page plus working navigation — **both done.** The rest is refinement.
 
 > The separate "mobile pass over every demo page" line that used to sit here has
 > been folded into the QA workstream — responsive behaviour is one dimension of
