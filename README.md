@@ -7,6 +7,10 @@ dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 
 **43 components** · **~2,060 tests** · **~92% coverage** · **~11 KB total (~3.5 KB gzipped)**
 
+### → Live pattern library: **[carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/)**
+
+[![The Castrovalva component index](docs/assets/home.png)](https://carlosterly.github.io/castrovalva-css/)
+
 ---
 
 ## Features
