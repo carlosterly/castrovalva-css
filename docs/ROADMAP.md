@@ -59,21 +59,17 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 
 ---
 
-## Q1 · Sep–Nov 2026 — Make it credible and visible
+## Q1 · Sep–Nov 2026 — Make it credible and visible — ✅ COMPLETE (Sep 2026)
 
-**Theme:** Get a working, honest public URL.
+**Theme was:** get a working, honest public URL. Reached in the first weeks, well ahead of the quarter.
 
-**At the end of this quarter:** you can put a link on a CV and nothing on it embarrasses you.
+Delivered:
 
-**Done so far:** repo initialised with LF normalisation and `.editorconfig`; lint fully clean — 28,609 problems to zero (0 errors, 0 warnings), two genuine bugs fixed on the way; documentation consolidated from 16,263 lines to 2,229; README rewritten; `LICENSE` added; GitHub Actions CI (lint + `npm test`) green with a badge; **site deployed and live at [carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/)** — serve-as-is via a Pages workflow, 12 absolute asset paths fixed, one orphaned demo page (`segmented-button.html`, imported a module that never existed) found by crawling the live site and removed. The manual visual pass over the live site came back clean. README now leads with the live URL and a component-index screenshot.
+- **Live site** — [carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/), deployed serve-as-is (no build) via a Pages workflow. README leads with the URL and a screenshot.
+- **Clean baseline** — lint from 28,609 problems to zero (two real bugs fixed on the way); GitHub Actions CI green with a badge; `LICENSE` added; docs consolidated 16,263 → 2,229 lines.
+- **QA triage** — automated sweep of all 51 pages × 2 viewports × 2 themes ([DEFECTS.md](./DEFECTS.md)). No console errors, no broken requests, desktop clean. One systemic defect: **48 of 51 demo pages overflow horizontally on mobile** from a single `min-width: auto` flex bug in `pattern-library.css` — one CSS line should fix all of them. Human review of MD3 visual fidelity, interactive states and keyboard paths rolls into the Q2 QA workstream.
 
-| Remaining | Est. |
-| --- | --- |
-| **Component QA triage.** Sweep all 43 demo pages at two viewports in both themes. Fix nothing — log everything to [DEFECTS.md](./DEFECTS.md). The output is not a fix list, it is the *size* of the problem, which is currently unknown and which Q2–Q3 cannot be planned honestly without. | 5h |
-
-**Decision — serve-as-is, not a Vite build.** Fastest route to a live URL, which is the quarter's whole point. The trade-offs it accepts, all deferred to Q2's site-polish work: the published site is the source tree rather than an optimised bundle; the six raw `.md` links in the home-page "Documentation & Tools" section render as plain text on Pages (logged in [DEFECTS.md](./DEFECTS.md)); no minification, bundling or cache-busting. Revisit if the unbundled module graph loads too slowly to demo well.
-
-**Minimum viable stop:** lint green, CI passing, site deployed — **all reached.** The two remaining items are polish and planning input, not prerequisites for the site reading as finished.
+**Decision on record — serve-as-is, not a Vite build.** Fastest route to a live URL. Trade-offs, all deferred to Q2's site polish: the published site is the source tree, not a bundle; the six raw `.md` links on the home page render as plain text on Pages ([DEFECTS.md](./DEFECTS.md)); no minification or cache-busting. Revisit if the unbundled module graph loads too slowly to demo well.
 
 ---
 
