@@ -39,13 +39,13 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ## Open defects
 
-### all component demo pages — mobile overflow (one root cause, ~48 pages)
+### shared-nav.html — drawer doesn't collapse on mobile
 
-- **A** — At 390px width, 48 of 51 demo pages overflow horizontally by 60–810px: body text is clipped at the right edge, grey demo/code boxes run off-screen, the whole page scrolls sideways. Only `index.html`, `motion-animation.html` and `state-layers.html` escape it. Root cause is in [docs/shared/pattern-library.css](./shared/pattern-library.css): `.content-area` is a flex child (`.page-container { display: flex }`) with the default `min-width: auto`, so it refuses to shrink below the intrinsic width of its widest unwrapped content — the `<pre>` code samples inside `.code-block`. Likely fix: `.content-area { min-width: 0 }` (the canonical flex-min-width fix), which lets `.code-block { overflow-x: auto }` actually scroll the code and everything else wrap. One CSS change should clear all 48. Desktop (1280px) is unaffected in both themes.
+- **B** — At 390px this prototype page overflows by ~24px: the persistent `<ds-navigation-drawer open persistent>` holds a ~360px fixed width, squeezing `.content-area` to a sliver and pushing past the viewport. The real fix is the drawer collapsing to a modal/overlay below its breakpoint — component behaviour, for the Q2 QA workstream, not a pattern-library tweak. Every other page's mobile overflow is fixed.
 
 ### home page (index.html)
 
-- **A** — On mobile, the fixed Light / Dark / High Contrast theme toggle (top-right) overlaps the "Castrovalva Design System" `<h1>`, hiding part of the title.
+- **A** — On mobile, the fixed Light / Dark / High Contrast theme toggle (top-right) overlaps the "Castrovalva Design System" `<h1>`, hiding part of the title. The home page is rebuilt in Q2; fix there or sooner.
 - **B** — The six links in the "Documentation & Tools" section point at raw `.md` files (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`). On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is Q2 site work.
 
 ## Triage coverage — Q1 sweep, 9 Sep 2026

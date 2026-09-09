@@ -22,8 +22,14 @@ body {
 
 .content-area {
   flex: 1;
+  /* Flex items default to min-width:auto, which refuses to shrink below the
+     widest unwrapped descendant (the <pre> code samples). That let every demo
+     page overflow horizontally on mobile. min-width:0 lets it shrink to the
+     viewport; .code-block scrolls its own <pre>, everything else wraps. */
+  min-width: 0;
   padding: var(--md-sys-spacing-8, 32px);
   max-width: 1200px;
+  overflow-wrap: break-word;
 }
 
 /* Mobile Header (for navigation drawer toggle) */
@@ -41,6 +47,13 @@ body {
   }
   .content-area {
     padding: var(--md-sys-spacing-4, 16px);
+  }
+  /* API tables can't shrink past their content's min width; let them scroll
+     within the page instead of widening it. */
+  .api-table,
+  .content-area table {
+    display: block;
+    overflow-x: auto;
   }
 }
 
@@ -85,6 +98,9 @@ h3 {
   flex-wrap: wrap;
   gap: var(--md-sys-spacing-3, 12px);
   align-items: center;
+  /* A single wide component (data table, long combobox) scrolls inside the
+     box rather than pushing the page wider. */
+  overflow-x: auto;
 }
 
 .demo-section {
