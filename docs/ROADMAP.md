@@ -89,7 +89,7 @@ Delivered:
 
 | Work | Est. |
 | --- | --- |
-| **Component QA, first half** — see the workstream below. Roughly half the 43 components, prioritised by how likely a visitor is to land on them. | 25h |
+| **Component QA — triage all 43, fix Tier 1.** One automated sweep covers all 43 (cheap to do at once); this quarter fixes the ~18 Tier-1 components a visitor is most likely to land on. Tier 2 fixes fall to Q3. See the workstream below. | 25h |
 
 **Minimum viable stop:** landing page plus working navigation — **both done.** The rest is refinement.
 
@@ -186,6 +186,30 @@ interesting the bug is.
 
 **Visual regression comes last.** Screenshot baselines taken mid-QA capture
 broken state and entrench it. Q3's regression suite runs once the fixing is done.
+
+### How the pass runs (agreed Sep 2026)
+
+- **One triage sweep over all 43**, not the Q2 half. It is mostly a script
+  (viewports, themes, overflow, console errors, failed requests,
+  keyboard-reachability of the primary control, "does the first demo render",
+  plus a spot-check of representative components dropped inside `<ds-dialog>`).
+  Running it over 43 pages costs little more than 21 and gives a complete
+  DEFECTS picture, so Q3 skips straight to fixing.
+- **Deliverable is a self-contained QA contact sheet** — one HTML page, every
+  component × {360px, 1280px} × {light, dark} in a grid with the mechanical
+  findings annotated inline. Screenshots live in scratch, not the repo.
+- **Split of labour.** The sweep and the contact sheet catch the mechanical
+  half — overflow, console errors, broken demos, keyboard reach, gross visual
+  breakage. The MD3-fidelity half — is this elevation / state-layer opacity /
+  type scale spec-correct, does hover/pressed feel right — is a human pass over
+  the contact sheet, not something the sweep can judge.
+- **Tier 1 (~18), fixed in Q2:** button, text-field, checkbox, radio, switch,
+  card, dialog, menu, tabs, chip, badge, tooltip, snackbar, icon, slider,
+  data-table, fab, list. **Tier 2 — everything else — fixed in Q3.**
+- **Accessibility trigger.** The sweep tags a11y findings (focus visibility,
+  keyboard traversal) but cannot audit ARIA properly — that needs the axe
+  harness scheduled for Q4. If the triage returns a high a11y count, pull the
+  4h harness forward from Q4 rather than reviewing ARIA by eye.
 
 ---
 
