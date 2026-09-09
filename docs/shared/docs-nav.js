@@ -196,6 +196,15 @@
       color: var(--md-sys-color-on-secondary-container, #1d192b);
       font-weight: 600;
     }
+    .dnav__link--content::after {
+      content: "in page";
+      float: inline-end;
+      font-size: 0.625rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      opacity: 0.6;
+      margin-block-start: 3px;
+    }
     .dnav__empty {
       padding: 16px;
       font-size: 0.8125rem;
@@ -285,14 +294,32 @@
   const groups = [...nav.querySelectorAll(".dnav__grouprow")];
   const empty = nav.querySelector(".dnav__empty");
 
+  // Content search: slug -> lowercased "heading heading api-name …" string.
+  // Lets the filter match page content (variants, states, attribute names),
+  // not just component titles. Degrades to title-only if the fetch fails.
+  const contentIndex = new Map();
+  fetch("../search-index.json")
+    .then((r) => (r.ok ? r.json() : []))
+    .then((rows) => {
+      for (const row of rows) {
+        contentIndex.set(row.slug, (row.keywords || []).join(" ").toLowerCase());
+      }
+      if (filter.value) applyFilter(filter.value);
+    })
+    .catch(() => {});
+
   function applyFilter(q) {
     const term = q.trim().toLowerCase();
     let anyVisible = false;
     for (const g of groups) {
       let groupVisible = false;
       for (const a of g.querySelectorAll(".dnav__link")) {
-        const match = !term || a.textContent.toLowerCase().includes(term);
+        const inTitle = a.dataset.title.includes(term);
+        const inContent =
+          !inTitle && (contentIndex.get(a.dataset.slug) || "").includes(term);
+        const match = !term || inTitle || inContent;
         a.hidden = !match;
+        a.classList.toggle("dnav__link--content", !!term && inContent);
         if (match) groupVisible = anyVisible = true;
       }
       g.hidden = !groupVisible;
@@ -300,6 +327,7 @@
     empty.hidden = anyVisible;
   }
 
+  links.forEach((a) => (a.dataset.title = a.textContent.toLowerCase()));
   filter.addEventListener("input", () => applyFilter(filter.value));
 
   function openDrawer() {
