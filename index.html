@@ -1,9 +1,12 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Design System Development</title>
+    <title>Castrovalva Design System</title>
+    <meta
+      name="description"
+      content="Material Design 3 implemented as vanilla Web Components — zero runtime dependencies, Shadow DOM, a complete MD3 token system." />
 
     <!-- Material Symbols Icons -->
     <link
@@ -18,32 +21,183 @@
 
     <link rel="stylesheet" href="src/styles.css" />
     <link rel="stylesheet" href="docs/shared/pattern-library.css" />
+
+    <style>
+      /* Home page only */
+      .hero {
+        padding-block: var(--ds-space-16, 64px) var(--ds-space-12, 48px);
+        text-align: center;
+      }
+      .hero h1 {
+        margin: 0 0 var(--ds-space-4, 16px);
+        font-size: clamp(2.25rem, 6vw, 3.25rem);
+        color: var(--md-sys-color-primary);
+      }
+      .hero .lede {
+        max-width: 54ch;
+        margin: 0 auto var(--ds-space-6, 24px);
+        font-size: 1.125rem;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+      .hero .why {
+        max-width: 60ch;
+        margin: 0 auto var(--ds-space-8, 32px);
+        color: var(--md-sys-color-on-surface-variant);
+        line-height: 1.6;
+      }
+      .stat-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--ds-space-6, 24px) var(--ds-space-10, 40px);
+        margin-bottom: var(--ds-space-8, 32px);
+      }
+      .stat-row div {
+        display: flex;
+        flex-direction: column;
+      }
+      .stat-row b {
+        font-size: 1.5rem;
+        color: var(--md-sys-color-on-surface);
+      }
+      .stat-row span {
+        font-size: 0.8125rem;
+        color: var(--md-sys-color-on-surface-variant);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+      }
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: var(--ds-space-3, 12px);
+      }
+      .cta {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--ds-space-2, 8px);
+        padding: var(--ds-space-3, 12px) var(--ds-space-5, 20px);
+        border-radius: 999px;
+        text-decoration: none;
+        font-weight: 500;
+        border: 1px solid var(--md-sys-color-outline);
+        color: var(--md-sys-color-on-surface);
+      }
+      .cta.primary {
+        background: var(--md-sys-color-primary);
+        color: var(--md-sys-color-on-primary);
+        border-color: var(--md-sys-color-primary);
+      }
+      .preview {
+        margin-block: var(--ds-space-8, 32px);
+        padding: var(--ds-space-8, 32px);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: var(--ds-radius-lg, 20px);
+        background: var(--md-sys-color-surface-container-low, #f7f2fa);
+      }
+      .preview h2 {
+        margin-top: 0;
+      }
+      .preview-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ds-space-6, 24px);
+        align-items: center;
+      }
+      .preview-grid > div {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--ds-space-3, 12px);
+        align-items: center;
+      }
+
+      /* Keep the fixed theme switcher off the heading on small screens */
+      @media (max-width: 640px) {
+        .theme-switcher {
+          position: static;
+          width: fit-content;
+          margin: var(--ds-space-3, 12px) auto 0;
+          justify-content: center;
+        }
+        .hero {
+          padding-block: var(--ds-space-8, 32px) var(--ds-space-10, 40px);
+        }
+      }
+    </style>
   </head>
-  <body data-page="playground">
+  <body data-page="home">
     <div class="theme-switcher">
       <button class="theme-btn active" data-theme="light">Light</button>
       <button class="theme-btn" data-theme="dark">Dark</button>
-      <button class="theme-btn" data-theme="high-contrast">
-        High Contrast
-      </button>
+      <button class="theme-btn" data-theme="high-contrast">High Contrast</button>
     </div>
 
     <div class="container">
-      <header style="padding-block: var(--ds-space-12) var(--ds-space-8)">
-        <h1
-          style="
-            margin: 0;
-            text-align: center;
-            font-size: 3rem;
-            color: var(--md-sys-color-primary);
-          ">
-          Castrovalva Design System
-        </h1>
+      <header class="hero">
+        <h1>Castrovalva Design System</h1>
+        <p class="lede">
+          Material Design 3, implemented as vanilla Web Components.
+        </p>
+        <p class="why">
+          No framework, no runtime dependencies. Every component is a standard
+          Custom Element with its styles sealed in Shadow DOM, themed entirely
+          through CSS custom properties. Drop the tag on any page — React, Vue,
+          plain HTML — and it works. The whole library is about 11&nbsp;KB
+          gzipped.
+        </p>
+
+        <div class="stat-row">
+          <div><b>43</b><span>Components</span></div>
+          <div><b>36 / 36</b><span>Official MD3</span></div>
+          <div><b>~2,060</b><span>Tests</span></div>
+          <div><b>~92%</b><span>Coverage</span></div>
+          <div><b>~11 KB</b><span>Gzipped</span></div>
+        </div>
+
+        <div class="cta-row">
+          <a class="cta primary" href="#components">Browse components</a>
+          <a
+            class="cta"
+            href="https://github.com/carlosterly/castrovalva-css"
+            target="_blank"
+            rel="noopener">
+            View on GitHub
+          </a>
+        </div>
       </header>
 
       <main>
-        <!-- Component Grid -->
-        <section style="margin-block-start: var(--ds-space-8)">
+        <!-- Live components, actually running -->
+        <section class="preview" aria-label="Live component preview">
+          <h2>Running right now</h2>
+          <p style="margin-top: 0; color: var(--md-sys-color-on-surface-variant)">
+            Real components on this page. Switch the theme above and watch them
+            follow.
+          </p>
+          <div class="preview-grid">
+            <div>
+              <ds-button variant="filled">Filled</ds-button>
+              <ds-button variant="filled-tonal">Tonal</ds-button>
+              <ds-button variant="outlined">Outlined</ds-button>
+              <ds-button variant="text">Text</ds-button>
+            </div>
+            <div>
+              <ds-chip label="Design"></ds-chip>
+              <ds-chip label="Tokens" icon="sell"></ds-chip>
+              <ds-switch checked show-icons></ds-switch>
+              <ds-badge value="8"></ds-badge>
+            </div>
+            <div style="flex: 1 1 240px">
+              <ds-slider min="0" max="100" value="60" label="Weight"></ds-slider>
+            </div>
+            <div style="flex: 1 1 200px">
+              <ds-linear-progress value="45"></ds-linear-progress>
+            </div>
+          </div>
+        </section>
+
+        <!-- Component catalogue -->
+        <section id="components" style="margin-block-start: var(--ds-space-12)">
           <h2 style="margin-block-end: var(--ds-space-6)">Components</h2>
           <div
             style="
@@ -69,7 +223,7 @@
               </p>
             </a>
             <a class="tile-card" href="docs/components/motion-animation.html">
-              <h3>Motion & Animation</h3>
+              <h3>Motion &amp; Animation</h3>
               <p>
                 Duration tokens, easing curves, and animation utilities for
                 smooth transitions.
@@ -83,7 +237,7 @@
               </p>
             </a>
 
-            <div class="md3-group-heading">Navigation & Structure</div>
+            <div class="md3-group-heading">Navigation &amp; Structure</div>
             <a class="tile-card" href="docs/components/app-bar-top.html">
               <h3>Top App Bar</h3>
               <p>
@@ -134,7 +288,7 @@
               </p>
             </a>
 
-            <div class="md3-group-heading">Inputs & Forms</div>
+            <div class="md3-group-heading">Inputs &amp; Forms</div>
             <a class="tile-card" href="docs/components/button.html">
               <h3>Button</h3>
               <p>
@@ -225,7 +379,7 @@
               <p>Floating Action Button for primary screen actions.</p>
             </a>
 
-            <div class="md3-group-heading">Lists & Data</div>
+            <div class="md3-group-heading">Lists &amp; Data</div>
             <a class="tile-card" href="docs/components/list.html">
               <h3>List</h3>
               <p>
@@ -245,7 +399,7 @@
               </p>
             </a>
 
-            <div class="md3-group-heading">Surfaces & Layout</div>
+            <div class="md3-group-heading">Surfaces &amp; Layout</div>
             <a class="tile-card" href="docs/components/card.html">
               <h3>Card</h3>
               <p>
@@ -259,7 +413,7 @@
               </p>
             </a>
 
-            <div class="md3-group-heading">Overlays & Dialogs</div>
+            <div class="md3-group-heading">Overlays &amp; Dialogs</div>
             <a class="tile-card" href="docs/components/dialog.html">
               <h3>Dialog</h3>
               <p>Modal dialogs for confirmations, alerts, and forms.</p>
@@ -279,7 +433,7 @@
               </p>
             </a>
 
-            <div class="md3-group-heading">Feedback & Status</div>
+            <div class="md3-group-heading">Feedback &amp; Status</div>
             <a class="tile-card" href="docs/components/badge.html">
               <h3>Badge</h3>
               <p>Small status or count indicators for overlays and lists.</p>
@@ -310,7 +464,7 @@
               <p>Linear and circular progress indicators for loading states.</p>
             </a>
 
-            <div class="md3-group-heading">Media & Imagery</div>
+            <div class="md3-group-heading">Media &amp; Imagery</div>
             <a class="tile-card" href="docs/components/icon.html">
               <h3>Icon</h3>
               <p>
@@ -360,7 +514,7 @@
               </p>
             </a>
             <a class="tile-card" href="docs/components/drag-drop.html">
-              <h3>Drag & Drop Utility</h3>
+              <h3>Drag &amp; Drop Utility</h3>
               <p>
                 Comprehensive drag-and-drop with mouse, touch, and keyboard
                 support for sortable lists and drop zones.
@@ -374,7 +528,7 @@
               </p>
             </a>
 
-            <div class="md3-group-heading">Documentation & Tools</div>
+            <div class="md3-group-heading">Documentation</div>
             <a class="tile-card" href="README.md">
               <h3>Project README</h3>
               <p>What this is, how to run it, and where everything lives.</p>
@@ -389,8 +543,7 @@
             <a class="tile-card" href="docs/ROADMAP.md">
               <h3>Roadmap</h3>
               <p>
-                Direction, quarterly themes, current status, and explicit
-                non-goals.
+                Direction, phase themes, current status, and explicit non-goals.
               </p>
             </a>
             <a class="tile-card" href="docs/tokens.md">
@@ -410,15 +563,6 @@
                 Durations, easings, and choreography examples for MD3 motion.
               </p>
             </a>
-
-            <div class="md3-group-heading">Optional & Experimental</div>
-            <a class="tile-card" href="docs/components/shared-nav.html">
-              <h3>Shared Navigation</h3>
-              <p>
-                Prototype shared navigation shell for component docs
-                integration.
-              </p>
-            </a>
           </div>
         </section>
       </main>
@@ -434,7 +578,12 @@
             text-align: center;
             color: var(--md-sys-color-on-surface-variant);
           ">
-          Castrovalva Design System &copy; 2026
+          Castrovalva Design System &copy; 2026 ·
+          <a
+            href="https://github.com/carlosterly/castrovalva-css"
+            style="color: inherit"
+            >GitHub</a
+          >
         </p>
       </footer>
     </div>

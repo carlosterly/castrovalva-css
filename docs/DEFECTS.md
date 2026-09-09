@@ -45,8 +45,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### home page (index.html)
 
-- **A** — On mobile, the fixed Light / Dark / High Contrast theme toggle (top-right) overlaps the "Castrovalva Design System" `<h1>`, hiding part of the title. The home page is rebuilt in Q2; fix there or sooner.
-- **B** — The six links in the "Documentation & Tools" section point at raw `.md` files (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`). On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is Q2 site work.
+- **B** — The six documentation links (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`) point at raw `.md` files. On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is site work.
 
 ## Triage coverage — Q1 sweep, 9 Sep 2026
 

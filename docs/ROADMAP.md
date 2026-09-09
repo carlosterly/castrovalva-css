@@ -79,11 +79,13 @@ Delivered:
 
 **At the end of this quarter:** the site navigates like something designed, not like a directory listing.
 
-**Done early (Sep 2026):** the systemic mobile-overflow defect from the Q1 triage — 48 demo pages clipped and scrolling sideways at phone width — fixed with three rules in `pattern-library.css`. Pulled forward because it was the single worst thing a phone visitor saw and the fix was cheap. Only `shared-nav.html` still overflows (its drawer doesn't collapse on mobile — [DEFECTS.md](./DEFECTS.md), for the QA workstream).
+**Done early (Sep 2026):**
+
+- Systemic mobile-overflow defect from the Q1 triage — 48 demo pages clipped and scrolling sideways at phone width — fixed with three rules in `pattern-library.css`. Only `shared-nav.html` still overflows (its drawer doesn't collapse on mobile — [DEFECTS.md](./DEFECTS.md)).
+- Landing page, first pass: hero with the "why vanilla web components" pitch, a stat row, a live "running right now" panel of real components that follow the theme toggle, and CTAs — above the existing catalogue grid, which stayed (it is good navigation). Also cleared the home-page theme-toggle-overlaps-`h1` defect and the dev-era `<title>`. Not a full visual redesign; refine on feedback.
 
 | Work | Est. |
 | --- | --- |
-| Landing page: what this is, why vanilla web components, live component previews above the fold. Replaces the current card grid. | 10h |
 | Consistent shell across all demo pages — the `shared-nav` drawer exists; make it complete, searchable, and keyboard-navigable. | 8h |
 | Client-side search across components and tokens. | 6h |
 | Performance: font loading strategy, defer non-critical JS, Lighthouse ≥ 95. | 6h |
