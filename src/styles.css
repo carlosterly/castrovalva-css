@@ -1,6 +1,7 @@
 /* Main CSS entry point for separate CSS/JS loading */
 
-/* Import design tokens */
+/* Import design tokens (palette first — it is the theme layer tokens.css builds on) */
+@import "./tokens/palette.css";
 @import "./tokens/tokens.css";
 
 /* Import base styles */

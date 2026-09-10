@@ -40,9 +40,21 @@ This document provides a comprehensive reference of all Material Design 3 tokens
 
 ## Color Tokens
 
+### Where the values live
+
+The six reference tonal palettes are defined in **`src/tokens/palette.css`** —
+the single file a theme changes. `tokens.css` holds only the role mapping
+(`--md-sys-color-*` → a palette tone) plus type, spacing, motion and shape.
+
+To retheme, do not edit either file. Load a stylesheet after `src/styles.css`
+and redefine the `--md-ref-palette-*` values there (the
+[theme playground](./components/theme-playground.html) generates a complete
+`palette.css` replacement). To undo an accidental edit:
+`git restore src/tokens/palette.css`.
+
 ### Tonal Palettes (78 tokens)
 
-MD3 uses tonal palettes with 13 tones per color, providing a complete range from 0 (black) to 100 (white).
+MD3 uses tonal palettes with 13 tones per color, providing a complete range from 0 (black) to 100 (white). The neutral palette carries five extra stops (12, 17, 22, 92, 94) that the surface-container ramp needs.
 
 #### Primary Palette
 

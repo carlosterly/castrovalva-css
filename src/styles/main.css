@@ -1,5 +1,6 @@
 /* Main stylesheet - imports all design system styles */
 
+@import "../tokens/palette.css";
 @import "../tokens/tokens.css";
 @import "./reset.css";
 @import "./base.css";

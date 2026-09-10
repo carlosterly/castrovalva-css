@@ -86,7 +86,8 @@ Token reference: [docs/tokens.md](docs/tokens.md) ·
 ```
 src/
 ├── components/{name}/{name}.js   Web Components
-├── tokens/tokens.css             250+ MD3 design tokens
+├── tokens/palette.css            reference tonal palettes — the theme layer
+├── tokens/tokens.css             role tokens, type, spacing, motion, shape
 ├── styles/                       reset, base, utilities
 ├── assets/icons/                 SVG sprite
 └── index.js                      main entry

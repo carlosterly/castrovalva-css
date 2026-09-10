@@ -226,6 +226,12 @@ Use MD3 design tokens (`--md-sys-color-*`, `--md-sys-shape-*`, …). Follow MD3
 motion durations and easing. Implement the elevation system. Support light,
 dark and dynamic colour schemes. Match the component specifications.
 
+Colour tokens are split: `src/tokens/palette.css` holds the six reference
+tonal palettes (`--md-ref-palette-*`) — the only file a theme changes —
+and `src/tokens/tokens.css` maps `--md-sys-color-*` roles onto them.
+Components read the `--md-sys-color-*` roles, never `--md-ref-palette-*`
+directly. `styles.css` imports `palette.css` before `tokens.css`.
+
 ### Accessibility
 
 Semantic HTML. Correct ARIA roles and labels. Full keyboard navigation (Tab,
