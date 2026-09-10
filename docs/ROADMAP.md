@@ -107,10 +107,13 @@ Delivered:
 
 **At the end of this quarter:** there is one thing on the site people remember.
 
+**Done early (Sep 2026):**
+
+- **Interactive theme playground — first pass.** [docs/components/theme-playground.html](./components/theme-playground.html), linked from the nav shell and the landing page. One primary source-colour picker; secondary / tertiary / neutral / neutral-variant / error palettes derived from it (tertiary rotated +60°, error hue anchored to the MD3 baseline). Palette generation is an OKLCH L\*→lightness ramp with per-stop sRGB gamut clamping — ~40 lines of colour maths, no dependencies. All 78 `--md-ref-palette-*` values and the `--md-sys-color-*` role set (mapped exactly as `tokens.css` does, per scheme) recompute live; a curated 12-block component preview re-themes with them. Copy per swatch, per role token, or the whole light / dark / palette block. Generating from `#006878` reproduces the shipped palette closely (primary40 → `#006a7b` vs `#006878`). Remaining: refinement on feedback — more preview components, mobile layout pass, maybe a shareable URL hash.
+
 | Work | Est. |
 | --- | --- |
-| **Interactive theme playground** — live-edit the MD3 source colour, watch all 78 tonal palette values and every component re-theme in real time, with token values and copy-to-clipboard built into the same surface. The single highest-leverage portfolio artefact available from what already exists: 250+ tokens and a working theme system. | 20h |
-| &nbsp;&nbsp;↳ **Scope agreed Sep 2026:** standalone page (`docs/theme-playground.html`), linked from the nav shell and landing page. One **primary** source-colour picker; secondary / tertiary / neutral palettes derived by hue rotation. Palette generation is an **OKLCH lightness ramp** (13 stops/palette, no dependencies) — not a bit-accurate HCT port, deliberately, to keep the zero-runtime-deps story. Live preview is a **curated ~12–15 component set** rendered in the page (no iframe). Copy-to-clipboard per token and for the whole `:root` block. | |
+| Theme playground — refinement pass (feedback, mobile, polish). | 6h |
 | Visual regression tests (Playwright screenshots) — run **after** the QA workstream completes, so the baselines capture a fixed state rather than an unstable one. | 10h |
 | One realistic composed demo — a settings page or dashboard built entirely from the library, proving the components work together rather than only in isolation. This is also the cheapest way to surface composition defects that per-component review cannot see. | 10h |
 | **Component QA, second half** — see the workstream below. | 15h |

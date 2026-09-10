@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theme Playground - Castrovalva Design System</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="../../favicon-32.png" sizes="32x32">
+    <link rel="apple-touch-icon" href="../../apple-touch-icon.png">
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#006878">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#5dd4f0">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap"
+      rel="stylesheet">
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet">
+    <link rel="stylesheet" href="../../src/styles.css">
+    <link rel="stylesheet" href="../shared/pattern-library.css">
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      .tp-controls {
+        position: sticky;
+        top: 0;
+        z-index: 5;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px 32px;
+        align-items: flex-end;
+        padding: 16px;
+        margin-bottom: 8px;
+        background: var(--md-sys-color-surface-container-low);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: 16px;
+      }
+      .tp-field {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+      }
+      .tp-field > span {
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+      .tp-source-row {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      #tp-source {
+        inline-size: 52px;
+        block-size: 40px;
+        padding: 2px;
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: 8px;
+        background: var(--md-sys-color-surface);
+        cursor: pointer;
+      }
+      #tp-hex {
+        inline-size: 9ch;
+        block-size: 40px;
+        padding: 0 10px;
+        font: 500 0.95rem/1 "Roboto Mono", ui-monospace, monospace;
+        text-transform: uppercase;
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: 8px;
+        background: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+      }
+      #tp-hex:invalid {
+        border-color: var(--md-sys-color-error);
+      }
+      .tp-presets {
+        display: flex;
+        gap: 6px;
+      }
+      .tp-preset {
+        inline-size: 28px;
+        block-size: 28px;
+        border: 1px solid rgba(0, 0, 0, 0.2);
+        border-radius: 50%;
+        cursor: pointer;
+        padding: 0;
+      }
+      .tp-seg {
+        display: inline-flex;
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: 999px;
+        overflow: hidden;
+      }
+      .tp-seg button {
+        appearance: none;
+        border: 0;
+        padding: 9px 18px;
+        font: 500 0.875rem/1 "Roboto", sans-serif;
+        background: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface-variant);
+        cursor: pointer;
+      }
+      .tp-seg button[aria-pressed="true"] {
+        background: var(--md-sys-color-secondary-container);
+        color: var(--md-sys-color-on-secondary-container);
+      }
+      .tp-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+      .tp-btn {
+        appearance: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 16px;
+        font: 500 0.875rem/1 "Roboto", sans-serif;
+        border: 1px solid var(--md-sys-color-outline);
+        border-radius: 999px;
+        background: var(--md-sys-color-surface);
+        color: var(--md-sys-color-primary);
+        cursor: pointer;
+      }
+      .tp-btn:hover {
+        background: var(--md-sys-color-surface-container-high);
+      }
+      .tp-btn--text {
+        border-color: transparent;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .tp-strip {
+        margin-bottom: 14px;
+      }
+      .tp-strip__name {
+        font-size: 0.8125rem;
+        font-weight: 600;
+        margin-bottom: 6px;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+      .tp-strip__row {
+        display: grid;
+        grid-template-columns: repeat(13, 1fr);
+        gap: 3px;
+      }
+      .tp-swatch {
+        appearance: none;
+        border: 0;
+        box-shadow: inset 0 0 0 1px rgba(128, 128, 128, 0.28);
+        aspect-ratio: 1 / 1.35;
+        border-radius: 5px;
+        cursor: pointer;
+        font: 500 0.625rem/1 "Roboto Mono", ui-monospace, monospace;
+        display: flex;
+        align-items: flex-end;
+        justify-content: center;
+        padding-bottom: 3px;
+      }
+      .tp-swatch:hover {
+        outline: 2px solid var(--md-sys-color-primary);
+        outline-offset: 1px;
+      }
+      @media (max-width: 720px) {
+        .tp-strip__row {
+          grid-template-columns: repeat(7, 1fr);
+        }
+        .tp-swatch:nth-child(n + 8) {
+          display: none;
+        }
+      }
+
+      .tp-sys {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 6px;
+      }
+      .tp-chip {
+        appearance: none;
+        text-align: left;
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: 8px;
+        padding: 8px 10px;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+        font: 400 0.75rem/1.3 "Roboto", sans-serif;
+      }
+      .tp-chip:hover {
+        border-color: var(--md-sys-color-primary);
+      }
+      .tp-chip__dot {
+        inline-size: 22px;
+        block-size: 22px;
+        border-radius: 6px;
+        border: 1px solid rgba(128, 128, 128, 0.35);
+        flex-shrink: 0;
+      }
+      .tp-chip__hex {
+        display: block;
+        font-family: "Roboto Mono", ui-monospace, monospace;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      .tp-preview {
+        background: var(--md-sys-color-background);
+        color: var(--md-sys-color-on-surface);
+        border: 1px solid var(--md-sys-color-outline-variant);
+        border-radius: 16px;
+        padding: 24px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        gap: 24px;
+        align-items: start;
+      }
+      .tp-demo {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        min-width: 0;
+      }
+      .tp-demo > h3 {
+        margin: 0;
+        font: 500 0.75rem/1 "Roboto", sans-serif;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+      .tp-demo__row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        align-items: center;
+      }
+
+      .tp-toast {
+        position: fixed;
+        inset-block-end: 24px;
+        inset-inline-start: 50%;
+        transform: translateX(-50%);
+        background: var(--md-sys-color-inverse-surface, #313033);
+        color: var(--md-sys-color-inverse-on-surface, #f4eff4);
+        padding: 12px 20px;
+        border-radius: 8px;
+        font: 500 0.875rem/1 "Roboto", sans-serif;
+        box-shadow: var(--md-sys-elevation-level3);
+        z-index: 20;
+      }
+
+      .tp-note {
+        font-size: 0.875rem;
+        color: var(--md-sys-color-on-surface-variant);
+        max-width: 68ch;
+      }
+      .tp-note code {
+        font-family: "Roboto Mono", ui-monospace, monospace;
+        font-size: 0.85em;
+      }
+    </style>
+  </head>
+  <body data-page="theme-playground">
+    <div class="page-container">
+      <div class="content-area">
+        <h1>Theme Playground</h1>
+        <p class="description">
+          Pick a source colour. Every tonal palette value and every component
+          below re-derives from it in real time. Copy the tokens straight into
+          <code>tokens.css</code>.
+        </p>
+
+        <div class="tp-controls">
+          <label class="tp-field">
+            <span>Source colour</span>
+            <span class="tp-source-row">
+              <input type="color" id="tp-source" value="#006878"
+                aria-label="Source colour picker">
+              <input type="text" id="tp-hex" value="#006878" spellcheck="false"
+                pattern="#?[0-9a-fA-F]{6}" aria-label="Source colour hex value">
+            </span>
+          </label>
+
+          <label class="tp-field">
+            <span>Presets</span>
+            <span class="tp-presets" id="tp-presets"></span>
+          </label>
+
+          <div class="tp-field">
+            <span>Preview scheme</span>
+            <div class="tp-seg" id="tp-scheme" role="group"
+              aria-label="Preview scheme">
+              <button type="button" data-scheme="light" aria-pressed="true">
+                Light
+              </button>
+              <button type="button" data-scheme="dark" aria-pressed="false">
+                Dark
+              </button>
+            </div>
+          </div>
+
+          <div class="tp-field">
+            <span>Copy</span>
+            <div class="tp-actions">
+              <button type="button" class="tp-btn" data-copy-block="ref">
+                <span class="material-symbols-outlined"
+                  style="font-size:18px">content_copy</span>
+                Palettes
+              </button>
+              <button type="button" class="tp-btn" data-copy-block="light">
+                Light <code>:root</code>
+              </button>
+              <button type="button" class="tp-btn" data-copy-block="dark">
+                Dark block
+              </button>
+              <button type="button" class="tp-btn tp-btn--text" id="tp-reset">
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>Tonal palettes</h2>
+          <p class="tp-note">
+            13 stops from 0 (black) to 100 (white). Click any swatch to copy its
+            <code>--md-ref-palette-*</code> declaration.
+          </p>
+          <div id="tp-strips"></div>
+        </div>
+
+        <div class="section">
+          <h2>System colours — <span id="tp-scheme-label">light</span></h2>
+          <p class="tp-note">
+            The role tokens components actually consume, resolved for the
+            selected scheme. Click a chip to copy its
+            <code>--md-sys-color-*</code> declaration.
+          </p>
+          <div class="tp-sys" id="tp-sys"></div>
+        </div>
+
+        <div class="section">
+          <h2>Live preview</h2>
+          <div class="tp-preview" id="tp-preview">
+            <div class="tp-demo">
+              <h3>Buttons</h3>
+              <div class="tp-demo__row">
+                <ds-button variant="filled">Filled</ds-button>
+                <ds-button variant="filled-tonal">Tonal</ds-button>
+                <ds-button variant="outlined">Outlined</ds-button>
+                <ds-button variant="text">Text</ds-button>
+              </div>
+              <div class="tp-demo__row">
+                <ds-button variant="elevated">Elevated</ds-button>
+                <ds-button variant="filled" disabled>Disabled</ds-button>
+              </div>
+            </div>
+
+            <div class="tp-demo">
+              <h3>FAB</h3>
+              <div class="tp-demo__row">
+                <ds-fab position="none">
+                  <ds-icon name="add"></ds-icon>
+                </ds-fab>
+                <ds-fab size="extended" label="Compose" position="none">
+                  <ds-icon name="edit"></ds-icon>
+                </ds-fab>
+              </div>
+            </div>
+
+            <div class="tp-demo">
+              <h3>Text field</h3>
+              <ds-text-field label="Full name"></ds-text-field>
+              <ds-text-field label="Email" value="alex@example.com">
+              </ds-text-field>
+            </div>
+
+            <div class="tp-demo">
+              <h3>Selection</h3>
+              <ds-checkbox label="Subscribe" checked></ds-checkbox>
+              <ds-radio name="tp-plan" value="std" checked>Standard</ds-radio>
+              <ds-radio name="tp-plan" value="pro">Pro</ds-radio>
+              <ds-switch checked></ds-switch>
+            </div>
+
+            <div class="tp-demo">
+              <h3>Slider</h3>
+              <ds-slider value="60" label="Volume"></ds-slider>
+            </div>
+
+            <div class="tp-demo">
+              <h3>Chips</h3>
+              <div class="tp-demo__row">
+                <ds-chip label="Assist"></ds-chip>
+                <ds-chip label="With icon" icon="add"></ds-chip>
+                <ds-chip label="Elevated" elevated></ds-chip>
+              </div>
+            </div>
+
+            <div class="tp-demo">
+              <h3>Badge</h3>
+              <div class="tp-demo__row">
+                <span>Inbox</span>
+                <ds-badge value="3"></ds-badge>
+                <ds-badge value="8" color="primary"></ds-badge>
+              </div>
+            </div>
+
+            <div class="tp-demo">
+              <h3>Progress</h3>
+              <ds-linear-progress value="45"></ds-linear-progress>
+              <ds-linear-progress value="70" color="secondary">
+              </ds-linear-progress>
+            </div>
+
+            <div class="tp-demo">
+              <h3>Card</h3>
+              <ds-card variant="elevated">
+                <span slot="title">Weekly digest</span>
+                <span slot="subhead">3 new items</span>
+                <p>A container that leans on elevation and the surface ramp.</p>
+                <div slot="actions">
+                  <ds-button variant="text">Open</ds-button>
+                </div>
+              </ds-card>
+            </div>
+
+            <div class="tp-demo">
+              <h3>Tabs</h3>
+              <ds-tabs>
+                <button slot="tab">Overview</button>
+                <button slot="tab">Activity</button>
+                <div slot="panel">Overview panel content.</div>
+                <div slot="panel">Activity panel content.</div>
+              </ds-tabs>
+            </div>
+
+            <div class="tp-demo">
+              <h3>List</h3>
+              <ds-list>
+                <ds-list-item headline="Inbox"
+                  supporting-text="2 new messages"></ds-list-item>
+                <ds-list-item headline="Drafts"></ds-list-item>
+                <ds-list-item headline="Sent"></ds-list-item>
+              </ds-list>
+            </div>
+
+            <div class="tp-demo">
+              <h3>Tooltip</h3>
+              <div class="tp-demo__row">
+                <button type="button" id="tp-tt">Hover me</button>
+                <ds-tooltip for="tp-tt">Follows the theme too</ds-tooltip>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section">
+          <h2>How the palettes are generated</h2>
+          <p class="tp-note">
+            Each palette fixes a hue and chroma and ramps lightness across the
+            13 tones in the <strong>OKLCH</strong> colour space, clamping chroma
+            back into the sRGB gamut per stop. Secondary and tertiary reuse the
+            source hue (tertiary rotated +60°) at reduced chroma; the neutrals
+            are the source hue at near-zero chroma. It is a perceptual
+            approximation, not a port of Google's HCT algorithm — no
+            dependencies, ~40 lines of colour maths. The role mapping (tone 40
+            for <code>primary</code> in light, tone 80 in dark, and so on)
+            mirrors <code>src/tokens/tokens.css</code> exactly, so a copied
+            block is a drop-in replacement.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="tp-toast" id="tp-toast" hidden></div>
+
+    <script type="module">
+      // ---- OKLCH colour maths ------------------------------------------------
+      const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+
+      function hexToRgb(hex) {
+        let h = hex.replace("#", "").trim();
+        if (h.length === 3) h = h.split("").map((c) => c + c).join("");
+        const n = parseInt(h, 16);
+        return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+      }
+      function rgbToHex([r, g, b]) {
+        const p = (v) => clamp(Math.round(v), 0, 255).toString(16).padStart(2, "0");
+        return "#" + p(r) + p(g) + p(b);
+      }
+      const toLin = (c) => {
+        c /= 255;
+        return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+      };
+      const toSrgb = (c) => {
+        const v = c <= 0.0031308 ? c * 12.92 : 1.055 * Math.pow(c, 1 / 2.4) - 0.055;
+        return v * 255;
+      };
+      function rgbToOklab([r, g, b]) {
+        const lr = toLin(r), lg = toLin(g), lb = toLin(b);
+        const l = 0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb;
+        const m = 0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb;
+        const s = 0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb;
+        const l_ = Math.cbrt(l), m_ = Math.cbrt(m), s_ = Math.cbrt(s);
+        return [
+          0.2104542553 * l_ + 0.793617785 * m_ - 0.0040720468 * s_,
+          1.9779984951 * l_ - 2.428592205 * m_ + 0.4505937099 * s_,
+          0.0259040371 * l_ + 0.7827717662 * m_ - 0.808675766 * s_,
+        ];
+      }
+      function oklabToRgb([L, a, b]) {
+        const l_ = L + 0.3963377774 * a + 0.2158037573 * b;
+        const m_ = L - 0.1055613458 * a - 0.0638541728 * b;
+        const s_ = L - 0.0894841775 * a - 1.291485548 * b;
+        const l = l_ ** 3, m = m_ ** 3, s = s_ ** 3;
+        return [
+          toSrgb(4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s),
+          toSrgb(-1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s),
+          toSrgb(-0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s),
+        ];
+      }
+      const oklabToOklch = ([L, a, b]) => [L, Math.hypot(a, b), Math.atan2(b, a)];
+      const oklchToOklab = ([L, C, h]) => [L, C * Math.cos(h), C * Math.sin(h)];
+      const inGamut = ([r, g, b]) => {
+        const e = 0.6;
+        return r >= -e && r <= 255 + e && g >= -e && g <= 255 + e &&
+          b >= -e && b <= 255 + e;
+      };
+      function oklchToHex(L, C, h) {
+        L = clamp(L, 0, 1);
+        let rgb = oklabToRgb(oklchToOklab([L, C, h]));
+        if (!inGamut(rgb)) {
+          let lo = 0, hi = C;
+          for (let i = 0; i < 22; i++) {
+            const mid = (lo + hi) / 2;
+            if (inGamut(oklabToRgb(oklchToOklab([L, mid, h])))) lo = mid;
+            else hi = mid;
+          }
+          rgb = oklabToRgb(oklchToOklab([L, lo, h]));
+        }
+        return rgbToHex(rgb);
+      }
+      const hexToOklch = (hex) => oklabToOklch(rgbToOklab(hexToRgb(hex)));
+
+      // ---- palette model --------------------------------------------------
+      const KINDS = [
+        ["primary", "Primary"],
+        ["secondary", "Secondary"],
+        ["tertiary", "Tertiary"],
+        ["neutral", "Neutral"],
+        ["neutral-variant", "Neutral Variant"],
+        ["error", "Error"],
+      ];
+      const CFG = {
+        "primary": { rot: 0, cMul: 1, fixed: null },
+        "secondary": { rot: 0, cMul: 0.26, fixed: null },
+        "tertiary": { rot: Math.PI / 3, cMul: 0.6, fixed: null },
+        "neutral": { rot: 0, cMul: 0, fixed: 0.004 },
+        "neutral-variant": { rot: 0, cMul: 0, fixed: 0.013 },
+        // hue + chroma anchored to the MD3 baseline error40 (#ba1a1a) below
+        "error": { rot: 0, cMul: 1, fixed: null, hue: 0, cBase: 0 },
+      };
+      const DISPLAY_TONES = [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100];
+      const ALL_TONES = [
+        0, 10, 12, 17, 20, 22, 30, 40, 50, 60, 70, 80, 90, 92, 94, 95, 99, 100,
+      ];
+
+      // Anchor the error hue/chroma to the MD3 baseline error40.
+      const errLch = hexToOklch("#ba1a1a");
+      CFG.error.hue = errLch[2];
+      CFG.error.cBase = errLch[1];
+
+      let source = "#006878";
+      let srcLch = hexToOklch(source);
+      let scheme = "light";
+
+      // MD3 "tone" is CIE L*. Convert L* -> luminance Y -> OKLab L
+      // (for a neutral, OKLab L is the cube root of linear luminance).
+      const toneToL = (t) => {
+        const Lstar = clamp(t, 0, 100);
+        const Y = Lstar > 8
+          ? Math.pow((Lstar + 16) / 116, 3)
+          : Lstar / 903.2962962;
+        return Math.cbrt(Y);
+      };
+      // Keep chroma high across the mid range, easing to 0 at the extremes.
+      const envelope = (L) =>
+        Math.min(1, 1.25 * Math.pow(Math.sin(Math.PI * clamp(L, 0, 1)), 0.4));
+
+      function paletteHex(kind, tone) {
+        if (tone <= 0) return "#000000";
+        if (tone >= 100) return "#ffffff";
+        const cfg = CFG[kind];
+        const L = toneToL(tone);
+        let h, cBase;
+        if (kind === "error") {
+          h = cfg.hue;
+          cBase = cfg.cBase;
+        } else {
+          h = srcLch[2] + cfg.rot;
+          cBase = cfg.fixed != null ? cfg.fixed : srcLch[1] * cfg.cMul;
+        }
+        let C;
+        if (cfg.fixed != null) C = cBase;
+        else if (kind === "error") C = cBase * envelope(L);
+        else C = cBase * envelope(L) * 1.35;
+        return oklchToHex(L, C, h);
+      }
+
+      // ---- system-colour role maps (mirror tokens.css) ------------------
+      const P = "primary", S = "secondary", T = "tertiary", E = "error",
+        N = "neutral", NV = "neutral-variant";
+      const SYS_LIGHT = {
+        "primary": [P, 40], "on-primary": [P, 100],
+        "primary-container": [P, 90], "on-primary-container": [P, 10],
+        "secondary": [S, 40], "on-secondary": [S, 100],
+        "secondary-container": [S, 90], "on-secondary-container": [S, 10],
+        "tertiary": [T, 40], "on-tertiary": [T, 100],
+        "tertiary-container": [T, 90], "on-tertiary-container": [T, 10],
+        "error": [E, 40], "on-error": [E, 100],
+        "error-container": [E, 90], "on-error-container": [E, 10],
+        "background": [N, 99], "on-background": [N, 10],
+        "surface": [N, 99], "on-surface": [N, 10],
+        "surface-variant": [NV, 90], "on-surface-variant": [NV, 30],
+        "surface-container-lowest": [N, 100], "surface-container-low": [N, 95],
+        "surface-container": [N, 94], "surface-container-high": [N, 92],
+        "surface-container-highest": [N, 90],
+        "outline": [NV, 50], "outline-variant": [NV, 80],
+        "inverse-surface": [N, 20], "inverse-on-surface": [N, 95],
+        "inverse-primary": [P, 80],
+      };
+      const SYS_DARK = {
+        "primary": [P, 80], "on-primary": [P, 20],
+        "primary-container": [P, 30], "on-primary-container": [P, 90],
+        "secondary": [S, 80], "on-secondary": [S, 20],
+        "secondary-container": [S, 30], "on-secondary-container": [S, 90],
+        "tertiary": [T, 80], "on-tertiary": [T, 20],
+        "tertiary-container": [T, 30], "on-tertiary-container": [T, 90],
+        "error": [E, 80], "on-error": [E, 20],
+        "error-container": [E, 30], "on-error-container": [E, 90],
+        "background": [N, 10], "on-background": [N, 90],
+        "surface": [N, 10], "on-surface": [N, 90],
+        "surface-variant": [NV, 30], "on-surface-variant": [NV, 80],
+        "surface-container-lowest": [N, 0], "surface-container-low": [N, 10],
+        "surface-container": [N, 12], "surface-container-high": [N, 17],
+        "surface-container-highest": [N, 22],
+        "outline": [NV, 60], "outline-variant": [NV, 30],
+        "inverse-surface": [N, 90], "inverse-on-surface": [N, 20],
+        "inverse-primary": [P, 40],
+      };
+      const sysMap = () => (scheme === "dark" ? SYS_DARK : SYS_LIGHT);
+
+      // ---- DOM ----------------------------------------------------------
+      const $ = (id) => document.getElementById(id);
+      const previewEl = $("tp-preview");
+      const stripsEl = $("tp-strips");
+      const sysEl = $("tp-sys");
+      const colorInput = $("tp-source");
+      const hexInput = $("tp-hex");
+      const toastEl = $("tp-toast");
+
+      const PRESETS = [
+        "#006878", "#6750a4", "#8e4585", "#3f6b2f",
+        "#b3261e", "#7d5260", "#255f9e", "#a1662f",
+      ];
+
+      const luminance = (hex) => {
+        const [r, g, b] = hexToRgb(hex).map(toLin);
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+      };
+      const readable = (hex) => (luminance(hex) > 0.4 ? "#000" : "#fff");
+
+      let toastTimer;
+      function toast(msg) {
+        toastEl.textContent = msg;
+        toastEl.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => (toastEl.hidden = true), 1600);
+      }
+      async function copy(text, label) {
+        try {
+          await navigator.clipboard.writeText(text);
+        } catch {
+          const ta = document.createElement("textarea");
+          ta.value = text;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand("copy");
+          ta.remove();
+        }
+        toast(label + " copied");
+      }
+
+      function refVar(kind, tone) {
+        return "--md-ref-palette-" + kind + tone;
+      }
+
+      function applyPreview() {
+        for (const [kind] of KINDS) {
+          for (const t of ALL_TONES) {
+            previewEl.style.setProperty(refVar(kind, t), paletteHex(kind, t));
+          }
+        }
+        const map = sysMap();
+        for (const [role, [kind, tone]] of Object.entries(map)) {
+          previewEl.style.setProperty(
+            "--md-sys-color-" + role,
+            paletteHex(kind, tone),
+          );
+        }
+        previewEl.style.setProperty(
+          "--md-sys-color-surface-tint",
+          paletteHex("primary", scheme === "dark" ? 80 : 40),
+        );
+        previewEl.style.colorScheme = scheme;
+      }
+
+      function renderStrips() {
+        stripsEl.innerHTML = KINDS.map(([kind, label]) => `
+          <div class="tp-strip">
+            <div class="tp-strip__name">${label}</div>
+            <div class="tp-strip__row">
+              ${DISPLAY_TONES.map((t) => {
+                const hex = paletteHex(kind, t);
+                return `<button type="button" class="tp-swatch"
+                  style="background:${hex};color:${readable(hex)}"
+                  data-copy="${refVar(kind, t)}: ${hex};"
+                  title="${kind} ${t} — ${hex}"><span>${t}</span></button>`;
+              }).join("")}
+            </div>
+          </div>`).join("");
+      }
+
+      function renderSys() {
+        const map = sysMap();
+        $("tp-scheme-label").textContent = scheme;
+        sysEl.innerHTML = Object.entries(map).map(([role, [kind, tone]]) => {
+          const hex = paletteHex(kind, tone);
+          return `<button type="button" class="tp-chip"
+            data-copy="--md-sys-color-${role}: ${hex};"
+            title="--md-sys-color-${role}">
+            <span class="tp-chip__dot" style="background:${hex}"></span>
+            <span>${role}<span class="tp-chip__hex">${hex}</span></span>
+          </button>`;
+        }).join("");
+      }
+
+      function buildRefBlock() {
+        let out = ":root {\n";
+        for (const [kind, label] of KINDS) {
+          out += `  /* ${label} */\n`;
+          for (const t of DISPLAY_TONES) {
+            out += `  ${refVar(kind, t)}: ${paletteHex(kind, t)};\n`;
+          }
+        }
+        return out + "}\n";
+      }
+      function buildSysBlock(which) {
+        const map = which === "dark" ? SYS_DARK : SYS_LIGHT;
+        const sel = which === "dark"
+          ? ':root[data-theme="dark"],\nhtml[data-theme="dark"] {'
+          : ":root {";
+        let out = sel + "\n";
+        for (const [role, [kind, tone]] of Object.entries(map)) {
+          out += `  --md-sys-color-${role}: ${paletteHex(kind, tone)};\n`;
+        }
+        return out + "}\n";
+      }
+
+      function setSource(hex, { push = true } = {}) {
+        hex = hex.trim();
+        if (!/^#?[0-9a-f]{6}$/i.test(hex)) return false;
+        if (hex[0] !== "#") hex = "#" + hex;
+        source = hex.toLowerCase();
+        srcLch = hexToOklch(source);
+        colorInput.value = source;
+        hexInput.value = source.toUpperCase();
+        renderStrips();
+        renderSys();
+        applyPreview();
+        if (push) {
+          try {
+            localStorage.setItem("tp:source", source);
+          } catch {}
+        }
+        return true;
+      }
+      function setScheme(next) {
+        scheme = next === "dark" ? "dark" : "light";
+        for (const b of $("tp-scheme").querySelectorAll("button")) {
+          b.setAttribute("aria-pressed", String(b.dataset.scheme === scheme));
+        }
+        renderSys();
+        applyPreview();
+        try {
+          localStorage.setItem("tp:scheme", scheme);
+        } catch {}
+      }
+
+      // ---- wiring -----------------------------------------------------
+      $("tp-presets").innerHTML = PRESETS.map((c) =>
+        `<button type="button" class="tp-preset" data-color="${c}"
+          style="background:${c}" title="${c}"
+          aria-label="Use ${c}"></button>`
+      ).join("");
+
+      colorInput.addEventListener("input", () => setSource(colorInput.value));
+      hexInput.addEventListener("change", () => {
+        if (!setSource(hexInput.value)) hexInput.value = source.toUpperCase();
+      });
+      $("tp-presets").addEventListener("click", (e) => {
+        const b = e.target.closest("[data-color]");
+        if (b) setSource(b.dataset.color);
+      });
+      $("tp-scheme").addEventListener("click", (e) => {
+        const b = e.target.closest("[data-scheme]");
+        if (b) setScheme(b.dataset.scheme);
+      });
+      $("tp-reset").addEventListener("click", () => {
+        setSource("#006878");
+        setScheme("light");
+      });
+      document.addEventListener("click", (e) => {
+        const el = e.target.closest("[data-copy]");
+        if (el) {
+          copy(el.dataset.copy, el.dataset.copy.split(":")[0]);
+          return;
+        }
+        const blk = e.target.closest("[data-copy-block]");
+        if (blk) {
+          const kind = blk.dataset.copyBlock;
+          if (kind === "ref") copy(buildRefBlock(), "Palette block");
+          else copy(buildSysBlock(kind), kind === "dark" ? "Dark block" : "Light block");
+        }
+      });
+
+      // ---- restore + first paint -----------------------------------
+      let saved;
+      try {
+        saved = {
+          source: localStorage.getItem("tp:source"),
+          scheme: localStorage.getItem("tp:scheme"),
+        };
+      } catch {
+        saved = {};
+      }
+      renderStrips();
+      renderSys();
+      applyPreview();
+      if (saved.source) setSource(saved.source, { push: false });
+      if (saved.scheme === "dark") setScheme("dark");
+    </script>
+
+    <script src="../shared/theme-init.js"></script>
+    <script src="../shared/docs-nav.js"></script>
+  </body>
+</html>

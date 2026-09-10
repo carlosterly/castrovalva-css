@@ -20,6 +20,7 @@
     {
       name: "Foundations",
       items: [
+        ["theme-playground", "Theme Playground"],
         ["design-tokens", "Design Tokens"],
         ["state-layers", "State Layers"],
         ["motion-animation", "Motion & Animation"],
