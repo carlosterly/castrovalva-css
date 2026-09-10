@@ -49,7 +49,10 @@
   /* Neutral Tonal Palette */
   --md-ref-palette-neutral0: #000000;
   --md-ref-palette-neutral10: #191c1d;
+  --md-ref-palette-neutral12: #1d2021;
+  --md-ref-palette-neutral17: #272b2b;
   --md-ref-palette-neutral20: #2e3132;
+  --md-ref-palette-neutral22: #323636;
   --md-ref-palette-neutral30: #444748;
   --md-ref-palette-neutral40: #5c5f5f;
   --md-ref-palette-neutral50: #747878;
@@ -57,6 +60,8 @@
   --md-ref-palette-neutral70: #a8acac;
   --md-ref-palette-neutral80: #c4c7c7;
   --md-ref-palette-neutral90: #e0e3e3;
+  --md-ref-palette-neutral92: #e6e8e8;
+  --md-ref-palette-neutral94: #ebeded;
   --md-ref-palette-neutral95: #eff1f1;
   --md-ref-palette-neutral99: #fafdfd;
   --md-ref-palette-neutral100: #ffffff;
@@ -123,12 +128,15 @@
   --md-sys-color-surface-variant: var(--md-ref-palette-neutral-variant90);
   --md-sys-color-on-surface-variant: var(--md-ref-palette-neutral-variant30);
 
-  /* Surface Containers */
+  /* Surface Containers.
+     Light tonal ramp must stay in the near-white range — mapping the
+     higher steps onto mid-grey palette tones made filled surfaces
+     (text fields, filled cards, table toolbars) read as disabled. */
   --md-sys-color-surface-container-lowest: var(--md-ref-palette-neutral100);
   --md-sys-color-surface-container-low: var(--md-ref-palette-neutral95);
-  --md-sys-color-surface-container: var(--md-ref-palette-neutral90);
-  --md-sys-color-surface-container-high: var(--md-ref-palette-neutral80);
-  --md-sys-color-surface-container-highest: var(--md-ref-palette-neutral70);
+  --md-sys-color-surface-container: var(--md-ref-palette-neutral94);
+  --md-sys-color-surface-container-high: var(--md-ref-palette-neutral92);
+  --md-sys-color-surface-container-highest: var(--md-ref-palette-neutral90);
 
   /* Background */
   --md-sys-color-background: var(--md-ref-palette-neutral99);
@@ -411,12 +419,13 @@ html[data-theme="dark"] {
   --md-sys-color-surface-variant: var(--md-ref-palette-neutral-variant30);
   --md-sys-color-on-surface-variant: var(--md-ref-palette-neutral-variant80);
 
-  /* Surface Containers */
+  /* Surface Containers. Dark ramp climbs from surface (neutral10); the
+     old 20/30/40 steps put filled surfaces at mid-grey. */
   --md-sys-color-surface-container-lowest: var(--md-ref-palette-neutral0);
   --md-sys-color-surface-container-low: var(--md-ref-palette-neutral10);
-  --md-sys-color-surface-container: var(--md-ref-palette-neutral20);
-  --md-sys-color-surface-container-high: var(--md-ref-palette-neutral30);
-  --md-sys-color-surface-container-highest: var(--md-ref-palette-neutral40);
+  --md-sys-color-surface-container: var(--md-ref-palette-neutral12);
+  --md-sys-color-surface-container-high: var(--md-ref-palette-neutral17);
+  --md-sys-color-surface-container-highest: var(--md-ref-palette-neutral22);
 
   /* Background */
   --md-sys-color-background: var(--md-ref-palette-neutral10);

@@ -255,6 +255,9 @@ export class DSListItem extends HTMLElement {
     const supportingText = this.supportingText || "";
     const trailingText = this.trailingText || "";
     const isDisabled = this.disabled;
+    // MD3 list items indent to 16px when there is no leading element; the
+    // leading box + row gap otherwise reserve ~32px of empty space.
+    const hasLeading = this.querySelector('[slot="leading"]') !== null;
 
     let contentClass = "one-line-content";
 
@@ -325,6 +328,10 @@ export class DSListItem extends HTMLElement {
           display: flex;
           align-items: center;
           flex-shrink: 0;
+        }
+
+        [part="container"].no-leading [part="leading"] {
+          display: none;
         }
 
         [part="content"] {
@@ -408,7 +415,7 @@ export class DSListItem extends HTMLElement {
         }
       </style>
 
-      <div part="container">
+      <div part="container" class="${hasLeading ? "" : "no-leading"}">
         <div part="leading">
           <slot name="leading"></slot>
         </div>

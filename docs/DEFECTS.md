@@ -43,6 +43,37 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — The six documentation links (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`) point at raw `.md` files. On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is site work.
 
+## Candidate findings — first-pass screenshot review (unconfirmed)
+
+Claude's first pass over the `_qa-out/` contact sheet (Tier-1 components,
+desktop + mobile, light + dark, 11 Sep 2026). **Not verified against the
+spec.** Each remaining item is either a real defect that graduates to _Open
+defects_ above, or noise that gets deleted, once reviewed.
+
+- **[C] button — disabled state.** Disabled filled button looks like the
+  enabled fill at reduced opacity (translucent `primary`, white text) rather
+  than MD3's `on-surface` 12% container / 38% label.
+- **[C] switch — unselected track outline.** The unselected track appears to
+  have no border; MD3 unselected switch track carries a 2px `outline` stroke.
+  Low confidence from a screenshot.
+- **[C] badge — default colour.** Default badge colour is `primary` (teal);
+  MD3's default badge colour is `error`. Probably a deliberate token choice.
+- **[C] data-table — sort affordance.** Sort arrows show on every column at
+  once rather than only the active column; pagination buttons are small and
+  vertically misaligned with the caption.
+
+Fixed from this pass (see git history): filled-surface tonal ramp
+(`surface-container` steps were mapped onto mid-grey palette tones, so text
+fields / filled cards / table toolbars read as disabled), `ds-card`
+elevated variant not separating in dark mode, `ds-list-item` reserving
+leading-slot space when empty, `ds-icon` ignoring text-content glyphs
+(every `<ds-fab>` on its demo page rendered iconless), and `ds-button`
+corner radius (was `--ds-radius-md` / ~8px, now the MD3 full-pill).
+
+Reviewed and looked clean in this pass: checkbox, radio, tabs.
+Not assessable from at-rest screenshots (never triggered by the sweep):
+menu, dialog, tooltip, snackbar surfaces.
+
 ## Triage coverage
 
 ### Q2 full sweep — 10 Sep 2026

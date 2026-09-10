@@ -225,6 +225,11 @@ export default class DSIcon extends HTMLElement {
     const role = label ? "img" : "presentation";
     const ariaLabel = label ? `aria-label="${label}"` : 'aria-hidden="true"';
 
+    // The Material Symbols glyph comes from `name`, or — matching the
+    // native `<span class="material-symbols">add</span>` ligature idiom —
+    // from the element's text content when `name` is not set.
+    const glyph = this.name || (this.textContent || "").trim();
+
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -283,7 +288,7 @@ export default class DSIcon extends HTMLElement {
         class="icon ${variantClass}"
         role="${role}"
         ${ariaLabel}
-      >${this.name}</span>
+      >${glyph}</span>
     `;
   }
 }

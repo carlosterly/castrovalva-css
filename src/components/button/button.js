@@ -210,7 +210,8 @@ export default class DSButton extends HTMLElement {
         :host {
           display: inline-block;
           --button-font-family: var(--md-sys-typescale-font-family);
-          --button-border-radius: var(--ds-radius-md);
+          /* MD3 common buttons are fully rounded (stadium shape). */
+          --button-border-radius: var(--ds-radius-full);
           --button-transition: all var(--md-sys-motion-duration-short2) var(--md-sys-motion-easing-standard);
         }
 

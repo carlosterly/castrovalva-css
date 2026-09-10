@@ -125,8 +125,11 @@ export class DSCard extends HTMLElement {
           transition: box-shadow 200ms var(--md-sys-motion-easing-standard);
         }
 
-        /* Elevated variant */
+        /* Elevated variant. A drop shadow alone is nearly invisible in
+           dark mode, so the surface also steps up a tonal container
+           level to stay separated from the page background. */
         .card[data-variant="elevated"] {
+          background-color: var(--md-sys-color-surface-container-low);
           box-shadow: var(--md-sys-elevation-level1);
         }
 
