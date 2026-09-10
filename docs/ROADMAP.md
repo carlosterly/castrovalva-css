@@ -86,10 +86,11 @@ Delivered:
 - **Navigation shell** — [docs/shared/docs-nav.js](./shared/docs-nav.js), one file included by all 50 demo pages. Fixed sidebar on desktop, off-canvas drawer + hamburger on mobile, full 50-component list grouped by category, current page highlighted and scrolled into view, live filter (`/` to focus, `Esc` to clear), arrow-key navigation. Retired the hand-built `shared-nav.html` prototype (only 7 items, linked from nowhere) — which also closed the last open mobile-overflow item.
 - **Content search** — `scripts/build-search-index.mjs` generates `docs/search-index.json` from the demo pages (section headings + API attribute/event/slot/part names); the Pages deploy regenerates it each time. The nav filter now matches page content, not just titles — "disabled" surfaces every component with a disabled state, "ds-click" finds Button. Not yet covered: token-name search from `tokens.md` (blocked on the same raw-`.md` rendering issue as the home-page doc links).
 - **Performance — font weight.** The Material Symbols Outlined variable font at full axis range was a 3.9 MB woff2, 82% of every page. Pinned it to a static instance (`@24,400,0,0`, ~315 KB) on every page except `icon.html` — no other page varies the icon axes. Added `preconnect` and `&display=swap` everywhere. Page weight fell ~77% (button.html 4.76 MB → 1.19 MB). `icon.html` keeps the full font since demoing those axes is its purpose. `display=swap` meant fonts never blocked paint, so FCP was already fine (~0.7–1.1 s). No exact Lighthouse score captured — the anonymous PageSpeed Insights quota was exhausted; run `npx lighthouse <url>` for the number. Optional further win: self-host a ~15 KB glyph subset instead of the 315 KB static font.
+- **Component QA — triage and Tier-1 fixes.** `scripts/qa-sweep.mjs` swept all 50 demo pages × {360px, 1280px} × {light, dark}, plus 8 components inside `<ds-dialog>` — mechanically clean (no overflow, console errors, page errors or failed requests). Fixed from the sweep and the first-pass contact-sheet review: `ds-slider` keyboard + ARIA (it had neither), the mis-mapped `surface-container` tonal ramp that made every filled input read as disabled, `ds-card` dark-mode elevation, `ds-list-item` empty-leading inset, `ds-icon` text-content glyphs, `ds-button` corner radius and disabled state, `ds-badge` default colour, `ds-data-table` sort affordance, and the `docs-nav` hamburger crowding the page `<h1>`. See [DEFECTS.md](./DEFECTS.md).
 
 | Work | Est. |
 | --- | --- |
-| **Component QA — triage all 43, fix Tier 1.** One automated sweep covers all 43 (cheap to do at once); this quarter fixes the ~18 Tier-1 components a visitor is most likely to land on. Tier 2 fixes fall to Q3. See the workstream below. | 25h |
+| **Component QA — manual pass.** Triage and the Tier-1 fixes are done (see _Done early_). What remains is the review the sweep cannot do: MD3 fidelity by eye (elevation, state-layer opacity, type scale, spacing rhythm), interactive states (hover / focus-visible / pressed), and the overlays the sweep never opens — menu, dialog, tooltip, snackbar. | 10h |
 
 **Minimum viable stop:** landing page plus working navigation — **both done.** The rest is refinement.
 
@@ -109,6 +110,7 @@ Delivered:
 | Work | Est. |
 | --- | --- |
 | **Interactive theme playground** — live-edit the MD3 source colour, watch all 78 tonal palette values and every component re-theme in real time, with token values and copy-to-clipboard built into the same surface. The single highest-leverage portfolio artefact available from what already exists: 250+ tokens and a working theme system. | 20h |
+| &nbsp;&nbsp;↳ **Scope agreed Sep 2026:** standalone page (`docs/theme-playground.html`), linked from the nav shell and landing page. One **primary** source-colour picker; secondary / tertiary / neutral palettes derived by hue rotation. Palette generation is an **OKLCH lightness ramp** (13 stops/palette, no dependencies) — not a bit-accurate HCT port, deliberately, to keep the zero-runtime-deps story. Live preview is a **curated ~12–15 component set** rendered in the page (no iframe). Copy-to-clipboard per token and for the whole `:root` block. | |
 | Visual regression tests (Playwright screenshots) — run **after** the QA workstream completes, so the baselines capture a fixed state rather than an unstable one. | 10h |
 | One realistic composed demo — a settings page or dashboard built entirely from the library, proving the components work together rather than only in isolation. This is also the cheapest way to surface composition defects that per-component review cannot see. | 10h |
 | **Component QA, second half** — see the workstream below. | 15h |
@@ -188,6 +190,10 @@ interesting the bug is.
 broken state and entrench it. Q3's regression suite runs once the fixing is done.
 
 ### How the pass runs (agreed Sep 2026)
+
+**Status:** the sweep, the contact sheet and the first-pass fidelity review
+are done (Sep 2026). Only the human MD3-fidelity pass over the Tier-1
+contact sheet and the never-opened overlays is outstanding.
 
 - **One triage sweep over all 43**, not the Q2 half. It is mostly a script
   (viewports, themes, overflow, console errors, failed requests,
