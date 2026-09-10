@@ -43,23 +43,42 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — The six documentation links (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`) point at raw `.md` files. On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is site work.
 
-## Triage coverage — Q1 sweep, 9 Sep 2026
+## Triage coverage
 
-Automated pass over all 51 pages × {390px, 1280px} × {light, dark} — 204 states.
-Checked: console errors, uncaught exceptions, failed requests, placeholder
-`<title>`, horizontal overflow. **Only overflow was found** — no console errors,
-no page errors, no broken requests, no placeholder titles anywhere.
+### Q2 full sweep — 10 Sep 2026
 
-Still needs a human pass (not covered by the automated sweep):
+`scripts/qa-sweep.mjs` over all 50 demo pages × {360px, 1280px} × {light, dark}
+— 200 states. Checked: horizontal overflow, console errors, uncaught
+exceptions, failed requests, whether the first `ds-*` renders, keyboard reach
+of the primary control, a few light a11y flags. Plus 8 representative
+components dropped inside `<ds-dialog open>`.
+
+**Mechanically clean.** Zero overflow, zero console errors, zero page errors,
+zero failed requests anywhere. All 8 composition checks pass.
+
+**Three findings, all since fixed (see git history):** `ds-slider` had no
+keyboard operation and no ARIA (A) — now has `role="slider"` thumbs, full arrow
+/ Page / Home / End keys, and synced `aria-value*`; the `state-layers` demo had
+three unnamed icon buttons (B); the `docs-nav.js` mobile hamburger crowded the
+page `<h1>` on every demo page (B) — top padding bumped to 72px.
+
+**Explained, no action:** `search-view` — its `<ds-search-view>` overlays live
+outside `.content-area` by design, so the sweep sees "no component on page".
+`tooltip` — `ds-tooltip` is 0×0 at rest, which is correct for a hover/focus
+tooltip.
+
+### Still needs a human pass
+
+The sweep only covers mechanical checks. Not covered — this is where most
+remaining findings will come from, reviewing the contact sheet
+(`_qa-out/index.html`, not committed):
 
 - MD3 visual fidelity — elevation, corner radius, state-layer opacity, type scale
 - Interactive states — hover, focus-visible, pressed, disabled
-- Keyboard paths, and component behaviour (focus trapping, carousel advance, menu positioning, …)
-- Composition — a component inside a dialog / sheet / card
-- Real accessibility — waits on the axe harness (Q4)
+- Component behaviour — focus trapping, carousel advance, menu positioning, …
+- Real accessibility (ARIA roles/names/live regions) — waits on the axe harness (Q4)
 
-Screenshots from the sweep are not committed (204 images); regenerate from
-the script in the scratchpad if needed.
+The 200 screenshots are not committed; regenerate with `node scripts/qa-sweep.mjs`.
 
 ---
 

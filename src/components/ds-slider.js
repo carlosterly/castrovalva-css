@@ -46,6 +46,7 @@ export class DSSlider extends HTMLElement {
     this._updateLabel();
     this._updateColor();
     this._updateSize();
+    this._updateAria();
   }
 
   disconnectedCallback() {
@@ -195,6 +196,10 @@ export class DSSlider extends HTMLElement {
 
     this._handlePointerMoveBound = this._handlePointerMove.bind(this);
     this._handlePointerUpBound = this._handlePointerUp.bind(this);
+
+    this._handleKeyDownBound = this._handleKeyDown.bind(this);
+    this._thumb.addEventListener("keydown", this._handleKeyDownBound);
+    this._thumbStart.addEventListener("keydown", this._handleKeyDownBound);
   }
 
   _detachListeners() {
@@ -202,6 +207,11 @@ export class DSSlider extends HTMLElement {
       "pointerdown",
       this._handlePointerDown.bind(this),
     );
+
+    if (this._handleKeyDownBound) {
+      this._thumb.removeEventListener("keydown", this._handleKeyDownBound);
+      this._thumbStart.removeEventListener("keydown", this._handleKeyDownBound);
+    }
   }
 
   _handlePointerDown(e) {
@@ -341,6 +351,157 @@ export class DSSlider extends HTMLElement {
     }
   }
 
+  _snap(val) {
+    if (this._step > 0) {
+      const steps = Math.round((val - this._min) / this._step);
+      const snapped = this._min + steps * this._step;
+      // Guard against binary-floating-point drift for fractional steps
+      // (e.g. 0.1 + 0.2). Round to the precision implied by the step.
+      const decimals = (String(this._step).split(".")[1] || "").length;
+      return decimals ? parseFloat(snapped.toFixed(decimals)) : snapped;
+    }
+    return val;
+  }
+
+  _handleKeyDown(e) {
+    if (this._disabled) return;
+
+    const step = this._step > 0 ? this._step : 1;
+    const bigStep = Math.max(step, (this._max - this._min) / 10);
+    let delta = 0;
+    let absolute = null;
+
+    switch (e.key) {
+      case "ArrowRight":
+      case "ArrowUp":
+        delta = step;
+        break;
+      case "ArrowLeft":
+      case "ArrowDown":
+        delta = -step;
+        break;
+      case "PageUp":
+        delta = bigStep;
+        break;
+      case "PageDown":
+        delta = -bigStep;
+        break;
+      case "Home":
+        absolute = "min";
+        break;
+      case "End":
+        absolute = "max";
+        break;
+      default:
+        return;
+    }
+
+    e.preventDefault();
+
+    const resolve = (current, lo, hi) => {
+      let next =
+        absolute === "min"
+          ? lo
+          : absolute === "max"
+            ? hi
+            : current + delta;
+      next = this._snap(next);
+      return Math.max(lo, Math.min(hi, next));
+    };
+
+    let changed = false;
+
+    if (this._isRange) {
+      const onStart = e.currentTarget === this._thumbStart;
+      if (onStart) {
+        const next = resolve(this._valueStart, this._min, this._valueEnd);
+        if (next !== this._valueStart) {
+          this._valueStart = next;
+          changed = true;
+        }
+      } else {
+        const next = resolve(this._valueEnd, this._valueStart, this._max);
+        if (next !== this._valueEnd) {
+          this._valueEnd = next;
+          changed = true;
+        }
+      }
+    } else {
+      const next = resolve(this._value, this._min, this._max);
+      if (next !== this._value) {
+        this._value = next;
+        changed = true;
+      }
+    }
+
+    if (!changed) return;
+
+    this._updateVisuals();
+    this._updateValueText();
+
+    const detail = this._isRange
+      ? { valueStart: this._valueStart, valueEnd: this._valueEnd }
+      : { value: this._value };
+
+    // A keyboard change is committed immediately, so — like a native
+    // range input — emit both `input` and `change`.
+    this.dispatchEvent(
+      new CustomEvent("input", { detail, bubbles: true, composed: true }),
+    );
+    this.dispatchEvent(
+      new CustomEvent("change", { detail, bubbles: true, composed: true }),
+    );
+  }
+
+  _updateAria() {
+    if (!this._thumb) return;
+
+    const base = this.getAttribute("label") || "Slider";
+
+    const applyThumb = (elm, label, now, min, max) => {
+      if (!elm) return;
+      elm.setAttribute("role", "slider");
+      elm.setAttribute("aria-orientation", "horizontal");
+      elm.setAttribute("aria-label", label);
+      elm.setAttribute("aria-valuemin", String(min));
+      elm.setAttribute("aria-valuemax", String(max));
+      elm.setAttribute("aria-valuenow", String(now));
+      elm.setAttribute("aria-valuetext", String(now));
+      if (this._disabled) {
+        elm.setAttribute("aria-disabled", "true");
+        elm.setAttribute("tabindex", "-1");
+      } else {
+        elm.removeAttribute("aria-disabled");
+        elm.setAttribute("tabindex", "0");
+      }
+    };
+
+    if (this._isRange) {
+      applyThumb(
+        this._thumbStart,
+        `${base} minimum`,
+        Math.round(this._valueStart * 100) / 100,
+        this._min,
+        Math.round(this._valueEnd * 100) / 100,
+      );
+      applyThumb(
+        this._thumb,
+        `${base} maximum`,
+        Math.round(this._valueEnd * 100) / 100,
+        Math.round(this._valueStart * 100) / 100,
+        this._max,
+      );
+    } else {
+      applyThumb(
+        this._thumb,
+        base,
+        Math.round(this._value * 100) / 100,
+        this._min,
+        this._max,
+      );
+    }
+  }
+
   _updateVisuals() {
     if (!this._track) return;
 
@@ -384,6 +545,8 @@ export class DSSlider extends HTMLElement {
       this._trackActive.style.transformOrigin = "left"; // Ensure origin is left
       this._thumb.style.left = `${clampedPercentage * 100}%`;
     }
+
+    this._updateAria();
   }
 
   _updateValueText() {
@@ -402,6 +565,7 @@ export class DSSlider extends HTMLElement {
     if (this._labelEl) {
       this._labelEl.textContent = this.getAttribute("label") || "";
     }
+    this._updateAria();
   }
 
   _updateDisabledState() {
@@ -412,6 +576,7 @@ export class DSSlider extends HTMLElement {
     } else {
       this._container.classList.remove("disabled");
     }
+    this._updateAria();
   }
 
   _updateColor() {
@@ -562,9 +727,27 @@ export class DSSlider extends HTMLElement {
           transform: translate(-50%, -50%) scale(1.1);
           box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
         }
-        
+
         .slider-container.dragging .thumb {
            cursor: grabbing;
+        }
+
+        .thumb:focus-visible {
+          outline: none;
+        }
+
+        /* Higher specificity than the :hover rule so the focus ring wins. */
+        .slider-container .thumb:focus-visible {
+          transform: translate(-50%, -50%) scale(1.1);
+          box-shadow:
+            0 0 0 var(--ds-focus-ring-offset, 2px)
+              var(--md-sys-color-surface, #fff),
+            0 0 0
+              calc(
+                var(--ds-focus-ring-offset, 2px) +
+                  var(--ds-focus-ring-width, 3px)
+              )
+              var(--ds-focus-ring-color, var(--slider-color));
         }
 
       </style>
@@ -577,8 +760,18 @@ export class DSSlider extends HTMLElement {
         
         <div class="track-wrapper track">
           <div class="track-active"></div>
-          <div class="thumb thumb-start"></div>
-          <div class="thumb thumb-end"></div>
+          <div
+            class="thumb thumb-start"
+            role="slider"
+            aria-orientation="horizontal"
+            tabindex="-1"
+          ></div>
+          <div
+            class="thumb thumb-end"
+            role="slider"
+            aria-orientation="horizontal"
+            tabindex="0"
+          ></div>
         </div>
       </div>
     `;

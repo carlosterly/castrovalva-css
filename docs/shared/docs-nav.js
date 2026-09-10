@@ -240,8 +240,10 @@
       .dnav__toggle { display: flex; align-items: center; justify-content: center; }
       .dnav.is-open ~ .dnav__toggle { display: none; }
       .dnav.is-open ~ .dnav__backdrop { opacity: 1; pointer-events: auto; }
+      /* Clear the 44px toggle at inset-block-start:12px, plus breathing room
+         so the hamburger never crowds the page <h1>. */
       body.dnav-on .content-area,
-      body.dnav-on .page-container > .content-area { padding-block-start: 56px; }
+      body.dnav-on .page-container > .content-area { padding-block-start: 72px; }
     }
   `;
   document.head.appendChild(style);

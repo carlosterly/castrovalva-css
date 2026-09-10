@@ -38,3 +38,6 @@ pnpm-debug.log*
 Thumbs.db
 ehthumbs.db
 Desktop.ini
+
+# QA sweep output (scripts/qa-sweep.mjs)
+_qa-out/

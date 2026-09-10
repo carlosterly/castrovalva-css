@@ -506,7 +506,11 @@
         <div class="section">
           <h2>Accessibility</h2>
           <h3>Keyboard Map</h3>
-          <p>This implementation relies on pointer/touch input. Keyboard control of the thumb is not built in.</p>
+          <p>
+            Each thumb is a focusable <code>role="slider"</code> element. In
+            range mode both thumbs are in the tab order; a disabled slider is
+            skipped.
+          </p>
           <table class="api-table">
             <thead>
               <tr>
@@ -517,20 +521,58 @@
             </thead>
             <tbody>
               <tr>
-                <td><code>Tab</code></td>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
                 <td>Slider not focused</td>
-                <td>Moves focus to the slider track.</td>
+                <td>Moves focus to a thumb (or past it).</td>
+              </tr>
+              <tr>
+                <td><code>&rarr;</code> / <code>&uarr;</code></td>
+                <td>Thumb focused</td>
+                <td>Increases the value by one <code>step</code>.</td>
+              </tr>
+              <tr>
+                <td><code>&larr;</code> / <code>&darr;</code></td>
+                <td>Thumb focused</td>
+                <td>Decreases the value by one <code>step</code>.</td>
+              </tr>
+              <tr>
+                <td><code>Page Up</code> / <code>Page Down</code></td>
+                <td>Thumb focused</td>
+                <td>
+                  Moves by a larger increment (10% of the range, or one step,
+                  whichever is greater).
+                </td>
+              </tr>
+              <tr>
+                <td><code>Home</code> / <code>End</code></td>
+                <td>Thumb focused</td>
+                <td>
+                  Jumps to the minimum / maximum the thumb is allowed to reach.
+                  In range mode a thumb stops at the other thumb.
+                </td>
               </tr>
             </tbody>
           </table>
           <h3>Semantics</h3>
           <ul>
-            <li>Provide a visible label using the <code>label</code> attribute.</li>
-            <li>Add external ARIA attributes when the slider is wrapped in a form control.</li>
-          </ul>
-          <h3>Known Limitation</h3>
-          <ul>
-            <li>Keyboard interaction for thumb movement is not implemented in this version; pointer input is required for value changes.</li>
+            <li>
+              Provide the accessible name with the <code>label</code> attribute.
+              It is applied to the thumb as <code>aria-label</code>; in range
+              mode the thumbs read as "<em>label</em> minimum" and
+              "<em>label</em> maximum".
+            </li>
+            <li>
+              Each thumb exposes <code>aria-valuemin</code>,
+              <code>aria-valuemax</code>, <code>aria-valuenow</code> and
+              <code>aria-valuetext</code>, kept in sync on both pointer and
+              keyboard changes. In range mode the thumbs' min/max close in on
+              each other so neither can be moved past the other.
+            </li>
+            <li>
+              A keyboard change emits both <code>input</code> and
+              <code>change</code> on the same keystroke, matching a native
+              range input.
+            </li>
           </ul>
         </div>
 

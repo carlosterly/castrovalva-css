@@ -507,6 +507,148 @@ describe("DSSlider", () => {
     });
   });
 
+  describe("Keyboard", () => {
+    const key = (target, k) =>
+      target.dispatchEvent(
+        new KeyboardEvent("keydown", { key: k, bubbles: true }),
+      );
+
+    it("should increase the value on ArrowRight by one step", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="50" step="1"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      key(thumb, "ArrowRight");
+
+      expect(el.value).to.equal(51);
+    });
+
+    it("should decrease the value on ArrowLeft by one step", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="50" step="1"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      key(thumb, "ArrowLeft");
+
+      expect(el.value).to.equal(49);
+    });
+
+    it("should treat ArrowUp / ArrowDown like ArrowRight / ArrowLeft", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="50" step="5"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      key(thumb, "ArrowUp");
+      expect(el.value).to.equal(55);
+
+      key(thumb, "ArrowDown");
+      expect(el.value).to.equal(50);
+    });
+
+    it("should honour the step increment", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="20" min="0" max="100" step="10"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      key(thumb, "ArrowRight");
+
+      expect(el.value).to.equal(30);
+    });
+
+    it("should jump to min on Home and max on End", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="50" min="10" max="90"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      key(thumb, "Home");
+      expect(el.value).to.equal(10);
+
+      key(thumb, "End");
+      expect(el.value).to.equal(90);
+    });
+
+    it("should move by a larger increment on PageUp / PageDown", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="50" min="0" max="100" step="1"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      key(thumb, "PageUp");
+      expect(el.value).to.equal(60);
+
+      key(thumb, "PageDown");
+      expect(el.value).to.equal(50);
+    });
+
+    it("should clamp at the maximum", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="100" min="0" max="100"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      key(thumb, "ArrowRight");
+
+      expect(el.value).to.equal(100);
+    });
+
+    it("should not respond to keys when disabled", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="50" disabled></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      key(thumb, "ArrowRight");
+
+      expect(el.value).to.equal(50);
+    });
+
+    it("should emit input and change on a keyboard change", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="50"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      const inputEvent = oneEvent(el, "input");
+      key(thumb, "ArrowRight");
+      const { detail: inputDetail } = await inputEvent;
+      expect(inputDetail.value).to.equal(51);
+
+      const changeEvent = oneEvent(el, "change");
+      key(thumb, "ArrowRight");
+      const { detail: changeDetail } = await changeEvent;
+      expect(changeDetail.value).to.equal(52);
+    });
+
+    it("should keep the range start thumb from crossing the end thumb", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider range value-start="70" value-end="75"></ds-slider>`,
+      );
+      const thumbStart = el.shadowRoot.querySelector(".thumb-start");
+
+      key(thumbStart, "End");
+
+      expect(el.valueStart).to.equal(75);
+      expect(el.valueEnd).to.equal(75);
+    });
+
+    it("should keep the range end thumb from crossing the start thumb", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider range value-start="25" value-end="30"></ds-slider>`,
+      );
+      const thumbEnd = el.shadowRoot.querySelector(".thumb-end");
+
+      key(thumbEnd, "Home");
+
+      expect(el.valueEnd).to.equal(25);
+      expect(el.valueStart).to.equal(25);
+    });
+  });
+
   describe("Accessibility", () => {
     it("should render a label element", async () => {
       const { el } = await setupSlider(
@@ -523,6 +665,77 @@ describe("DSSlider", () => {
       const valueDisplay = el.shadowRoot.querySelector(".value-display");
 
       expect(valueDisplay).to.exist;
+    });
+
+    it("should expose the thumb as a focusable slider to assistive tech", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="40" min="0" max="100"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      expect(thumb.getAttribute("role")).to.equal("slider");
+      expect(thumb.getAttribute("tabindex")).to.equal("0");
+      expect(thumb.getAttribute("aria-orientation")).to.equal("horizontal");
+      expect(thumb.getAttribute("aria-valuemin")).to.equal("0");
+      expect(thumb.getAttribute("aria-valuemax")).to.equal("100");
+      expect(thumb.getAttribute("aria-valuenow")).to.equal("40");
+    });
+
+    it("should use the label attribute as the thumb's accessible name", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider label="Volume"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      expect(thumb.getAttribute("aria-label")).to.equal("Volume");
+    });
+
+    it("should update aria-valuenow after a keyboard change", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider value="50" step="1"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      thumb.dispatchEvent(
+        new KeyboardEvent("keydown", { key: "ArrowRight", bubbles: true }),
+      );
+
+      expect(thumb.getAttribute("aria-valuenow")).to.equal("51");
+    });
+
+    it("should remove the thumb from the tab order when disabled", async () => {
+      const { el } = await setupSlider(html`<ds-slider disabled></ds-slider>`);
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      expect(thumb.getAttribute("tabindex")).to.equal("-1");
+      expect(thumb.getAttribute("aria-disabled")).to.equal("true");
+    });
+
+    it("should restore the thumb to the tab order when re-enabled", async () => {
+      const { el } = await setupSlider(html`<ds-slider disabled></ds-slider>`);
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+
+      el.removeAttribute("disabled");
+      await elementUpdated(el);
+
+      expect(thumb.getAttribute("tabindex")).to.equal("0");
+      expect(thumb.hasAttribute("aria-disabled")).to.be.false;
+    });
+
+    it("should expose two sliders with bounded ranges in range mode", async () => {
+      const { el } = await setupSlider(
+        html`<ds-slider range value-start="20" value-end="80"></ds-slider>`,
+      );
+      const thumbStart = el.shadowRoot.querySelector(".thumb-start");
+      const thumbEnd = el.shadowRoot.querySelector(".thumb-end");
+
+      expect(thumbStart.getAttribute("role")).to.equal("slider");
+      expect(thumbStart.getAttribute("tabindex")).to.equal("0");
+      expect(thumbStart.getAttribute("aria-valuenow")).to.equal("20");
+      expect(thumbStart.getAttribute("aria-valuemax")).to.equal("80");
+
+      expect(thumbEnd.getAttribute("aria-valuenow")).to.equal("80");
+      expect(thumbEnd.getAttribute("aria-valuemin")).to.equal("20");
     });
   });
 });
