@@ -524,18 +524,26 @@ export class DSDataTable extends HTMLElement {
           right: 8px;
           top: 50%;
           transform: translateY(-50%);
-          opacity: 0.5;
+          /* Only the active column, or the one under the pointer, shows an
+             arrow — a row of arrows on every column reads as noise. */
+          opacity: 0;
           font-family: 'Material Symbols Outlined';
           font-size: var(--ds-data-table-icon-size);
           transition: transform 0.2s ease, opacity 0.2s ease;
         }
 
-        th[data-sorted="asc"] .sort-icon {
+        th[data-sortable]:hover .sort-icon {
+          opacity: 0.5;
+        }
+
+        th[data-sorted="asc"] .sort-icon,
+        th[data-sortable]:hover[data-sorted="asc"] .sort-icon {
           opacity: 1;
           transform: translateY(-50%) rotate(0deg);
         }
 
-        th[data-sorted="desc"] .sort-icon {
+        th[data-sorted="desc"] .sort-icon,
+        th[data-sortable]:hover[data-sorted="desc"] .sort-icon {
           opacity: 1;
           transform: translateY(-50%) rotate(180deg);
         }
@@ -595,6 +603,7 @@ export class DSDataTable extends HTMLElement {
 
         .pagination-controls {
           display: flex;
+          align-items: center;
           gap: var(--ds-space-2, 8px);
         }
 

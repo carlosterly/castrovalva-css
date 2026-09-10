@@ -14,7 +14,7 @@ export class DSBadge extends HTMLElement {
     this._value = null;
     this._dot = false;
     this._max = 99;
-    this._color = "primary"; // maps to css token
+    this._color = "error"; // MD3 default badge colour; maps to a css token
     this._position = "inline"; // inline or overlap
   }
 
@@ -37,7 +37,7 @@ export class DSBadge extends HTMLElement {
     this._max = this.hasAttribute("max")
       ? parseInt(this.getAttribute("max"), 10)
       : 99;
-    this._color = this.getAttribute("color") || "primary";
+    this._color = this.getAttribute("color") || "error";
     this._position = this.getAttribute("position") || "inline";
     if (this._position !== "inline" && this._position !== "overlap") {
       this._position = "inline";
@@ -128,15 +128,23 @@ export class DSBadge extends HTMLElement {
     // eslint-disable-next-line wc/no-self-class
     this.classList.toggle("position-overlap", this._position === "overlap");
     badge.style.setProperty("--badge-bg", this._resolveColor(this._color));
+    badge.style.setProperty("--badge-fg", this._resolveFg(this._color));
   }
 
   _resolveColor(name) {
-    if (!name) return "var(--md-sys-color-primary, #6750a4)";
+    if (!name) return "var(--md-sys-color-error, #b00020)";
     if (name === "primary") return "var(--md-sys-color-primary, #6750a4)";
     if (name === "secondary") return "var(--md-sys-color-secondary, #7a5268)";
     if (name === "error") return "var(--md-sys-color-error, #b00020)";
     // allow CSS color strings
     return name;
+  }
+
+  _resolveFg(name) {
+    if (name === "primary") return "var(--md-sys-color-on-primary, #fff)";
+    if (name === "secondary") return "var(--md-sys-color-on-secondary, #fff)";
+    // error (the default) and custom colour strings both take light text
+    return "var(--md-sys-color-on-error, #fff)";
   }
 
   render() {
@@ -159,8 +167,8 @@ export class DSBadge extends HTMLElement {
           font-size: var(--ds-badge-font-size);
           line-height: 1;
           border-radius: 999px;
-          background: var(--badge-bg, var(--md-sys-color-primary, #6750a4));
-          color: var(--md-sys-color-on-primary, #fff);
+          background: var(--badge-bg, var(--md-sys-color-error, #b00020));
+          color: var(--badge-fg, var(--md-sys-color-on-error, #fff));
           box-sizing: border-box;
           vertical-align: middle;
           white-space: nowrap;

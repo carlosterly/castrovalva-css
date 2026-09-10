@@ -43,36 +43,32 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — The six documentation links (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`) point at raw `.md` files. On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is site work.
 
-## Candidate findings — first-pass screenshot review (unconfirmed)
+## First-pass screenshot review — done, all findings actioned
 
 Claude's first pass over the `_qa-out/` contact sheet (Tier-1 components,
-desktop + mobile, light + dark, 11 Sep 2026). **Not verified against the
-spec.** Each remaining item is either a real defect that graduates to _Open
-defects_ above, or noise that gets deleted, once reviewed.
+desktop + mobile, light + dark, 11 Sep 2026). Everything it surfaced is now
+fixed (see git history):
 
-- **[C] button — disabled state.** Disabled filled button looks like the
-  enabled fill at reduced opacity (translucent `primary`, white text) rather
-  than MD3's `on-surface` 12% container / 38% label.
-- **[C] switch — unselected track outline.** The unselected track appears to
-  have no border; MD3 unselected switch track carries a 2px `outline` stroke.
-  Low confidence from a screenshot.
-- **[C] badge — default colour.** Default badge colour is `primary` (teal);
-  MD3's default badge colour is `error`. Probably a deliberate token choice.
-- **[C] data-table — sort affordance.** Sort arrows show on every column at
-  once rather than only the active column; pagination buttons are small and
-  vertically misaligned with the caption.
-
-Fixed from this pass (see git history): filled-surface tonal ramp
-(`surface-container` steps were mapped onto mid-grey palette tones, so text
-fields / filled cards / table toolbars read as disabled), `ds-card`
-elevated variant not separating in dark mode, `ds-list-item` reserving
-leading-slot space when empty, `ds-icon` ignoring text-content glyphs
-(every `<ds-fab>` on its demo page rendered iconless), and `ds-button`
-corner radius (was `--ds-radius-md` / ~8px, now the MD3 full-pill).
+- **Filled-surface tonal ramp.** `surface-container` steps were mapped onto
+  mid-grey palette tones, so text fields, filled cards and the data-table
+  toolbar read as disabled. Also why the switch's unselected track outline
+  looked absent — it was there, just no contrast against the grey fill.
+- **`ds-card`** elevated variant not separating from the page in dark mode.
+- **`ds-list-item`** reserving leading-slot space (~32px inset) when empty.
+- **`ds-icon`** ignoring text-content glyphs — every `<ds-fab>` on its demo
+  page rendered iconless.
+- **`ds-button`** corner radius (`--ds-radius-md` / ~8px → MD3 full-pill)
+  and disabled state (brand colour dimmed → `on-surface` 12% / 38% tint).
+- **`ds-badge`** default colour `primary` → `error` (MD3 default).
+- **`ds-data-table`** sort arrows shown on every column at rest → only the
+  active or hovered column; pagination row vertically aligned.
 
 Reviewed and looked clean in this pass: checkbox, radio, tabs.
-Not assessable from at-rest screenshots (never triggered by the sweep):
-menu, dialog, tooltip, snackbar surfaces.
+
+**Still to do — the full manual pass.** The screenshot review only catches
+structural and token issues. A human eye is still needed on interactive
+states (hover / focus-visible / pressed), spacing rhythm, MD3 type scale,
+and the components the sweep never opens (menu, dialog, tooltip, snackbar).
 
 ## Triage coverage
 

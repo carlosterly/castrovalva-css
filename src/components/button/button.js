@@ -381,11 +381,11 @@ export default class DSButton extends HTMLElement {
         }
 
         button.outlined:disabled {
-          border-color: rgba(0, 0, 0, 0.12);
-        }
-
-        :host([data-theme="dark"]) button.outlined:disabled {
-          border-color: rgba(255, 255, 255, 0.12);
+          border-color: color-mix(
+            in srgb,
+            var(--md-sys-color-on-surface) 12%,
+            transparent
+          );
         }
 
         /* Elevated Button - Medium emphasis with shadow */
@@ -418,15 +418,6 @@ export default class DSButton extends HTMLElement {
 
         button.elevated:active:not(:disabled)::before {
           opacity: var(--md-sys-state-pressed-opacity);
-        }
-
-        button.elevated:disabled {
-          background-color: rgba(0, 0, 0, 0.12);
-          box-shadow: var(--md-sys-elevation-level0);
-        }
-
-        :host([data-theme="dark"]) button.elevated:disabled {
-          background-color: rgba(255, 255, 255, 0.12);
         }
 
         /* Text Button - Low emphasis */
@@ -493,6 +484,35 @@ export default class DSButton extends HTMLElement {
           cursor: not-allowed;
           opacity: 0.38;
           box-shadow: var(--md-sys-elevation-level0);
+        }
+
+        /* MD3 disabled: a filled container reads as an on-surface tint
+           (12% container / 38% label), not the brand colour dimmed.
+           on-surface flips with the theme, so this needs no dark override. */
+        button.filled:disabled,
+        button.filled-tonal:disabled,
+        button.elevated:disabled {
+          background-color: color-mix(
+            in srgb,
+            var(--md-sys-color-on-surface) 12%,
+            transparent
+          );
+          color: color-mix(
+            in srgb,
+            var(--md-sys-color-on-surface) 38%,
+            transparent
+          );
+          opacity: 1;
+        }
+
+        button.outlined:disabled,
+        button.text:disabled {
+          color: color-mix(
+            in srgb,
+            var(--md-sys-color-on-surface) 38%,
+            transparent
+          );
+          opacity: 1;
         }
 
         button:focus-visible {

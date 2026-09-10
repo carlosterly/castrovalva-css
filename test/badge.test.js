@@ -121,7 +121,7 @@ describe("DSBadge", () => {
       const el = await fixture(html`<ds-badge color="error"></ds-badge>`);
       el.color = "";
       expect(el.hasAttribute("color")).to.equal(false);
-      expect(el.color).to.equal("primary");
+      expect(el.color).to.equal("error");
     });
 
     it("removes position attribute on invalid position property value", async () => {
