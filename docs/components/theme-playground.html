@@ -336,6 +336,11 @@
               <button type="button" class="tp-btn" data-copy-block="dark">
                 Dark roles
               </button>
+              <button type="button" class="tp-btn" id="tp-share">
+                <span class="material-symbols-outlined"
+                  style="font-size:18px">link</span>
+                Copy link
+              </button>
               <button type="button" class="tp-btn tp-btn--text" id="tp-reset">
                 Reset
               </button>
@@ -512,6 +517,11 @@
             If a shipped token file is ever changed by accident:
             <code>git restore src/tokens/palette.css</code> (or
             <code>tokens.css</code>) puts it back to the committed baseline.
+          </p>
+          <p class="tp-note">
+            <strong>Sharing.</strong> The URL tracks the current colour,
+            harmony and scheme (or preset), so bookmarking or copying it — the
+            <code>Copy link</code> button does this — reopens the same theme.
           </p>
         </div>
 
@@ -915,6 +925,43 @@
           b.setAttribute("aria-pressed", String(b.dataset.h === harmony));
         }
       }
+      function isDefaultState() {
+        return presetSelect.value === "" && source === "#006878" &&
+          scheme === "light" && harmony === "default";
+      }
+      function stateToHash() {
+        const q = new URLSearchParams();
+        if (presetSelect.value !== "") {
+          // A preset fixes its own colour / scheme / harmony.
+          q.set("p", presetSelect.value);
+        } else {
+          q.set("c", source.replace("#", ""));
+          if (harmony !== "default") q.set("h", harmony);
+          if (scheme === "dark") q.set("s", "dark");
+        }
+        return q.toString();
+      }
+      function readHash() {
+        const raw = location.hash.replace(/^#/, "");
+        if (!raw) return null;
+        const q = new URLSearchParams(raw);
+        if (q.has("p")) {
+          const i = parseInt(q.get("p"), 10);
+          if (PRESETS[i]) return { preset: i };
+        }
+        const out = {};
+        const c = q.get("c");
+        if (c && /^[0-9a-f]{6}$/i.test(c)) out.source = "#" + c.toLowerCase();
+        if (q.get("s") === "dark") out.scheme = "dark";
+        if (q.has("h") && HARMONIES[q.get("h")]) out.harmony = q.get("h");
+        return Object.keys(out).length ? out : null;
+      }
+      function writeHash() {
+        const base = location.pathname + location.search;
+        const url = isDefaultState() ? base : base + "#" + stateToHash();
+        // replaceState doesn't fire hashchange, so this never loops.
+        history.replaceState(null, "", url);
+      }
       function persist() {
         try {
           localStorage.setItem("tp:source", source);
@@ -922,6 +969,7 @@
           localStorage.setItem("tp:harmony", harmony);
           localStorage.setItem("tp:preset", presetSelect.value);
         } catch {}
+        writeHash();
       }
       function updateCredit() {
         const p = presetSelect.value === "" ? null : PRESETS[+presetSelect.value];
@@ -1002,6 +1050,24 @@
         updateCredit();
         persist();
       }
+      // Apply a plain {source?, scheme?, harmony?} state (no preset).
+      function applyCustom(s, { persistNow = true } = {}) {
+        neutralHue = null;
+        harmony = s.harmony && HARMONIES[s.harmony] ? s.harmony : "default";
+        scheme = s.scheme === "dark" ? "dark" : "light";
+        if (s.source && /^#[0-9a-f]{6}$/i.test(s.source)) {
+          source = s.source.toLowerCase();
+          srcLch = hexToOklch(source);
+        }
+        colorInput.value = source;
+        hexInput.value = source.toUpperCase();
+        presetSelect.value = "";
+        syncSchemeButtons();
+        syncHarmonyButtons();
+        render();
+        updateCredit();
+        if (persistNow) persist();
+      }
 
       // ---- wiring -----------------------------------------------------
       {
@@ -1041,6 +1107,10 @@
         if (b) setScheme(b.dataset.scheme);
       });
       $("tp-reset").addEventListener("click", resetAll);
+      $("tp-share").addEventListener("click", () => {
+        writeHash();
+        copy(location.href, "Link");
+      });
       document.addEventListener("click", (e) => {
         const el = e.target.closest("[data-copy]");
         if (el) {
@@ -1060,7 +1130,16 @@
         }
       });
 
+      // Follow a link pasted into the address bar of an already-open tab.
+      window.addEventListener("hashchange", () => {
+        const s = readHash();
+        if (!s) resetAll();
+        else if (s.preset != null) applyPreset(s.preset);
+        else applyCustom(s);
+      });
+
       // ---- restore + first paint -----------------------------------
+      // Precedence: URL hash > localStorage > defaults.
       let saved = {};
       try {
         saved = {
@@ -1071,21 +1150,20 @@
         };
       } catch {}
 
-      if (saved.preset && PRESETS[+saved.preset]) {
+      const fromHash = readHash();
+      if (fromHash && fromHash.preset != null) {
+        applyPreset(fromHash.preset);
+      } else if (fromHash) {
+        applyCustom(fromHash);
+      } else if (saved.preset && PRESETS[+saved.preset]) {
         applyPreset(+saved.preset);
       } else {
-        if (saved.harmony && HARMONIES[saved.harmony]) harmony = saved.harmony;
-        if (saved.scheme === "dark") scheme = "dark";
-        if (saved.source && /^#[0-9a-f]{6}$/i.test(saved.source)) {
-          source = saved.source.toLowerCase();
-          srcLch = hexToOklch(source);
-        }
-        colorInput.value = source;
-        hexInput.value = source.toUpperCase();
-        syncSchemeButtons();
-        syncHarmonyButtons();
-        render();
-        updateCredit();
+        applyCustom({
+          source: saved.source,
+          scheme: saved.scheme,
+          harmony: saved.harmony,
+        }, { persistNow: false });
+        writeHash();
       }
     </script>
 
