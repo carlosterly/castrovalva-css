@@ -377,4 +377,14 @@
   // keep the active link in view
   const active = nav.querySelector('.dnav__link[aria-current="page"]');
   if (active) active.scrollIntoView({ block: "center" });
+
+  // Every demo page renders .code-block > pre snippets that can overflow
+  // horizontally (overflow-x: auto in pattern-library.css). A scrollable
+  // region with no way into the tab order fails axe's
+  // scrollable-region-focusable check and is unreachable by keyboard. axe
+  // flags whichever element is actually the overflowing box — sometimes
+  // .code-block, sometimes the <pre> inside it — so tab-stop both.
+  document.querySelectorAll(".code-block, .code-block > pre").forEach((el) => {
+    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
+  });
 })();

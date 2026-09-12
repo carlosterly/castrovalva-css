@@ -12,6 +12,24 @@ body {
   color: var(--md-sys-color-on-surface, #1d1b20);
 }
 
+/* Bare form controls in demo interactive panels (selects, text/range/number
+   inputs — the ds-* components manage their own Shadow DOM styling and are
+   unaffected by this). These inherit `color` from body but keep the
+   browser's native (usually white) widget background, so in dark theme the
+   light on-surface text renders on a white control — ~1.3:1 contrast. */
+select,
+input[type="text"],
+input[type="number"],
+input[type="range"],
+input[type="color"],
+textarea {
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+  border: 1px solid var(--md-sys-color-outline);
+  border-radius: var(--ds-radius-sm);
+  font-family: inherit;
+}
+
 /* Layout Containers */
 .page-container {
   display: flex;

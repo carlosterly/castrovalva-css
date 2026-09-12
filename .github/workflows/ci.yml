@@ -28,3 +28,11 @@ jobs:
 
       - name: Test
         run: npm test
+
+      # Non-blocking for now: the harness landed Sep 2026 and immediately
+      # surfaced real, pre-existing component a11y bugs (tracked one by one
+      # in docs/DEFECTS.md). Flip to blocking once that backlog clears —
+      # see the Q4 "Accessibility audit" roadmap item.
+      - name: Accessibility (axe)
+        run: npm run test:a11y
+        continue-on-error: true
