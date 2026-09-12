@@ -49,6 +49,10 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 - **B (fixed)** — `package.json`'s `exports` map listed `"./input": "./dist/input.js"`, but no `input` component exists (the real component is `text-field`) and `vite.config.js` never had a build entry for it — `dist/input.js` was never generated, so that export always 404'd. Removed the entry rather than fabricate an entry point. Found while measuring bundle size for the roadmap's "publish real numbers" item.
 - **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~604 KB raw / ~97 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
 
+### source layout
+
+- **B** — CLAUDE.md documents `src/components/{name}/{name}.js` for every component, but 14 of them (badge, card, chip, dialog, fab, menu, progress-indicator, radio, slider, snackbar, switch, tabs, textarea, tooltip) actually live flat at `src/components/ds-{name}.js`; their `{name}/` directory holds only the stub README. Everything still imports and works — `src/index.js` points at the real paths — so this is a documentation/reality mismatch, not a functional bug. Found while looking up component source while building the composed settings-page demo.
+
 ### carousel
 
 - **A** — axe `aria-required-children` (critical): the `role="list"` viewport's children aren't `role="listitem"` (9 nodes, both themes).
@@ -65,6 +69,10 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 ### design-tokens
 
 - **B** — axe `color-contrast`: `.token-name` text on at least one `.surface-chip` swatch fails contrast (both themes).
+
+### dialog
+
+- **A (fixed)** — `:host` set `--ds-dialog-surface-color: #ffffff` unconditionally, short-circuiting the surface's own theme-aware fallback (`var(--ds-dialog-surface-color, var(--md-sys-color-surface-container-high, ...))`) so every dialog rendered on a hardcoded white background regardless of theme. Harmless-looking in light theme; in dark theme it made `on-surface` text (a light color, meant for dark backgrounds) low-contrast against that white surface; in the new high-contrast theme `on-surface` is pure white, making dialog titles and body text **completely invisible** against the same hardcoded white — a real, severe bug no one had seen because nothing had opened a dialog in high-contrast theme until the composed settings-page example did. Fixed by deleting the hardcoded default so the existing fallback chain (already correct) takes over; consumers can still override `--ds-dialog-surface-color` themselves, that capability wasn't removed. Verified: `dialog.test.js` (28/28) still passes, and the settings-page example's delete-confirmation dialog is now legible in all three themes.
 
 ### form
 

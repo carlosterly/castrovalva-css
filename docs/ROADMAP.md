@@ -116,11 +116,11 @@ Delivered:
 - **Token restructure.** The 91 `--md-ref-palette-*` values moved out of the 450-line `tokens.css` into their own `src/tokens/palette.css` — the one file a theme changes, so a bad edit is one `git restore` away from the shipped baseline. `tokens.css` keeps only the role mapping plus type/spacing/motion/shape.
 - **Mobile layout pass.** Fixed two real issues at 320–768px: the Harmony control forced 25px of horizontal page scroll (now scrolls internally instead), and the sticky control bar covered most of a phone screen while scrolling the palettes below (now scrolls away below 720px). Zero horizontal overflow at 320/375/768/1280px.
 - Generating from `#006878` reproduces the shipped palette closely (primary40 → `#006a7b`). The 12-component preview set (actions, inputs, selection, feedback, containers, navigation, lists, overlay) is judged sufficient — the playground is considered feature-complete for this quarter.
+- **Composed example.** [docs/examples/settings-page.html](./examples/settings-page.html), linked from the home page (CTA row + a new "Examples" card group) and the README — a realistic account-settings screen, not a component reference page: `ds-navigation-rail` on desktop and `ds-navigation-bar` on mobile (MD3's own responsive nav pattern) both driving the same section-switching logic, cards full of form fields with shared unsaved-changes tracking across text-fields/switches/radios, a theme switcher wired to the real `data-theme` mechanism, and a delete-account flow through a real confirmation dialog and snackbar. Paid for itself immediately: opening the delete dialog in the new high-contrast theme surfaced a real, severe bug — `ds-dialog` hardcoded its surface to white in its `:host` styles, silently low-contrast in dark theme and **completely illegible** in high-contrast (white-on-white). One-line fix (the token fallback chain underneath was already correct); `dialog.test.js` still 28/28. Also surfaced two lower-priority findings, logged in [DEFECTS.md](./DEFECTS.md) rather than fixed here: 14 of 43 components live at `src/components/ds-{name}.js` instead of the `{name}/{name}.js` CLAUDE.md documents (works fine, just a docs/reality mismatch), and the home page's live preview panel inherits the `ds-radio`/`ds-switch`/`ds-linear-progress` accessible-name bugs already tracked under those components.
 
 | Work | Est. |
 | --- | --- |
 | Visual regression tests (Playwright screenshots) — run **after** the QA workstream completes, so the baselines capture a fixed state rather than an unstable one. | 10h |
-| One realistic composed demo — a settings page or dashboard built entirely from the library, proving the components work together rather than only in isolation. This is also the cheapest way to surface composition defects that per-component review cannot see. | 10h |
 | **Component QA, second half** — see the workstream below. | 15h |
 
 **Minimum viable stop:** the theme playground alone justifies the quarter.
@@ -156,13 +156,14 @@ Delivered:
 **Minimum viable stop:** the engineering notes. Everything else is maintenance.
 
 **Decision on record — sequence what's left by risk, not by table order (Sep 2026).**
-The two lowest-risk items (engineering notes, real numbers) are done — see
-above. What's left, still in risk order:
+Engineering notes, real numbers, and the composed demo are done — see above.
+The composed demo turned out not to be purely risk-free (it found and fixed
+a real dialog theming bug), which is the expected shape of this kind of
+work, not a reason to have skipped it. What's left, still in risk order:
 
-1. **Composed demo** (Q3) — a new page built from existing components; purely additive, doesn't modify any component source, and surfaces composition bugs as a side effect.
-2. **Component QA manual passes** (Q2/Q3 remainders) — triage only by the workstream's own rules ("fixes nothing"), so low risk even though the findings they produce are not.
-3. Higher risk, because it touches component source directly: **fixing the 38 axe findings** in DEFECTS.md (see also the two new form-association / package-export defects the real-numbers pass turned up), then the **docs-site accessibility audit**.
-4. **Visual regression** waits until the QA/axe backlog above is mostly clear — baselining screenshots now would lock in known-broken states as "correct," which the workstream's own "triage first, fix second... visual regression comes last" rule already warns against.
+1. **Component QA manual passes** (Q2/Q3 remainders) — triage only by the workstream's own rules ("fixes nothing"), so low risk even though the findings they produce are not.
+2. Higher risk, because it touches component source directly: **fixing the 38 axe findings** in DEFECTS.md (see also the form-association, package-export, and source-layout defects turned up since), then the **docs-site accessibility audit**.
+3. **Visual regression** waits until the QA/axe backlog above is mostly clear — baselining screenshots now would lock in known-broken states as "correct," which the workstream's own "triage first, fix second... visual regression comes last" rule already warns against.
 
 **Dependency refresh** carries its own separate risk (breaking upgrades) independent of this ordering — treat it on its own merits when it comes up, not by this list's position.
 

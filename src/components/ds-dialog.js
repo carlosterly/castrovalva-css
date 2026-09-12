@@ -267,7 +267,6 @@ export class DSDialog extends HTMLElement {
           --ds-dialog-padding: var(--ds-space-6, 24px);
           --ds-dialog-fullscreen-header-padding-block: var(--ds-space-4, 16px);
           --ds-dialog-fullscreen-header-padding-inline: var(--ds-space-6, 24px);
-          --ds-dialog-surface-color: #ffffff;
         }
 
         dialog {

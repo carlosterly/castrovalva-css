@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Account Settings - Castrovalva Composed Example</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet" />
+    <link rel="stylesheet" href="../../src/styles.css" />
+    <script type="module" src="../../src/index.js"></script>
+    <style>
+      body {
+        margin: 0;
+        font-family: "Roboto", sans-serif;
+        background: var(--md-sys-color-surface);
+        color: var(--md-sys-color-on-surface);
+      }
+
+      .back-link {
+        color: inherit;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: var(--ds-space-1);
+        font: inherit;
+        font-size: 0.875rem;
+      }
+      .back-link:hover {
+        text-decoration: underline;
+      }
+
+      .settings-shell {
+        display: flex;
+        align-items: flex-start;
+      }
+
+      .settings-content {
+        flex: 1;
+        min-width: 0;
+        max-width: 720px;
+        margin-inline: auto;
+        padding: var(--ds-space-6) var(--ds-space-4) var(--ds-space-24);
+      }
+
+      .settings-content [data-section][hidden] {
+        display: none;
+      }
+
+      ds-card {
+        display: block;
+        margin-block-end: var(--ds-space-6);
+      }
+      ds-card::part(content),
+      ds-card .card-body {
+        padding: var(--ds-space-2) var(--ds-space-5) var(--ds-space-5);
+      }
+
+      .field-grid {
+        display: grid;
+        gap: var(--ds-space-4);
+        padding: var(--ds-space-2) var(--ds-space-5) var(--ds-space-5);
+      }
+
+      .switch-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: var(--ds-space-4);
+        padding: var(--ds-space-3) var(--ds-space-5);
+      }
+      .switch-row label {
+        font-weight: 500;
+      }
+      .row-hint {
+        margin: var(--ds-space-1) 0 0;
+        font-size: 0.8125rem;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+
+      fieldset.radio-group {
+        border: none;
+        margin: 0;
+        padding: var(--ds-space-2) var(--ds-space-5) var(--ds-space-5);
+      }
+      fieldset.radio-group legend {
+        font-weight: 500;
+        padding: 0 0 var(--ds-space-2);
+      }
+      fieldset.radio-group > div {
+        display: flex;
+        align-items: center;
+        gap: var(--ds-space-3);
+        padding-block: var(--ds-space-1);
+      }
+
+      ds-divider {
+        display: block;
+        margin-inline: var(--ds-space-5);
+      }
+
+      .danger-card {
+        --md-sys-color-outline: var(--md-sys-color-error);
+      }
+
+      .save-bar {
+        position: sticky;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        gap: var(--ds-space-3);
+        margin-top: var(--ds-space-2);
+        padding: var(--ds-space-3) var(--ds-space-4);
+        background: var(--md-sys-color-surface-container-high);
+        border-radius: var(--ds-radius-md);
+        box-shadow: var(--md-sys-elevation-level2);
+      }
+      #save-status {
+        flex: 1;
+        font-size: 0.875rem;
+        color: var(--md-sys-color-on-surface-variant);
+      }
+      #unsaved-badge {
+        display: inline-flex;
+      }
+      #unsaved-badge[hidden] {
+        display: none;
+      }
+
+      /* MD3's own responsive pattern: a navigation rail down the side on
+         larger screens, a navigation bar along the bottom on small ones —
+         same section-selection logic drives both. */
+      #rail {
+        position: sticky;
+        top: 0;
+        align-self: stretch;
+      }
+      #bar {
+        display: none;
+        position: fixed;
+        inset-inline: 0;
+        bottom: 0;
+        z-index: 10;
+      }
+      @media (max-width: 768px) {
+        #rail {
+          display: none;
+        }
+        #bar {
+          display: flex;
+        }
+        .settings-content {
+          padding-block-end: calc(var(--ds-space-24) + 80px);
+        }
+      }
+    </style>
+  </head>
+  <body data-page="settings-example">
+    <ds-app-bar-top title="Account Settings" nav-icon="arrow_back">
+      <a
+        slot="actions"
+        class="back-link"
+        href="../../index.html"
+        aria-label="Back to Castrovalva">
+        <ds-icon name="close" size="sm"></ds-icon>
+      </a>
+    </ds-app-bar-top>
+
+    <p style="max-width: 720px; margin: var(--ds-space-4) auto 0; padding-inline: var(--ds-space-4); color: var(--md-sys-color-on-surface-variant); font-size: 0.875rem;">
+      A composed example, not a component reference page — a realistic
+      settings screen built entirely from the library, proving the pieces
+      work together.
+      <a href="../ROADMAP.md" style="color: inherit">Why this exists.</a>
+    </p>
+
+    <div class="settings-shell">
+      <ds-navigation-rail id="rail">
+        <ds-navigation-rail-item icon="person" value="profile" active>Profile</ds-navigation-rail-item>
+        <ds-navigation-rail-item icon="notifications" value="notifications">Notifications</ds-navigation-rail-item>
+        <ds-navigation-rail-item icon="palette" value="appearance">Appearance</ds-navigation-rail-item>
+        <ds-navigation-rail-item icon="lock" value="security">Security</ds-navigation-rail-item>
+        <ds-navigation-rail-item icon="warning" value="danger">Danger Zone</ds-navigation-rail-item>
+      </ds-navigation-rail>
+
+      <main class="settings-content">
+        <section id="section-profile" data-section>
+          <ds-card variant="outlined">
+            <span slot="title">Profile</span>
+            <span slot="subhead">This information may be visible to other people.</span>
+            <div class="field-grid">
+              <ds-text-field
+                label="Full name"
+                name="fullName"
+                value="Jamie Rios"></ds-text-field>
+              <ds-text-field
+                label="Email"
+                type="email"
+                name="email"
+                value="jamie.rios@example.com"></ds-text-field>
+              <ds-textarea
+                label="Bio"
+                name="bio"
+                supporting-text="Shown on your public profile."></ds-textarea>
+            </div>
+          </ds-card>
+        </section>
+
+        <section id="section-notifications" data-section hidden>
+          <ds-card variant="outlined">
+            <span slot="title">Notifications</span>
+            <span slot="subhead">Choose what you hear about, and how.</span>
+            <div class="switch-row">
+              <div>
+                <label for="sw-email">Email notifications</label>
+                <p class="row-hint">Account activity and security alerts.</p>
+              </div>
+              <ds-switch id="sw-email" checked></ds-switch>
+            </div>
+            <div class="switch-row">
+              <div>
+                <label for="sw-push">Push notifications</label>
+                <p class="row-hint">Only on this device.</p>
+              </div>
+              <ds-switch id="sw-push"></ds-switch>
+            </div>
+            <div class="switch-row">
+              <div>
+                <label for="sw-marketing">Marketing emails</label>
+                <p class="row-hint">Product news and occasional offers.</p>
+              </div>
+              <ds-switch id="sw-marketing"></ds-switch>
+            </div>
+            <ds-divider></ds-divider>
+            <fieldset class="radio-group">
+              <legend>Digest frequency</legend>
+              <div>
+                <ds-radio name="digest" value="immediate" id="digest-immediate" checked></ds-radio>
+                <label for="digest-immediate">Immediately</label>
+              </div>
+              <div>
+                <ds-radio name="digest" value="daily" id="digest-daily"></ds-radio>
+                <label for="digest-daily">Daily digest</label>
+              </div>
+              <div>
+                <ds-radio name="digest" value="weekly" id="digest-weekly"></ds-radio>
+                <label for="digest-weekly">Weekly digest</label>
+              </div>
+            </fieldset>
+          </ds-card>
+        </section>
+
+        <section id="section-appearance" data-section hidden>
+          <ds-card variant="outlined">
+            <span slot="title">Appearance</span>
+            <span slot="subhead">Applies immediately — no need to save.</span>
+            <fieldset class="radio-group">
+              <legend>Theme</legend>
+              <div>
+                <ds-radio name="theme" value="light" id="theme-light"></ds-radio>
+                <label for="theme-light">Light</label>
+              </div>
+              <div>
+                <ds-radio name="theme" value="dark" id="theme-dark"></ds-radio>
+                <label for="theme-dark">Dark</label>
+              </div>
+              <div>
+                <ds-radio name="theme" value="high-contrast" id="theme-hc"></ds-radio>
+                <label for="theme-hc">High contrast</label>
+              </div>
+            </fieldset>
+          </ds-card>
+        </section>
+
+        <section id="section-security" data-section hidden>
+          <ds-card variant="outlined">
+            <span slot="title">Security</span>
+            <span slot="subhead">Keep your account secure.</span>
+            <div class="field-grid">
+              <ds-text-field
+                label="Current password"
+                type="password"
+                name="currentPassword"></ds-text-field>
+              <ds-text-field
+                label="New password"
+                type="password"
+                name="newPassword"
+                supporting-text="At least 8 characters."></ds-text-field>
+            </div>
+            <ds-divider></ds-divider>
+            <div class="switch-row">
+              <div>
+                <label for="sw-2fa">Two-factor authentication</label>
+                <p class="row-hint">Require a code at sign-in.</p>
+              </div>
+              <ds-switch id="sw-2fa"></ds-switch>
+            </div>
+          </ds-card>
+        </section>
+
+        <section id="section-danger" data-section hidden>
+          <ds-card variant="outlined" class="danger-card">
+            <span slot="title">Danger zone</span>
+            <span slot="subhead">These actions are permanent.</span>
+            <div class="switch-row">
+              <div>
+                <label><b>Delete account</b></label>
+                <p class="row-hint">Everything will be permanently removed.</p>
+              </div>
+              <ds-button variant="danger" id="delete-account-btn">Delete account</ds-button>
+            </div>
+          </ds-card>
+        </section>
+
+        <div class="save-bar">
+          <ds-badge id="unsaved-badge" dot hidden></ds-badge>
+          <span id="save-status">All changes saved</span>
+          <ds-button variant="text" id="cancel-btn" disabled>Cancel</ds-button>
+          <ds-button variant="filled" id="save-btn" disabled>Save changes</ds-button>
+        </div>
+      </main>
+    </div>
+
+    <ds-navigation-bar id="bar">
+      <ds-navigation-bar-item icon="person" value="profile" active>Profile</ds-navigation-bar-item>
+      <ds-navigation-bar-item icon="notifications" value="notifications">Notify</ds-navigation-bar-item>
+      <ds-navigation-bar-item icon="palette" value="appearance">Theme</ds-navigation-bar-item>
+      <ds-navigation-bar-item icon="lock" value="security">Security</ds-navigation-bar-item>
+      <ds-navigation-bar-item icon="warning" value="danger">Danger</ds-navigation-bar-item>
+    </ds-navigation-bar>
+
+    <ds-dialog id="delete-dialog" variant="alert">
+      <span slot="title">Delete account?</span>
+      <p>This action cannot be undone. All of your data will be permanently removed.</p>
+      <div slot="actions">
+        <button type="button" id="delete-cancel">Cancel</button>
+        <button type="button" id="delete-confirm">Delete</button>
+      </div>
+    </ds-dialog>
+
+    <ds-snackbar id="snackbar"></ds-snackbar>
+
+    <!-- Page-specific JS. No import statements. -->
+    <script type="module">
+      const rail = document.querySelector("#rail");
+      const bar = document.querySelector("#bar");
+      const sections = document.querySelectorAll("[data-section]");
+
+      function selectSection(value) {
+        sections.forEach((s) => {
+          s.hidden = s.id !== `section-${value}`;
+        });
+        [rail, bar].forEach((nav) => {
+          nav.querySelectorAll("[value]").forEach((item) => {
+            item.toggleAttribute("active", item.getAttribute("value") === value);
+          });
+        });
+      }
+
+      rail.addEventListener("ds-navigation-rail:select", (e) => selectSection(e.detail.value));
+      bar.addEventListener("ds-navigation-bar:select", (e) => selectSection(e.detail.value));
+
+      // --- Theme radios: applied immediately, same mechanism theme-init.js
+      // uses everywhere else on the site, not tied to the save bar below.
+      const themeRadios = document.querySelectorAll('ds-radio[name="theme"]');
+      const currentTheme = localStorage.getItem("theme") || "light";
+      themeRadios.forEach((r) => {
+        r.checked = r.value === currentTheme;
+      });
+      themeRadios.forEach((r) => {
+        r.addEventListener("ds-radio:change", (e) => {
+          if (!e.detail.checked) return;
+          document.documentElement.setAttribute("data-theme", e.detail.value);
+          localStorage.setItem("theme", e.detail.value);
+        });
+      });
+
+      // --- Unsaved-changes tracking for everything else on the page.
+      const saveBtn = document.querySelector("#save-btn");
+      const cancelBtn = document.querySelector("#cancel-btn");
+      const unsavedBadge = document.querySelector("#unsaved-badge");
+      const saveStatus = document.querySelector("#save-status");
+      const snackbar = document.querySelector("#snackbar");
+
+      const trackedFields = document.querySelectorAll(
+        ".settings-content ds-text-field, .settings-content ds-textarea",
+      );
+      const trackedSwitches = document.querySelectorAll(".settings-content ds-switch");
+      const trackedRadios = document.querySelectorAll(
+        '.settings-content ds-radio:not([name="theme"])',
+      );
+
+      function snapshot() {
+        return {
+          fields: [...trackedFields].map((f) => f.value),
+          switches: [...trackedSwitches].map((s) => s.checked),
+          radios: [...trackedRadios].map((r) => r.checked),
+        };
+      }
+      const initial = snapshot();
+
+      function setDirty(dirty) {
+        saveBtn.disabled = !dirty;
+        cancelBtn.disabled = !dirty;
+        unsavedBadge.hidden = !dirty;
+        saveStatus.textContent = dirty ? "Unsaved changes" : "All changes saved";
+      }
+
+      function markDirty() {
+        setDirty(true);
+      }
+
+      trackedFields.forEach((f) => {
+        f.addEventListener("ds-text-field:input", markDirty);
+        f.addEventListener("ds-textarea:input", markDirty);
+      });
+      trackedSwitches.forEach((s) => s.addEventListener("ds-switch:change", markDirty));
+      trackedRadios.forEach((r) => r.addEventListener("ds-radio:change", markDirty));
+
+      saveBtn.addEventListener("click", () => {
+        setDirty(false);
+        snackbar.show({ message: "Settings saved" });
+      });
+
+      cancelBtn.addEventListener("click", () => {
+        const snap = initial;
+        trackedFields.forEach((f, i) => {
+          f.value = snap.fields[i];
+        });
+        trackedSwitches.forEach((s, i) => {
+          s.checked = snap.switches[i];
+        });
+        trackedRadios.forEach((r, i) => {
+          r.checked = snap.radios[i];
+        });
+        setDirty(false);
+      });
+
+      // --- Danger zone: a real dialog, closed manually from its own
+      // buttons rather than relying on a built-in confirm control.
+      const deleteDialog = document.querySelector("#delete-dialog");
+      document.querySelector("#delete-account-btn").addEventListener("click", () => {
+        deleteDialog.show();
+      });
+      document.querySelector("#delete-cancel").addEventListener("click", () => {
+        deleteDialog.close();
+      });
+      document.querySelector("#delete-confirm").addEventListener("click", () => {
+        deleteDialog.close();
+        snackbar.show({ message: "Account deleted (this is a demo — nothing was actually deleted)" });
+      });
+    </script>
+
+    <!-- Theme init: at the end, exactly once -->
+    <script src="../shared/theme-init.js"></script>
+  </body>
+</html>

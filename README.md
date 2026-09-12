@@ -106,6 +106,7 @@ index.html                        component index / playground
 | Where | What |
 | --- | --- |
 | `docs/components/{name}.html` | Live, interactive documentation for every component — the authoritative API reference |
+| [docs/examples/settings-page.html](docs/examples/settings-page.html) | A composed example — a realistic account-settings screen, not a component reference page. Proves navigation, forms, dialogs, and theming compose together, not just in isolation |
 | [CLAUDE.md](CLAUDE.md) | Build conventions: component patterns, demo page rules, testing standards |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Where the project is heading, and what it is deliberately not doing |
 
