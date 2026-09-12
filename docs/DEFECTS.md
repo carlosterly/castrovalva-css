@@ -42,6 +42,12 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 ### home page (index.html)
 
 - **B** — The six documentation links (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`) point at raw `.md` files. On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is site work.
+- **B** — Lighthouse (accessibility, live site) flags `aria-progressbar-name` and `aria-toggle-field-name` in the "Running right now" live preview panel — the same underlying `ds-linear-progress`/`ds-radio`/`ds-switch` bugs already logged under those components below, surfacing here too since the panel embeds real instances.
+
+### package build
+
+- **B (fixed)** — `package.json`'s `exports` map listed `"./input": "./dist/input.js"`, but no `input` component exists (the real component is `text-field`) and `vite.config.js` never had a build entry for it — `dist/input.js` was never generated, so that export always 404'd. Removed the entry rather than fabricate an entry point. Found while measuring bundle size for the roadmap's "publish real numbers" item.
+- **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~604 KB raw / ~97 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
 
 ### carousel
 
@@ -92,6 +98,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 ### slider
 
 - **B** — axe `color-contrast`: the light-DOM `.label`/`.value-display` text next to `ds-slider` demos fails contrast (12 nodes, both themes).
+- **B** — 12 unit tests fail on Firefox only (`npm run test:all`), all pointer-drag interaction/event tests (`should emit input/change event on pointer interaction`, `should update value when dragged`, `should snap values to step`, …). Chromium and WebKit pass all of them. Not yet root-caused — could be a real Firefox pointer-event handling difference in the component, or a Playwright synthetic-pointer-event quirk specific to Firefox's test harness rather than a user-facing bug. Needs someone to actually drag a slider in real Firefox before concluding either way.
 
 ### split-button
 

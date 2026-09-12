@@ -15,9 +15,6 @@
     "./button": {
       "import": "./dist/button.js"
     },
-    "./input": {
-      "import": "./dist/input.js"
-    },
     "./icon": {
       "import": "./dist/icon.js"
     },
