@@ -86,6 +86,11 @@ MD3 uses tonal palettes with 13 tones per color, providing a complete range from
 
 These tokens map to specific UI purposes and automatically adapt to light/dark themes.
 
+Three themes are shipped, all switched via `data-theme` on `<html>`/`<body>`: the
+default (light), `dark`, and `high-contrast` — a pure black/white theme built for
+maximum legibility, ≥7:1 against every text-bearing role pair. See the block in
+`tokens.css` for the exact mapping.
+
 #### Primary Colors
 
 ```css

@@ -139,13 +139,16 @@ Delivered:
 
 **Done early:** documentation consolidation, completed September 2026 — nine months ahead of schedule, freeing ~10h.
 
+**Done early (Sep 2026):**
+
+- **High-contrast theme.** `[data-theme="high-contrast"]` block in `tokens.css`, reusing the existing dark theme's 80/20 and 90/30 role mapping against a pure-black surface (no new palette values — additive token change only, per the token-pipeline non-goal). Outline and outline-variant pushed brighter than the dark theme's for unmistakable borders. State-layer opacities doubled for visible hover/focus/pressed feedback. The home-page switcher button was already wired to the attribute; this makes it do something. Verified by computing WCAG contrast ratios directly (relative-luminance formula) for every text-bearing role pair — all ≥7:1 (several 10–21:1); non-text roles (outline/outline-variant) land at 9–16:1 against the black surface, well past the 3:1 floor WCAG 1.4.11 sets for UI component boundaries. This is a math check, not an axe run — re-verify against the accessibility harness below once it exists, since axe can catch things (e.g. focus-ring rendering in actual components) that a token-level contrast calculation can't.
+
 | Remaining | Est. |
 | --- | --- |
 | Write 3–4 short engineering notes: why vanilla web components over a framework, the Shadow DOM and theming tension and how it was resolved, the form-association pattern, what accessibility actually cost. This is the portfolio content most people skip and hiring managers actually read. | 12h |
 | Publish real numbers: bundle size, coverage, Lighthouse, browser support — measured, not claimed. | 4h |
 | **Build the accessibility harness.** `playwright.config.js` plus axe run across every demo page, wired into CI. `@axe-core/playwright` is already a dependency and `npm run test:a11y` currently finds zero tests — this is what makes the WCAG 2.1 AA claim in the README true rather than aspirational. | 4h |
 | Accessibility audit of the **docs site itself** — the components carry a11y assertions, the pages around them have none. Runs on the harness above. | 8h |
-| **High-contrast theme.** A `[data-theme="high-contrast"]` token block in `tokens.css` at WCAG AAA ratios, verified against the axe harness above. The switcher button already exists on the home page wired to `data-theme="high-contrast"` — it currently sets an attribute nothing responds to. This finishes it. Fits here because it is accessibility-craft showcase work and needs the harness to verify. | 8h |
 | Clear whatever remains in [DEFECTS.md](./DEFECTS.md), and fill component gaps only if Q2–Q3 surfaced real ones. | 10h |
 | Dependency refresh, final accessibility pass, roadmap review. | 6h |
 
