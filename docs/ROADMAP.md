@@ -109,11 +109,16 @@ Delivered:
 
 **Done early (Sep 2026):**
 
-- **Interactive theme playground — first pass.** [docs/components/theme-playground.html](./components/theme-playground.html), linked from the nav shell and the landing page. One primary source-colour picker; secondary / tertiary / neutral / neutral-variant / error palettes derived from it (tertiary rotated +60°, error hue anchored to the MD3 baseline). Palette generation is an OKLCH L\*→lightness ramp with per-stop sRGB gamut clamping — ~40 lines of colour maths, no dependencies. All 78 `--md-ref-palette-*` values and the `--md-sys-color-*` role set (mapped exactly as `tokens.css` does, per scheme) recompute live; a curated 12-block component preview re-themes with them. Copy per swatch, per role token, or the whole light / dark / palette block. Generating from `#006878` reproduces the shipped palette closely (primary40 → `#006a7b` vs `#006878`). Remaining: refinement on feedback — more preview components, mobile layout pass, maybe a shareable URL hash.
+- **Interactive theme playground.** [docs/components/theme-playground.html](./components/theme-playground.html), linked from the nav shell and the landing page. One primary source-colour picker; secondary / tertiary / neutral / neutral-variant / error palettes derived from it (tertiary rotated +60° by default, error hue anchored to the MD3 baseline). Palette generation is an OKLCH L\*→lightness ramp with per-stop sRGB gamut clamping — no dependencies. All 78 `--md-ref-palette-*` values and the `--md-sys-color-*` role set (mapped exactly as `tokens.css` does, per scheme) recompute live; a curated 12-block component preview re-themes with them.
+- **Preset themes + colour harmony.** A grouped dropdown of ~24 starting points — 12 pattern-library accents (Material, Tailwind, Bootstrap, Ant, Carbon, Primer, Polaris, Atlassian, Chakra) and 12 editor themes (Dracula, Nord, Solarized, Gruvbox, One Dark, Monokai, Tokyo Night, Catppuccin, Night Owl, Ayu, Rosé Pine, Synthwave), each seeding a source colour + neutral tint + scheme (credited to its origin, not a reproduction). A Harmony control (Default / Analogous / Complementary / Triadic / Split) reparametrises the secondary/tertiary hue rotation.
+- **Shareable URL.** The hash tracks the live theme (`#p=<preset>` or `#c=<hex>&h=<harmony>&s=dark`); a "Copy link" button and `localStorage` fallback round-trip it.
+- **Export, on the same surface.** Copy per swatch, per role token, or a whole block: a complete `palette.css` replacement, or the resolved light/dark role set.
+- **Token restructure.** The 91 `--md-ref-palette-*` values moved out of the 450-line `tokens.css` into their own `src/tokens/palette.css` — the one file a theme changes, so a bad edit is one `git restore` away from the shipped baseline. `tokens.css` keeps only the role mapping plus type/spacing/motion/shape.
+- Generating from `#006878` reproduces the shipped palette closely (primary40 → `#006a7b`). Remaining refinement: a few more preview components, a mobile layout pass over the playground's control bar.
 
 | Work | Est. |
 | --- | --- |
-| Theme playground — refinement pass (feedback, mobile, polish). | 6h |
+| Theme playground — mobile layout pass + a few more preview components. | 3h |
 | Visual regression tests (Playwright screenshots) — run **after** the QA workstream completes, so the baselines capture a fixed state rather than an unstable one. | 10h |
 | One realistic composed demo — a settings page or dashboard built entirely from the library, proving the components work together rather than only in isolation. This is also the cheapest way to surface composition defects that per-component review cannot see. | 10h |
 | **Component QA, second half** — see the workstream below. | 15h |
