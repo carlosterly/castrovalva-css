@@ -155,6 +155,17 @@ Delivered:
 
 **Minimum viable stop:** the engineering notes. Everything else is maintenance.
 
+**Decision on record — sequence what's left by risk, not by table order (Sep 2026).**
+Lowest risk first, since none of it depends on the rest:
+
+1. **Engineering notes**, then **publish real numbers** — pure writing/measurement, touch no code at all.
+2. **Composed demo** (Q3) — a new page built from existing components; purely additive, doesn't modify any component source, and surfaces composition bugs as a side effect.
+3. **Component QA manual passes** (Q2/Q3 remainders) — triage only by the workstream's own rules ("fixes nothing"), so low risk even though the findings they produce are not.
+4. Higher risk, because it touches component source directly: **fixing the 38 axe findings** in DEFECTS.md, then the **docs-site accessibility audit**.
+5. **Visual regression** waits until the QA/axe backlog above is mostly clear — baselining screenshots now would lock in known-broken states as "correct," which the workstream's own "triage first, fix second... visual regression comes last" rule already warns against.
+
+**Dependency refresh** carries its own separate risk (breaking upgrades) independent of this ordering — treat it on its own merits when it comes up, not by this list's position.
+
 ---
 
 ## Workstream: component QA

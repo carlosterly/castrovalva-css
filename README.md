@@ -107,6 +107,16 @@ index.html                        component index / playground
 | [CLAUDE.md](CLAUDE.md) | Build conventions: component patterns, demo page rules, testing standards |
 | [docs/ROADMAP.md](docs/ROADMAP.md) | Where the project is heading, and what it is deliberately not doing |
 
+## Engineering notes
+
+Short write-ups on specific decisions and what they actually cost, including
+the parts that didn't go cleanly:
+
+- [Why vanilla Web Components over a framework](docs/notes/why-vanilla-web-components.md)
+- [The Shadow DOM and theming tension, and how it was resolved](docs/notes/shadow-dom-and-theming.md)
+- [The form-association pattern](docs/notes/form-association-pattern.md)
+- [What accessibility actually cost](docs/notes/accessibility-cost.md)
+
 ## Browser support
 
 Chrome/Edge 90+ · Firefox 88+ · Safari 14+ · Opera 76+
