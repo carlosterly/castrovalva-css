@@ -1,8 +1,11 @@
 # Defects
 
-Open UI/UX defects found during component QA. See the
-[component QA workstream](./ROADMAP.md#workstream-component-qa) for the checklist
-this is populated from.
+Open defects, found however they turn up — the
+[component QA workstream](./ROADMAP.md#workstream-component-qa)'s checklist is
+the main source, but real ones have also come from the axe/Lighthouse audits,
+and from just building something else and noticing the thing underneath it
+was wrong. Wherever it came from, it goes here rather than getting fixed
+silently and forgotten or left to rot in a chat transcript.
 
 ## How to use this file
 
@@ -241,3 +244,4 @@ resolved.
 
 - **No visual regression.** Nothing catches a CSS change that breaks an unrelated component. Scheduled for Q3.
 - **No responsive testing.** No automated check at any viewport. Covered manually by the QA workstream.
+- **The axe harness doesn't test high-contrast.** `test/accessibility/demo-pages.spec.js` only runs `{light, dark}` — added before the theme existed and never extended. Real consequence, not theoretical: the `ds-dialog` hardcoded-white-surface bug (see the `dialog` entry above) made dialog text completely illegible in high-contrast, and the harness would have caught it immediately if it covered that theme. Extending the `for (const theme of [...])` loop to include `"high-contrast"` is a small change (153 more checks); do it alongside the next `test:a11y` pass rather than as its own task.

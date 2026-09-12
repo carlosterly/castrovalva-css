@@ -24,7 +24,7 @@ dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 - **2,500+ icons** — Material Symbols with variable font axes (weight, grade, fill, optical size)
 - **Accessible** — targets WCAG 2.1 AA; full keyboard support and managed focus are in place everywhere, automated ARIA/contrast auditing is new and still finding real gaps (see [Accessibility](#accessibility))
 - **Tree-shakeable for `button` and `icon`** — those two ship individual entry points; every other component currently comes in through the full bundle (see [Measured numbers](#measured-numbers))
-- **Light, dark and dynamic themes** — MD3 tonal palettes with persistence
+- **Light, dark, high-contrast, and dynamic themes** — MD3 tonal palettes with persistence; the [theme playground](docs/components/theme-playground.html) generates a dynamic palette from any source colour
 - **Cross-browser** — tested on Chromium, Firefox and WebKit
 
 ## Quick start

@@ -84,7 +84,7 @@ MD3 uses tonal palettes with 13 tones per color, providing a complete range from
 
 ### Semantic Color Roles (40+ tokens)
 
-These tokens map to specific UI purposes and automatically adapt to light/dark themes.
+These tokens map to specific UI purposes and automatically adapt to the active theme.
 
 Three themes are shipped, all switched via `data-theme` on `<html>`/`<body>`: the
 default (light), `dark`, and `high-contrast` — a pure black/white theme built for

@@ -153,6 +153,37 @@ ipsum" and `<ds-button>Button</ds-button>` teach nothing.
 
 ---
 
+## Composed examples
+
+`docs/examples/{name}.html` — a different category from `docs/components/`.
+Not API reference for one component; a realistic page built from several,
+proving they work together (a settings screen, a dashboard). One exists
+today: [docs/examples/settings-page.html](docs/examples/settings-page.html).
+
+Differences from the demo-page rules above, deliberately:
+
+- **No `docs-nav.js`.** A real app screen wouldn't have the design system's
+  own reference-doc sidebar. Include a small back-link instead.
+- **No `pattern-library.css`.** Its classes (`demo-box`, `code-block`,
+  `api-table`, …) are for documenting a component, not building a page.
+  Write page-specific styles reading the same `--md-sys-color-*` /
+  `--ds-space-*` tokens components use.
+- **Still include `theme-init.js`, exactly once, at the end of `<body>`.**
+  The page participates in the site's theme system like everything else.
+- **Link it from `index.html`** (an `Examples` card group) **and the
+  README**, not from the component nav.
+
+Everything from "Demo page rules" that isn't about the nav/CSS/template
+still applies: correct doctype, no HTML entities leaking into tags or
+scripts, no redundant `import` statements in the inline script.
+
+A composed example earns its place by finding real bugs, not just looking
+plausible — test every interactive path in the browser, in light, dark, and
+high-contrast, before calling it done. `settings-page.html` found a real
+`ds-dialog` theming bug in its first ten minutes of testing.
+
+---
+
 ## Component implementation standards
 
 ### Web component pattern
@@ -357,11 +388,12 @@ When the pattern is unclear, copy the structure from:
 - [ ] `npm run lint` exits 0
 - [ ] No console errors in the browser
 - [ ] Responsive on mobile
-- [ ] Works in light and dark themes
+- [ ] Works in light, dark, and high-contrast themes
 - [ ] Keyboard accessible
 
 ## File organisation
 
 - Unit tests: `test/{component}.test.js` — never test HTML files in the repo root
 - Demo pages: `docs/components/{component}.html`
+- Composed examples: `docs/examples/{name}.html` — see "Composed examples" above
 - Component source: `src/components/{name}/{name}.js`
