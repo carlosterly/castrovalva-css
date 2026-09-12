@@ -39,6 +39,8 @@
         display: flex;
         flex-direction: column;
         gap: 6px;
+        min-inline-size: 0;
+        max-inline-size: 100%;
       }
       .tp-field > span {
         font-size: 0.75rem;
@@ -88,13 +90,19 @@
       }
       .tp-seg {
         display: inline-flex;
+        max-inline-size: 100%;
+        /* More harmony options than fit a narrow viewport scroll inside the
+           pill instead of overflowing the page (overflow-x/y split, not
+           shorthand `overflow: hidden`, so the rounded ends still clip). */
+        overflow-x: auto;
+        overflow-y: hidden;
         border: 1px solid var(--md-sys-color-outline);
         border-radius: 999px;
-        overflow: hidden;
       }
       .tp-seg button {
         appearance: none;
         border: 0;
+        flex-shrink: 0;
         padding: 9px 18px;
         font: 500 0.875rem/1 "Roboto", sans-serif;
         background: var(--md-sys-color-surface);
@@ -180,6 +188,12 @@
         }
         .tp-swatch:nth-child(n + 8) {
           display: none;
+        }
+        /* The sticky control bar is worth the scroll-tracking on desktop;
+           on a phone it is tall enough to cover most of the viewport, so it
+           scrolls away with the page instead. */
+        .tp-controls {
+          position: static;
         }
       }
 
