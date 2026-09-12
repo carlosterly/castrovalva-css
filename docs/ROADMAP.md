@@ -114,11 +114,11 @@ Delivered:
 - **Shareable URL.** The hash tracks the live theme (`#p=<preset>` or `#c=<hex>&h=<harmony>&s=dark`); a "Copy link" button and `localStorage` fallback round-trip it.
 - **Export, on the same surface.** Copy per swatch, per role token, or a whole block: a complete `palette.css` replacement, or the resolved light/dark role set.
 - **Token restructure.** The 91 `--md-ref-palette-*` values moved out of the 450-line `tokens.css` into their own `src/tokens/palette.css` — the one file a theme changes, so a bad edit is one `git restore` away from the shipped baseline. `tokens.css` keeps only the role mapping plus type/spacing/motion/shape.
-- Generating from `#006878` reproduces the shipped palette closely (primary40 → `#006a7b`). Remaining refinement: a few more preview components, a mobile layout pass over the playground's control bar.
+- **Mobile layout pass.** Fixed two real issues at 320–768px: the Harmony control forced 25px of horizontal page scroll (now scrolls internally instead), and the sticky control bar covered most of a phone screen while scrolling the palettes below (now scrolls away below 720px). Zero horizontal overflow at 320/375/768/1280px.
+- Generating from `#006878` reproduces the shipped palette closely (primary40 → `#006a7b`). The 12-component preview set (actions, inputs, selection, feedback, containers, navigation, lists, overlay) is judged sufficient — the playground is considered feature-complete for this quarter.
 
 | Work | Est. |
 | --- | --- |
-| Theme playground — mobile layout pass + a few more preview components. | 3h |
 | Visual regression tests (Playwright screenshots) — run **after** the QA workstream completes, so the baselines capture a fixed state rather than an unstable one. | 10h |
 | One realistic composed demo — a settings page or dashboard built entirely from the library, proving the components work together rather than only in isolation. This is also the cheapest way to surface composition defects that per-component review cannot see. | 10h |
 | **Component QA, second half** — see the workstream below. | 15h |
