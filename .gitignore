@@ -41,3 +41,4 @@ Desktop.ini
 
 # QA sweep output (scripts/qa-sweep.mjs)
 _qa-out/
+_qa-overlays/

@@ -76,6 +76,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 ### dialog
 
 - **A (fixed)** — `:host` set `--ds-dialog-surface-color: #ffffff` unconditionally, short-circuiting the surface's own theme-aware fallback (`var(--ds-dialog-surface-color, var(--md-sys-color-surface-container-high, ...))`) so every dialog rendered on a hardcoded white background regardless of theme. Harmless-looking in light theme; in dark theme it made `on-surface` text (a light color, meant for dark backgrounds) low-contrast against that white surface; in the new high-contrast theme `on-surface` is pure white, making dialog titles and body text **completely invisible** against the same hardcoded white — a real, severe bug no one had seen because nothing had opened a dialog in high-contrast theme until the composed settings-page example did. Fixed by deleting the hardcoded default so the existing fallback chain (already correct) takes over; consumers can still override `--ds-dialog-surface-color` themselves, that capability wasn't removed. Verified: `dialog.test.js` (28/28) still passes, and the settings-page example's delete-confirmation dialog is now legible in all three themes.
+- **A** — Every dialog demo's `actions` slot (Cancel/Save/Delete/Confirm) is a native `<button>`, and the site-wide reset (`button { border: none; background: none; padding: 0; }` in `src/styles/reset.css`) strips them of all visual affordance — they render as bare unstyled text with no padding, background, or hover/pressed state, just the browser's default outline on Tab focus. `ds-dialog`'s `::slotted([slot="actions"])` rule only lays out the wrapper `<div>` (flex + gap), it never styles the buttons themselves. Same pattern in the composed `docs/examples/settings-page.html` delete-confirmation dialog, so this isn't a one-off demo mistake — every real usage of the actions slot looks unfinished. Found opening every dialog demo variant in both themes; independent of viewport.
 
 ### form
 
@@ -111,6 +112,10 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 - **B** — axe `color-contrast`: the light-DOM `.label`/`.value-display` text next to `ds-slider` demos fails contrast (12 nodes, both themes).
 - **B** — 12 unit tests fail on Firefox only (`npm run test:all`), all pointer-drag interaction/event tests (`should emit input/change event on pointer interaction`, `should update value when dragged`, `should snap values to step`, …). Chromium and WebKit pass all of them. Not yet root-caused — could be a real Firefox pointer-event handling difference in the component, or a Playwright synthetic-pointer-event quirk specific to Firefox's test harness rather than a user-facing bug. Needs someone to actually drag a slider in real Firefox before concluding either way.
 
+### snackbar
+
+- **A** — At 360px viewport, a snackbar with an action (the "With Action" demo, message + "UNDO" + dismiss icon) renders ~376px wide against the 360px viewport, clipping the message on the left and the action/dismiss controls on the right (confirmed by measurement: inner box left=-8px, right=368px vs a 360px viewport). Not caught by the mechanical QA sweep because it's `position: fixed` content — it never registers in `document.documentElement.scrollWidth`, which is what the sweep's overflow check reads. Both themes; message-only and basic snackbars (no action) fit fine, so this only hits the action/dismissible variants.
+
 ### split-button
 
 - **B** — axe `scrollable-region-focusable`: one demo-box scrolls without keyboard access (1 node, both themes).
@@ -136,6 +141,10 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **A** — axe `aria-progressbar-name`, `aria-toggle-field-name`, `label`, `nested-interactive`: inherits the `progress-indicator` / `radio`+`switch` / `text-field` / `checkbox` bugs above via its live component preview — no separate fix needed once those land.
 - **B** — axe `color-contrast`: palette swatch button labels fail contrast against their own swatch background for some tones (11 nodes, both themes).
+
+### tooltip
+
+- **A** — `position="left"` and `position="right"` render overlapping the target instead of beside it, in both themes — a visitor would see the tooltip cover part of the button's own label. `top`/`bottom` are correctly offset; only the two horizontal positions are affected. Confirmed by measurement, not just a screenshot read: hovering `#tooltip-left-target` (button at x=778–806), the tooltip's rendered box lands at x=692–785 — overlapping ~13px into the button — even though the inline `left` style the component actually sets (676.8px) would, if honored, place it with a clean 8px gap outside the button. Something between `calculatePosition()`'s `left`/`right` branches (`ds-tooltip.js`) and the final rendered box introduces the offset; `top`/`bottom` use a different (centering) formula and aren't affected. Not caught by the QA sweep, which never opens a tooltip via hover/focus.
 
 ### virtual-scroll
 
@@ -164,10 +173,29 @@ fixed (see git history):
 
 Reviewed and looked clean in this pass: checkbox, radio, tabs.
 
-**Still to do — the full manual pass.** The screenshot review only catches
-structural and token issues. A human eye is still needed on interactive
-states (hover / focus-visible / pressed), spacing rhythm, MD3 type scale,
-and the components the sweep never opens (menu, dialog, tooltip, snackbar).
+**Overlay interaction pass — done, 12 Sep 2026.** `scripts/qa-overlays.mjs`
+actually opens the four components the mechanical sweep never triggers —
+menu, dialog, tooltip, snackbar — and captures their interactive states
+(open, hover, keyboard focus, pressed) at both viewports and both themes
+(96 states). Three real findings, logged under their components above:
+dialog's `actions` slot buttons render with no visual styling at all (a
+site-wide `button` reset with nothing to replace it), `ds-tooltip`'s
+`position="left"`/`"right"` overlap their target instead of sitting beside
+it, and `ds-snackbar` with an action overflows a 360px viewport (invisible
+to the sweep since fixed-position content doesn't register as page
+overflow). Menu — including keyboard roving focus, icons, and the
+selected/disabled/divider states demo — and dialog's `dismiss-on-esc`/
+`dismiss-on-backdrop-click` configuration held up correctly. One dead end
+worth recording so it isn't rechecked: the menu item's keyboard-focus state
+layer looked absent in a full-page screenshot but is real — it's a subtle
+12%-opacity overlay only visible on close inspection, confirmed by a
+cropped/zoomed capture.
+
+**Still to do — the full manual pass.** The screenshot review and the
+overlay pass above only catch structural, token, and interaction-triggered
+issues. A human eye is still needed on spacing rhythm and MD3 type scale
+across the Tier-1 contact sheet, and on hover/pressed states for components
+outside the four overlays checked above.
 
 ## Triage coverage
 

@@ -215,9 +215,11 @@ broken state and entrench it. Q3's regression suite runs once the fixing is done
 
 ### How the pass runs (agreed Sep 2026)
 
-**Status:** the sweep, the contact sheet and the first-pass fidelity review
-are done (Sep 2026). Only the human MD3-fidelity pass over the Tier-1
-contact sheet and the never-opened overlays is outstanding.
+**Status:** the sweep, the contact sheet, the first-pass fidelity review, and
+the overlay interaction pass (menu, dialog, tooltip, snackbar — see
+[DEFECTS.md](./DEFECTS.md)) are done (Sep 2026). Only the human MD3-fidelity
+pass over the Tier-1 contact sheet itself (spacing rhythm, type scale, and
+hover/pressed states outside the four overlays) is outstanding.
 
 - **One triage sweep over all 43**, not the Q2 half. It is mostly a script
   (viewports, themes, overflow, console errors, failed requests,
