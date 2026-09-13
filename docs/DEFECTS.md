@@ -191,11 +191,43 @@ layer looked absent in a full-page screenshot but is real — it's a subtle
 12%-opacity overlay only visible on close inspection, confirmed by a
 cropped/zoomed capture.
 
-**Still to do — the full manual pass.** The screenshot review and the
-overlay pass above only catch structural, token, and interaction-triggered
-issues. A human eye is still needed on spacing rhythm and MD3 type scale
-across the Tier-1 contact sheet, and on hover/pressed states for components
-outside the four overlays checked above.
+**Programmatic type-scale/spacing check — 13 Sep 2026, all findings fixed.**
+Cross-referenced every Tier-1 component's Shadow DOM CSS against the MD3
+spec's sizing and typescale values (not a screenshot read — actual
+token/pixel values verified against `tokens.css`). Four real, verified
+findings, all now fixed (see git history):
+
+- An invalid typescale-token-name pattern — `-font-size`/`-font-weight`/
+  `-font-family-name` suffixes that don't exist in `tokens.css` (only
+  `-size`/`-weight`/`-font` do), silently discarding the intended type scale
+  with no fallback to catch it — spanning `card`, `chip`, `dialog`,
+  `snackbar`, `tooltip`, `textarea`, and (found in the same sweep once the
+  pattern was known) the `ds-switch.css` helper label. `snackbar` also had
+  `-letter-spacing` where the token suffix is `-tracking`. Masked in `card`
+  only because the title sits in an `<h3>`, whose native bold/large UA
+  styling happened to look plausible — why the screenshot contact-sheet
+  review didn't catch it and it took a CSS-level check to surface.
+- `card`'s corner radius resolved to a dead `var(--ds-radius-md, 12px)`
+  fallback (8px, not MD3's 12dp) since `--ds-radius-md` is already defined;
+  fixed by hardcoding 12px directly, since the project's radius scale has no
+  token at that value (it jumps sm 4px → md 8px → lg 16px).
+- `radio`'s outer circle resolved to a dead `var(--ds-size-icon-md, 20px)`
+  fallback (18px, not MD3's 20dp) for the same reason; fixed by hardcoding
+  the 20px default instead of reusing checkbox's icon-size token.
+- `badge`'s dot variant sized off `--ds-size-icon-sm` (14px) instead of
+  MD3's 6dp dot, over 2x oversized; fixed with a dedicated 6px value.
+
+Switch (track/thumb sizing), FAB, checkbox, and icon were checked and are
+fully spec-compliant. A handful of lower-confidence items (menu/tabs/list
+type-scale role choices, minor padding deltas) surfaced too but weren't
+independently verified, so they were left unfixed and unlogged — worth a
+follow-up pass if pursued.
+
+**Still to do — the full manual pass.** The screenshot review, the overlay
+pass, and the programmatic check above only catch structural, token, and
+interaction-triggered issues. A human eye is still needed on spacing rhythm
+*as felt* and on hover/pressed state-layer feel across the Tier-1 contact
+sheet — things a static screenshot or a CSS diff can't judge.
 
 ## Triage coverage
 

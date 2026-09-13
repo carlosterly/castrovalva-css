@@ -4,7 +4,7 @@
  *
  * @attr {string} size - Size of the radio (sm, md, lg)
  *
- * @cssprop --ds-radio-size - Size of the radio (default: var(--ds-size-icon-md))
+ * @cssprop --ds-radio-size - Size of the radio (default: 20px, the MD3 spec size)
  * @cssprop --ds-radio-dot-size - Size of the inner dot (default: calc(var(--ds-radio-size) / 2))
  * @cssprop --ds-radio-state-layer-size - Size of the state layer (default: var(--ds-size-hit-area))
  */
@@ -283,11 +283,11 @@ export class DSRadio extends HTMLElement {
         :host {
           display: inline-block;
           position: relative;
-          width: var(--ds-radio-size, var(--ds-size-icon-md, 20px));
-          height: var(--ds-radio-size, var(--ds-size-icon-md, 20px));
+          width: var(--ds-radio-size, 20px);
+          height: var(--ds-radio-size, 20px);
           cursor: pointer;
           --ds-radio-dot-size: calc(
-            var(--ds-radio-size, var(--ds-size-icon-md, 20px)) / 2
+            var(--ds-radio-size, 20px) / 2
           );
         }
 
@@ -298,8 +298,8 @@ export class DSRadio extends HTMLElement {
 
         .radio {
           position: relative;
-          width: var(--ds-radio-size, var(--ds-size-icon-md, 20px));
-          height: var(--ds-radio-size, var(--ds-size-icon-md, 20px));
+          width: var(--ds-radio-size, 20px);
+          height: var(--ds-radio-size, 20px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -350,8 +350,8 @@ export class DSRadio extends HTMLElement {
 
         /* Outer circle */
         .outer-circle {
-          width: var(--ds-radio-size, var(--ds-size-icon-md, 20px));
-          height: var(--ds-radio-size, var(--ds-size-icon-md, 20px));
+          width: var(--ds-radio-size, 20px);
+          height: var(--ds-radio-size, 20px);
           border-radius: 50%;
           border: 2px solid var(--md-sys-color-on-surface-variant);
           box-sizing: border-box;

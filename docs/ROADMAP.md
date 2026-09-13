@@ -87,10 +87,12 @@ Delivered:
 - **Content search** — `scripts/build-search-index.mjs` generates `docs/search-index.json` from the demo pages (section headings + API attribute/event/slot/part names); the Pages deploy regenerates it each time. The nav filter now matches page content, not just titles — "disabled" surfaces every component with a disabled state, "ds-click" finds Button. Not yet covered: token-name search from `tokens.md` (blocked on the same raw-`.md` rendering issue as the home-page doc links).
 - **Performance — font weight.** The Material Symbols Outlined variable font at full axis range was a 3.9 MB woff2, 82% of every page. Pinned it to a static instance (`@24,400,0,0`, ~315 KB) on every page except `icon.html` — no other page varies the icon axes. Added `preconnect` and `&display=swap` everywhere. Page weight fell ~77% (button.html 4.76 MB → 1.19 MB). `icon.html` keeps the full font since demoing those axes is its purpose. `display=swap` meant fonts never blocked paint, so FCP was already fine. Confirmed since with a real `npx lighthouse` run rather than the anonymous PageSpeed Insights quota this note originally hit: 0.9s FCP / 98 performance on desktop, 4.5s FCP / 71 performance on throttled mobile — see the README's [Measured numbers](../README.md#measured-numbers) table. Optional further win: self-host a ~15 KB glyph subset instead of the 315 KB static font.
 - **Component QA — triage and Tier-1 fixes.** `scripts/qa-sweep.mjs` swept all 50 demo pages × {360px, 1280px} × {light, dark}, plus 8 components inside `<ds-dialog>` — mechanically clean (no overflow, console errors, page errors or failed requests). Fixed from the sweep and the first-pass contact-sheet review: `ds-slider` keyboard + ARIA (it had neither), the mis-mapped `surface-container` tonal ramp that made every filled input read as disabled, `ds-card` dark-mode elevation, `ds-list-item` empty-leading inset, `ds-icon` text-content glyphs, `ds-button` corner radius and disabled state, `ds-badge` default colour, `ds-data-table` sort affordance, and the `docs-nav` hamburger crowding the page `<h1>`. See [DEFECTS.md](./DEFECTS.md).
+- **Component QA — overlay interaction pass.** `scripts/qa-overlays.mjs` actually opens the four components the mechanical sweep never triggers — menu, dialog, tooltip, snackbar — across both viewports and themes. Fixed: `ds-dialog`'s `actions` slot buttons had zero visual styling (a site-wide `button` reset with nothing to replace it — still open, needs a design decision on default button styling), `ds-tooltip`'s `position="left"`/`"right"` overlapping their target, and `ds-snackbar` with an action overflowing a 360px viewport. Menu and dialog's dismiss configuration held up correctly.
+- **Component QA — programmatic type-scale/spacing check.** Cross-referenced every Tier-1 component's Shadow DOM CSS against the MD3 spec's numeric sizing and typescale values (not a screenshot read — actual token/pixel values verified against `tokens.css`). Found and fixed: an invalid typescale-token-name pattern that silently discarded the intended type scale on six components plus a switch helper style, `ds-card`'s corner radius and `ds-radio`'s outer-circle size each resolving to a dead CSS fallback, and `ds-badge`'s dot variant reusing an icon token at over 2x the spec size. Switch, FAB, checkbox, and icon checked out fully spec-compliant. See [DEFECTS.md](./DEFECTS.md).
 
 | Work | Est. |
 | --- | --- |
-| **Component QA — manual pass.** Triage and the Tier-1 fixes are done (see _Done early_). What remains is the review the sweep cannot do: MD3 fidelity by eye (elevation, state-layer opacity, type scale, spacing rhythm), interactive states (hover / focus-visible / pressed), and the overlays the sweep never opens — menu, dialog, tooltip, snackbar. | 10h |
+| **Component QA — manual pass.** Triage, the Tier-1 sweep fixes, the overlay pass, and the programmatic type-scale/spacing check are all done (see _Done early_). What remains is the part none of those can do: MD3 fidelity *by eye* — elevation, state-layer opacity, spacing rhythm as felt — and interactive states (hover / focus-visible / pressed) in a live browser. | 10h |
 
 **Minimum viable stop:** landing page plus working navigation — **both done.** The rest is refinement.
 
@@ -215,11 +217,14 @@ broken state and entrench it. Q3's regression suite runs once the fixing is done
 
 ### How the pass runs (agreed Sep 2026)
 
-**Status:** the sweep, the contact sheet, the first-pass fidelity review, and
-the overlay interaction pass (menu, dialog, tooltip, snackbar — see
-[DEFECTS.md](./DEFECTS.md)) are done (Sep 2026). Only the human MD3-fidelity
-pass over the Tier-1 contact sheet itself (spacing rhythm, type scale, and
-hover/pressed states outside the four overlays) is outstanding.
+**Status:** the sweep, the contact sheet, the first-pass fidelity review, the
+overlay interaction pass (menu, dialog, tooltip, snackbar), and a programmatic
+type-scale/spacing check against the MD3 spec's numeric values (see
+[DEFECTS.md](./DEFECTS.md)) are done (Sep 2026), and every defect any of
+those turned up has been fixed. Only the human MD3-fidelity pass over the
+Tier-1 contact sheet itself — spacing rhythm *as felt*, and hover/pressed
+state-layer feel outside the four overlays already checked — is outstanding.
+That's a live-browser judgment call a script or a CSS diff can't make.
 
 - **One triage sweep over all 43**, not the Q2 half. It is mostly a script
   (viewports, themes, overflow, console errors, failed requests,

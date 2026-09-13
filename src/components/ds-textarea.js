@@ -202,7 +202,7 @@ export class DSTextarea extends HTMLElement {
         .textarea-container {
           position: relative;
           width: 100%;
-          font-family: var(--md-sys-typescale-body-large-font-family-name);
+          font-family: var(--md-sys-typescale-body-large-font);
         }
 
         /* Label */
@@ -210,7 +210,7 @@ export class DSTextarea extends HTMLElement {
           position: absolute;
           left: 16px;
           top: 8px;
-          font-size: var(--md-sys-typescale-body-large-font-size);
+          font-size: var(--md-sys-typescale-body-large-size);
           color: var(--md-sys-color-on-surface-variant);
           pointer-events: none;
           transition: all var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
@@ -222,7 +222,7 @@ export class DSTextarea extends HTMLElement {
         .textarea-container.focused .label,
         .textarea-container.has-value .label {
           top: -1px;
-          font-size: var(--md-sys-typescale-body-small-font-size);
+          font-size: var(--md-sys-typescale-body-small-size);
           color: var(--md-sys-color-primary);
         }
 
@@ -248,8 +248,8 @@ export class DSTextarea extends HTMLElement {
           border-radius: 4px 4px 0 0;
           background-color: var(--md-sys-color-surface-variant);
           color: var(--md-sys-color-on-surface);
-          font-family: var(--md-sys-typescale-body-large-font-family-name);
-          font-size: var(--md-sys-typescale-body-large-font-size);
+          font-family: var(--md-sys-typescale-body-large-font);
+          font-size: var(--md-sys-typescale-body-large-size);
           line-height: var(--md-sys-typescale-body-large-line-height);
           resize: ${this._autoResize ? "none" : "vertical"};
           box-sizing: border-box;
@@ -319,7 +319,7 @@ export class DSTextarea extends HTMLElement {
 
         .helper-text,
         .error-text {
-          font-size: var(--md-sys-typescale-body-small-font-size);
+          font-size: var(--md-sys-typescale-body-small-size);
           line-height: var(--md-sys-typescale-body-small-line-height);
           color: var(--md-sys-color-on-surface-variant);
           flex: 1;
@@ -330,7 +330,7 @@ export class DSTextarea extends HTMLElement {
         }
 
         .character-counter {
-          font-size: var(--md-sys-typescale-body-small-font-size);
+          font-size: var(--md-sys-typescale-body-small-size);
           color: var(--md-sys-color-on-surface-variant);
           white-space: nowrap;
         }

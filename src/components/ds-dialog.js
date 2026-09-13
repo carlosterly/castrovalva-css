@@ -349,10 +349,10 @@ export class DSDialog extends HTMLElement {
         .title {
           flex: 1;
           margin: 0;
-          font-family: var(--md-sys-typescale-headline-small-font-family-name);
-          font-size: var(--md-sys-typescale-headline-small-font-size);
+          font-family: var(--md-sys-typescale-headline-small-font);
+          font-size: var(--md-sys-typescale-headline-small-size);
           line-height: var(--md-sys-typescale-headline-small-line-height);
-          font-weight: var(--md-sys-typescale-headline-small-font-weight);
+          font-weight: var(--md-sys-typescale-headline-small-weight);
           color: var(--md-sys-color-on-surface);
         }
 
@@ -382,8 +382,8 @@ export class DSDialog extends HTMLElement {
 
         .content {
           color: var(--md-sys-color-on-surface-variant);
-          font-family: var(--md-sys-typescale-body-medium-font-family-name);
-          font-size: var(--md-sys-typescale-body-medium-font-size);
+          font-family: var(--md-sys-typescale-body-medium-font);
+          font-size: var(--md-sys-typescale-body-medium-size);
           line-height: var(--md-sys-typescale-body-medium-line-height);
           margin: 0 0 24px 0;
         }

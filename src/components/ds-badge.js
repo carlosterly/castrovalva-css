@@ -152,7 +152,7 @@ export class DSBadge extends HTMLElement {
       <style>
         :host {
           --ds-badge-size: var(--ds-size-icon-md, 18px);
-          --ds-badge-dot-size: var(--ds-size-icon-sm, 14px);
+          --ds-badge-dot-size: 6px;
           --ds-badge-padding-inline: var(--ds-space-1, 4px);
           --ds-badge-font-size: 12px;
           display: inline-block;

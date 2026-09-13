@@ -226,9 +226,9 @@ export class DSChip extends HTMLElement {
           border: 1px solid var(--md-sys-color-outline);
           background-color: transparent;
           color: var(--md-sys-color-on-surface-variant);
-          font-family: var(--md-sys-typescale-label-large-font-family-name);
-          font-size: var(--md-sys-typescale-label-large-font-size);
-          font-weight: var(--md-sys-typescale-label-large-font-weight);
+          font-family: var(--md-sys-typescale-label-large-font);
+          font-size: var(--md-sys-typescale-label-large-size);
+          font-weight: var(--md-sys-typescale-label-large-weight);
           line-height: var(--md-sys-typescale-label-large-line-height);
           cursor: pointer;
           user-select: none;

@@ -474,8 +474,8 @@ export class DSTooltip extends HTMLElement {
           padding-inline: var(--ds-tooltip-padding-inline);
           background-color: var(--md-sys-color-inverse-surface);
           color: var(--md-sys-color-inverse-on-surface);
-          font-family: var(--md-sys-typescale-body-small-font-family-name);
-          font-size: var(--md-sys-typescale-body-small-font-size);
+          font-family: var(--md-sys-typescale-body-small-font);
+          font-size: var(--md-sys-typescale-body-small-size);
           line-height: var(--md-sys-typescale-body-small-line-height);
           border-radius: var(--ds-tooltip-border-radius);
           z-index: var(--ds-tooltip-z-index);

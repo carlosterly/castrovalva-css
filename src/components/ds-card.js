@@ -109,7 +109,9 @@ export class DSCard extends HTMLElement {
       <style>
         :host {
           display: block;
-          --ds-card-corner-radius: var(--ds-radius-md, 12px);
+          /* MD3's medium shape (12dp) has no matching --ds-radius-* token —
+             the scale jumps from sm (4px) to md (8px) to lg (16px). */
+          --ds-card-corner-radius: 12px;
           --ds-card-padding: var(--ds-space-4, 16px);
           --ds-card-action-gap: var(--ds-space-2, 8px);
           --ds-card-touch-target-size: var(--ds-size-hit-area, 40px);
@@ -214,17 +216,17 @@ export class DSCard extends HTMLElement {
 
         .title {
           margin: 0;
-          font-family: var(--md-sys-typescale-title-large-font-family-name);
-          font-size: var(--md-sys-typescale-title-large-font-size);
+          font-family: var(--md-sys-typescale-title-large-font);
+          font-size: var(--md-sys-typescale-title-large-size);
           line-height: var(--md-sys-typescale-title-large-line-height);
-          font-weight: var(--md-sys-typescale-title-large-font-weight);
+          font-weight: var(--md-sys-typescale-title-large-weight);
           color: var(--md-sys-color-on-surface);
         }
 
         .subhead {
           margin: 4px 0 0 0;
-          font-family: var(--md-sys-typescale-body-medium-font-family-name);
-          font-size: var(--md-sys-typescale-body-medium-font-size);
+          font-family: var(--md-sys-typescale-body-medium-font);
+          font-size: var(--md-sys-typescale-body-medium-size);
           line-height: var(--md-sys-typescale-body-medium-line-height);
           color: var(--md-sys-color-on-surface-variant);
         }
@@ -234,8 +236,8 @@ export class DSCard extends HTMLElement {
           padding: 0 var(--ds-card-padding) var(--ds-card-padding)
             var(--ds-card-padding);
           color: var(--md-sys-color-on-surface-variant);
-          font-family: var(--md-sys-typescale-body-medium-font-family-name);
-          font-size: var(--md-sys-typescale-body-medium-font-size);
+          font-family: var(--md-sys-typescale-body-medium-font);
+          font-size: var(--md-sys-typescale-body-medium-size);
           line-height: var(--md-sys-typescale-body-medium-line-height);
         }
 

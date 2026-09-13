@@ -343,21 +343,21 @@ export class DSSnackbar extends HTMLElement {
 
         .message {
           flex: 1;
-          font-family: var(--md-sys-typescale-body-medium-font-family-name);
-          font-size: var(--md-sys-typescale-body-medium-font-size);
+          font-family: var(--md-sys-typescale-body-medium-font);
+          font-size: var(--md-sys-typescale-body-medium-size);
           line-height: var(--md-sys-typescale-body-medium-line-height);
-          font-weight: var(--md-sys-typescale-body-medium-font-weight);
+          font-weight: var(--md-sys-typescale-body-medium-weight);
         }
 
         .action-button {
           background: transparent;
           border: none;
           color: var(--md-sys-color-inverse-primary);
-          font-family: var(--md-sys-typescale-label-large-font-family-name);
-          font-size: var(--md-sys-typescale-label-large-font-size);
-          font-weight: var(--md-sys-typescale-label-large-font-weight);
+          font-family: var(--md-sys-typescale-label-large-font);
+          font-size: var(--md-sys-typescale-label-large-size);
+          font-weight: var(--md-sys-typescale-label-large-weight);
           line-height: var(--md-sys-typescale-label-large-line-height);
-          letter-spacing: var(--md-sys-typescale-label-large-letter-spacing);
+          letter-spacing: var(--md-sys-typescale-label-large-tracking);
           text-transform: uppercase;
           padding-inline: var(--ds-snackbar-action-padding-inline);
           padding-block: var(--ds-snackbar-action-padding-block);
