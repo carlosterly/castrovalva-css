@@ -42,10 +42,6 @@
         display: block;
       }
 
-      .radio-error-label {
-        color: var(--md-sys-color-error);
-      }
-
       .radio-output {
         margin-block-start: var(--ds-space-4);
         padding: var(--ds-space-3);
@@ -76,12 +72,11 @@
           </p>
           <div class="demo-box">
             <div class="radio-item">
-              <ds-radio name="basic" value="option"></ds-radio>
-              <label>Single option</label>
+              <ds-radio name="basic" value="option" label="Single option"></ds-radio>
             </div>
           </div>
           <div class="code-block">
-            <pre>&lt;ds-radio name="basic" value="option">&lt;/ds-radio></pre>
+            <pre>&lt;ds-radio name="basic" value="option" label="Single option">&lt;/ds-radio></pre>
           </div>
         </div>
 
@@ -91,19 +86,21 @@
           <div class="demo-box radio-demo-block">
             <div class="radio-group">
               <div class="radio-item">
-                <ds-radio name="delivery" value="standard" checked></ds-radio>
-                <label>Standard</label>
+                <ds-radio
+                  name="delivery"
+                  value="standard"
+                  label="Standard"
+                  checked></ds-radio>
               </div>
               <div class="radio-item">
-                <ds-radio name="delivery" value="express"></ds-radio>
-                <label>Express</label>
+                <ds-radio name="delivery" value="express" label="Express"></ds-radio>
               </div>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-radio name="delivery" value="standard" checked>&lt;/ds-radio>
-&lt;ds-radio name="delivery" value="express">&lt;/ds-radio></pre
+&lt;ds-radio name="delivery" value="standard" label="Standard" checked>&lt;/ds-radio>
+&lt;ds-radio name="delivery" value="express" label="Express">&lt;/ds-radio></pre
             >
           </div>
         </div>
@@ -128,24 +125,21 @@
           <div class="demo-box radio-demo-block">
             <div class="radio-group">
               <div class="radio-item">
-                <ds-radio name="size" value="small" checked></ds-radio>
-                <label>Small</label>
+                <ds-radio name="size" value="small" label="Small" checked></ds-radio>
               </div>
               <div class="radio-item">
-                <ds-radio name="size" value="medium"></ds-radio>
-                <label>Medium</label>
+                <ds-radio name="size" value="medium" label="Medium"></ds-radio>
               </div>
               <div class="radio-item">
-                <ds-radio name="size" value="large"></ds-radio>
-                <label>Large</label>
+                <ds-radio name="size" value="large" label="Large"></ds-radio>
               </div>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-radio name="size" value="small" checked>&lt;/ds-radio>
-&lt;ds-radio name="size" value="medium">&lt;/ds-radio>
-&lt;ds-radio name="size" value="large">&lt;/ds-radio></pre
+&lt;ds-radio name="size" value="small" label="Small" checked>&lt;/ds-radio>
+&lt;ds-radio name="size" value="medium" label="Medium">&lt;/ds-radio>
+&lt;ds-radio name="size" value="large" label="Large">&lt;/ds-radio></pre
             >
           </div>
 
@@ -163,24 +157,21 @@
           <div class="demo-box radio-demo-block">
             <div class="radio-group horizontal">
               <div class="radio-item">
-                <ds-radio name="color" value="red" checked></ds-radio>
-                <label>Red</label>
+                <ds-radio name="color" value="red" label="Red" checked></ds-radio>
               </div>
               <div class="radio-item">
-                <ds-radio name="color" value="green"></ds-radio>
-                <label>Green</label>
+                <ds-radio name="color" value="green" label="Green"></ds-radio>
               </div>
               <div class="radio-item">
-                <ds-radio name="color" value="blue"></ds-radio>
-                <label>Blue</label>
+                <ds-radio name="color" value="blue" label="Blue"></ds-radio>
               </div>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-radio name="color" value="red" checked>&lt;/ds-radio>
-&lt;ds-radio name="color" value="green">&lt;/ds-radio>
-&lt;ds-radio name="color" value="blue">&lt;/ds-radio></pre
+&lt;ds-radio name="color" value="red" label="Red" checked>&lt;/ds-radio>
+&lt;ds-radio name="color" value="green" label="Green">&lt;/ds-radio>
+&lt;ds-radio name="color" value="blue" label="Blue">&lt;/ds-radio></pre
             >
           </div>
 
@@ -189,28 +180,34 @@
           <div class="demo-box radio-demo-block">
             <div class="radio-group horizontal">
               <div class="radio-item">
-                <ds-radio name="size-demo" value="sm" size="sm"></ds-radio>
-                <label>Small</label>
+                <ds-radio
+                  name="size-demo"
+                  value="sm"
+                  size="sm"
+                  label="Small"></ds-radio>
               </div>
               <div class="radio-item">
                 <ds-radio
                   name="size-demo"
                   value="md"
                   size="md"
+                  label="Medium"
                   checked></ds-radio>
-                <label>Medium</label>
               </div>
               <div class="radio-item">
-                <ds-radio name="size-demo" value="lg" size="lg"></ds-radio>
-                <label>Large</label>
+                <ds-radio
+                  name="size-demo"
+                  value="lg"
+                  size="lg"
+                  label="Large"></ds-radio>
               </div>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-radio name="size-demo" value="sm" size="sm">&lt;/ds-radio>
-&lt;ds-radio name="size-demo" value="md" size="md" checked>&lt;/ds-radio>
-&lt;ds-radio name="size-demo" value="lg" size="lg">&lt;/ds-radio></pre
+&lt;ds-radio name="size-demo" value="sm" size="sm" label="Small">&lt;/ds-radio>
+&lt;ds-radio name="size-demo" value="md" size="md" label="Medium" checked>&lt;/ds-radio>
+&lt;ds-radio name="size-demo" value="lg" size="lg" label="Large">&lt;/ds-radio></pre
             >
           </div>
         </div>
@@ -222,62 +219,73 @@
           <h3>Default and Selected</h3>
           <div class="demo-box">
             <div class="radio-item">
-              <ds-radio name="basic-demo" value="unselected"></ds-radio>
-              <label>Unselected</label>
+              <ds-radio
+                name="basic-demo"
+                value="unselected"
+                label="Unselected"></ds-radio>
             </div>
             <div class="radio-item">
-              <ds-radio name="basic-demo" value="selected" checked></ds-radio>
-              <label>Selected</label>
+              <ds-radio
+                name="basic-demo"
+                value="selected"
+                label="Selected"
+                checked></ds-radio>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-radio name="group1" value="option1">&lt;/ds-radio>
-&lt;ds-radio name="group1" value="option2" checked>&lt;/ds-radio></pre
+&lt;ds-radio name="group1" value="option1" label="Unselected">&lt;/ds-radio>
+&lt;ds-radio name="group1" value="option2" label="Selected" checked>&lt;/ds-radio></pre
             >
           </div>
 
           <h3>Disabled</h3>
           <div class="demo-box">
             <div class="radio-item">
-              <ds-radio name="demo3" value="disabled" disabled></ds-radio>
-              <label>Disabled Unselected</label>
+              <ds-radio
+                name="demo3"
+                value="disabled"
+                label="Disabled Unselected"
+                disabled></ds-radio>
             </div>
             <div class="radio-item">
               <ds-radio
                 name="demo4"
                 value="disabled-selected"
+                label="Disabled Selected"
                 checked
                 disabled></ds-radio>
-              <label>Disabled Selected</label>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-radio disabled>&lt;/ds-radio>
-&lt;ds-radio checked disabled>&lt;/ds-radio></pre
+&lt;ds-radio label="Disabled Unselected" disabled>&lt;/ds-radio>
+&lt;ds-radio label="Disabled Selected" checked disabled>&lt;/ds-radio></pre
             >
           </div>
 
           <h3>Error</h3>
           <div class="demo-box">
             <div class="radio-item">
-              <ds-radio name="error-demo" value="error" error></ds-radio>
-              <label class="radio-error-label">Error State</label>
+              <ds-radio
+                name="error-demo"
+                value="error"
+                label="Error State"
+                error></ds-radio>
             </div>
             <div class="radio-item">
               <ds-radio
                 name="error-demo"
                 value="error-selected"
+                label="Error Selected"
                 checked
                 error></ds-radio>
-              <label class="radio-error-label">Error Selected</label>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-radio error>&lt;/ds-radio>
-&lt;ds-radio checked error>&lt;/ds-radio></pre
+&lt;ds-radio label="Error State" error>&lt;/ds-radio>
+&lt;ds-radio label="Error Selected" checked error>&lt;/ds-radio></pre
             >
           </div>
         </div>
@@ -294,29 +302,29 @@
                   name="contact"
                   value="email"
                   id="contact-email"
+                  label="Email"
                   checked></ds-radio>
-                <label for="contact-email">Email</label>
               </div>
               <div class="radio-item">
                 <ds-radio
                   name="contact"
                   value="phone"
-                  id="contact-phone"></ds-radio>
-                <label for="contact-phone">Phone</label>
+                  id="contact-phone"
+                  label="Phone"></ds-radio>
               </div>
               <div class="radio-item">
                 <ds-radio
                   name="contact"
                   value="sms"
-                  id="contact-sms"></ds-radio>
-                <label for="contact-sms">SMS</label>
+                  id="contact-sms"
+                  label="SMS"></ds-radio>
               </div>
               <div class="radio-item">
                 <ds-radio
                   name="contact"
                   value="mail"
-                  id="contact-mail"></ds-radio>
-                <label for="contact-mail">Postal Mail</label>
+                  id="contact-mail"
+                  label="Postal Mail"></ds-radio>
               </div>
             </div>
             <div id="contact-output" class="radio-output">Selected: Email</div>
@@ -369,6 +377,15 @@
                 <td>Value to identify this specific radio option</td>
               </tr>
               <tr>
+                <td><code>label</code></td>
+                <td>String</td>
+                <td>""</td>
+                <td>
+                  Label text rendered next to the control and mirrored into
+                  <code>aria-label</code> for its accessible name
+                </td>
+              </tr>
+              <tr>
                 <td><code>size</code></td>
                 <td>String</td>
                 <td>""</td>
@@ -414,6 +431,11 @@
                 <td><code>value</code></td>
                 <td>String</td>
                 <td>Get or set the value</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>String</td>
+                <td>Get or set the label text</td>
               </tr>
               <tr>
                 <td><code>size</code></td>
@@ -552,6 +574,11 @@
             <li>Radio buttons expose <code>role="radio"</code>.</li>
             <li><code>aria-checked</code> reflects the checked state.</li>
             <li><code>aria-disabled</code> reflects the disabled state.</li>
+            <li>
+              The <code>label</code> attribute is mirrored into
+              <code>aria-label</code> so the radio's accessible name doesn't
+              depend on an external, unassociated label element.
+            </li>
           </ul>
         </div>
 

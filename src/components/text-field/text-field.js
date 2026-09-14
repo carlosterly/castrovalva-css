@@ -562,6 +562,7 @@ class DSTextField extends HTMLElement {
             value="${value}"
             aria-invalid="${error}"
             aria-describedby="supporting-text"
+            ${label ? `aria-label="${label}"` : ""}
           />
           
           <div class="trailing-icon" part="trailing-icon">

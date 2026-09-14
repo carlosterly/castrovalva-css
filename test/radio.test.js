@@ -426,6 +426,53 @@ describe("DSRadio", () => {
 
       expect(el.getAttribute("aria-disabled")).to.equal("true");
     });
+
+    it("should expose the label attribute as its accessible name", async () => {
+      const el = await fixture(
+        html`<ds-radio label="Standard delivery"></ds-radio>`,
+      );
+
+      expect(el.getAttribute("aria-label")).to.equal("Standard delivery");
+    });
+
+    it("should render the label text visibly in the shadow DOM", async () => {
+      const el = await fixture(
+        html`<ds-radio label="Standard delivery"></ds-radio>`,
+      );
+
+      const labelEl = el.shadowRoot.querySelector(".radio-label");
+      expect(labelEl).to.exist;
+      expect(labelEl.textContent).to.equal("Standard delivery");
+    });
+
+    it("should update aria-label when the label attribute changes", async () => {
+      const el = await fixture(html`<ds-radio label="Initial"></ds-radio>`);
+
+      el.label = "Updated";
+      await elementUpdated(el);
+
+      expect(el.getAttribute("aria-label")).to.equal("Updated");
+      expect(
+        el.shadowRoot.querySelector(".radio-label").textContent,
+      ).to.equal("Updated");
+    });
+
+    it("should remove aria-label and the label span when label is cleared", async () => {
+      const el = await fixture(html`<ds-radio label="Initial"></ds-radio>`);
+
+      el.label = "";
+      await elementUpdated(el);
+
+      expect(el.hasAttribute("aria-label")).to.be.false;
+      expect(el.shadowRoot.querySelector(".radio-label")).to.not.exist;
+    });
+
+    it("should have no visible label by default", async () => {
+      const el = await fixture(html`<ds-radio></ds-radio>`);
+
+      expect(el.shadowRoot.querySelector(".radio-label")).to.not.exist;
+      expect(el.hasAttribute("aria-label")).to.be.false;
+    });
   });
 
   describe("Integration", () => {

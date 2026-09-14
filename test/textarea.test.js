@@ -354,5 +354,17 @@ describe("ds-textarea", () => {
       expect(helper).to.exist;
       expect(helper.textContent).to.equal("Helpful info");
     });
+
+    it("should expose the label as the textarea's accessible name", async () => {
+      const el = await fixture(labeledFixture);
+      const textarea = el.shadowRoot.querySelector("textarea");
+      expect(textarea.getAttribute("aria-label")).to.equal("Message");
+    });
+
+    it("should not set aria-label when no label is provided", async () => {
+      const el = await fixture(defaultFixture);
+      const textarea = el.shadowRoot.querySelector("textarea");
+      expect(textarea.hasAttribute("aria-label")).to.be.false;
+    });
   });
 });

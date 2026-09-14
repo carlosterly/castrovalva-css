@@ -3,6 +3,9 @@
  * Implements MD3 radio button with state layers and accessibility
  *
  * @attr {string} size - Size of the radio (sm, md, lg)
+ * @attr {string} label - Label text for the radio, rendered next to the
+ *   control and mirrored into aria-label so its accessible name doesn't
+ *   depend on an external, unassociated label element.
  *
  * @cssprop --ds-radio-size - Size of the radio (default: 20px, the MD3 spec size)
  * @cssprop --ds-radio-dot-size - Size of the inner dot (default: calc(var(--ds-radio-size) / 2))
@@ -20,7 +23,7 @@ export class DSRadio extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["checked", "disabled", "error", "name", "value", "size"];
+    return ["checked", "disabled", "error", "name", "value", "size", "label"];
   }
 
   connectedCallback() {
@@ -36,6 +39,9 @@ export class DSRadio extends HTMLElement {
     this.setAttribute("tabindex", this.disabled ? "-1" : "0");
     this.setAttribute("aria-checked", this.checked ? "true" : "false");
     this.setAttribute("aria-disabled", this.disabled ? "true" : "false");
+    if (this.label) {
+      this.setAttribute("aria-label", this.label);
+    }
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -65,6 +71,13 @@ export class DSRadio extends HTMLElement {
         break;
       case "size":
         this.updateSize();
+        break;
+      case "label":
+        if (this.label) {
+          this.setAttribute("aria-label", this.label);
+        } else {
+          this.removeAttribute("aria-label");
+        }
         break;
     }
 
@@ -159,6 +172,18 @@ export class DSRadio extends HTMLElement {
 
   set value(value) {
     this.setAttribute("value", value);
+  }
+
+  get label() {
+    return this.getAttribute("label") || "";
+  }
+
+  set label(value) {
+    if (value === null || value === undefined || value === "") {
+      this.removeAttribute("label");
+      return;
+    }
+    this.setAttribute("label", String(value));
   }
 
   get size() {
@@ -278,17 +303,28 @@ export class DSRadio extends HTMLElement {
   }
 
   render() {
+    const label = this.label;
     this.shadowRoot.innerHTML = `
       <style>
         :host {
-          display: inline-block;
+          display: inline-flex;
+          align-items: center;
+          gap: var(--ds-space-2, 8px);
           position: relative;
-          width: var(--ds-radio-size, 20px);
-          height: var(--ds-radio-size, 20px);
           cursor: pointer;
           --ds-radio-dot-size: calc(
             var(--ds-radio-size, 20px) / 2
           );
+        }
+
+        .radio-label {
+          font: var(--md-sys-typescale-body-medium-font, 400 14px/20px Roboto, sans-serif);
+          color: var(--md-sys-color-on-surface);
+          user-select: none;
+        }
+
+        :host([error]) .radio-label {
+          color: var(--md-sys-color-error);
         }
 
         :host([disabled]) {
@@ -297,6 +333,7 @@ export class DSRadio extends HTMLElement {
         }
 
         .radio {
+          flex-shrink: 0;
           position: relative;
           width: var(--ds-radio-size, 20px);
           height: var(--ds-radio-size, 20px);
@@ -410,6 +447,7 @@ export class DSRadio extends HTMLElement {
           </div>
         </div>
       </div>
+      ${label ? `<span class="radio-label" part="label">${label}</span>` : ""}
     `;
   }
 }

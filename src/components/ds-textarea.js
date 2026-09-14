@@ -355,6 +355,7 @@ export class DSTextarea extends HTMLElement {
           ${this._maxlength ? `maxlength="${this._maxlength}"` : ""}
           rows="${this._rows}"
           placeholder="${!label ? this.getAttribute("placeholder") || "" : ""}"
+          ${label ? `aria-label="${label}"` : ""}
         >${this._value}</textarea>
       </div>
 

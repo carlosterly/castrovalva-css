@@ -424,5 +424,52 @@ describe("DSSwitch", () => {
 
       expect(el.getAttribute("tabindex")).to.equal("0");
     });
+
+    it("should expose the label attribute as its accessible name", async () => {
+      const el = await fixture(
+        html`<ds-switch label="Enable alerts"></ds-switch>`,
+      );
+
+      expect(el.getAttribute("aria-label")).to.equal("Enable alerts");
+    });
+
+    it("should render the label text visibly in the shadow DOM", async () => {
+      const el = await fixture(
+        html`<ds-switch label="Enable alerts"></ds-switch>`,
+      );
+
+      const labelEl = el.shadowRoot.querySelector(".switch-label");
+      expect(labelEl).to.exist;
+      expect(labelEl.textContent).to.equal("Enable alerts");
+    });
+
+    it("should update aria-label when the label attribute changes", async () => {
+      const el = await fixture(html`<ds-switch label="Initial"></ds-switch>`);
+
+      el.label = "Updated";
+      await elementUpdated(el);
+
+      expect(el.getAttribute("aria-label")).to.equal("Updated");
+      expect(
+        el.shadowRoot.querySelector(".switch-label").textContent,
+      ).to.equal("Updated");
+    });
+
+    it("should remove aria-label and the label span when label is cleared", async () => {
+      const el = await fixture(html`<ds-switch label="Initial"></ds-switch>`);
+
+      el.label = "";
+      await elementUpdated(el);
+
+      expect(el.hasAttribute("aria-label")).to.be.false;
+      expect(el.shadowRoot.querySelector(".switch-label")).to.not.exist;
+    });
+
+    it("should have no visible label by default", async () => {
+      const el = await fixture(html`<ds-switch></ds-switch>`);
+
+      expect(el.shadowRoot.querySelector(".switch-label")).to.not.exist;
+      expect(el.hasAttribute("aria-label")).to.be.false;
+    });
   });
 });

@@ -372,5 +372,17 @@ describe("ds-text-field", () => {
       const input = el.shadowRoot.querySelector("input");
       expect(el.shadowRoot.activeElement).to.equal(input);
     });
+
+    it("should expose the label as the input's accessible name", async () => {
+      const el = await fixture(labeledFixture);
+      const input = el.shadowRoot.querySelector("input");
+      expect(input.getAttribute("aria-label")).to.equal("Email");
+    });
+
+    it("should not set aria-label when no label is provided", async () => {
+      const el = await fixture(html`<ds-text-field></ds-text-field>`);
+      const input = el.shadowRoot.querySelector("input");
+      expect(input.hasAttribute("aria-label")).to.be.false;
+    });
   });
 });

@@ -42,15 +42,13 @@
           <div class="demo-box">
             <div class="switch-group">
               <div class="switch-item">
-                <ds-switch id="switch-basic"></ds-switch>
-                <label for="switch-basic">Enable alerts</label>
+                <ds-switch id="switch-basic" label="Enable alerts"></ds-switch>
               </div>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-switch id="switch-basic"&gt;&lt;/ds-switch&gt;
-&lt;label for="switch-basic"&gt;Enable alerts&lt;/label&gt;</pre
+&lt;ds-switch id="switch-basic" label="Enable alerts"&gt;&lt;/ds-switch&gt;</pre
             >
           </div>
         </div>
@@ -74,19 +72,24 @@
           <div class="demo-box">
             <div class="switch-group">
               <div class="switch-item">
-                <ds-switch id="switch-icon-off" show-icons></ds-switch>
-                <label for="switch-icon-off">Off with icon</label>
+                <ds-switch
+                  id="switch-icon-off"
+                  show-icons
+                  label="Off with icon"></ds-switch>
               </div>
               <div class="switch-item">
-                <ds-switch id="switch-icon-on" checked show-icons></ds-switch>
-                <label for="switch-icon-on">On with icon</label>
+                <ds-switch
+                  id="switch-icon-on"
+                  checked
+                  show-icons
+                  label="On with icon"></ds-switch>
               </div>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-switch show-icons&gt;&lt;/ds-switch&gt;
-&lt;ds-switch checked show-icons&gt;&lt;/ds-switch&gt;</pre
+&lt;ds-switch show-icons label="Off with icon"&gt;&lt;/ds-switch&gt;
+&lt;ds-switch checked show-icons label="On with icon"&gt;&lt;/ds-switch&gt;</pre
             >
           </div>
 
@@ -95,24 +98,25 @@
           <div class="demo-box">
             <div class="switch-group">
               <div class="switch-item">
-                <ds-switch id="switch-size-sm" size="sm"></ds-switch>
-                <label for="switch-size-sm">Small</label>
+                <ds-switch id="switch-size-sm" size="sm" label="Small"></ds-switch>
               </div>
               <div class="switch-item">
-                <ds-switch id="switch-size-md" size="md" checked></ds-switch>
-                <label for="switch-size-md">Medium</label>
+                <ds-switch
+                  id="switch-size-md"
+                  size="md"
+                  label="Medium"
+                  checked></ds-switch>
               </div>
               <div class="switch-item">
-                <ds-switch id="switch-size-lg" size="lg"></ds-switch>
-                <label for="switch-size-lg">Large</label>
+                <ds-switch id="switch-size-lg" size="lg" label="Large"></ds-switch>
               </div>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-switch size="sm"&gt;&lt;/ds-switch&gt;
-&lt;ds-switch size="md" checked&gt;&lt;/ds-switch&gt;
-&lt;ds-switch size="lg"&gt;&lt;/ds-switch&gt;</pre
+&lt;ds-switch size="sm" label="Small"&gt;&lt;/ds-switch&gt;
+&lt;ds-switch size="md" label="Medium" checked&gt;&lt;/ds-switch&gt;
+&lt;ds-switch size="lg" label="Large"&gt;&lt;/ds-switch&gt;</pre
             >
           </div>
         </div>
@@ -126,19 +130,17 @@
           <div class="demo-box">
             <div class="switch-group">
               <div class="switch-item">
-                <ds-switch id="switch-off"></ds-switch>
-                <label for="switch-off">Off</label>
+                <ds-switch id="switch-off" label="Off"></ds-switch>
               </div>
               <div class="switch-item">
-                <ds-switch id="switch-on" checked></ds-switch>
-                <label for="switch-on">On</label>
+                <ds-switch id="switch-on" checked label="On"></ds-switch>
               </div>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-switch&gt;&lt;/ds-switch&gt;
-&lt;ds-switch checked&gt;&lt;/ds-switch&gt;</pre
+&lt;ds-switch label="Off"&gt;&lt;/ds-switch&gt;
+&lt;ds-switch checked label="On"&gt;&lt;/ds-switch&gt;</pre
             >
           </div>
 
@@ -147,19 +149,24 @@
           <div class="demo-box">
             <div class="switch-group">
               <div class="switch-item">
-                <ds-switch id="switch-disabled-off" disabled></ds-switch>
-                <label for="switch-disabled-off">Disabled off</label>
+                <ds-switch
+                  id="switch-disabled-off"
+                  disabled
+                  label="Disabled off"></ds-switch>
               </div>
               <div class="switch-item">
-                <ds-switch id="switch-disabled-on" checked disabled></ds-switch>
-                <label for="switch-disabled-on">Disabled on</label>
+                <ds-switch
+                  id="switch-disabled-on"
+                  checked
+                  disabled
+                  label="Disabled on"></ds-switch>
               </div>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-switch disabled&gt;&lt;/ds-switch&gt;
-&lt;ds-switch checked disabled&gt;&lt;/ds-switch&gt;</pre
+&lt;ds-switch disabled label="Disabled off"&gt;&lt;/ds-switch&gt;
+&lt;ds-switch checked disabled label="Disabled on"&gt;&lt;/ds-switch&gt;</pre
             >
           </div>
         </div>
@@ -170,20 +177,23 @@
           <div class="demo-box">
             <div class="switch-group">
               <div class="switch-item">
-                <ds-switch id="notifications" checked></ds-switch>
-                <label for="notifications">Enable notifications</label>
+                <ds-switch
+                  id="notifications"
+                  checked
+                  label="Enable notifications"></ds-switch>
               </div>
               <div class="switch-item">
-                <ds-switch id="darkmode" show-icons></ds-switch>
-                <label for="darkmode">Dark mode</label>
+                <ds-switch id="darkmode" show-icons label="Dark mode"></ds-switch>
               </div>
               <div class="switch-item">
-                <ds-switch id="autosave" checked show-icons></ds-switch>
-                <label for="autosave">Auto-save</label>
+                <ds-switch
+                  id="autosave"
+                  checked
+                  show-icons
+                  label="Auto-save"></ds-switch>
               </div>
               <div class="switch-item">
-                <ds-switch id="bluetooth"></ds-switch>
-                <label for="bluetooth">Bluetooth</label>
+                <ds-switch id="bluetooth" label="Bluetooth"></ds-switch>
               </div>
             </div>
 
@@ -224,6 +234,15 @@
                 <td>Whether to show the selected icon.</td>
               </tr>
               <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>
+                  Label text rendered next to the control and mirrored into
+                  <code>aria-label</code> for its accessible name.
+                </td>
+              </tr>
+              <tr>
                 <td><code>size</code></td>
                 <td>string</td>
                 <td>""</td>
@@ -259,6 +278,11 @@
                 <td><code>showIcons</code></td>
                 <td>boolean</td>
                 <td>Get or set whether icons are shown.</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>Get or set the label text.</td>
               </tr>
               <tr>
                 <td><code>size</code></td>
@@ -434,6 +458,11 @@
               Uses <code>role="switch"</code>, <code>aria-checked</code>, and
               <code>aria-disabled</code>.
             </li>
+            <li>
+              The <code>label</code> attribute is mirrored into
+              <code>aria-label</code> so the switch's accessible name doesn't
+              depend on an external, unassociated label element.
+            </li>
             <li>Screen readers announce the on/off state.</li>
             <li>Visible focus indicator supports keyboard navigation.</li>
           </ul>
@@ -470,8 +499,7 @@
       function updateStatus() {
         const states = switches.map((id) => {
           const sw = document.getElementById(id);
-          const label = sw.nextElementSibling.textContent;
-          return `${label}: ${sw.checked ? "ON" : "OFF"}`;
+          return `${sw.label}: ${sw.checked ? "ON" : "OFF"}`;
         });
         statusBox.innerHTML = `<strong>Current Settings:</strong><br>${states.join(
           "<br>",
@@ -486,17 +514,6 @@
 
       // Initial status
       updateStatus();
-
-      // Make labels clickable
-      document.querySelectorAll("label[for]").forEach((label) => {
-        label.addEventListener("click", (e) => {
-          e.preventDefault();
-          const switchEl = document.getElementById(label.getAttribute("for"));
-          if (!switchEl.disabled) {
-            switchEl.toggle();
-          }
-        });
-      });
     </script>
     <script src="../shared/theme-init.js"></script>
     <script src="../shared/docs-nav.js"></script>

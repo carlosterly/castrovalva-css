@@ -56,6 +56,10 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — CLAUDE.md documents `src/components/{name}/{name}.js` for every component, but 14 of them (badge, card, chip, dialog, fab, menu, progress-indicator, radio, slider, snackbar, switch, tabs, textarea, tooltip) actually live flat at `src/components/ds-{name}.js`; their `{name}/` directory holds only the stub README. Everything still imports and works — `src/index.js` points at the real paths — so this is a documentation/reality mismatch, not a functional bug. Found while looking up component source while building the composed settings-page demo.
 
+### card
+
+- **B** — The `elevated` variant's hover feedback (box-shadow level1→level2) is invisible in dark theme. The rest-state background already compensates for shadows being imperceptible on dark backgrounds (`background-color: var(--md-sys-color-surface-container-low)`, per the comment at `ds-card.js:130`), but the `:hover` rule at `ds-card.js:138` only bumps the box-shadow — no matching tonal step-up — so hovering an elevated card in dark theme produces no visible feedback at all. Confirmed by pixel-diffing hover-vs-rest screenshots: 3.19% of pixels change in light theme, 0.00% in dark.
+
 ### carousel
 
 - **A** — axe `aria-required-children` (critical): the `role="list"` viewport's children aren't `role="listitem"` (9 nodes, both themes).
@@ -68,6 +72,11 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 ### chip
 
 - **A** — axe `nested-interactive`: same pattern as `checkbox` (8 nodes, both themes).
+- **B** — Hover and pressed state layers are invisible in dark theme. `ds-chip.js:266` sets `background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.08)` — but `--md-sys-color-on-surface-rgb` is never defined anywhere in `tokens.css` or `palette.css`, so the `rgba()` always resolves to the hardcoded fallback triple `29, 27, 32` (light theme's near-black on-surface), regardless of theme. In light theme that reads as a subtle dark tint (correct by coincidence); in dark theme it's a near-black overlay on an already near-black surface — invisible. Confirmed by pixel diff: light hover 14.34%, dark hover 0.00%; light pressed 14.56%, dark pressed 0.00% (focus, which uses a different, theme-correct rule, is unaffected: 3.32% in both themes). **Same root cause, same fix, in `radio` and `switch`** (see their entries below) — all three components use the identical undefined-token pattern; fix once and apply to all three. A related but distinct instance affects `ds-snackbar.js:372` (`--md-sys-color-inverse-primary-rgb`, also undefined) — not independently visually confirmed but the same class of bug.
+
+### data-table
+
+- **B** — Row hover feedback is barely perceptible in dark theme. `data-table.js:556` sets `tbody tr:hover { background: var(--md-sys-color-surface-container); }`, which is theme-aware (not hardcoded), but in dark theme `--md-sys-color-surface` (neutral10) and `--md-sys-color-surface-container` (neutral12) sit only 2 tonal steps apart — a much smaller jump than light theme's surface (neutral99) to surface-container (neutral94), 5 steps. Confirmed by pixel diff: light hover 10.37%, dark hover 0.00% (measured against the table's own background, not a specific row — the effect is table-wide since every row shares the same surface/surface-container pairing).
 
 ### design-tokens
 
@@ -101,7 +110,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### radio
 
-- **A** — axe `aria-toggle-field-name`: `ds-radio` has no accessible name in most demo configurations (22 nodes, both themes) — the visible label text exists but isn't wired as the control's accessible name. Surprising for an already-reviewed Tier-1 component; the mechanical QA sweep couldn't catch this because it only checks for a *visible* label, not whether it's exposed to assistive tech.
+- **B** — Hover/pressed state-layer ripple is essentially imperceptible in dark theme — same undefined-`--md-sys-color-on-surface-rgb`-token bug as `chip` (`ds-radio.js:326`), see that entry for the root cause. Pixel diff: light hover 11.87% / pressed 12.01%, dark hover 0.09% / pressed 0.12% (noise-level).
 
 ### scrollbar
 
@@ -122,11 +131,14 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### switch
 
-- **A** — axe `aria-toggle-field-name`: `ds-switch` has no accessible name in several demos (14 nodes, both themes) — same underlying pattern as `radio`.
+- **B** — Hover state-layer ripple is nearly invisible in dark theme (0.92% pixel diff vs 7.29% in light) — same undefined-`--md-sys-color-on-surface-rgb`-token bug as `chip` and `radio` (`ds-switch.js:267`). The pressed state layer still shows in dark (4.00% diff) since it composites with the checked-track color change, which masks the missing overlay somewhat — hover alone has nothing to mask it.
+
+### tabs
+
+- **B** — Tab buttons have no hover feedback at all, in either theme. `ds-tabs.js:308` sets `::slotted([role="tab"]) { background: transparent !important; ... }`, and the hover rule at line 330, `::slotted([role="tab"]:hover) { background: color-mix(...) }`, has no `!important` — so the base rule's `!important` always wins regardless of the hover rule's later source order or matching specificity, and the hover background never renders. Confirmed by pixel diff (0.00% in both themes, both the selected and an unselected tab) and by reading the two rules directly. Fix: add `!important` to the hover (and presumably `:active`, if one exists) background declaration, or drop `!important` from the base rule and increase its specificity instead.
 
 ### text-field
 
-- **A** — axe `label` (critical): the internal `<input>` isn't reliably exposed with the visible `label` attribute's text as its accessible name — fails even on fully-labelled examples like `label="Full Name"` (21 nodes, both themes).
 - **A** — `ds-text-field` calls `this.attachInternals()` but never sets `static formAssociated = true` or calls `setFormValue()`. Verified empirically: `new FormData(form)` on a form containing a named, valued `ds-text-field` silently omits it — the field's value never reaches form submission. `checkValidity()`/`reportValidity()` are implemented by delegating to the internal native `<input>`, so those work standalone, but the field is invisible to the *enclosing* form. Grepped every input/selection component for `formAssociated`: **only `ds-checkbox` fully implements it** (declares the flag and calls `setFormValue`). `ds-radio`, `ds-switch`, `ds-slider`, `ds-select`, `ds-combobox`, `ds-textarea`, `ds-data-table` use neither `formAssociated` nor `attachInternals` at all, despite CLAUDE.md documenting this as the convention for the whole "Input & selection" category. This is bigger than one component — it's the documented pattern applied in one place out of roughly a dozen it's supposed to cover.
 
 ### text-wrapper
@@ -135,11 +147,11 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### textarea
 
-- **A** — axe `label` (critical): same missing-accessible-name pattern as `text-field`, on `ds-textarea` (11 nodes, both themes).
+- **B** — `ds-textarea` has no `:hover` styling at all (grepped the whole component source — zero matches), so hovering the field produces no feedback in either theme. `ds-text-field`, the sibling component, implements this correctly (`.text-field.filled:hover::after` / `.text-field.outlined:hover`) — worth copying that pattern rather than reinventing it. Confirmed by pixel-diffing rest-vs-hover screenshots (0.00% in both themes) and by reading the source.
 
 ### theme-playground
 
-- **A** — axe `aria-progressbar-name`, `aria-toggle-field-name`, `label`, `nested-interactive`: inherits the `progress-indicator` / `radio`+`switch` / `text-field` / `checkbox` bugs above via its live component preview — no separate fix needed once those land.
+- **A** — axe `aria-progressbar-name`, `nested-interactive`: inherits the `progress-indicator` / `checkbox` bugs above via its live component preview — no separate fix needed once those land. (The `aria-toggle-field-name`/`label` findings this entry used to also list are fixed — the preview's `ds-radio`/`ds-switch`/`ds-text-field` instances now carry `label` attributes.)
 - **B** — axe `color-contrast`: palette swatch button labels fail contrast against their own swatch background for some tones (11 nodes, both themes).
 
 ### tooltip
@@ -223,11 +235,31 @@ type-scale role choices, minor padding deltas) surfaced too but weren't
 independently verified, so they were left unfixed and unlogged — worth a
 follow-up pass if pursued.
 
-**Still to do — the full manual pass.** The screenshot review, the overlay
-pass, and the programmatic check above only catch structural, token, and
-interaction-triggered issues. A human eye is still needed on spacing rhythm
-*as felt* and on hover/pressed state-layer feel across the Tier-1 contact
-sheet — things a static screenshot or a CSS diff can't judge.
+**Hover/pressed state-layer pass — 14 Sep 2026, done.** The one item the
+screenshot review, overlay pass, and programmatic check couldn't catch:
+whether hover/pressed feedback actually *renders*, live, in both themes.
+Captured rest/hover/focus/pressed screenshots for the 12 Tier-1 components
+with a primary interactive element (button, text-field, checkbox, radio,
+switch, card, tabs, chip, slider, data-table, fab, list — dialog, menu,
+tooltip, snackbar were already covered by the overlay pass; badge and icon
+are non-interactive) at 1280px in both themes, then pixel-diffed rest
+against each state rather than eyeballing — a translucent 8% overlay is
+easy to miss by eye but shows up immediately in a diff. Five real, verified
+findings, all logged above: `chip`/`radio`/`switch` share one root cause
+(an undefined `--md-sys-color-on-surface-rgb` token whose hardcoded
+light-theme fallback never adapts to dark theme — probably present in
+`snackbar` too, from the same pattern with a different token); `card`'s
+elevated-hover shadow bump has no dark-theme compensation the way its rest
+state does; `data-table`'s row-hover tint is technically theme-aware but
+too tonally close to the surface to read in dark theme; `tabs` has no
+hover feedback in *either* theme because an `!important` base rule
+permanently shadows the non-`!important` hover rule. Checkbox, radio,
+switch, and tabs were all previously reviewed and marked clean by the
+screenshot-only first pass — this is exactly the gap that pass couldn't
+see. Spacing rhythm *as felt* was reviewed over the same full-page
+1280/360 × light/dark screenshots for all 18 Tier-1 components; nothing
+beyond what the programmatic type-scale/spacing check already caught
+stood out.
 
 ## Triage coverage
 
@@ -286,14 +318,31 @@ code, so low-risk to fix immediately rather than triage):
   `.code-block` and its `<pre>` on load. Cleared findings on `app-bar-top`,
   and partially on `navigation-bar`, `navigation-rail`, `textarea`.
 
-**38 of 102 checks still fail** (19 components × 2 themes) — logged
-individually under [Open defects](#open-defects) above. One likely shared
-root cause worth checking first: `radio`, `switch`, `text-field`, `textarea`
-all fail on a control having no accessible name despite a visible label —
-suggests the label-to-control wiring (`<label for>` / `aria-labelledby`) has
-the same gap across several form-associated components, not four unrelated
-bugs. `checkbox`, `chip`, and `form` share a separate `nested-interactive`
-pattern that's also likely one fix applied in multiple places.
+**Missing-accessible-name cluster fixed — 14 Sep 2026.** `radio`, `switch`,
+`text-field`, and `textarea` all failed on a control having no accessible
+name despite a visible label. Two different root causes, not one:
+`text-field` and `textarea` already had an internal (but unlinked)
+`<label>` next to their native `<input>`/`<textarea>` — fixed by adding
+`aria-label="${label}"` directly on the input/textarea in each render
+template. `radio` and `switch` had no label story at all — every demo used
+an external, unassociated `<label>` sibling with no `for`/`id` link (or,
+for `radio`, no link of any kind). Fixed by giving both a `label` attribute
+that mirrors `ds-checkbox`'s existing, tested pattern exactly: render the
+text inside the component's own shadow DOM next to the control, and set
+`aria-label` from the same value — self-contained, no external markup to
+get out of sync. `radio.html` and `switch.html`'s demo markup (36
+instances total) converted from external `<label>` siblings to the new
+`label` attribute; `theme-playground`'s live preview instances got real
+labels too (previously `<ds-radio>Standard</ds-radio>`-style text content,
+silently dropped since `ds-radio` has no default slot to catch it).
+Verified: all four components' full test suites still pass (157 tests,
+plus 12 new tests added for the `label` attribute itself), `npm run lint`
+clean, and `npm run test:a11y` confirms the fix — 72/102 checks now pass
+(was 64/102), the exact 8-check gain expected from 4 components × 2
+themes. **30 of 102 checks still fail** (down from 38) — logged
+individually under [Open defects](#open-defects) above. `checkbox`, `chip`,
+and `form` share a `nested-interactive` pattern that's likely one fix
+applied in multiple places, worth checking next.
 
 ---
 

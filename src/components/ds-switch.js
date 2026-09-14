@@ -1,6 +1,10 @@
 /**
  * Material Design 3 Switch Component
  * Implements MD3 switch with smooth animations and accessibility
+ *
+ * @attr {string} label - Label text for the switch, rendered next to the
+ *   control and mirrored into aria-label so its accessible name doesn't
+ *   depend on an external, unassociated label element.
  */
 export class DSSwitch extends HTMLElement {
   constructor() {
@@ -12,7 +16,7 @@ export class DSSwitch extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["checked", "disabled", "show-icons", "size"];
+    return ["checked", "disabled", "show-icons", "size", "label"];
   }
 
   connectedCallback() {
@@ -27,6 +31,9 @@ export class DSSwitch extends HTMLElement {
     this.setAttribute("tabindex", this.disabled ? "-1" : "0");
     this.setAttribute("aria-checked", this.checked ? "true" : "false");
     this.setAttribute("aria-disabled", this.disabled ? "true" : "false");
+    if (this.label) {
+      this.setAttribute("aria-label", this.label);
+    }
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -47,6 +54,13 @@ export class DSSwitch extends HTMLElement {
         break;
       case "size":
         this.updateSize();
+        break;
+      case "label":
+        if (this.label) {
+          this.setAttribute("aria-label", this.label);
+        } else {
+          this.removeAttribute("aria-label");
+        }
         break;
     }
 
@@ -124,6 +138,18 @@ export class DSSwitch extends HTMLElement {
     }
   }
 
+  get label() {
+    return this.getAttribute("label") || "";
+  }
+
+  set label(value) {
+    if (value === null || value === undefined || value === "") {
+      this.removeAttribute("label");
+      return;
+    }
+    this.setAttribute("label", String(value));
+  }
+
   get size() {
     return this.getAttribute("size") || "";
   }
@@ -190,17 +216,14 @@ export class DSSwitch extends HTMLElement {
   render() {
     const checked = this.checked;
     const showIcons = this.showIcons;
+    const label = this.label;
 
     this.shadowRoot.innerHTML = `
       <style>
         :host {
-          display: inline-block;
-          position: relative;
-          width: var(
-            --ds-switch-track-width,
-            calc(var(--ds-switch-track-height, var(--ds-size-control-sm, 32px)) + 20px)
-          );
-          height: var(--ds-switch-track-height, var(--ds-size-control-sm, 32px));
+          display: inline-flex;
+          align-items: center;
+          gap: var(--ds-space-2, 8px);
           cursor: pointer;
           --ds-switch-icon-size: var(--ds-size-icon-md, 18px);
           --ds-switch-handle-size-off: calc(var(--ds-switch-icon-size) - 2px);
@@ -227,7 +250,14 @@ export class DSSwitch extends HTMLElement {
           opacity: 0.38;
         }
 
+        .switch-label {
+          font: var(--md-sys-typescale-body-medium-font, 400 14px/20px Roboto, sans-serif);
+          color: var(--md-sys-color-on-surface);
+          user-select: none;
+        }
+
         .switch-track {
+          flex-shrink: 0;
           position: relative;
           width: var(
             --ds-switch-track-width,
@@ -361,6 +391,7 @@ export class DSSwitch extends HTMLElement {
           </div>
         </div>
       </div>
+      ${label ? `<span class="switch-label" part="label">${label}</span>` : ""}
     `;
   }
 }
