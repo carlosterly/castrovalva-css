@@ -79,9 +79,13 @@ describe("DSChip", () => {
       );
       const removeButton = el.shadowRoot.querySelector(".remove-btn");
 
+      // Not a real <button> and not focusable: removal is keyboard-accessible
+      // via Delete/Backspace on the chip itself, and this element existing as
+      // a focusable/interactive nested control was an axe nested-interactive
+      // violation (the host already carries role="button"/"checkbox").
       expect(removeButton).to.exist;
-      expect(removeButton.getAttribute("aria-label")).to.equal("Remove Tag");
-      expect(removeButton.getAttribute("tabindex")).to.equal("-1");
+      expect(removeButton.tagName).to.equal("SPAN");
+      expect(removeButton.getAttribute("aria-hidden")).to.equal("true");
     });
   });
 

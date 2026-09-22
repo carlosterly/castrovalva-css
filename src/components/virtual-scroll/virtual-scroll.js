@@ -43,7 +43,7 @@ export default class DSVirtualScroll extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["item-height", "buffer", "scroll-offset"];
+    return ["item-height", "buffer", "scroll-offset", "label"];
   }
 
   connectedCallback() {
@@ -71,6 +71,8 @@ export default class DSVirtualScroll extends HTMLElement {
       this._scrollTop = offset;
       this._scroller.scrollTop = offset;
       this._updateVirtualRange();
+    } else if (name === "label" && this._container) {
+      this._container.setAttribute("aria-label", newVal || "Items");
     }
   }
 
@@ -332,6 +334,11 @@ export default class DSVirtualScroll extends HTMLElement {
       itemEl.textContent = "";
       itemEl.setAttribute("data-index", globalIdx);
       itemEl.setAttribute("tabindex", "0");
+      // .items-container carries role="listbox" (see render()); its
+      // children need role="option" to satisfy axe's
+      // aria-required-children check. Rows are fully owned by this
+      // component (plain divs, not a consumer template), so it's set here.
+      itemEl.setAttribute("role", "option");
       itemEl.style.height = `${this._itemHeight}px`;
       itemEl.style.overflow = "hidden";
 
@@ -481,7 +488,7 @@ export default class DSVirtualScroll extends HTMLElement {
       <div class="virtual-scroller">
         <div class="scroll-viewport">
           <div class="spacer-top"></div>
-          <div class="items-container" role="listbox"></div>
+          <div class="items-container" role="listbox" aria-label="${this.getAttribute("label") || "Items"}"></div>
           <div class="spacer-bottom"></div>
         </div>
       </div>

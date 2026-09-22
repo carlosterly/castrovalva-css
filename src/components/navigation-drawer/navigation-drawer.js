@@ -41,8 +41,12 @@ class DSNavigationDrawer extends HTMLElement {
     this.render();
     this.setupEventListeners();
 
-    // Set initial ARIA state
-    this.setAttribute("aria-hidden", "true");
+    // Closed by default: inert (not aria-hidden) both hides the drawer from
+    // the accessibility tree AND blocks keyboard/mouse focus on its
+    // descendants. aria-hidden alone doesn't stop Tab from reaching the
+    // still-present, translated-off-screen content underneath — a
+    // hidden-but-tabbable trap (WCAG 2.4.3 / axe's aria-hidden-focus).
+    this.inert = true;
 
     // Load persistent state if enabled (only for standard variant)
     if (this.persistent && this.variant === "standard") {
@@ -181,6 +185,9 @@ class DSNavigationDrawer extends HTMLElement {
         document.body.style.overflow = "hidden";
       }
 
+      // Un-inert before anything tries to focus into the drawer
+      this.inert = false;
+
       // Focus first focusable element
       setTimeout(() => {
         const focusableElements = this.getFocusableElements();
@@ -188,9 +195,6 @@ class DSNavigationDrawer extends HTMLElement {
           focusableElements[0].focus();
         }
       }, 50); // Wait for animation to start
-
-      // Update ARIA
-      this.setAttribute("aria-hidden", "false");
 
       // Dispatch open event
       this.dispatchEvent(
@@ -214,14 +218,14 @@ class DSNavigationDrawer extends HTMLElement {
         document.body.style.overflow = "";
       }
 
-      // Restore previous focus
+      // Restore previous focus before going inert, so focus never gets
+      // stranded inside a now-inert subtree
       if (this._previousFocus && this._previousFocus.focus) {
         this._previousFocus.focus();
         this._previousFocus = null;
       }
 
-      // Update ARIA
-      this.setAttribute("aria-hidden", "true");
+      this.inert = true;
 
       // Dispatch close event
       this.dispatchEvent(
@@ -509,7 +513,7 @@ class DSNavigationDrawer extends HTMLElement {
         }
 
         /* Accessibility */
-        :host([aria-hidden="true"]) {
+        :host([inert]) {
           pointer-events: none;
         }
 

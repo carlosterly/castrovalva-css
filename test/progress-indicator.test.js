@@ -180,5 +180,52 @@ describe("ProgressIndicators", () => {
 
       expect(svg.hasAttribute("aria-valuenow")).to.equal(false);
     });
+
+    it("uses the label attribute as the linear progressbar's accessible name", async () => {
+      const el = await fixture(
+        html`<ds-linear-progress
+          value="40"
+          label="Upload progress"></ds-linear-progress>`,
+      );
+      const node = el.shadowRoot.querySelector(".progress-container");
+
+      expect(node.getAttribute("aria-label")).to.equal("Upload progress");
+    });
+
+    it("falls back to a value-derived name when no label is set (linear)", async () => {
+      const el = await fixture(html`<ds-linear-progress value="40"></ds-linear-progress>`);
+      const node = el.shadowRoot.querySelector(".progress-container");
+
+      expect(node.getAttribute("aria-label")).to.equal("40% complete");
+    });
+
+    it("falls back to 'Loading' when indeterminate with no label (linear)", async () => {
+      const el = await fixture(
+        html`<ds-linear-progress indeterminate></ds-linear-progress>`,
+      );
+      const node = el.shadowRoot.querySelector(".progress-container");
+
+      expect(node.getAttribute("aria-label")).to.equal("Loading");
+    });
+
+    it("uses the label attribute as the circular progressbar's accessible name", async () => {
+      const el = await fixture(
+        html`<ds-circular-progress
+          value="20"
+          label="Profile completion"></ds-circular-progress>`,
+      );
+      const svg = el.shadowRoot.querySelector("svg");
+
+      expect(svg.getAttribute("aria-label")).to.equal("Profile completion");
+    });
+
+    it("falls back to a value-derived name when no label is set (circular)", async () => {
+      const el = await fixture(
+        html`<ds-circular-progress value="20"></ds-circular-progress>`,
+      );
+      const svg = el.shadowRoot.querySelector("svg");
+
+      expect(svg.getAttribute("aria-label")).to.equal("20% complete");
+    });
   });
 });

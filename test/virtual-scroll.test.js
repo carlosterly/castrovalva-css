@@ -30,6 +30,7 @@ describe("DSVirtualScroll", () => {
         "item-height",
         "buffer",
         "scroll-offset",
+        "label",
       ]);
     });
 
@@ -415,6 +416,38 @@ describe("DSVirtualScroll", () => {
       const el = await fixture(html`<ds-virtual-scroll></ds-virtual-scroll>`);
       const container = el.shadowRoot.querySelector(".items-container");
       expect(container.getAttribute("role")).to.equal("listbox");
+    });
+
+    it("falls back to a generic accessible name when no label is set", async () => {
+      // role="listbox" always needs an accessible name (axe's
+      // aria-input-field-name) — always set label when context is known.
+      const el = await fixture(html`<ds-virtual-scroll></ds-virtual-scroll>`);
+      const container = el.shadowRoot.querySelector(".items-container");
+      expect(container.getAttribute("aria-label")).to.equal("Items");
+    });
+
+    it("uses the label attribute as the listbox's accessible name", async () => {
+      const el = await fixture(
+        html`<ds-virtual-scroll label="Search results"></ds-virtual-scroll>`,
+      );
+      const container = el.shadowRoot.querySelector(".items-container");
+      expect(container.getAttribute("aria-label")).to.equal("Search results");
+    });
+
+    it("updates the listbox's accessible name when label changes", async () => {
+      const el = await fixture(html`<ds-virtual-scroll></ds-virtual-scroll>`);
+      el.setAttribute("label", "Contacts");
+      const container = el.shadowRoot.querySelector(".items-container");
+      expect(container.getAttribute("aria-label")).to.equal("Contacts");
+    });
+
+    it("rendered items have role option to satisfy the listbox's required children", async () => {
+      const el = await fixture(html`<ds-virtual-scroll></ds-virtual-scroll>`);
+      el.setItems(buildItems(8));
+      await waitForTick();
+
+      const item = el.shadowRoot.querySelector(".virtual-item");
+      expect(item.getAttribute("role")).to.equal("option");
     });
 
     it("rendered items are focusable with tabindex 0", async () => {

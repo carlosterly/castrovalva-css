@@ -39,7 +39,7 @@ export class DSLinearProgress extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["value", "max", "indeterminate", "color"];
+    return ["value", "max", "indeterminate", "color", "label"];
   }
 
   connectedCallback() {
@@ -95,6 +95,18 @@ export class DSLinearProgress extends HTMLElement {
     this.setAttribute("color", normalizeColor(val));
   }
 
+  get label() {
+    return this.getAttribute("label") || "";
+  }
+
+  set label(val) {
+    if (val) {
+      this.setAttribute("label", val);
+    } else {
+      this.removeAttribute("label");
+    }
+  }
+
   getProgress() {
     const percentage = (this.value / this.max) * 100;
     return Math.max(0, Math.min(100, percentage));
@@ -104,6 +116,11 @@ export class DSLinearProgress extends HTMLElement {
     const progress = this.getProgress();
     const isIndeterminate = this.indeterminate;
     const color = this.color;
+    // A progressbar always needs an accessible name (WCAG 4.1.2). Consumers
+    // should set label for meaningful context; this keeps it announceable
+    // even when they don't.
+    const ariaLabel =
+      this.label || (isIndeterminate ? "Loading" : `${Math.round(progress)}% complete`);
 
     const indicatorColor = COLOR_MAP[color];
     const trackColor =
@@ -161,6 +178,7 @@ export class DSLinearProgress extends HTMLElement {
       </style>
 
       <div class="progress-container" role="progressbar"
+           aria-label="${ariaLabel}"
            aria-valuemin="0"
            aria-valuemax="${this.max}"
            ${isIndeterminate ? "" : `aria-valuenow="${this.value}"`}>
@@ -182,7 +200,7 @@ export class DSCircularProgress extends HTMLElement {
   }
 
   static get observedAttributes() {
-    return ["value", "max", "indeterminate", "size", "color"];
+    return ["value", "max", "indeterminate", "size", "color", "label"];
   }
 
   connectedCallback() {
@@ -246,6 +264,18 @@ export class DSCircularProgress extends HTMLElement {
     this.setAttribute("color", normalizeColor(val));
   }
 
+  get label() {
+    return this.getAttribute("label") || "";
+  }
+
+  set label(val) {
+    if (val) {
+      this.setAttribute("label", val);
+    } else {
+      this.removeAttribute("label");
+    }
+  }
+
   getProgress() {
     const percentage = (this.value / this.max) * 100;
     return Math.max(0, Math.min(100, percentage));
@@ -275,6 +305,8 @@ export class DSCircularProgress extends HTMLElement {
     const isIndeterminate = this.indeterminate;
     const sizeValue = this.getSizeValue();
     const color = this.color;
+    const ariaLabel =
+      this.label || (isIndeterminate ? "Loading" : `${Math.round(progress)}% complete`);
 
     const indicatorColor = COLOR_MAP[color];
     const trackColor =
@@ -353,6 +385,7 @@ export class DSCircularProgress extends HTMLElement {
 
       <svg class="${isIndeterminate ? "indeterminate" : ""}"
            role="progressbar"
+           aria-label="${ariaLabel}"
            aria-valuemin="0"
            aria-valuemax="${this.max}"
            ${isIndeterminate ? "" : `aria-valuenow="${this.value}"`}>

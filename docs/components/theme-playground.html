@@ -817,7 +817,20 @@
         const [r, g, b] = hexToRgb(hex).map(toLin);
         return 0.2126 * r + 0.7152 * g + 0.0722 * b;
       };
-      const readable = (hex) => (luminance(hex) > 0.4 ? "#000" : "#fff");
+      const contrastRatio = (l1, l2) => {
+        const [lighter, darker] = l1 > l2 ? [l1, l2] : [l2, l1];
+        return (lighter + 0.05) / (darker + 0.05);
+      };
+      // Picking whichever of black/white contrasts more against a given
+      // background is mathematically guaranteed to clear WCAG's 4.5:1 for
+      // any solid color (the worst case, a mid-gray background, still
+      // yields ~4.58:1 either way) — unlike a fixed luminance threshold,
+      // which left some mid-tone swatches (e.g. primary 60) under 4.5:1
+      // with white text.
+      const readable = (hex) => {
+        const l = luminance(hex);
+        return contrastRatio(1, l) >= contrastRatio(l, 0) ? "#fff" : "#000";
+      };
 
       let toastTimer;
       function toast(msg) {

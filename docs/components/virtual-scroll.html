@@ -87,11 +87,12 @@
           <div class="demo-box">
             <ds-virtual-scroll
               id="basic-demo"
-              class="virtual-scroll-demo"></ds-virtual-scroll>
+              class="virtual-scroll-demo"
+              label="Basic usage items"></ds-virtual-scroll>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-virtual-scroll item-height="48" buffer="5"&gt;&lt;/ds-virtual-scroll&gt;
+&lt;ds-virtual-scroll item-height="48" buffer="5" label="Basic usage items"&gt;&lt;/ds-virtual-scroll&gt;
 
 &lt;script&gt;
   const list = document.querySelector('ds-virtual-scroll');
@@ -111,11 +112,12 @@
             <ds-virtual-scroll
               id="initial-offset-demo"
               class="virtual-scroll-demo"
-              scroll-offset="240"></ds-virtual-scroll>
+              scroll-offset="240"
+              label="Restored position items"></ds-virtual-scroll>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-virtual-scroll scroll-offset="240"&gt;&lt;/ds-virtual-scroll&gt;</pre
+&lt;ds-virtual-scroll scroll-offset="240" label="Restored position items"&gt;&lt;/ds-virtual-scroll&gt;</pre
             >
           </div>
         </div>
@@ -133,7 +135,8 @@
               id="variant-standard"
               class="virtual-scroll-demo"
               item-height="48"
-              buffer="5"></ds-virtual-scroll>
+              buffer="5"
+              label="Standard density items"></ds-virtual-scroll>
           </div>
 
           <h3>Compact Density</h3>
@@ -142,7 +145,8 @@
               id="variant-compact"
               class="virtual-scroll-demo"
               item-height="40"
-              buffer="4"></ds-virtual-scroll>
+              buffer="4"
+              label="Compact density items"></ds-virtual-scroll>
           </div>
 
           <h3>Larger Rows</h3>
@@ -151,13 +155,14 @@
               id="variant-large"
               class="virtual-scroll-demo"
               item-height="56"
-              buffer="3"></ds-virtual-scroll>
+              buffer="3"
+              label="Larger row items"></ds-virtual-scroll>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-virtual-scroll item-height="40" buffer="4"&gt;&lt;/ds-virtual-scroll&gt;
-&lt;ds-virtual-scroll item-height="48" buffer="5"&gt;&lt;/ds-virtual-scroll&gt;
-&lt;ds-virtual-scroll item-height="56" buffer="3"&gt;&lt;/ds-virtual-scroll&gt;</pre
+&lt;ds-virtual-scroll item-height="40" buffer="4" label="Compact density items"&gt;&lt;/ds-virtual-scroll&gt;
+&lt;ds-virtual-scroll item-height="48" buffer="5" label="Standard density items"&gt;&lt;/ds-virtual-scroll&gt;
+&lt;ds-virtual-scroll item-height="56" buffer="3" label="Larger row items"&gt;&lt;/ds-virtual-scroll&gt;</pre
             >
           </div>
         </div>
@@ -170,14 +175,16 @@
           <div class="demo-box">
             <ds-virtual-scroll
               id="state-populated"
-              class="virtual-scroll-demo"></ds-virtual-scroll>
+              class="virtual-scroll-demo"
+              label="Populated list items"></ds-virtual-scroll>
           </div>
 
           <h3>Empty List</h3>
           <div class="demo-box">
             <ds-virtual-scroll
               id="state-empty"
-              class="virtual-scroll-demo"></ds-virtual-scroll>
+              class="virtual-scroll-demo"
+              label="Empty list items"></ds-virtual-scroll>
           </div>
           <div class="code-block">
             <pre>
@@ -205,14 +212,16 @@ emptyList.setItems([]);</pre
                 type="number"
                 min="0"
                 max="999"
-                placeholder="Jump index" />
+                placeholder="Jump index"
+                aria-label="Jump to index" />
             </div>
 
             <ds-virtual-scroll
               id="interactive-demo"
               class="virtual-scroll-demo"
               item-height="48"
-              buffer="5"></ds-virtual-scroll>
+              buffer="5"
+              label="Interactive example items"></ds-virtual-scroll>
 
             <div class="stats-row stats-row--spaced">
               <div class="stat-box">
@@ -278,6 +287,17 @@ list.focusItem(250);</pre
                 <td>number</td>
                 <td>0</td>
                 <td>Initial or programmatic scrollTop offset in pixels</td>
+              </tr>
+              <tr>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td><code>Items</code></td>
+                <td>
+                  Accessible name for the <code>role="listbox"</code>
+                  container. Always set a real one describing the list's
+                  content (e.g. "Search results") rather than relying on the
+                  generic fallback.
+                </td>
               </tr>
             </tbody>
           </table>
@@ -424,7 +444,13 @@ list.focusItem(250);</pre
           <ul>
             <li>
               The rendered rows container exposes <code>role="listbox"</code>
-              semantics for assistive technologies.
+              semantics for assistive technologies, named by the
+              <code>label</code> attribute (falls back to "Items" when unset
+              — always set a real one).
+            </li>
+            <li>
+              Each rendered row carries <code>role="option"</code>, the
+              child role <code>role="listbox"</code> requires.
             </li>
             <li>
               Virtualized rows are keyboard-focusable so screen reader and

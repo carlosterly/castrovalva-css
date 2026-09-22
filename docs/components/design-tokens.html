@@ -130,6 +130,16 @@
         gap: var(--ds-space-1);
       }
 
+      /* .token-name normally uses on-surface-variant, sized for the page's
+         own surface background. Each swatch sets its own contrasting
+         color (on-surface / on-inverse-surface, matched to its background) —
+         inherit that instead of overriding it with a token that isn't
+         guaranteed to contrast against every swatch (found failing against
+         inverse-surface via axe's color-contrast check). */
+      .surface-chip .token-name {
+        color: inherit;
+      }
+
       .type-sample {
         margin: 0;
         padding: var(--ds-space-4) var(--ds-space-4) 0;

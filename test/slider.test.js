@@ -440,6 +440,22 @@ describe("DSSlider", () => {
       expect(container.classList.contains("disabled")).to.be.false;
     });
 
+    it("keeps the header at full opacity when disabled (dims only track/thumb)", async () => {
+      // opacity: 0.5 on the whole .slider-container used to also dim
+      // .header, dropping its text below WCAG 1.4.3's 4.5:1 in dark theme.
+      // CSS opacity composites across all descendants regardless of their
+      // own opacity, so the fix scopes the dimming to the visual controls
+      // instead — .header itself must never carry disabled-state opacity.
+      const { el } = await setupSlider(
+        html`<ds-slider label="Volume" disabled></ds-slider>`,
+      );
+      const header = el.shadowRoot.querySelector(".header");
+      const trackWrapper = el.shadowRoot.querySelector(".track-wrapper");
+
+      expect(getComputedStyle(header).opacity).to.equal("1");
+      expect(getComputedStyle(trackWrapper).opacity).to.equal("0.5");
+    });
+
     it("should snap values to step", async () => {
       const { el, container } = await setupSlider(
         html`<ds-slider min="0" max="100" step="10"></ds-slider>`,

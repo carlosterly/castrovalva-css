@@ -33,6 +33,21 @@ describe("DSNavigationBar", () => {
       expect(nav).to.exist;
     });
 
+    it("wraps its items in a tablist so role=\"tab\" items have a required parent", async () => {
+      // axe's aria-required-parent: role="tab" (set on each item's internal
+      // button) must live inside an element with role="tablist".
+      const el = await fixture(html`
+        <ds-navigation-bar>
+          <ds-navigation-bar-item icon="home">Home</ds-navigation-bar-item>
+        </ds-navigation-bar>
+      `);
+
+      const tablist = el.shadowRoot.querySelector('[role="tablist"]');
+      expect(tablist).to.exist;
+      expect(tablist.contains(el.shadowRoot.querySelector("slot"))).to.be
+        .true;
+    });
+
     it("should support 3-5 destinations", async () => {
       const el3 = await fixture(html`
         <ds-navigation-bar>

@@ -291,6 +291,17 @@ describe("DSScrollbar", () => {
       const el = await fixture(html`<ds-scrollbar></ds-scrollbar>`);
       expect(el.hasAttribute("tabindex")).to.equal(false);
     });
+
+    it("scrollable container is keyboard-focusable so the region is reachable", async () => {
+      // .scrollbar-container is the element that actually overflows (the
+      // host is sized to match it, not the other way around), so it needs
+      // the tabindex to satisfy WCAG 2.1.1 / axe's
+      // scrollable-region-focusable check — without one, keyboard users
+      // can never reach or scroll the content.
+      const el = await fixture(html`<ds-scrollbar></ds-scrollbar>`);
+      const container = el.shadowRoot.querySelector(".scrollbar-container");
+      expect(container.getAttribute("tabindex")).to.equal("0");
+    });
   });
 
   describe("CSS Parts", () => {

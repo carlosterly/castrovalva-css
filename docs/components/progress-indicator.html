@@ -39,15 +39,19 @@
             form factor based on available space and content flow.
           </p>
           <div class="demo-box" style="display: grid; gap: 16px">
-            <ds-linear-progress value="45"></ds-linear-progress>
+            <ds-linear-progress
+              value="45"
+              label="Upload progress"></ds-linear-progress>
             <div style="display: flex; justify-content: center">
-              <ds-circular-progress value="45"></ds-circular-progress>
+              <ds-circular-progress
+                value="45"
+                label="Upload progress"></ds-circular-progress>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-linear-progress value="45"&gt;&lt;/ds-linear-progress&gt;
-&lt;ds-circular-progress value="45"&gt;&lt;/ds-circular-progress&gt;</pre
+&lt;ds-linear-progress value="45" label="Upload progress"&gt;&lt;/ds-linear-progress&gt;
+&lt;ds-circular-progress value="45" label="Upload progress"&gt;&lt;/ds-circular-progress&gt;</pre
             >
           </div>
         </div>
@@ -59,18 +63,20 @@
             <ds-linear-progress
               value="30"
               max="80"
-              color="secondary"></ds-linear-progress>
+              color="secondary"
+              label="Storage used"></ds-linear-progress>
             <div style="display: flex; justify-content: center">
               <ds-circular-progress
                 value="30"
                 max="80"
-                color="secondary"></ds-circular-progress>
+                color="secondary"
+                label="Storage used"></ds-circular-progress>
             </div>
           </div>
           <div class="code-block">
             <pre>
-&lt;ds-linear-progress value="30" max="80" color="secondary"&gt;&lt;/ds-linear-progress&gt;
-&lt;ds-circular-progress value="30" max="80" color="secondary"&gt;&lt;/ds-circular-progress&gt;</pre
+&lt;ds-linear-progress value="30" max="80" color="secondary" label="Storage used"&gt;&lt;/ds-linear-progress&gt;
+&lt;ds-circular-progress value="30" max="80" color="secondary" label="Storage used"&gt;&lt;/ds-circular-progress&gt;</pre
             >
           </div>
         </div>
@@ -211,6 +217,18 @@
                 </td>
               </tr>
               <tr>
+                <td><code>ds-linear-progress</code></td>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>none</td>
+                <td>
+                  Accessible name announced to screen readers. Falls back to
+                  "Loading" (indeterminate) or "N% complete" (determinate)
+                  when unset — always set a real one when the progress bar
+                  has specific context (e.g. "Upload progress").
+                </td>
+              </tr>
+              <tr>
                 <td><code>ds-circular-progress</code></td>
                 <td><code>value</code></td>
                 <td>number</td>
@@ -250,6 +268,16 @@
                 <td>
                   <code>primary</code>, <code>secondary</code>,
                   <code>tertiary</code>, <code>error</code>.
+                </td>
+              </tr>
+              <tr>
+                <td><code>ds-circular-progress</code></td>
+                <td><code>label</code></td>
+                <td>string</td>
+                <td>none</td>
+                <td>
+                  Accessible name announced to screen readers. Same fallback
+                  behavior as <code>ds-linear-progress</code>.
                 </td>
               </tr>
             </tbody>
@@ -431,8 +459,13 @@
               mode omits it per ARIA guidance.
             </li>
             <li>
-              Add labels via <code>aria-label</code> or
-              <code>aria-labelledby</code> when context is ambiguous.
+              Always has an accessible name: the <code>label</code>
+              attribute, when set, becomes <code>aria-label</code>. When
+              unset, it falls back to "Loading" (indeterminate) or
+              "N% complete" (determinate) so the progressbar is never
+              nameless — but set <code>label</code> whenever the bar has
+              real context (e.g. "Upload progress") rather than relying on
+              the generic fallback.
             </li>
           </ul>
         </div>

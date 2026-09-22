@@ -106,6 +106,7 @@ export class DSCarousel extends HTMLElement {
 
     this._onSlotChange = () => {
       const changed = this._updateItemCount();
+      this._updateItemRoles();
 
       if (changed) {
         this.render();
@@ -394,6 +395,26 @@ export class DSCarousel extends HTMLElement {
     const changed = newCount !== this._itemCount;
     this._itemCount = newCount;
     return changed;
+  }
+
+  /**
+   * The viewport carries role="list" (see render()), so each slotted item
+   * needs role="listitem" — otherwise the list's children are arbitrary
+   * light-DOM elements with no list semantics, which fails axe's
+   * aria-required-children check. Items are arbitrary consumer-provided
+   * elements, so this is applied here rather than left to callers.
+   */
+  _updateItemRoles() {
+    const slot = this.shadowRoot?.querySelector("slot");
+    const items = slot?.assignedElements();
+    const children =
+      items && items.length > 0 ? items : Array.from(this.children);
+
+    children.forEach((child) => {
+      if (!child.hasAttribute("role")) {
+        child.setAttribute("role", "listitem");
+      }
+    });
   }
 
   /**
@@ -722,14 +743,14 @@ export class DSCarousel extends HTMLElement {
           outline-offset: 2px;
         }
 
-        :host(:focus-visible) {
+        [part="viewport"]:focus-visible {
           outline: 2px solid var(--md-sys-color-primary, #6750a4);
-          outline-offset: 2px;
+          outline-offset: -2px;
         }
       </style>
 
       <div part="container" role="region" aria-label="Carousel">
-        <div part="viewport" role="list">
+        <div part="viewport" role="list" tabindex="0" aria-label="Carousel slides, use arrow keys to navigate">
           <slot></slot>
         </div>
 
@@ -781,6 +802,7 @@ export class DSCarousel extends HTMLElement {
       this._renderRaf = null;
       this.setupEventListeners();
       this._updateItemCount();
+      this._updateItemRoles();
       this._updateIndicators();
       this._updateNavigationState();
       this._observeSlotChanges();

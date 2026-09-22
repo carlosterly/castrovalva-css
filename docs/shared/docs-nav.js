@@ -378,13 +378,18 @@
   const active = nav.querySelector('.dnav__link[aria-current="page"]');
   if (active) active.scrollIntoView({ block: "center" });
 
-  // Every demo page renders .code-block > pre snippets that can overflow
-  // horizontally (overflow-x: auto in pattern-library.css). A scrollable
-  // region with no way into the tab order fails axe's
+  // Every demo page renders .code-block > pre snippets and .demo-box
+  // component examples that can overflow horizontally (overflow-x: auto in
+  // pattern-library.css — a wide component like a data table or long
+  // combobox scrolls inside the box rather than pushing the page wider). A
+  // scrollable region with no way into the tab order fails axe's
   // scrollable-region-focusable check and is unreachable by keyboard. axe
   // flags whichever element is actually the overflowing box — sometimes
-  // .code-block, sometimes the <pre> inside it — so tab-stop both.
-  document.querySelectorAll(".code-block, .code-block > pre").forEach((el) => {
-    if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
-  });
+  // .code-block, sometimes the <pre> inside it — so tab-stop both, plus
+  // .demo-box itself.
+  document
+    .querySelectorAll(".code-block, .code-block > pre, .demo-box")
+    .forEach((el) => {
+      if (!el.hasAttribute("tabindex")) el.setAttribute("tabindex", "0");
+    });
 })();

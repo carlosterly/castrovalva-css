@@ -107,7 +107,7 @@ export class DSNavigationRail extends HTMLElement {
 
       <nav class="navigation-rail" part="container" role="navigation" aria-label="Primary navigation">
         <slot name="header"></slot>
-        <div class="destinations" part="destinations">
+        <div class="destinations" part="destinations" role="tablist" aria-label="Primary navigation" aria-orientation="vertical">
           <slot></slot>
         </div>
         <slot name="fab"></slot>

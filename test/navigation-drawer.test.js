@@ -287,20 +287,25 @@ describe("DSNavigationDrawer", () => {
       expect(container.getAttribute("role")).to.equal("navigation");
     });
 
-    it('should have aria-hidden="true" when closed', async () => {
+    it("is inert when closed", async () => {
+      // inert (not aria-hidden) both hides the drawer from the
+      // accessibility tree and blocks keyboard/mouse focus on its
+      // descendants — aria-hidden alone doesn't stop Tab from reaching the
+      // still-present, translated-off-screen content (axe's
+      // aria-hidden-focus).
       const el = await fixture(
         html`<ds-navigation-drawer></ds-navigation-drawer>`,
       );
 
-      expect(el.getAttribute("aria-hidden")).to.equal("true");
+      expect(el.inert).to.equal(true);
     });
 
-    it('should have aria-hidden="false" when open', async () => {
+    it("is not inert when open", async () => {
       const el = await fixture(
         html`<ds-navigation-drawer open></ds-navigation-drawer>`,
       );
 
-      expect(el.getAttribute("aria-hidden")).to.equal("false");
+      expect(el.inert).to.equal(false);
     });
 
     it("should have aria-label on navigation container", async () => {
@@ -673,22 +678,22 @@ describe("DSNavigationDrawer", () => {
       expect(el.getAttribute("position")).to.equal("right");
     });
 
-    it("should update aria-hidden when open attribute changes", async () => {
+    it("should update inert state when open attribute changes", async () => {
       const el = await fixture(
         html`<ds-navigation-drawer></ds-navigation-drawer>`,
       );
 
-      expect(el.getAttribute("aria-hidden")).to.equal("true");
+      expect(el.inert).to.equal(true);
 
       el.setAttribute("open", "");
       await el.updateComplete;
 
-      expect(el.getAttribute("aria-hidden")).to.equal("false");
+      expect(el.inert).to.equal(false);
 
       el.removeAttribute("open");
       await el.updateComplete;
 
-      expect(el.getAttribute("aria-hidden")).to.equal("true");
+      expect(el.inert).to.equal(true);
     });
   });
 

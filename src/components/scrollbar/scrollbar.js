@@ -210,9 +210,14 @@ export class DSScrollbar extends HTMLElement {
           inline-size: 100%;
           block-size: 100%;
         }
+
+        .scrollbar-container:focus-visible {
+          outline: 2px solid var(${colorVariable});
+          outline-offset: -2px;
+        }
       </style>
 
-      <div part="container" class="scrollbar-container">
+      <div part="container" class="scrollbar-container" tabindex="0">
         <slot></slot>
       </div>
     `;

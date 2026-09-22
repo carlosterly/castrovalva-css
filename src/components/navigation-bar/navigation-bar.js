@@ -75,13 +75,17 @@ export class DSNavigationBar extends HTMLElement {
         }
 
         .navigation-bar {
-          display: flex;
-          justify-content: space-around;
-          align-items: center;
           height: 80px;
           background: var(--md-sys-color-surface-container, #F3EDF7);
           border-top: 1px solid var(--md-sys-color-outline-variant, #CAC4D0);
           position: relative;
+        }
+
+        .tablist {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          height: 100%;
         }
 
         ::slotted(ds-navigation-bar-item) {
@@ -91,7 +95,9 @@ export class DSNavigationBar extends HTMLElement {
       </style>
 
       <nav class="navigation-bar" part="container" role="navigation" aria-label="Main navigation">
-        <slot></slot>
+        <div class="tablist" role="tablist" aria-label="Main navigation">
+          <slot></slot>
+        </div>
       </nav>
     `;
   }

@@ -667,9 +667,21 @@ export class DSSlider extends HTMLElement {
         }
 
         .slider-container.disabled {
-          opacity: 0.5;
           cursor: not-allowed;
           pointer-events: none;
+        }
+
+        /* Dim the track/thumb to signal disabled, but not .header — WCAG
+           1.4.3 exempts inactive-control text from contrast requirements,
+           but axe can't infer that for a custom element's disabled state,
+           and opacity on the whole container would dim .header along with
+           it (opacity composites across all descendants, so a counter-rule
+           on .header itself can't undo a parent's dimming). Keeping the
+           value/label at full contrast is also better for a low-vision user
+           who wants to read what value a disabled slider is stuck at. */
+        .slider-container.disabled .track-wrapper,
+        .slider-container.disabled .thumb {
+          opacity: 0.5;
         }
 
         .header {
@@ -677,7 +689,7 @@ export class DSSlider extends HTMLElement {
           justify-content: space-between;
           margin-bottom: 8px;
           font-size: 14px;
-          color: #374151;
+          color: var(--md-sys-color-on-surface-variant, #374151);
         }
 
         .track-wrapper {

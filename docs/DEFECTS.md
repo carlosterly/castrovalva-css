@@ -45,7 +45,6 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 ### home page (index.html)
 
 - **B** — The six documentation links (`README.md`, `CLAUDE.md`, `docs/ROADMAP.md`, `docs/tokens.md`, `docs/state-layers.md`, `docs/motion.md`) point at raw `.md` files. On the deployed Pages site these render as plain text or download rather than as formatted pages. Accepted for the serve-as-is deploy; proper fix (render to HTML, or link to the GitHub blob view) is site work.
-- **B** — Lighthouse (accessibility, live site) flags `aria-progressbar-name` and `aria-toggle-field-name` in the "Running right now" live preview panel — the same underlying `ds-linear-progress`/`ds-radio`/`ds-switch` bugs already logged under those components below, surfacing here too since the panel embeds real instances.
 
 ### package build
 
@@ -60,27 +59,12 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — The `elevated` variant's hover feedback (box-shadow level1→level2) is invisible in dark theme. The rest-state background already compensates for shadows being imperceptible on dark backgrounds (`background-color: var(--md-sys-color-surface-container-low)`, per the comment at `ds-card.js:130`), but the `:hover` rule at `ds-card.js:138` only bumps the box-shadow — no matching tonal step-up — so hovering an elevated card in dark theme produces no visible feedback at all. Confirmed by pixel-diffing hover-vs-rest screenshots: 3.19% of pixels change in light theme, 0.00% in dark.
 
-### carousel
-
-- **A** — axe `aria-required-children` (critical): the `role="list"` viewport's children aren't `role="listitem"` (9 nodes, both themes).
-- **A** — axe `scrollable-region-focusable`: the scrolling viewport isn't in the tab order (8 nodes).
-
-### checkbox
-
-- **A** — axe `nested-interactive`: `ds-checkbox`'s rendered markup nests one interactive control inside another — invalid ARIA that can break screen-reader operation (13 nodes, both themes). Same pattern as `chip`, `form`, `theme-playground` — likely one shared fix in the component's internal markup.
-
 ### chip
-
-- **A** — axe `nested-interactive`: same pattern as `checkbox` (8 nodes, both themes).
 - **B** — Hover and pressed state layers are invisible in dark theme. `ds-chip.js:266` sets `background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.08)` — but `--md-sys-color-on-surface-rgb` is never defined anywhere in `tokens.css` or `palette.css`, so the `rgba()` always resolves to the hardcoded fallback triple `29, 27, 32` (light theme's near-black on-surface), regardless of theme. In light theme that reads as a subtle dark tint (correct by coincidence); in dark theme it's a near-black overlay on an already near-black surface — invisible. Confirmed by pixel diff: light hover 14.34%, dark hover 0.00%; light pressed 14.56%, dark pressed 0.00% (focus, which uses a different, theme-correct rule, is unaffected: 3.32% in both themes). **Same root cause, same fix, in `radio` and `switch`** (see their entries below) — all three components use the identical undefined-token pattern; fix once and apply to all three. A related but distinct instance affects `ds-snackbar.js:372` (`--md-sys-color-inverse-primary-rgb`, also undefined) — not independently visually confirmed but the same class of bug.
 
 ### data-table
 
 - **B** — Row hover feedback is barely perceptible in dark theme. `data-table.js:556` sets `tbody tr:hover { background: var(--md-sys-color-surface-container); }`, which is theme-aware (not hardcoded), but in dark theme `--md-sys-color-surface` (neutral10) and `--md-sys-color-surface-container` (neutral12) sit only 2 tonal steps apart — a much smaller jump than light theme's surface (neutral99) to surface-container (neutral94), 5 steps. Confirmed by pixel diff: light hover 10.37%, dark hover 0.00% (measured against the table's own background, not a specific row — the effect is table-wide since every row shares the same surface/surface-container pairing).
-
-### design-tokens
-
-- **B** — axe `color-contrast`: `.token-name` text on at least one `.surface-chip` swatch fails contrast (both themes).
 
 ### dialog
 
@@ -90,44 +74,26 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 ### form
 
 - **A** — axe `label` (critical): several `ds-text-field`/native inputs in the form demos have no accessible name (10 nodes, both themes).
-- **A** — axe `nested-interactive`: `ds-checkbox` nested inside `#initialForm`/`#interactiveForm` — the checkbox component bug above, surfacing here too.
 
 ### navigation-bar
 
-- **A** — axe `aria-required-parent` (critical): `ds-navigation-bar-item` renders a role that requires a specific ARIA parent role the markup doesn't provide (20 nodes, both themes).
-
-### navigation-drawer
-
-- **A** — axe `aria-hidden-focus`: closed/inactive drawers (`#basic-drawer`, `#modal-drawer`, `#left-drawer`) are `aria-hidden` while still containing focusable elements — a hidden-but-tabbable trap (5 nodes, both themes).
+- **B** — `ds-navigation-bar-item` renders `role="tab"` but `ds-navigation-bar` doesn't implement the roving-tabindex/arrow-key navigation the ARIA tab pattern expects — every item stays independently `Tab`-reachable instead of only the active one, and Left/Right don't move selection. Same gap in `navigation-rail` (see below). Not axe-detectable (axe checks structure, not interaction), found while fixing the `aria-required-parent` finding on the same component. Functions fine via `Tab` alone; the gap is a mismatch between the announced role's expected behavior and the actual one.
 
 ### navigation-rail
 
-- **A** — axe `aria-required-parent` (critical): same role/parent mismatch as `navigation-bar`, on `ds-navigation-rail-item` (18 nodes, both themes).
-
-### progress-indicator
-
-- **A** — axe `aria-progressbar-name`: `ds-linear-progress` renders `role="progressbar"` with no accessible name (8 nodes, both themes). Also present on `theme-playground`'s live preview.
+- **B** — Same roving-tabindex/arrow-key gap as `navigation-bar` (see above): `ds-navigation-rail-item` renders `role="tab"` with no arrow-key (here, up/down) navigation between destinations.
 
 ### radio
 
 - **B** — Hover/pressed state-layer ripple is essentially imperceptible in dark theme — same undefined-`--md-sys-color-on-surface-rgb`-token bug as `chip` (`ds-radio.js:326`), see that entry for the root cause. Pixel diff: light hover 11.87% / pressed 12.01%, dark hover 0.09% / pressed 0.12% (noise-level).
 
-### scrollbar
-
-- **B** — axe `scrollable-region-focusable`: the `ds-scrollbar` demo's scrolling container isn't keyboard-reachable (10 nodes, both themes).
-
 ### slider
 
-- **B** — axe `color-contrast`: the light-DOM `.label`/`.value-display` text next to `ds-slider` demos fails contrast (12 nodes, both themes).
 - **B** — 12 unit tests fail on Firefox only (`npm run test:all`), all pointer-drag interaction/event tests (`should emit input/change event on pointer interaction`, `should update value when dragged`, `should snap values to step`, …). Chromium and WebKit pass all of them. Not yet root-caused — could be a real Firefox pointer-event handling difference in the component, or a Playwright synthetic-pointer-event quirk specific to Firefox's test harness rather than a user-facing bug. Needs someone to actually drag a slider in real Firefox before concluding either way.
 
 ### snackbar
 
 - **A** — At 360px viewport, a snackbar with an action (the "With Action" demo, message + "UNDO" + dismiss icon) renders ~376px wide against the 360px viewport, clipping the message on the left and the action/dismiss controls on the right (confirmed by measurement: inner box left=-8px, right=368px vs a 360px viewport). Not caught by the mechanical QA sweep because it's `position: fixed` content — it never registers in `document.documentElement.scrollWidth`, which is what the sweep's overflow check reads. Both themes; message-only and basic snackbars (no action) fit fine, so this only hits the action/dismissible variants.
-
-### split-button
-
-- **B** — axe `scrollable-region-focusable`: one demo-box scrolls without keyboard access (1 node, both themes).
 
 ### switch
 
@@ -141,27 +107,13 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **A** — `ds-text-field` calls `this.attachInternals()` but never sets `static formAssociated = true` or calls `setFormValue()`. Verified empirically: `new FormData(form)` on a form containing a named, valued `ds-text-field` silently omits it — the field's value never reaches form submission. `checkValidity()`/`reportValidity()` are implemented by delegating to the internal native `<input>`, so those work standalone, but the field is invisible to the *enclosing* form. Grepped every input/selection component for `formAssociated`: **only `ds-checkbox` fully implements it** (declares the flag and calls `setFormValue`). `ds-radio`, `ds-switch`, `ds-slider`, `ds-select`, `ds-combobox`, `ds-textarea`, `ds-data-table` use neither `formAssociated` nor `attachInternals` at all, despite CLAUDE.md documenting this as the convention for the whole "Input & selection" category. This is bigger than one component — it's the documented pattern applied in one place out of roughly a dozen it's supposed to cover.
 
-### text-wrapper
-
-- **B** — axe `scrollable-region-focusable`: one demo-box scrolls without keyboard access (1 node, both themes).
-
 ### textarea
 
 - **B** — `ds-textarea` has no `:hover` styling at all (grepped the whole component source — zero matches), so hovering the field produces no feedback in either theme. `ds-text-field`, the sibling component, implements this correctly (`.text-field.filled:hover::after` / `.text-field.outlined:hover`) — worth copying that pattern rather than reinventing it. Confirmed by pixel-diffing rest-vs-hover screenshots (0.00% in both themes) and by reading the source.
 
-### theme-playground
-
-- **A** — axe `aria-progressbar-name`, `nested-interactive`: inherits the `progress-indicator` / `checkbox` bugs above via its live component preview — no separate fix needed once those land. (The `aria-toggle-field-name`/`label` findings this entry used to also list are fixed — the preview's `ds-radio`/`ds-switch`/`ds-text-field` instances now carry `label` attributes.)
-- **B** — axe `color-contrast`: palette swatch button labels fail contrast against their own swatch background for some tones (11 nodes, both themes).
-
 ### tooltip
 
 - **A** — `position="left"` and `position="right"` render overlapping the target instead of beside it, in both themes — a visitor would see the tooltip cover part of the button's own label. `top`/`bottom` are correctly offset; only the two horizontal positions are affected. Confirmed by measurement, not just a screenshot read: hovering `#tooltip-left-target` (button at x=778–806), the tooltip's rendered box lands at x=692–785 — overlapping ~13px into the button — even though the inline `left` style the component actually sets (676.8px) would, if honored, place it with a clean 8px gap outside the button. Something between `calculatePosition()`'s `left`/`right` branches (`ds-tooltip.js`) and the final rendered box introduces the offset; `top`/`bottom` use a different (centering) formula and aren't affected. Not caught by the QA sweep, which never opens a tooltip via hover/focus.
-
-### virtual-scroll
-
-- **A** — axe `aria-input-field-name`: the jump-to-index input has no accessible name (8 nodes, both themes).
-- **A** — axe `aria-required-children` (critical): the `role="listbox"` container's children don't carry `role="option"` (7 nodes, both themes).
 
 ## First-pass screenshot review — done, all findings actioned
 
@@ -343,6 +295,156 @@ themes. **30 of 102 checks still fail** (down from 38) — logged
 individually under [Open defects](#open-defects) above. `checkbox`, `chip`,
 and `form` share a `nested-interactive` pattern that's likely one fix
 applied in multiple places, worth checking next.
+
+**`nested-interactive` cluster fixed — 22 Sep 2026.** `checkbox`, `chip`,
+and `form` (which embeds a checkbox) all failed because a host carrying an
+interactive ARIA role (`role="checkbox"`/`role="button"`) contained a
+native, natively-focusable element in its shadow DOM. axe's `_isFocusable`
+check treats any native `<input>`/`<button>`/etc. as focusable regardless
+of `tabindex="-1"` or `aria-hidden`, and separately treats *any* element
+carrying an explicit `tabindex` attribute — even `"-1"` — as focusable too,
+so neither attribute actually suppressed the finding. `ds-checkbox`'s
+hidden native `<input type="checkbox">` existed only to mirror `value`/
+`name` for inspection — the real form value already comes from
+`ElementInternals.setFormValue()` — so it was changed to
+`<input type="hidden">` (not natively focusable, no `tabindex` needed).
+`ds-chip`'s remove affordance was a `<button>` that never needed to be
+independently focusable — removal already happens via delegated click
+handling on the host (`composedPath()`) and via Delete/Backspace on the
+host itself — so it became a plain `<span aria-hidden="true">` with no
+`tabindex`. `theme-playground` inherited the `checkbox` finding via its
+live preview and is fixed by the same change, with no separate edit.
+Verified: `checkbox.test.js`/`chip.test.js`/`form.test.js` (138 tests) and
+`npm run lint` still pass, and `npm run test:a11y` confirms all `checkbox`,
+`chip`, and `form` checks now pass in both themes (`theme-playground` still
+has its unrelated `aria-progressbar-name`/`color-contrast` findings, logged
+under its own entry).
+
+**`scrollable-region-focusable` cluster fixed — 22 Sep 2026.** `carousel`,
+`scrollbar`, `split-button`, and `text-wrapper` all failed because a
+horizontally/vertically overflowing container had no way into the tab
+order — axe requires the actual overflowing node itself (or a focusable
+descendant) to be reachable, not just its ancestor. Two different root
+causes, one shared: `split-button` and `text-wrapper`'s findings were
+generic `.demo-box` examples overflowing (`overflow-x: auto` in
+`pattern-library.css`), the same pattern already fixed for `.code-block` —
+extended the existing `docs-nav.js` tab-stop fix to also cover `.demo-box`
+(one shared script, every demo page). `carousel` and `scrollbar` are
+component bugs, not demo-page ones: `ds-carousel`'s `[part="viewport"]` is
+the actual scrolling box (the host's `:host(:focus-visible)` outline
+already existed in the CSS but nothing ever made anything focusable) — gave
+the viewport `tabindex="0"` directly, which also makes it reachable for the
+existing ArrowLeft/ArrowRight `keydown` handler already bound on the host
+(the event still bubbles up to it). `ds-scrollbar`'s `.scrollbar-container`
+div is the element that actually overflows, not the host itself (the host
+just matches its size) — gave the container `tabindex="0"`, not the host,
+after an initial attempt at the host confirmed axe still flagged the
+container specifically. Verified: `carousel.test.js`/`scrollbar.test.js`
+(2 new tests) and full suite (2093 tests) plus `npm run lint` still pass,
+and `npm run test:a11y` confirms all four components' checks now pass in
+both themes — `carousel` still has its separate, pre-existing
+`aria-required-children` finding (its viewport's children aren't
+`role="listitem"`), logged under its own entry.
+
+**`aria-required-parent` cluster fixed — 22 Sep 2026.** `navigation-bar`
+and `navigation-rail` both failed because each destination item's internal
+button carries `role="tab"` (correct for a single-selection destination
+switcher), but neither component's markup ever provided the `role="tablist"`
+ancestor that ARIA requires for a `tab` to be valid. `ds-navigation-bar`
+wrapped its item slot in a new `<div role="tablist">` inside the existing
+`<nav role="navigation">` landmark (moved the flex layout from the `nav`
+onto the new wrapper so visuals are unchanged); `ds-navigation-rail`
+already had a `.destinations` wrapper around just the item slot (separate
+from its `header`/`fab` slots) so `role="tablist"` and
+`aria-orientation="vertical"` went directly on that existing element — no
+new wrapper needed. Neither component implements roving-tabindex/arrow-key
+navigation between tabs (every item stays independently `Tab`-reachable);
+that's a real gap in the APG tab pattern but a separate, larger piece of
+work from this specific `aria-required-parent` fix, not addressed here.
+Verified: `navigation-bar.test.js`/`navigation-rail.test.js` (2 new tests)
+and full suite (2095 tests) plus `npm run lint` still pass, and
+`npm run test:a11y` confirms both components' checks now pass in both
+themes.
+
+**Remaining one-offs (cluster 5 of 5) fixed — 22 Sep 2026, clearing the
+axe backlog to 0/102.** Seven unrelated findings, no shared root cause:
+
+- **`progress-indicator`** (`aria-progressbar-name`): `ds-linear-progress`/
+  `ds-circular-progress` had no accessible name at all. Added a `label`
+  attribute reflected as `aria-label`, with a fallback (`"Loading"` when
+  indeterminate, `"N% complete"` otherwise) so the progressbar is never
+  nameless even if a consumer forgets to set it — real per-instance labels
+  were also added to the demo page. Fixes `theme-playground`'s inherited
+  copy of the same finding too.
+- **`carousel`** (`aria-required-children`): the `role="list"` viewport's
+  children are arbitrary consumer-provided elements with no list semantics.
+  Added `_updateItemRoles()`, called on connect and on every `slotchange`,
+  which sets `role="listitem"` on each assigned item unless it already
+  carries its own role.
+- **`navigation-drawer`** (`aria-hidden-focus`): closed drawers were marked
+  `aria-hidden="true"` while still containing focusable content translated
+  off-screen — a hidden-but-tabbable trap, since `aria-hidden` alone doesn't
+  stop `Tab` from reaching what's underneath. Replaced with the native
+  `inert` attribute, which both hides from the accessibility tree and
+  actually blocks focus; un-inert happens before focusing into the drawer
+  on open, and previous focus is restored before going inert on close so
+  focus never gets stranded in an inert subtree.
+- **`virtual-scroll`**, two findings: the `role="listbox"` container had no
+  accessible name (`aria-input-field-name`) — same `label`-attribute/
+  fallback pattern as `progress-indicator` (defaults to `"Items"`). Its
+  rows also lacked `role="option"` (`aria-required-children`) — since rows
+  are plain `<div>`s fully owned by the component (not a consumer
+  template), the role is set directly in `_renderItems()`. The demo page's
+  separate jump-to-index `<input>` also had no name (`placeholder` doesn't
+  count) — given `aria-label="Jump to index"`.
+- **`slider`** (`color-contrast`, `.label`/`.value-display`): two distinct
+  causes. The `.header`'s text color was a hardcoded `#374151` that never
+  adapted for dark theme (contrast 1.66:1) — replaced with
+  `--md-sys-color-on-surface-variant`. Separately, `.slider-container.disabled`
+  applied `opacity: 0.5` to the *entire* container, including `.header` —
+  CSS opacity composites across all descendants regardless of their own
+  opacity, so even after the token fix, a disabled slider's already-correct
+  text still failed (1.26:1, worse than the enabled case). Since WCAG 1.4.3
+  exempts inactive-control text from contrast requirements but axe can't
+  infer that for a custom element's `disabled` state, and the value is
+  genuinely useful to keep legible for a low-vision user reading a disabled
+  slider's stuck value, scoped the dimming to `.track-wrapper`/`.thumb`
+  only — `.header` now stays at full contrast when disabled.
+- **`design-tokens`** (`color-contrast`, `.surface-chip .token-name`): each
+  swatch sets its own correctly-paired `color` (`on-surface` /
+  `on-inverse-surface`, matched to its `background`), but `.token-name`'s
+  own rule unconditionally overrode it with `on-surface-variant` —  wrong
+  pairing for the `inverse-surface` swatch specifically. Fixed with
+  `.surface-chip .token-name { color: inherit; }`.
+- **`theme-playground`** (`color-contrast`, palette swatch labels): the
+  `readable(hex)` helper picked black-or-white text by a fixed luminance
+  threshold (`> 0.4`), which doesn't track actual WCAG contrast and left
+  several mid-tone swatches (e.g. primary/secondary/neutral 50–60) under
+  4.5:1 with white text. Replaced with an actual contrast-ratio comparison
+  that picks whichever of black/white contrasts more against the
+  background — provably always ≥4.5:1 for any solid color, since the
+  worst case (a mid-gray background) still yields ~4.58:1 either way.
+
+Verified per-component and via a full `npm run test:a11y` run: **102/102
+checks pass**, up from 88/102 — the exact expected 14-check gain (7
+components × 2 themes). Full unit suite (2107 tests) and `npm run lint`
+both still pass.
+
+**Docs-site accessibility audit — 22 Sep 2026.** The axe harness only ever
+scanned `docs/components/*.html` — the surrounding site chrome (home page,
+composed examples) had zero automated coverage, even though every demo
+page already incidentally sweeps the shared nav shell (`docs-nav.js`) just
+by including it. Extended `test/accessibility/demo-pages.spec.js` with an
+`EXTRA_PAGES` list covering `index.html` and
+`docs/examples/settings-page.html`, × {light, dark}. Found one real issue:
+the home page's "Running right now" live preview embeds a real
+`<ds-switch>` with no `label` attribute (`aria-toggle-field-name`, 1 node,
+both themes — the same underlying gap the `radio`/`switch` cluster-1 fix
+closed everywhere else, just never applied here since this instance isn't
+part of either component's own demo page). Fixed by giving it a real label
+("Notifications") instead of leaving it to axe's absence-of-name failure.
+`settings-page.html` was already clean. `npm run test:a11y`: **106/106**
+checks pass (102 + 4 new). Full suite (2107 tests) and lint still pass.
 
 ---
 

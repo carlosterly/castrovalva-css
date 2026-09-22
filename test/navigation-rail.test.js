@@ -20,6 +20,22 @@ describe("DSNavigationRail", () => {
       expect(nav).to.exist;
     });
 
+    it("wraps its items in a vertical tablist so role=\"tab\" items have a required parent", async () => {
+      // axe's aria-required-parent: role="tab" (set on each item's internal
+      // button) must live inside an element with role="tablist".
+      const el = await fixture(html`
+        <ds-navigation-rail>
+          <ds-navigation-rail-item icon="home">Home</ds-navigation-rail-item>
+        </ds-navigation-rail>
+      `);
+
+      const tablist = el.shadowRoot.querySelector('[role="tablist"]');
+      expect(tablist).to.exist;
+      expect(tablist.getAttribute("aria-orientation")).to.equal("vertical");
+      expect(tablist.contains(el.shadowRoot.querySelector("slot:not([name])")))
+        .to.be.true;
+    });
+
     it("supports 3-7 destinations", async () => {
       const el3 = await fixture(html`
         <ds-navigation-rail>

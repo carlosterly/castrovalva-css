@@ -62,9 +62,11 @@ describe("DSCheckbox", () => {
         html`<ds-checkbox name="terms" value="agreed"></ds-checkbox>`,
       );
 
-      const input = el.shadowRoot.querySelector('input[type="checkbox"]');
+      // type="hidden" keeps this out of the accessibility tree and, unlike
+      // tabindex="-1", isn't reported as focusable by axe's nested-interactive
+      // check (the real form value comes from ElementInternals, not this input).
+      const input = el.shadowRoot.querySelector('input[type="hidden"]');
       expect(input).to.exist;
-      expect(input.getAttribute("aria-hidden")).to.equal("true");
     });
   });
 

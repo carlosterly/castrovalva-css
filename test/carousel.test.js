@@ -386,6 +386,37 @@ describe("DSCarousel", () => {
       expect(viewport.getAttribute("role")).to.equal("list");
     });
 
+    it("viewport is keyboard-focusable so the scrolling region is reachable", async () => {
+      const el = await fixture(html`<ds-carousel></ds-carousel>`);
+      const viewport = el.shadowRoot.querySelector('[part="viewport"]');
+      expect(viewport.getAttribute("tabindex")).to.equal("0");
+    });
+
+    it("gives each slotted item role=\"listitem\" to satisfy the viewport's role=\"list\"", async () => {
+      const el = await fixture(twoSlides);
+      const items = Array.from(el.children);
+
+      await waitUntil(() =>
+        items.every((item) => item.getAttribute("role") === "listitem"),
+      );
+
+      expect(items.every((item) => item.getAttribute("role") === "listitem"))
+        .to.be.true;
+    });
+
+    it("doesn't override a role an item already has", async () => {
+      const el = await fixture(html`
+        <ds-carousel>
+          <div role="figure">Slide 1</div>
+        </ds-carousel>
+      `);
+      const item = el.children[0];
+
+      await waitUntil(() => el._itemCount === 1);
+
+      expect(item.getAttribute("role")).to.equal("figure");
+    });
+
     it("navigation buttons have aria labels", async () => {
       const el = await fixture(
         html`<ds-carousel show-navigation></ds-carousel>`,

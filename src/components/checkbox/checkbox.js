@@ -517,13 +517,8 @@ class DSCheckbox extends HTMLElement {
         }
       </style>
 
-      <input
-        type="checkbox"
-        part="input"
-        tabindex="-1"
-        aria-hidden="true"
-      />
-      
+      <input type="hidden" part="input" />
+
       <div class="checkbox-container" part="container">
         <div class="state-layer" part="state-layer"></div>
         <span class="checkbox-icon" part="icon">check_box_outline_blank</span>
