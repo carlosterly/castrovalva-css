@@ -13,7 +13,7 @@ Vanilla Web Components implementing Material Design 3. Zero runtime
 dependencies, Shadow DOM, MD3 design tokens. Built with Vite, tested with
 `@web/test-runner` + Playwright.
 
-43 components (36/36 official MD3 plus enhancements and utilities), ~2,060
+43 components (36/36 official MD3 plus enhancements and utilities), 2,107
 tests, ~92% coverage. The library is feature-complete; see the roadmap before
 proposing new components.
 
@@ -23,7 +23,8 @@ proposing new components.
 
 Three required artefacts per component:
 
-1. **Component JS** — `src/components/{name}/{name}.js`
+1. **Component JS** — `src/components/{name}/{name}.js` (new components; see
+   "File organisation" for the 15 older ones that live flat)
 2. **Unit tests** — `test/{name}.test.js` (40+ cases)
 3. **Demo page** — `docs/components/{name}.html`
 
@@ -396,4 +397,9 @@ When the pattern is unclear, copy the structure from:
 - Unit tests: `test/{component}.test.js` — never test HTML files in the repo root
 - Demo pages: `docs/components/{component}.html`
 - Composed examples: `docs/examples/{name}.html` — see "Composed examples" above
-- Component source: `src/components/{name}/{name}.js`
+- Component source: `src/components/{name}/{name}.js`. Fifteen older
+  components predate this and live flat, with only the stub README in
+  `{name}/`: `src/components/ds-{name}.js` for badge, card, chip, dialog, fab,
+  menu, progress-indicator, radio, slider, snackbar, switch, tabs, textarea
+  and tooltip, plus an unprefixed `src/components/advanced-menu.js`. Leave
+  them where they are — `src/index.js` and the tests import those paths.

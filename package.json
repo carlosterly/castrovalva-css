@@ -18,7 +18,7 @@
     "./icon": {
       "import": "./dist/icon.js"
     },
-    "./css": "./dist/design-system.css"
+    "./css": "./dist/css/styles.css"
   },
   "files": [
     "dist",

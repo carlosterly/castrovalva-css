@@ -5,7 +5,7 @@
 Material Design 3 implemented as vanilla Web Components. Zero runtime
 dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 
-**43 components** · **2,077 tests** · **92% coverage** · **97 KB gzipped (full library)**
+**43 components** · **2,107 tests** · **92% coverage** · **98 KB gzipped (full library)**
 
 <sub>Measured, not estimated — see [Measured numbers](#measured-numbers) for the breakdown and how to reproduce each figure.</sub>
 
@@ -22,7 +22,7 @@ dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 - **Standard Web Components** — Custom Elements v1 with Shadow DOM
 - **250+ design tokens** — CSS custom properties throughout, themeable at runtime
 - **2,500+ icons** — Material Symbols with variable font axes (weight, grade, fill, optical size)
-- **Accessible** — targets WCAG 2.1 AA; full keyboard support and managed focus are in place everywhere, automated ARIA/contrast auditing is new and still finding real gaps (see [Accessibility](#accessibility))
+- **Accessible** — targets WCAG 2.1 AA; full keyboard support and managed focus, and an automated axe pass over every docs page that CI blocks on (see [Accessibility](#accessibility) for what it doesn't cover)
 - **Tree-shakeable for `button` and `icon`** — those two ship individual entry points; every other component currently comes in through the full bundle (see [Measured numbers](#measured-numbers))
 - **Light, dark, high-contrast, and dynamic themes** — MD3 tonal palettes with persistence; the [theme playground](docs/components/theme-playground.html) generates a dynamic palette from any source colour
 - **Cross-browser** — tested on Chromium, Firefox and WebKit
@@ -65,7 +65,7 @@ import "castrovalva/icon";
 ```
 
 ```html
-<link rel="stylesheet" href="dist/design-system.css" />
+<link rel="stylesheet" href="dist/css/styles.css" />
 
 <ds-button variant="filled">Save</ds-button>
 <ds-icon name="check"></ds-icon>
@@ -87,7 +87,7 @@ Token reference: [docs/tokens.md](docs/tokens.md) ·
 
 ```
 src/
-├── components/{name}/{name}.js   Web Components
+├── components/                   Web Components ({name}/{name}.js; some older ones flat)
 ├── tokens/palette.css            reference tonal palettes — the theme layer
 ├── tokens/tokens.css             role tokens, type, spacing, motion, shape
 ├── styles/                       reset, base, utilities
@@ -123,31 +123,34 @@ the parts that didn't go cleanly:
 ## Measured numbers
 
 Republished periodically, not aspirational — reproduce any of these with the
-command shown.
+command shown. Last measured 23 September 2026.
 
 | Metric | Result | Reproduce |
 | --- | --- | --- |
-| Unit tests | 2,077 passing, Chromium | `npm test` |
+| Unit tests | 2,107 passing, Chromium | `npm test` |
 | Coverage | 92.2% statements | `npm test` (prints a summary; full report in `coverage/`) |
-| Cross-browser | Chromium 2,077/2,077 · WebKit 2,011/2,011 · Firefox 1,999/2,011 (12 failing, all `ds-slider` pointer-drag simulation — tracked in [DEFECTS.md](docs/DEFECTS.md), not yet confirmed as a real Firefox bug vs. a test-harness quirk) | `npm run test:all` |
-| Bundle — full library | 604 KB raw / 97 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
+| Cross-browser | Chromium 2,107/2,107 · WebKit 2,041/2,041 · Firefox 2,029/2,041 (12 failing, all `ds-slider` pointer-drag simulation — tracked in [DEFECTS.md](docs/DEFECTS.md), not yet confirmed as a real Firefox bug vs. a test-harness quirk) | `npm run test:all` |
+| Bundle — full library | 609 KB raw / 98 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
 | Bundle — `castrovalva/button` | 16.8 KB raw / 3.2 KB gzip | `npm run build` |
 | Bundle — `castrovalva/icon` | 6.6 KB raw / 2.0 KB gzip | `npm run build` |
-| Lighthouse, home page — mobile (simulated throttling, Lighthouse default) | Performance 71 · Accessibility 92 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/` |
-| Lighthouse, home page — desktop | Performance 98 · Accessibility 92 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/ --preset=desktop` |
-| Lighthouse, a component page (`button.html`) — mobile | Performance 70 · Accessibility 98 · Best Practices 100 · SEO 90 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/docs/components/button.html` |
+| Lighthouse, home page — mobile (simulated throttling, Lighthouse default) | Performance 98 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/` |
+| Lighthouse, home page — desktop | Performance 100 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/ --preset=desktop` |
+| Lighthouse, a component page (`button.html`) — mobile | Performance 69 · Accessibility 98 · Best Practices 100 · SEO 90 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/docs/components/button.html` |
 
-Two things this table intentionally doesn't smooth over:
+Three things this table intentionally doesn't smooth over:
 
 - Only `button` and `icon` currently have individual build entries
   (`vite.config.js`) and matching `package.json` exports. Every other
   component ships through the full bundle only — the "tree-shakeable" claim
   is accurate for two components out of 43, not all of them.
-- The home page's Lighthouse accessibility score (92, not 100) is real and
-  traces to the same `aria-progressbar-name`/`aria-toggle-field-name` bugs
-  the [accessibility harness](test/accessibility/) already found and logged
-  per-component in [DEFECTS.md](docs/DEFECTS.md) — two independent tools
-  agreeing is a reason for more confidence in the finding, not less.
+- The home page's Lighthouse accessibility score was 92 when this table was
+  first published, tracing to the same `aria-progressbar-name` /
+  `aria-toggle-field-name` bugs the [accessibility harness](test/accessibility/)
+  had found independently. Fixing those for the harness took the Lighthouse
+  score to 100 too — two tools agreeing on the problem, then on the fix.
+- Lighthouse performance on simulated mobile varies a lot between runs (the
+  home page scored 71 on the first published run, 98 on the latest). Treat
+  any single figure as a sample, not a constant.
 
 ## Browser support
 
@@ -162,12 +165,18 @@ are fully green; Firefox has 12 known failures under investigation.
 Every component targets WCAG 2.1 AA: semantic HTML, correct ARIA roles and
 labels, full keyboard navigation, managed focus with visible indicators, screen
 reader announcements, and disabled states that genuinely prevent interaction.
-That's the target, not yet the fully-verified state: an automated axe pass
-across all 51 demo pages (`npm run test:a11y`, added September 2026) found 38
-outstanding findings across 19 components — real ARIA/contrast bugs, not
-false positives — logged individually in [DEFECTS.md](docs/DEFECTS.md) rather
-than smoothed over here. See [what building that harness actually
+An automated axe pass (`npm run test:a11y`, added September 2026) covers all
+51 demo pages plus the home page and the composed example, in light and dark
+theme. Its first run found 45 of 102 checks failing — real ARIA/contrast bugs,
+not false positives. All of them are now fixed: 106/106 checks pass, and CI
+blocks on any regression. See [what building that harness actually
 found](docs/notes/accessibility-cost.md) for the longer version.
+
+Automated checks aren't the whole story: axe doesn't yet run against the
+high-contrast theme, and it can't judge interaction patterns — for example,
+the navigation bar and rail announce `role="tab"` without the arrow-key
+behaviour that role implies. Known gaps like these are tracked in
+[DEFECTS.md](docs/DEFECTS.md).
 
 Verify with `npm run test:a11y`.
 

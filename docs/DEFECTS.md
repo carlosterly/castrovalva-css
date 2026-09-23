@@ -48,12 +48,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### package build
 
-- **B (fixed)** — `package.json`'s `exports` map listed `"./input": "./dist/input.js"`, but no `input` component exists (the real component is `text-field`) and `vite.config.js` never had a build entry for it — `dist/input.js` was never generated, so that export always 404'd. Removed the entry rather than fabricate an entry point. Found while measuring bundle size for the roadmap's "publish real numbers" item.
 - **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~604 KB raw / ~97 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
-
-### source layout
-
-- **B** — CLAUDE.md documents `src/components/{name}/{name}.js` for every component, but 14 of them (badge, card, chip, dialog, fab, menu, progress-indicator, radio, slider, snackbar, switch, tabs, textarea, tooltip) actually live flat at `src/components/ds-{name}.js`; their `{name}/` directory holds only the stub README. Everything still imports and works — `src/index.js` points at the real paths — so this is a documentation/reality mismatch, not a functional bug. Found while looking up component source while building the composed settings-page demo.
 
 ### card
 
@@ -68,12 +63,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### dialog
 
-- **A (fixed)** — `:host` set `--ds-dialog-surface-color: #ffffff` unconditionally, short-circuiting the surface's own theme-aware fallback (`var(--ds-dialog-surface-color, var(--md-sys-color-surface-container-high, ...))`) so every dialog rendered on a hardcoded white background regardless of theme. Harmless-looking in light theme; in dark theme it made `on-surface` text (a light color, meant for dark backgrounds) low-contrast against that white surface; in the new high-contrast theme `on-surface` is pure white, making dialog titles and body text **completely invisible** against the same hardcoded white — a real, severe bug no one had seen because nothing had opened a dialog in high-contrast theme until the composed settings-page example did. Fixed by deleting the hardcoded default so the existing fallback chain (already correct) takes over; consumers can still override `--ds-dialog-surface-color` themselves, that capability wasn't removed. Verified: `dialog.test.js` (28/28) still passes, and the settings-page example's delete-confirmation dialog is now legible in all three themes.
 - **A** — Every dialog demo's `actions` slot (Cancel/Save/Delete/Confirm) is a native `<button>`, and the site-wide reset (`button { border: none; background: none; padding: 0; }` in `src/styles/reset.css`) strips them of all visual affordance — they render as bare unstyled text with no padding, background, or hover/pressed state, just the browser's default outline on Tab focus. `ds-dialog`'s `::slotted([slot="actions"])` rule only lays out the wrapper `<div>` (flex + gap), it never styles the buttons themselves. Same pattern in the composed `docs/examples/settings-page.html` delete-confirmation dialog, so this isn't a one-off demo mistake — every real usage of the actions slot looks unfinished. Found opening every dialog demo variant in both themes; independent of viewport.
-
-### form
-
-- **A** — axe `label` (critical): several `ds-text-field`/native inputs in the form demos have no accessible name (10 nodes, both themes).
 
 ### navigation-bar
 
@@ -93,7 +83,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### snackbar
 
-- **A** — At 360px viewport, a snackbar with an action (the "With Action" demo, message + "UNDO" + dismiss icon) renders ~376px wide against the 360px viewport, clipping the message on the left and the action/dismiss controls on the right (confirmed by measurement: inner box left=-8px, right=368px vs a 360px viewport). Not caught by the mechanical QA sweep because it's `position: fixed` content — it never registers in `document.documentElement.scrollWidth`, which is what the sweep's overflow check reads. Both themes; message-only and basic snackbars (no action) fit fine, so this only hits the action/dismissible variants.
+- **A** — At 360px viewport, a snackbar with an action (the "With Action" demo, message + "UNDO" + dismiss icon) renders ~376px wide against the 360px viewport, clipping the message on the left and the action/dismiss controls on the right (confirmed by measurement: inner box left=-8px, right=368px vs a 360px viewport). Not caught by the mechanical QA sweep because it's `position: fixed` content — it never registers in `document.documentElement.scrollWidth`, which is what the sweep's overflow check reads. Both themes. Re-measured 23 Sep 2026: this is not limited to the action/dismissible variants as first logged — the basic and message-only demos render the same `.snackbar` box at left=-8px, right=368px. Start from the `min-inline-size` rules (`--ds-snackbar-min-inline-size: 21.5rem` and the `max-inline-size: 600px` media query's `min-inline-size: 100%`) rather than the action slot.
 
 ### switch
 
@@ -113,7 +103,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### tooltip
 
-- **A** — `position="left"` and `position="right"` render overlapping the target instead of beside it, in both themes — a visitor would see the tooltip cover part of the button's own label. `top`/`bottom` are correctly offset; only the two horizontal positions are affected. Confirmed by measurement, not just a screenshot read: hovering `#tooltip-left-target` (button at x=778–806), the tooltip's rendered box lands at x=692–785 — overlapping ~13px into the button — even though the inline `left` style the component actually sets (676.8px) would, if honored, place it with a clean 8px gap outside the button. Something between `calculatePosition()`'s `left`/`right` branches (`ds-tooltip.js`) and the final rendered box introduces the offset; `top`/`bottom` use a different (centering) formula and aren't affected. Not caught by the QA sweep, which never opens a tooltip via hover/focus.
+- **A** — `position="left"` renders overlapping the target instead of beside it, in both themes — a visitor would see the tooltip cover part of the button's own label. `top`/`bottom` are correctly offset. `position="right"` no longer overlaps (re-measured 23 Sep 2026: target right edge x=1036, tooltip left edge x=1059), but its 23px gap is well off the intended 8px, so the horizontal branches are still wrong in both directions. Confirmed by measurement, not just a screenshot read: hovering `#tooltip-left-target` (button at x=778–806), the tooltip's rendered box lands at x=711–785 (re-measured 23 Sep 2026; originally x=692–785) — overlapping ~7px into the button — even though the inline `left` style the component actually sets (676.8px) would, if honored, place it with a clean 8px gap outside the button. Something between `calculatePosition()`'s `left`/`right` branches (`ds-tooltip.js`) and the final rendered box introduces the offset; `top`/`bottom` use a different (centering) formula and aren't affected. Not caught by the QA sweep, which never opens a tooltip via hover/focus.
 
 ## First-pass screenshot review — done, all findings actioned
 
@@ -237,15 +227,19 @@ outside `.content-area` by design, so the sweep sees "no component on page".
 `tooltip` — `ds-tooltip` is 0×0 at rest, which is correct for a hover/focus
 tooltip.
 
-### Still needs a human pass
+### Beyond the sweep — human and interaction passes
 
-The sweep only covers mechanical checks. Not covered — this is where most
-remaining findings will come from, reviewing the contact sheet
-(`_qa-out/index.html`, not committed):
+The sweep only covers mechanical checks. What it can't judge has since been
+covered by the passes below (Sep 2026); their open findings are in
+[Open defects](#open-defects) above.
 
-- MD3 visual fidelity — elevation, corner radius, state-layer opacity, type scale
-- Interactive states — hover, focus-visible, pressed, disabled
-- Component behaviour — focus trapping, carousel advance, menu positioning, …
+- MD3 visual fidelity — elevation, corner radius, state-layer opacity, type
+  scale: the first-pass screenshot review, the programmatic type-scale/sizing
+  check against the MD3 spec, and the Tier-1/Tier-2 manual pass.
+- Interactive states — hover, focus-visible, pressed: pixel-diffed across all
+  demo pages in the Tier-1/Tier-2 manual pass.
+- Component behaviour — `scripts/qa-overlays.mjs` opens menu, dialog, tooltip
+  and snackbar.
 
 The 200 screenshots are not committed; regenerate with `node scripts/qa-sweep.mjs`.
 
@@ -453,6 +447,6 @@ checks pass (102 + 4 new). Full suite (2107 tests) and lint still pass.
 Not component defects, but things that limit what QA can catch. Delete each when
 resolved.
 
-- **No visual regression.** Nothing catches a CSS change that breaks an unrelated component. Scheduled for Q3.
-- **No responsive testing.** No automated check at any viewport. Covered manually by the QA workstream.
-- **The axe harness doesn't test high-contrast.** `test/accessibility/demo-pages.spec.js` only runs `{light, dark}` — added before the theme existed and never extended. Real consequence, not theoretical: the `ds-dialog` hardcoded-white-surface bug (see the `dialog` entry above) made dialog text completely illegible in high-contrast, and the harness would have caught it immediately if it covered that theme. Extending the `for (const theme of [...])` loop to include `"high-contrast"` is a small change (153 more checks); do it alongside the next `test:a11y` pass rather than as its own task.
+- **No visual regression.** Nothing catches a CSS change that breaks an unrelated component. Next on the roadmap (Q3 item).
+- **Responsive testing isn't in CI.** `scripts/qa-sweep.mjs` checks horizontal overflow at 360px and 1280px, but it is run by hand, not by CI, and it can't see `position: fixed` content (that is how the `snackbar` overflow above slipped past it).
+- **The axe harness doesn't test high-contrast.** `test/accessibility/demo-pages.spec.js` only runs `{light, dark}` — added before the theme existed and never extended. Real consequence, not theoretical: the since-fixed `ds-dialog` hardcoded-white-surface bug (written up under the composed example in [ROADMAP.md](./ROADMAP.md)) made dialog text completely illegible in high-contrast, and the harness would have caught it immediately if it covered that theme. Extending the `for (const theme of [...])` loop to include `"high-contrast"` is a small change (53 more checks — 51 demo pages plus the 2 extra pages); do it alongside the next `test:a11y` pass rather than as its own task.

@@ -57,17 +57,20 @@ these notes. Frameworks earn their weight:
   package that ripples through 43 components on someone else's schedule.
   (Lit shows up in `package-lock.json` — but only as a transitive dependency
   of a *test* tool. Nothing shipped imports it.)
-- **Tree-shaking that's actually granular.** `vite.config.js` defines a
-  build entry per component, so `import "castrovalva/button"` pulls in
-  17 KB raw / 3.2 KB gzipped — just the button and what it needs — instead
-  of the whole library. Importing everything (`import "castrovalva"`) is
-  honestly heavier: ~604 KB raw / ~97 KB gzipped for all 43 components plus
+- **Tree-shaking that can be granular.** A component with its own
+  `vite.config.js` build entry ships on its own: `import "castrovalva/button"`
+  pulls in 17 KB raw / 3.2 KB gzipped — just the button and what it needs —
+  instead of the whole library. Only `button` and `icon` have that entry so
+  far; the other 41 components currently come in through the full bundle.
+  Importing everything (`import "castrovalva"`) is
+  honestly heavier: ~609 KB raw / ~98 KB gzipped for all 43 components plus
   the full icon set, a number this project hadn't actually measured until
   writing this note turned up how stale the "~11 KB gzipped" figure on the
   home page and in the README had become. That's the kind of drift that
   happens when a number gets written down once, early, and never
-  re-measured as the library grows — fixing it is on the roadmap, and this
-  note is what surfaced it.
+  re-measured as the library grows. This note is what surfaced it; the
+  README's "Measured numbers" table now carries the real figure, with the
+  command to reproduce it.
 - **Real encapsulation.** Shadow DOM means a component's internal markup and
   styles can't leak into the page, and the page's styles mostly can't leak
   in either — see the next note for the one deliberate exception that makes

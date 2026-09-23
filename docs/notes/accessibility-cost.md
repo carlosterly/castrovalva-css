@@ -84,17 +84,26 @@ have caught it. The harness doesn't make the library accessible. It's the
 thing that makes it possible to find out it wasn't, which turns out to be
 the harder and more valuable half of the problem.
 
-## What's still open
+## How the backlog closed
 
-38 findings across 19 components are logged individually in
+The 38 per-component findings were logged individually in
 [DEFECTS.md](../DEFECTS.md), not fixed in the same pass that found them —
 fixing component internals and re-running each component's own test suite
 is a different, larger piece of work than building the tool that found the
-problem. The CI step that runs this harness is currently non-blocking for
-the same reason: making it blocking before the backlog is clear would just
-mean turning off a check that's telling the truth. Two likely shared root
-causes span most of those 19 components — the label-to-control wiring gap
-behind the `radio`/`switch`/`text-field`/`textarea` failures, and the nested-
-interactive markup pattern behind `checkbox`/`chip`/`form` — so the real
-number of underlying bugs is probably smaller than 38, but that's still a
-claim to verify, not assume.
+problem. The CI step ran non-blocking until then, because making it blocking
+before the backlog was clear would just have meant turning off a check that
+was telling the truth.
+
+The guess at the time was that two shared root causes — the label-to-control
+wiring gap behind `radio`/`switch`/`text-field`/`textarea`, and the
+nested-interactive markup behind `checkbox`/`chip`/`form` — would account for
+most of the 38. That held up only partly. Those two clusters cleared 14
+checks; three more clusters (unreachable scroll regions, `role="tab"` with no
+`tablist` parent, and a tail of unrelated one-offs) accounted for the other
+24. Five fixes by root cause rather than 38 by symptom — but five, not two.
+
+As of 22 September 2026 all 102 checks pass, plus 4 more from extending the
+harness to the home page and the composed example (106/106), and the CI step
+is blocking. The harness still doesn't run against the high-contrast theme,
+and axe can't judge interaction patterns — both gaps are tracked in
+DEFECTS.md.

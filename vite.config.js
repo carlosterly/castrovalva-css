@@ -29,9 +29,6 @@ export default defineConfig({
 
         // CSS file naming
         assetFileNames: (assetInfo) => {
-          if (assetInfo.name === "style.css") {
-            return "design-system.css";
-          }
           if (assetInfo.name.endsWith(".css")) {
             return "css/[name][extname]";
           }
