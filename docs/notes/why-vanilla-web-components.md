@@ -63,7 +63,7 @@ these notes. Frameworks earn their weight:
   instead of the whole library. Only `button` and `icon` have that entry so
   far; the other 41 components currently come in through the full bundle.
   Importing everything (`import "castrovalva"`) is
-  honestly heavier: ~609 KB raw / ~98 KB gzipped for all 43 components plus
+  honestly heavier: ~609 KB raw / ~99 KB gzipped for all 43 components plus
   the full icon set, a number this project hadn't actually measured until
   writing this note turned up how stale the "~11 KB gzipped" figure on the
   home page and in the README had become. That's the kind of drift that

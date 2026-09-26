@@ -48,14 +48,14 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### package build
 
-- **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~604 KB raw / ~97 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
+- **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~609 KB raw / ~99 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
 
 ### card
 
 - **B** — The `elevated` variant's hover feedback (box-shadow level1→level2) is invisible in dark theme. The rest-state background already compensates for shadows being imperceptible on dark backgrounds (`background-color: var(--md-sys-color-surface-container-low)`, per the comment at `ds-card.js:130`), but the `:hover` rule at `ds-card.js:138` only bumps the box-shadow — no matching tonal step-up — so hovering an elevated card in dark theme produces no visible feedback at all. Confirmed by pixel-diffing hover-vs-rest screenshots: 3.19% of pixels change in light theme, 0.00% in dark.
 
 ### chip
-- **B** — Hover and pressed state layers are invisible in dark theme. `ds-chip.js:266` sets `background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.08)` — but `--md-sys-color-on-surface-rgb` is never defined anywhere in `tokens.css` or `palette.css`, so the `rgba()` always resolves to the hardcoded fallback triple `29, 27, 32` (light theme's near-black on-surface), regardless of theme. In light theme that reads as a subtle dark tint (correct by coincidence); in dark theme it's a near-black overlay on an already near-black surface — invisible. Confirmed by pixel diff: light hover 14.34%, dark hover 0.00%; light pressed 14.56%, dark pressed 0.00% (focus, which uses a different, theme-correct rule, is unaffected: 3.32% in both themes). **Same root cause, same fix, in `radio` and `switch`** (see their entries below) — all three components use the identical undefined-token pattern; fix once and apply to all three. A related but distinct instance affects `ds-snackbar.js:372` (`--md-sys-color-inverse-primary-rgb`, also undefined) — not independently visually confirmed but the same class of bug.
+- **B** — Hover and pressed state layers are invisible in dark theme. `ds-chip.js:266` sets `background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.08)` — but `--md-sys-color-on-surface-rgb` is never defined anywhere in `tokens.css` or `palette.css`, so the `rgba()` always resolves to the hardcoded fallback triple `29, 27, 32` (light theme's near-black on-surface), regardless of theme. In light theme that reads as a subtle dark tint (correct by coincidence); in dark theme it's a near-black overlay on an already near-black surface — invisible. Confirmed by pixel diff: light hover 14.34%, dark hover 0.00%; light pressed 14.56%, dark pressed 0.00% (focus, which uses a different, theme-correct rule, is unaffected: 3.32% in both themes). **Same root cause, same fix, in `radio` and `switch`** (see their entries below) — all three components use the identical undefined-token pattern; fix once and apply to all three. A related but distinct instance affects the `.action-button` hover/focus/active rules in `ds-snackbar.js` (`--md-sys-color-inverse-primary-rgb`, also undefined) — not independently visually confirmed but the same class of bug.
 
 ### data-table
 
@@ -63,7 +63,15 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ### dialog
 
-- **A** — Every dialog demo's `actions` slot (Cancel/Save/Delete/Confirm) is a native `<button>`, and the site-wide reset (`button { border: none; background: none; padding: 0; }` in `src/styles/reset.css`) strips them of all visual affordance — they render as bare unstyled text with no padding, background, or hover/pressed state, just the browser's default outline on Tab focus. `ds-dialog`'s `::slotted([slot="actions"])` rule only lays out the wrapper `<div>` (flex + gap), it never styles the buttons themselves. Same pattern in the composed `docs/examples/settings-page.html` delete-confirmation dialog, so this isn't a one-off demo mistake — every real usage of the actions slot looks unfinished. Found opening every dialog demo variant in both themes; independent of viewport.
+- **B** — No scrim. `ds-dialog.js` sets `dialog::backdrop { background-color: transparent; }`, so a modal dialog leaves the page behind it at full brightness, in every theme. MD3 specifies a scrim (`--md-sys-color-scrim` at 32% opacity) behind modal dialogs, and the modal bottom sheet does dim the page — so the two overlays are also inconsistent with each other. Found while verifying the action-button fix (26 Sep 2026).
+
+### menu
+
+- **B** — The flip-above / align-right collision logic in `positionMenu()` never has real dimensions to work with. `open()` calls `positionMenu()` *before* setting `display: block`, so `container.getBoundingClientRect()` measures a `display: none` element (0×0): "not enough space below" and "not enough space right" are never true, and a menu opened near the bottom or right edge of the viewport overflows instead of flipping. The final viewport clamp uses the same zero size, so it doesn't catch it either. Not visible on the demo page, whose triggers sit mid-page. Found while fixing the fixed-position containing-block offset (26 Sep 2026). Fix: show the container (it's still `opacity: 0`) before measuring.
+
+### bottom-sheet
+
+- **B** — On desktop the sheet sits against the left edge instead of centred: at 1280px the standard sheet spans x≈15–655 rather than centring its 640px width, which MD3 specifies for bottom sheets on wide screens. Found in the dialog/sheet action-button verification screenshots (26 Sep 2026).
 
 ### navigation-bar
 
@@ -77,13 +85,13 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — Hover/pressed state-layer ripple is essentially imperceptible in dark theme — same undefined-`--md-sys-color-on-surface-rgb`-token bug as `chip` (`ds-radio.js:326`), see that entry for the root cause. Pixel diff: light hover 11.87% / pressed 12.01%, dark hover 0.09% / pressed 0.12% (noise-level).
 
+### search
+
+- **B** — `DSSearch > Keyboard > navigates down with ArrowDown` / `navigates up with ArrowUp` fail intermittently on WebKit only — 1–2 failures on most isolated runs (`npx wtr --config web-test-runner.full.config.js --files test/search.test.js`), sometimes passing in a full `npm run test:all`. Reproduces on the committed code, so it predates the 26 Sep fixes. Both tests wait a fixed `setTimeout(10)` after dispatching the keydown instead of awaiting the update — the arbitrary-timeout pattern CLAUDE.md's testing practices rule out — which is the likely source of the timing sensitivity. Not yet confirmed whether it's only the test or a real WebKit keyboard bug.
+
 ### slider
 
 - **B** — 12 unit tests fail on Firefox only (`npm run test:all`), all pointer-drag interaction/event tests (`should emit input/change event on pointer interaction`, `should update value when dragged`, `should snap values to step`, …). Chromium and WebKit pass all of them. Not yet root-caused — could be a real Firefox pointer-event handling difference in the component, or a Playwright synthetic-pointer-event quirk specific to Firefox's test harness rather than a user-facing bug. Needs someone to actually drag a slider in real Firefox before concluding either way.
-
-### snackbar
-
-- **A** — At 360px viewport, a snackbar with an action (the "With Action" demo, message + "UNDO" + dismiss icon) renders ~376px wide against the 360px viewport, clipping the message on the left and the action/dismiss controls on the right (confirmed by measurement: inner box left=-8px, right=368px vs a 360px viewport). Not caught by the mechanical QA sweep because it's `position: fixed` content — it never registers in `document.documentElement.scrollWidth`, which is what the sweep's overflow check reads. Both themes. Re-measured 23 Sep 2026: this is not limited to the action/dismissible variants as first logged — the basic and message-only demos render the same `.snackbar` box at left=-8px, right=368px. Start from the `min-inline-size` rules (`--ds-snackbar-min-inline-size: 21.5rem` and the `max-inline-size: 600px` media query's `min-inline-size: 100%`) rather than the action slot.
 
 ### switch
 
@@ -100,10 +108,6 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 ### textarea
 
 - **B** — `ds-textarea` has no `:hover` styling at all (grepped the whole component source — zero matches), so hovering the field produces no feedback in either theme. `ds-text-field`, the sibling component, implements this correctly (`.text-field.filled:hover::after` / `.text-field.outlined:hover`) — worth copying that pattern rather than reinventing it. Confirmed by pixel-diffing rest-vs-hover screenshots (0.00% in both themes) and by reading the source.
-
-### tooltip
-
-- **A** — `position="left"` renders overlapping the target instead of beside it, in both themes — a visitor would see the tooltip cover part of the button's own label. `top`/`bottom` are correctly offset. `position="right"` no longer overlaps (re-measured 23 Sep 2026: target right edge x=1036, tooltip left edge x=1059), but its 23px gap is well off the intended 8px, so the horizontal branches are still wrong in both directions. Confirmed by measurement, not just a screenshot read: hovering `#tooltip-left-target` (button at x=778–806), the tooltip's rendered box lands at x=711–785 (re-measured 23 Sep 2026; originally x=692–785) — overlapping ~7px into the button — even though the inline `left` style the component actually sets (676.8px) would, if honored, place it with a clean 8px gap outside the button. Something between `calculatePosition()`'s `left`/`right` branches (`ds-tooltip.js`) and the final rendered box introduces the offset; `top`/`bottom` use a different (centering) formula and aren't affected. Not caught by the QA sweep, which never opens a tooltip via hover/focus.
 
 ## First-pass screenshot review — done, all findings actioned
 
@@ -448,5 +452,5 @@ Not component defects, but things that limit what QA can catch. Delete each when
 resolved.
 
 - **No visual regression.** Nothing catches a CSS change that breaks an unrelated component. Next on the roadmap (Q3 item).
-- **Responsive testing isn't in CI.** `scripts/qa-sweep.mjs` checks horizontal overflow at 360px and 1280px, but it is run by hand, not by CI, and it can't see `position: fixed` content (that is how the `snackbar` overflow above slipped past it).
+- **Responsive testing isn't in CI.** `scripts/qa-sweep.mjs` checks horizontal overflow at 360px and 1280px, but it is run by hand, not by CI, and it can't see `position: fixed` content (that is how the since-fixed `snackbar` 360px overflow slipped past it).
 - **The axe harness doesn't test high-contrast.** `test/accessibility/demo-pages.spec.js` only runs `{light, dark}` — added before the theme existed and never extended. Real consequence, not theoretical: the since-fixed `ds-dialog` hardcoded-white-surface bug (written up under the composed example in [ROADMAP.md](./ROADMAP.md)) made dialog text completely illegible in high-contrast, and the harness would have caught it immediately if it covered that theme. Extending the `for (const theme of [...])` loop to include `"high-contrast"` is a small change (53 more checks — 51 demo pages plus the 2 extra pages); do it alongside the next `test:a11y` pass rather than as its own task.

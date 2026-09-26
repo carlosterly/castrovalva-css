@@ -2,6 +2,8 @@
  * Material Design 3 Menu Web Component
  * Implements MD3 specifications for dropdown and context menus
  */
+import { placeFixed } from "../utils/fixed-position.js";
+
 export class DSMenu extends HTMLElement {
   constructor() {
     super();
@@ -217,8 +219,7 @@ export class DSMenu extends HTMLElement {
     top = Math.max(8, Math.min(top, viewportHeight - menuRect.height - 8));
     left = Math.max(8, Math.min(left, viewportWidth - menuRect.width - 8));
 
-    container.style.top = `${top}px`;
-    container.style.left = `${left}px`;
+    placeFixed(container, left, top);
   }
 
   /**

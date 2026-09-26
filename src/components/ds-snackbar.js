@@ -312,15 +312,19 @@ export class DSSnackbar extends HTMLElement {
           pointer-events: none;
           display: flex;
           justify-content: center;
-          padding-inline: var(--ds-snackbar-offset-inline);
-          padding-block: 0 var(--ds-snackbar-offset-block-end);
         }
 
+        /* The edge offset is a margin on .snackbar, not padding on :host:
+           page-level resets (\`* { padding: 0 }\`) beat :host rules and would
+           zero it, but they can't reach inside the shadow root. */
         .snackbar {
+          box-sizing: border-box;
           display: flex;
           align-items: center;
           gap: var(--ds-snackbar-gap);
-          min-inline-size: var(--ds-snackbar-min-inline-size);
+          margin-inline: var(--ds-snackbar-offset-inline);
+          margin-block-end: var(--ds-snackbar-offset-block-end);
+          min-inline-size: min(var(--ds-snackbar-min-inline-size), 100%);
           max-inline-size: var(--ds-snackbar-max-inline-size);
           min-block-size: var(--ds-snackbar-min-block-size);
           padding-inline: var(--ds-snackbar-padding-inline);
@@ -425,14 +429,15 @@ export class DSSnackbar extends HTMLElement {
           border-width: 0;
         }
 
-        @media (max-inline-size: 600px) {
+        @media (max-width: 600px) {
           :host {
-            padding-inline: var(--ds-space-2);
-            padding-block: 0 var(--ds-space-2);
+            --ds-snackbar-offset-inline: var(--ds-space-2);
+            --ds-snackbar-offset-block-end: var(--ds-space-2);
           }
 
           .snackbar {
-            min-inline-size: 100%;
+            flex: 1 1 auto;
+            min-inline-size: 0;
           }
         }
       </style>

@@ -426,7 +426,7 @@ export class DSSideSheet extends HTMLElement {
           padding: 0;
         }
 
-        @media (max-inline-size: 600px) {
+        @media (max-width: 600px) {
           :host {
             --ds-side-sheet-width: 100vw;
           }

@@ -5,7 +5,7 @@
 Material Design 3 implemented as vanilla Web Components. Zero runtime
 dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 
-**43 components** · **2,107 tests** · **92% coverage** · **98 KB gzipped (full library)**
+**43 components** · **2,114 tests** · **92% coverage** · **99 KB gzipped (full library)**
 
 <sub>Measured, not estimated — see [Measured numbers](#measured-numbers) for the breakdown and how to reproduce each figure.</sub>
 
@@ -123,14 +123,14 @@ the parts that didn't go cleanly:
 ## Measured numbers
 
 Republished periodically, not aspirational — reproduce any of these with the
-command shown. Last measured 23 September 2026.
+command shown. Last measured 26 September 2026 (Lighthouse rows: 23 September).
 
 | Metric | Result | Reproduce |
 | --- | --- | --- |
-| Unit tests | 2,107 passing, Chromium | `npm test` |
+| Unit tests | 2,114 passing, Chromium | `npm test` |
 | Coverage | 92.2% statements | `npm test` (prints a summary; full report in `coverage/`) |
-| Cross-browser | Chromium 2,107/2,107 · WebKit 2,041/2,041 · Firefox 2,029/2,041 (12 failing, all `ds-slider` pointer-drag simulation — tracked in [DEFECTS.md](docs/DEFECTS.md), not yet confirmed as a real Firefox bug vs. a test-harness quirk) | `npm run test:all` |
-| Bundle — full library | 609 KB raw / 98 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
+| Cross-browser | Chromium 2,114/2,114 · WebKit 2,047/2,048 · Firefox 2,036/2,048 (Firefox: 12 failing, all `ds-slider` pointer-drag simulation — tracked in [DEFECTS.md](docs/DEFECTS.md), not yet confirmed as a real Firefox bug vs. a test-harness quirk; WebKit: 1–2 intermittent `ds-search` arrow-key test failures that predate this measurement, also tracked there) | `npm run test:all` |
+| Bundle — full library | 609 KB raw / 99 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
 | Bundle — `castrovalva/button` | 16.8 KB raw / 3.2 KB gzip | `npm run build` |
 | Bundle — `castrovalva/icon` | 6.6 KB raw / 2.0 KB gzip | `npm run build` |
 | Lighthouse, home page — mobile (simulated throttling, Lighthouse default) | Performance 98 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/` |
@@ -157,8 +157,9 @@ Three things this table intentionally doesn't smooth over:
 Chrome/Edge 90+ · Firefox 88+ · Safari 14+ · Opera 76+
 
 Requires Custom Elements v1 and Shadow DOM v1. Backed by the cross-browser
-unit-test run in [Measured numbers](#measured-numbers) — Chromium and WebKit
-are fully green; Firefox has 12 known failures under investigation.
+unit-test run in [Measured numbers](#measured-numbers) — Chromium is fully green;
+WebKit has an intermittent `ds-search` test failure and Firefox 12 known
+failures, both under investigation.
 
 ## Accessibility
 

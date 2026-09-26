@@ -50,8 +50,8 @@
   &lt;/div&gt;
   &lt;p&gt;Supporting content goes here.&lt;/p&gt;
   &lt;div slot="actions"&gt;
-    &lt;button type="button"&gt;Cancel&lt;/button&gt;
-    &lt;button type="button"&gt;Confirm&lt;/button&gt;
+    &lt;ds-button variant="text"&gt;Cancel&lt;/ds-button&gt;
+    &lt;ds-button variant="text"&gt;Confirm&lt;/ds-button&gt;
   &lt;/div&gt;
 &lt;/ds-bottom-sheet&gt;</pre
             >
@@ -368,8 +368,8 @@ Event log:
       </div>
       <p>Supporting content goes here.</p>
       <div slot="actions">
-        <button type="button" id="sheet-standard-cancel">Cancel</button>
-        <button type="button" id="sheet-standard-confirm">Confirm</button>
+        <ds-button variant="text" id="sheet-standard-cancel">Cancel</ds-button>
+        <ds-button variant="text" id="sheet-standard-confirm">Confirm</ds-button>
       </div>
     </ds-bottom-sheet>
 
@@ -383,7 +383,7 @@ Event log:
       </div>
       <p>This sheet disables drag-to-dismiss with a custom threshold.</p>
       <div slot="actions">
-        <button type="button" id="sheet-configured-close">Close</button>
+        <ds-button variant="text" id="sheet-configured-close">Close</ds-button>
       </div>
     </ds-bottom-sheet>
 
@@ -393,7 +393,7 @@ Event log:
       </div>
       <p>Modal sheets require explicit close actions.</p>
       <div slot="actions">
-        <button type="button" id="sheet-modal-close">Close</button>
+        <ds-button variant="text" id="sheet-modal-close">Close</ds-button>
       </div>
     </ds-bottom-sheet>
 
@@ -410,7 +410,7 @@ Event log:
       </div>
       <p>Observe emitted lifecycle and drag events in the log.</p>
       <div slot="actions">
-        <button type="button" id="sheet-interactive-close">Close</button>
+        <ds-button variant="text" id="sheet-interactive-close">Close</ds-button>
       </div>
     </ds-bottom-sheet>
 

@@ -13,7 +13,7 @@ Vanilla Web Components implementing Material Design 3. Zero runtime
 dependencies, Shadow DOM, MD3 design tokens. Built with Vite, tested with
 `@web/test-runner` + Playwright.
 
-43 components (36/36 official MD3 plus enhancements and utilities), 2,107
+43 components (36/36 official MD3 plus enhancements and utilities), 2,114
 tests, ~92% coverage. The library is feature-complete; see the roadmap before
 proposing new components.
 
@@ -228,6 +228,23 @@ spec requires it.
 --ds-component-control-size: var(--ds-size-control-md);
 --ds-component-hit-area-size: var(--ds-size-hit-area);
 ```
+
+### CSS pitfalls that have shipped real bugs
+
+- **Media queries take `width`, never `inline-size`.** `@media (max-inline-size: 600px)`
+  is not a valid media feature — the browser drops the whole block silently.
+  Logical-property linters suggest this rewrite; ignore them inside `@media`
+  (logical sizes are fine in `@container`). Five components had dead mobile
+  layouts from exactly this.
+- **Don't put layout on `:host` that a page reset can undo.** Outer author
+  styles beat `:host` rules, and the site's reset sets `* { padding: 0; margin: 0 }`
+  — so `:host { padding: … }` never renders. Put spacing on an element inside
+  the shadow root instead (see `ds-snackbar`).
+- **Place `position: fixed` overlays with `placeFixed()`** from
+  `src/utils/fixed-position.js`, not by assigning `getBoundingClientRect()`
+  values to `left`/`top`. The site's `scrollbar-gutter: stable both-edges`
+  shifts the fixed containing block 15px right on Windows, and a transformed
+  ancestor does the same (tooltip and menu both shipped that offset).
 
 ### Focus ring
 

@@ -406,16 +406,12 @@ export class DSDialog extends HTMLElement {
           border-block-start: 1px solid var(--md-sys-color-outline-variant);
         }
 
-        .surface[data-variant="alert"] .actions {
-          flex-direction: row-reverse;
-        }
-
         ::slotted([slot="actions"]) {
           display: flex;
           gap: var(--ds-dialog-action-gap);
         }
 
-        @media (max-inline-size: 600px) {
+        @media (max-width: 600px) {
           .surface[data-variant="basic"],
           .surface[data-variant="alert"] {
             inline-size: calc(100% - 32px);

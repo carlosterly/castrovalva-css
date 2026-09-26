@@ -548,7 +548,7 @@ export class DSBottomSheet extends HTMLElement {
           padding: 0;
         }
 
-        @media (max-inline-size: 600px) {
+        @media (max-width: 600px) {
           [part="sheet"] {
             border-radius: var(--md-sys-shape-corner-large, 28px) var(--md-sys-shape-corner-large, 28px) 0 0;
             max-block-size: 100vh;

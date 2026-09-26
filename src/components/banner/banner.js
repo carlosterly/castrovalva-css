@@ -390,7 +390,7 @@ export class DSBanner extends HTMLElement {
         }
 
         /* Responsive - Stack on mobile */
-        @media (max-inline-size: 640px) {
+        @media (max-width: 640px) {
           .banner {
             flex-direction: column;
             gap: var(--ds-space-3);

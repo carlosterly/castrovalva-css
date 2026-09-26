@@ -2,6 +2,8 @@
  * Material Design 3 Tooltip Component
  * Brief floating labels that provide descriptions on hover/focus
  */
+import { placeFixed } from "../utils/fixed-position.js";
+
 export class DSTooltip extends HTMLElement {
   static _instanceCount = 0;
 
@@ -379,8 +381,7 @@ export class DSTooltip extends HTMLElement {
       left = positions.left;
     }
 
-    tooltip.style.top = `${top}px`;
-    tooltip.style.left = `${left}px`;
+    placeFixed(tooltip, left, top);
     tooltip.setAttribute("data-position", position);
   }
 

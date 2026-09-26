@@ -3,6 +3,8 @@
  * Provides positioning, hover intent, and open/close orchestration.
  * Supports hierarchical submenus with breadcrumb navigation and smart positioning.
  */
+import { placeFixed } from "../utils/fixed-position.js";
+
 export class DSAdvancedMenu extends HTMLElement {
   static get observedAttributes() {
     return ["open", "variant", "placement", "offset", "hover-open"];
@@ -751,6 +753,7 @@ export class DSAdvancedMenu extends HTMLElement {
         z-index: 1001;
         animation: submenu-slide-in 150ms ease-out;
       `;
+      placeFixed(submenu, left, submenuTop);
     }
   }
 
