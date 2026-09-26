@@ -120,9 +120,35 @@ Delivered:
 
 | Work | Est. |
 | --- | --- |
-| Visual regression tests (Playwright screenshots) — run **after** the QA workstream completes, so the baselines capture a fixed state rather than an unstable one. | 10h |
+| Visual regression tests (Playwright screenshots) — run **after** the QA workstream completes, so the baselines capture a fixed state rather than an unstable one. **Unblocked (26 Sep 2026); waiting on the two decisions below.** | 10h |
 
 **Minimum viable stop:** the theme playground alone justifies the quarter.
+
+**Visual regression — open decisions (raised 26 Sep 2026, owner to decide):**
+
+1. **Where baselines are generated and checked.** Screenshots only compare
+   reliably on the same OS — Windows and Linux render fonts differently, so
+   baselines made locally would fail in CI.
+   - *A (recommended):* generate on Linux (in CI or a Linux Docker container),
+     CI blocks on diffs. Standard, catches regressions on every push;
+     updating a baseline becomes a deliberate step.
+   - *B:* generate and check on the local machine only. Simpler, but nothing
+     checks automatically.
+2. **The 15px undimmed scrim strip** on bottom-sheet, side-sheet and
+   navigation-drawer (see [DEFECTS.md](./DEFECTS.md)) — fix before
+   baselining, or let the first baselines record it.
+   - *C (recommended):* extend those three scrims past their containing
+     block (e.g. `inset-inline: -32px`) so they cover the gutter. Local to
+     three components; the page-wide `scrollbar-gutter` rule stays.
+   - Change `scrollbar-gutter: stable both-edges` to `stable` page-wide —
+     fixes it, but content shifts ~7px whenever a dialog locks scrolling.
+   - Leave it and let the baselines capture it.
+
+**Proposed scope once decided:** every demo page, the home page and the
+settings example at 360px and 1280px × light, dark and high-contrast, plus
+one open-state shot per overlay (reusing the overlay checks from the A/B
+defect work). Animations disabled; the home page's live "running right now"
+panel masked, so diffs don't flicker.
 
 > The standalone token explorer has been merged into the theme playground. A
 > playground that shows token values as you edit them is the same build and the
@@ -169,7 +195,7 @@ work, not a reason to have skipped it. What's left, still in risk order:
 
 1. **Component QA manual passes** — done.
 2. **Axe findings, then the docs-site accessibility audit** — done, 106/106 as of 22 Sep 2026.
-3. **Visual regression** — **next.** The axe backlog, the visible A-severity defects and the visual B-severity defects are all cleared (26 Sep 2026), so baselines now capture a fixed state. One known visual imperfection will be in them: the 15px undimmed scrim strip on full-screen overlays (a page-wide `scrollbar-gutter` decision — see DEFECTS.md). The one remaining A, `text-field` form association, is behavioural and doesn't affect screenshots.
+3. **Visual regression** — **next, pending two decisions** (see "Visual regression — open decisions" under Q3). The axe backlog, the visible A-severity defects and the visual B-severity defects are all cleared (26 Sep 2026), so baselines now capture a fixed state — apart from the 15px scrim strip, depending on how decision 2 goes. The one remaining A, `text-field` form association, is behavioural and doesn't affect screenshots.
 
 **Dependency refresh** carries its own separate risk (breaking upgrades) independent of this ordering — treat it on its own merits when it comes up, not by this list's position.
 
