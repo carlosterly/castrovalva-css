@@ -502,7 +502,7 @@ export class DSFab extends HTMLElement {
           bottom: var(--ds-fab-action-offset, 72px);
           left: 0;
           flex-direction: column;
-          gap: 16px;
+          gap: var(--ds-fab-action-gap, 16px);
           z-index: 6;
         }
 
@@ -555,10 +555,10 @@ export class DSFab extends HTMLElement {
           display: flex;
           align-items: center;
           justify-content: center;
-          width: 40px;
-          height: 40px;
-          min-width: 40px;
-          min-height: 40px;
+          width: var(--ds-fab-action-size, 40px);
+          height: var(--ds-fab-action-size, 40px);
+          min-width: var(--ds-fab-action-size, 40px);
+          min-height: var(--ds-fab-action-size, 40px);
           background: var(--md-sys-color-surface-container-high);
           color: var(--md-sys-color-primary);
           border: none;

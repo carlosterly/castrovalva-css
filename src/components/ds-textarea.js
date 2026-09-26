@@ -196,7 +196,7 @@ export class DSTextarea extends HTMLElement {
       <style>
         :host {
           display: block;
-          width: 100%;
+          width: var(--ds-textarea-width, 100%);
         }
 
         .textarea-container {
@@ -351,6 +351,7 @@ export class DSTextarea extends HTMLElement {
            data-variant="${variant}">
         ${label ? `<label class="label">${label}</label>` : ""}
         <textarea
+          part="textarea"
           ${disabled ? "disabled" : ""}
           ${this._maxlength ? `maxlength="${this._maxlength}"` : ""}
           rows="${this._rows}"

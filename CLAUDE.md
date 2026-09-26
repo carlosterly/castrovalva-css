@@ -300,6 +300,7 @@ npm test                       # all tests, Chromium only
 npm run test:all               # all tests, Chromium + Firefox + WebKit
 npm run test:a11y              # axe accessibility pass
 npm run lint                   # ESLint - must exit 0
+npm run check:docs             # documented CSS props/events/parts exist in src/
 ```
 
 `web-test-runner.config.js` is the default (Chromium, honours CLI file
@@ -403,7 +404,7 @@ When the pattern is unclear, copy the structure from:
 - [ ] Stub README linking to the demo page
 - [ ] Registered in `src/index.js` (import **and** export)
 - [ ] Card added to `index.html`
-- [ ] `npm run lint` exits 0
+- [ ] `npm run lint` and `npm run check:docs` exit 0
 - [ ] No console errors in the browser
 - [ ] Responsive on mobile
 - [ ] Works in light, dark, and high-contrast themes

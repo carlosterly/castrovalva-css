@@ -50,6 +50,7 @@ from `src/` directly, so edits hot-reload without a build.
 | `npm run test:all` | All tests across Chromium, Firefox and WebKit |
 | `npm run test:a11y` | Accessibility pass (axe + Playwright) |
 | `npm run lint` | ESLint |
+| `npm run check:docs` | Verify every CSS property, event and part the demo pages document exists in `src/` |
 | `npm run build` | Production build to `dist/` |
 | `npm run preview` | Serve the production build on port 8080 |
 

@@ -650,6 +650,7 @@ export class DSAdvancedMenu extends HTMLElement {
     if (!breadcrumbEl && breadcrumb && breadcrumb.length > 0) {
       breadcrumbEl = document.createElement("div");
       breadcrumbEl.className = "menu-breadcrumb";
+      breadcrumbEl.setAttribute("part", "breadcrumb");
       this._panel?.insertBefore(breadcrumbEl, this._panel.firstChild);
     }
 
@@ -960,9 +961,9 @@ export class DSAdvancedMenu extends HTMLElement {
           }
         }
       </style>
-      <div class="menu-backdrop"></div>
+      <div class="menu-backdrop" part="backdrop"></div>
       <slot name="trigger"></slot>
-      <div class="menu-panel" role="menu" aria-hidden="true" data-variant="${this._variant}" data-placement="${this._placement}">
+      <div class="menu-panel" part="panel" role="menu" aria-hidden="true" data-variant="${this._variant}" data-placement="${this._placement}">
         <slot name="menu"></slot>
       </div>
     `;

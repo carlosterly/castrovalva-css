@@ -35,6 +35,7 @@
     "test:all": "web-test-runner --node-resolve --config web-test-runner.full.config.js",
     "test:a11y": "playwright test test/accessibility",
     "lint": "eslint src/**/*.js",
+    "check:docs": "node scripts/check-api-docs.mjs",
     "lint:fix": "eslint src/**/*.js --fix"
   },
   "keywords": [

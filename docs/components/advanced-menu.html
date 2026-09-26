@@ -935,19 +935,16 @@
                 <td>Scrim overlay for dismissal</td>
               </tr>
               <tr>
-                <td><code>submenu</code></td>
-                <td>Nested submenu container</td>
-              </tr>
-              <tr>
                 <td><code>breadcrumb</code></td>
-                <td>Breadcrumb navigation display</td>
-              </tr>
-              <tr>
-                <td><code>back-button</code></td>
-                <td>Auto-generated back button in submenu</td>
+                <td>Breadcrumb navigation display (present once a submenu is open)</td>
               </tr>
             </tbody>
           </table>
+          <p>
+            Submenus and their auto-generated back button are your own slotted
+            elements, not shadow parts, so style them with ordinary selectors —
+            the back button carries a <code>data-back</code> attribute.
+          </p>
 
           <h3>CSS Custom Properties</h3>
           <table class="api-table">
