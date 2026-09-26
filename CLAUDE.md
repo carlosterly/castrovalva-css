@@ -240,6 +240,12 @@ spec requires it.
   styles beat `:host` rules, and the site's reset sets `* { padding: 0; margin: 0 }`
   — so `:host { padding: … }` never renders. Put spacing on an element inside
   the shadow root instead (see `ds-snackbar`).
+- **There are no `--md-sys-color-*-rgb` tokens.** `rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.08)`
+  always uses its hardcoded light-theme fallback, so it breaks in dark and
+  high-contrast. Build state layers as
+  `color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent)`
+  — the opacity tokens double in high-contrast. Chip, radio, switch and
+  snackbar all shipped the `-rgb` version.
 - **Place `position: fixed` overlays with `placeFixed()`** from
   `src/utils/fixed-position.js`, not by assigning `getBoundingClientRect()`
   values to `left`/`top`. The site's `scrollbar-gutter: stable both-edges`

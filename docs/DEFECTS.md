@@ -50,28 +50,13 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~609 KB raw / ~99 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
 
-### card
-
-- **B** — The `elevated` variant's hover feedback (box-shadow level1→level2) is invisible in dark theme. The rest-state background already compensates for shadows being imperceptible on dark backgrounds (`background-color: var(--md-sys-color-surface-container-low)`, per the comment at `ds-card.js:130`), but the `:hover` rule at `ds-card.js:138` only bumps the box-shadow — no matching tonal step-up — so hovering an elevated card in dark theme produces no visible feedback at all. Confirmed by pixel-diffing hover-vs-rest screenshots: 3.19% of pixels change in light theme, 0.00% in dark.
-
-### chip
-- **B** — Hover and pressed state layers are invisible in dark theme. `ds-chip.js:266` sets `background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.08)` — but `--md-sys-color-on-surface-rgb` is never defined anywhere in `tokens.css` or `palette.css`, so the `rgba()` always resolves to the hardcoded fallback triple `29, 27, 32` (light theme's near-black on-surface), regardless of theme. In light theme that reads as a subtle dark tint (correct by coincidence); in dark theme it's a near-black overlay on an already near-black surface — invisible. Confirmed by pixel diff: light hover 14.34%, dark hover 0.00%; light pressed 14.56%, dark pressed 0.00% (focus, which uses a different, theme-correct rule, is unaffected: 3.32% in both themes). **Same root cause, same fix, in `radio` and `switch`** (see their entries below) — all three components use the identical undefined-token pattern; fix once and apply to all three. A related but distinct instance affects the `.action-button` hover/focus/active rules in `ds-snackbar.js` (`--md-sys-color-inverse-primary-rgb`, also undefined) — not independently visually confirmed but the same class of bug.
-
-### data-table
-
-- **B** — Row hover feedback is barely perceptible in dark theme. `data-table.js:556` sets `tbody tr:hover { background: var(--md-sys-color-surface-container); }`, which is theme-aware (not hardcoded), but in dark theme `--md-sys-color-surface` (neutral10) and `--md-sys-color-surface-container` (neutral12) sit only 2 tonal steps apart — a much smaller jump than light theme's surface (neutral99) to surface-container (neutral94), 5 steps. Confirmed by pixel diff: light hover 10.37%, dark hover 0.00% (measured against the table's own background, not a specific row — the effect is table-wide since every row shares the same surface/surface-container pairing).
-
-### dialog
-
-- **B** — No scrim. `ds-dialog.js` sets `dialog::backdrop { background-color: transparent; }`, so a modal dialog leaves the page behind it at full brightness, in every theme. MD3 specifies a scrim (`--md-sys-color-scrim` at 32% opacity) behind modal dialogs, and the modal bottom sheet does dim the page — so the two overlays are also inconsistent with each other. Found while verifying the action-button fix (26 Sep 2026).
-
 ### menu
 
 - **B** — The flip-above / align-right collision logic in `positionMenu()` never has real dimensions to work with. `open()` calls `positionMenu()` *before* setting `display: block`, so `container.getBoundingClientRect()` measures a `display: none` element (0×0): "not enough space below" and "not enough space right" are never true, and a menu opened near the bottom or right edge of the viewport overflows instead of flipping. The final viewport clamp uses the same zero size, so it doesn't catch it either. Not visible on the demo page, whose triggers sit mid-page. Found while fixing the fixed-position containing-block offset (26 Sep 2026). Fix: show the container (it's still `opacity: 0`) before measuring.
 
-### bottom-sheet
+### full-screen overlays (bottom-sheet, side-sheet, navigation-drawer)
 
-- **B** — On desktop the sheet sits against the left edge instead of centred: at 1280px the standard sheet spans x≈15–655 rather than centring its 640px width, which MD3 specifies for bottom sheets on wide screens. Found in the dialog/sheet action-button verification screenshots (26 Sep 2026).
+- **B** — Their scrims leave a 15px undimmed strip down each side of the viewport on browsers with classic scrollbars (Windows desktop). Each is a `position: fixed; inset: 0` container, and `html { scrollbar-gutter: stable both-edges }` (`src/styles/base.css`) insets the fixed containing block by the gutter on *both* edges — the same root cause as the since-fixed tooltip/menu offset. `ds-dialog` isn't affected: its `::backdrop` lives in the top layer, which ignores the gutter. `placeFixed()` doesn't apply (these are sized, not placed). Likely fix is revisiting `both-edges` itself (`stable` alone reserves only the right gutter), which trades this for a ~7px content shift when a dialog locks scrolling — a page-wide call, so not made as part of the scrim fixes. Found 26 Sep 2026.
 
 ### navigation-bar
 
@@ -81,10 +66,6 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — Same roving-tabindex/arrow-key gap as `navigation-bar` (see above): `ds-navigation-rail-item` renders `role="tab"` with no arrow-key (here, up/down) navigation between destinations.
 
-### radio
-
-- **B** — Hover/pressed state-layer ripple is essentially imperceptible in dark theme — same undefined-`--md-sys-color-on-surface-rgb`-token bug as `chip` (`ds-radio.js:326`), see that entry for the root cause. Pixel diff: light hover 11.87% / pressed 12.01%, dark hover 0.09% / pressed 0.12% (noise-level).
-
 ### search
 
 - **B** — `DSSearch > Keyboard > navigates down with ArrowDown` / `navigates up with ArrowUp` fail intermittently on WebKit only — 1–2 failures on most isolated runs (`npx wtr --config web-test-runner.full.config.js --files test/search.test.js`), sometimes passing in a full `npm run test:all`. Reproduces on the committed code, so it predates the 26 Sep fixes. Both tests wait a fixed `setTimeout(10)` after dispatching the keydown instead of awaiting the update — the arbitrary-timeout pattern CLAUDE.md's testing practices rule out — which is the likely source of the timing sensitivity. Not yet confirmed whether it's only the test or a real WebKit keyboard bug.
@@ -93,21 +74,9 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — 12 unit tests fail on Firefox only (`npm run test:all`), all pointer-drag interaction/event tests (`should emit input/change event on pointer interaction`, `should update value when dragged`, `should snap values to step`, …). Chromium and WebKit pass all of them. Not yet root-caused — could be a real Firefox pointer-event handling difference in the component, or a Playwright synthetic-pointer-event quirk specific to Firefox's test harness rather than a user-facing bug. Needs someone to actually drag a slider in real Firefox before concluding either way.
 
-### switch
-
-- **B** — Hover state-layer ripple is nearly invisible in dark theme (0.92% pixel diff vs 7.29% in light) — same undefined-`--md-sys-color-on-surface-rgb`-token bug as `chip` and `radio` (`ds-switch.js:267`). The pressed state layer still shows in dark (4.00% diff) since it composites with the checked-track color change, which masks the missing overlay somewhat — hover alone has nothing to mask it.
-
-### tabs
-
-- **B** — Tab buttons have no hover feedback at all, in either theme. `ds-tabs.js:308` sets `::slotted([role="tab"]) { background: transparent !important; ... }`, and the hover rule at line 330, `::slotted([role="tab"]:hover) { background: color-mix(...) }`, has no `!important` — so the base rule's `!important` always wins regardless of the hover rule's later source order or matching specificity, and the hover background never renders. Confirmed by pixel diff (0.00% in both themes, both the selected and an unselected tab) and by reading the two rules directly. Fix: add `!important` to the hover (and presumably `:active`, if one exists) background declaration, or drop `!important` from the base rule and increase its specificity instead.
-
 ### text-field
 
 - **A** — `ds-text-field` calls `this.attachInternals()` but never sets `static formAssociated = true` or calls `setFormValue()`. Verified empirically: `new FormData(form)` on a form containing a named, valued `ds-text-field` silently omits it — the field's value never reaches form submission. `checkValidity()`/`reportValidity()` are implemented by delegating to the internal native `<input>`, so those work standalone, but the field is invisible to the *enclosing* form. Grepped every input/selection component for `formAssociated`: **only `ds-checkbox` fully implements it** (declares the flag and calls `setFormValue`). `ds-radio`, `ds-switch`, `ds-slider`, `ds-select`, `ds-combobox`, `ds-textarea`, `ds-data-table` use neither `formAssociated` nor `attachInternals` at all, despite CLAUDE.md documenting this as the convention for the whole "Input & selection" category. This is bigger than one component — it's the documented pattern applied in one place out of roughly a dozen it's supposed to cover.
-
-### textarea
-
-- **B** — `ds-textarea` has no `:hover` styling at all (grepped the whole component source — zero matches), so hovering the field produces no feedback in either theme. `ds-text-field`, the sibling component, implements this correctly (`.text-field.filled:hover::after` / `.text-field.outlined:hover`) — worth copying that pattern rather than reinventing it. Confirmed by pixel-diffing rest-vs-hover screenshots (0.00% in both themes) and by reading the source.
 
 ## First-pass screenshot review — done, all findings actioned
 
@@ -191,7 +160,7 @@ tooltip, snackbar were already covered by the overlay pass; badge and icon
 are non-interactive) at 1280px in both themes, then pixel-diffed rest
 against each state rather than eyeballing — a translucent 8% overlay is
 easy to miss by eye but shows up immediately in a diff. Five real, verified
-findings, all logged above: `chip`/`radio`/`switch` share one root cause
+findings, all since fixed (26 Sep 2026): `chip`/`radio`/`switch` share one root cause
 (an undefined `--md-sys-color-on-surface-rgb` token whose hardcoded
 light-theme fallback never adapts to dark theme — probably present in
 `snackbar` too, from the same pattern with a different token); `card`'s

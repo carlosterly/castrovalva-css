@@ -135,8 +135,14 @@ export class DSCard extends HTMLElement {
           box-shadow: var(--md-sys-elevation-level1);
         }
 
+        /* MD3 pairs the elevation bump with an on-surface state layer; the
+           layer is what stays visible in dark theme, where shadows vanish. */
         .card[data-variant="elevated"]:hover {
           box-shadow: var(--md-sys-elevation-level2);
+          background-image: linear-gradient(
+            color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent),
+            color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent)
+          );
         }
 
         /* Filled variant */

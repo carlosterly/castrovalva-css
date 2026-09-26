@@ -553,12 +553,18 @@ export class DSDataTable extends HTMLElement {
           transition: background-color 0.15s;
         }
 
+        /* A state layer, not a surface-tone swap: in dark theme surface and
+           surface-container are too close to tell apart. As an image it
+           also layers over a selected row's container colour. */
         tbody tr:hover {
-          background: var(--md-sys-color-surface-container);
+          background-image: linear-gradient(
+            color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent),
+            color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent)
+          );
         }
 
         tbody tr.selected {
-          background: var(--md-sys-color-primary-container);
+          background-color: var(--md-sys-color-primary-container);
         }
 
         td {

@@ -280,7 +280,7 @@ export class DSDialog extends HTMLElement {
         }
 
         dialog::backdrop {
-          background-color: transparent;
+          background-color: var(--md-sys-color-scrim, rgba(0, 0, 0, 0.32));
         }
 
         .surface {

@@ -373,16 +373,16 @@ export class DSSnackbar extends HTMLElement {
         }
 
         .action-button:hover {
-          background-color: rgba(var(--md-sys-color-inverse-primary-rgb, 208, 188, 255), 0.08);
+          background-color: color-mix(in srgb, var(--md-sys-color-inverse-primary) calc(var(--md-sys-state-hover-opacity) * 100%), transparent);
         }
 
         .action-button:focus {
           outline: none;
-          background-color: rgba(var(--md-sys-color-inverse-primary-rgb, 208, 188, 255), 0.12);
+          background-color: color-mix(in srgb, var(--md-sys-color-inverse-primary) calc(var(--md-sys-state-focus-opacity) * 100%), transparent);
         }
 
         .action-button:active {
-          background-color: rgba(var(--md-sys-color-inverse-primary-rgb, 208, 188, 255), 0.16);
+          background-color: color-mix(in srgb, var(--md-sys-color-inverse-primary) calc(var(--md-sys-state-pressed-opacity) * 100%), transparent);
         }
 
         .close-button {

@@ -210,7 +210,7 @@ Event log:
                 <td>boolean</td>
                 <td>true</td>
                 <td>
-                  Closes when the transparent modal backdrop area is clicked
+                  Closes when the scrim behind the dialog is clicked
                   unless set to
                   <code>false</code>.
                 </td>
@@ -378,7 +378,11 @@ ds-dialog {
             <li>Traps focus inside the dialog while open.</li>
             <li>Restores focus to the previous element on close.</li>
             <li>Supports keyboard dismissal with Escape (configurable).</li>
-            <li>No visible scrim is rendered behind the dialog.</li>
+            <li>
+              Dims the page behind the dialog with the theme's scrim colour
+              (<code>--md-sys-color-scrim</code>: 32% black, 60% in
+              high-contrast).
+            </li>
           </ul>
         </div>
 
@@ -414,10 +418,6 @@ ds-dialog {
         <div class="section">
           <h2>Known Limitations</h2>
           <ul>
-            <li>
-              This implementation renders a transparent backdrop (no visible
-              scrim), which may differ from strict MD3 visual expectations.
-            </li>
             <li>
               Dialog open state is managed per page and closes any other open
               dialogs automatically.

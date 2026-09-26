@@ -327,8 +327,22 @@ export class DSTabs extends HTMLElement {
           -webkit-tap-highlight-color: transparent;
         }
 
-        ::slotted([role="tab"]:hover) {
-          background: color-mix(in srgb, var(--tab-bg-hover) 8%, transparent);
+        /* !important to match the base rule above, which needs it to beat
+           page-level button resets (outer styles win over ::slotted). */
+        ::slotted([role="tab"]:not([disabled]):hover) {
+          background: color-mix(
+            in srgb,
+            var(--tab-bg-hover) calc(var(--md-sys-state-hover-opacity) * 100%),
+            transparent
+          ) !important;
+        }
+
+        ::slotted([role="tab"]:not([disabled]):active) {
+          background: color-mix(
+            in srgb,
+            var(--tab-bg-hover) calc(var(--md-sys-state-pressed-opacity) * 100%),
+            transparent
+          ) !important;
         }
 
         ::slotted([role="tab"]:focus-visible) {

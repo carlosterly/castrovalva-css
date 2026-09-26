@@ -360,29 +360,29 @@ export class DSRadio extends HTMLElement {
 
         /* Hover state */
         :host(:not([disabled]):hover) .state-layer {
-          background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.08);
+          background-color: color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent);
         }
 
         :host([checked]:not([disabled]):hover) .state-layer {
-          background-color: rgba(var(--md-sys-color-primary-rgb, 103, 80, 164), 0.08);
+          background-color: color-mix(in srgb, var(--md-sys-color-primary) calc(var(--md-sys-state-hover-opacity) * 100%), transparent);
         }
 
         /* Focus state */
         .radio.focused .state-layer {
-          background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.12);
+          background-color: color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-focus-opacity) * 100%), transparent);
         }
 
         :host([checked]) .radio.focused .state-layer {
-          background-color: rgba(var(--md-sys-color-primary-rgb, 103, 80, 164), 0.12);
+          background-color: color-mix(in srgb, var(--md-sys-color-primary) calc(var(--md-sys-state-focus-opacity) * 100%), transparent);
         }
 
         /* Pressed state */
         :host(:not([disabled]):active) .state-layer {
-          background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.12);
+          background-color: color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-pressed-opacity) * 100%), transparent);
         }
 
         :host([checked]:not([disabled]):active) .state-layer {
-          background-color: rgba(var(--md-sys-color-primary-rgb, 103, 80, 164), 0.12);
+          background-color: color-mix(in srgb, var(--md-sys-color-primary) calc(var(--md-sys-state-pressed-opacity) * 100%), transparent);
         }
 
         /* Outer circle */

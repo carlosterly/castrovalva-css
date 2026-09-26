@@ -447,6 +447,7 @@ export class DSBottomSheet extends HTMLElement {
           z-index: 1000;
           display: flex;
           align-items: flex-end;
+          justify-content: center;
           pointer-events: none;
           visibility: hidden;
         }
@@ -465,7 +466,7 @@ export class DSBottomSheet extends HTMLElement {
         }
 
         .container.open .scrim {
-          background: rgba(0, 0, 0, ${isModal ? "0.32" : "0.32"});
+          background: var(--md-sys-color-scrim, rgba(0, 0, 0, 0.32));
           pointer-events: auto;
         }
 

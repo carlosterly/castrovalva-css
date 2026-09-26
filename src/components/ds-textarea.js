@@ -264,6 +264,22 @@ export class DSTextarea extends HTMLElement {
           padding: 16px;
         }
 
+        /* Hover state - MD3: on-surface state layer over the filled
+           container, active indicator / outline darkens to on-surface.
+           Colour-only, so hovering never shifts layout. */
+        .textarea-container:not(.focused):not(.error) textarea:not(:disabled):hover {
+          border-bottom-color: var(--md-sys-color-on-surface);
+          background-image: linear-gradient(
+            color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent),
+            color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent)
+          );
+        }
+
+        .textarea-container[data-variant="outlined"]:not(.focused):not(.error) textarea:not(:disabled):hover {
+          border-color: var(--md-sys-color-on-surface);
+          background-image: none;
+        }
+
         /* Focus state */
         .textarea-container.focused textarea {
           border-bottom-color: var(--md-sys-color-primary);

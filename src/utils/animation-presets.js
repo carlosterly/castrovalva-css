@@ -96,7 +96,7 @@ const KEYFRAMES = {
   collapseBlock: "@keyframes ds-collapse-block { from { max-block-size: 1000px; opacity: 1; overflow: hidden; } to { max-block-size: 0; opacity: 0; overflow: hidden; } }",
 
   // Glow animation
-  glow: "@keyframes ds-glow { 0%, 100% { box-shadow: 0 0 0 0 rgba(var(--md-sys-color-primary-rgb), 0.7); } 50% { box-shadow: 0 0 0 10px rgba(var(--md-sys-color-primary-rgb), 0); } }",
+  glow: "@keyframes ds-glow { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--md-sys-color-primary) 70%, transparent); } 50% { box-shadow: 0 0 0 10px transparent; } }",
 
   // Shimmer animation
   shimmer: "@keyframes ds-shimmer { 0% { background-position: -1000px 0; } 100% { background-position: 1000px 0; } }",

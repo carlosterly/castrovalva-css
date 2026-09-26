@@ -263,7 +263,7 @@ export class DSChip extends HTMLElement {
 
         /* Hover state */
         :host(:not([disabled]):hover) .chip {
-          background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.08);
+          background-color: color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent);
         }
 
         :host([selected]:not([disabled]):hover) .chip {
@@ -287,7 +287,7 @@ export class DSChip extends HTMLElement {
 
         /* Active/pressed state */
         :host(:not([disabled]):active) .chip {
-          background-color: rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.12);
+          background-color: color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-pressed-opacity) * 100%), transparent);
         }
 
         :host([selected]:not([disabled]):active) .chip {
@@ -353,7 +353,7 @@ export class DSChip extends HTMLElement {
         }
 
         .remove-btn:hover {
-          background-color: rgba(var(--md-sys-color-on-surface-variant-rgb, 73, 69, 79), 0.12);
+          background-color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) calc(var(--md-sys-state-hover-opacity) * 100%), transparent);
         }
 
         .remove-btn svg {

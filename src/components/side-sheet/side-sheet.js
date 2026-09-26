@@ -365,7 +365,7 @@ export class DSSideSheet extends HTMLElement {
         }
 
         .container.open .scrim {
-          background: rgba(0, 0, 0, 0.32);
+          background: var(--md-sys-color-scrim, rgba(0, 0, 0, 0.32));
           pointer-events: auto;
         }
 
