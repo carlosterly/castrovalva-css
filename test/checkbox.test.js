@@ -1,5 +1,6 @@
 import { fixture, expect, html, oneEvent } from "@open-wc/testing";
 import "../src/components/checkbox/checkbox.js";
+import { inForm, inDisabledFieldset, entriesOf } from "./helpers/forms.js";
 
 // Test suite for ds-checkbox behavior and accessibility.
 
@@ -532,20 +533,14 @@ describe("DSCheckbox", () => {
       expect(el.checked).to.be.false;
     });
 
-    it("should set form value via internals when checked", async () => {
-      const el = await fixture(html`<ds-checkbox value="yes"></ds-checkbox>`);
-
-      let setValue = null;
-      el._internals = {
-        setFormValue: (value) => {
-          setValue = value;
-        },
-      };
+    it("should submit its value to the form when checked", async () => {
+      const { form, el } = await inForm(
+        html`<ds-checkbox name="agree" value="yes"></ds-checkbox>`,
+      );
 
       el.checked = true;
-      el.updateCheckState();
 
-      expect(setValue).to.equal("yes");
+      expect(entriesOf(form)).to.deep.equal([["agree", "yes"]]);
     });
   });
 
@@ -602,6 +597,94 @@ describe("DSCheckbox", () => {
 
       const stateLayer = el.shadowRoot.querySelector('[part="state-layer"]');
       expect(stateLayer).to.exist;
+    });
+  });
+
+  // The checkbox submitted a value but ignored required, never reset with
+  // its form, and ignored a disabled fieldset.
+  describe("Form association", () => {
+    it("should submit \"on\" when checked without a value", async () => {
+      const { form } = await inForm(html`<ds-checkbox name="news" checked></ds-checkbox>`);
+      expect(entriesOf(form)).to.deep.equal([["news", "on"]]);
+    });
+
+    it("should be left out while unchecked", async () => {
+      const { form } = await inForm(html`<ds-checkbox name="news"></ds-checkbox>`);
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    it("should follow user toggling", async () => {
+      const { form, el } = await inForm(html`<ds-checkbox name="news"></ds-checkbox>`);
+      el.click();
+      expect(entriesOf(form)).to.deep.equal([["news", "on"]]);
+      el.click();
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    it("should block the form while required and unchecked", async () => {
+      const { form, el } = await inForm(
+        html`<ds-checkbox name="agree" required></ds-checkbox>`,
+      );
+      expect(el.validity.valueMissing).to.be.true;
+      expect(form.checkValidity()).to.be.false;
+
+      el.click();
+      expect(el.validity.valid).to.be.true;
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should update validity when required is toggled", async () => {
+      const { form, el } = await inForm(html`<ds-checkbox name="agree"></ds-checkbox>`);
+      el.required = true;
+      expect(form.checkValidity()).to.be.false;
+      el.required = false;
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should submit a value changed while checked", async () => {
+      const { form, el } = await inForm(
+        html`<ds-checkbox name="plan" value="basic" checked></ds-checkbox>`,
+      );
+      el.value = "pro";
+      expect(entriesOf(form)).to.deep.equal([["plan", "pro"]]);
+    });
+
+    it("should restore its initial state when the form resets", async () => {
+      const { form, el } = await inForm(html`
+        <ds-checkbox name="news" checked></ds-checkbox>
+      `);
+      el.click();
+      expect(el.checked).to.be.false;
+      form.reset();
+      expect(el.checked).to.be.true;
+      expect(el.getAttribute("aria-checked")).to.equal("true");
+      expect(entriesOf(form)).to.deep.equal([["news", "on"]]);
+    });
+
+    it("should take a checked attribute set later as the new default", async () => {
+      const { form, el } = await inForm(html`<ds-checkbox name="news"></ds-checkbox>`);
+      el.setAttribute("checked", "");
+      el.click();
+      form.reset();
+      expect(el.checked).to.be.true;
+    });
+
+    it("should be disabled by a disabled fieldset", async () => {
+      const { form, fieldset, el } = await inDisabledFieldset(
+        html`<ds-checkbox name="news" checked></ds-checkbox>`,
+      );
+      expect(el.disabled).to.be.true;
+      expect(el.getAttribute("aria-disabled")).to.equal("true");
+      expect(el.getAttribute("tabindex")).to.equal("-1");
+      expect(entriesOf(form)).to.deep.equal([]);
+
+      el.click();
+      expect(el.checked).to.be.true;
+
+      fieldset.disabled = false;
+      expect(el.hasAttribute("aria-disabled")).to.be.false;
+      expect(el.getAttribute("tabindex")).to.equal("0");
+      expect(entriesOf(form)).to.deep.equal([["news", "on"]]);
     });
   });
 });

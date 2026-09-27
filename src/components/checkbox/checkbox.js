@@ -1,3 +1,5 @@
+import { FormAssociated } from "../../utils/form-associated.js";
+
 /**
  * Material Design 3 Checkbox Component
  *
@@ -29,9 +31,7 @@
  * @cssprop --ds-checkbox-icon-size - Size of the checkbox icon (default: var(--ds-size-icon-md))
  * @cssprop --ds-checkbox-state-layer-size - Size of the state layer (default: var(--ds-size-hit-area))
  */
-class DSCheckbox extends HTMLElement {
-  static formAssociated = true;
-
+class DSCheckbox extends FormAssociated(HTMLElement) {
   static get observedAttributes() {
     return [
       "checked",
@@ -49,12 +49,16 @@ class DSCheckbox extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this._internals = this.attachInternals?.() || null;
     this._checked = false;
     this._indeterminate = false;
+    // What a form reset restores. The checked attribute also reflects
+    // toggling, so it can't serve as the default once the user has clicked.
+    this._defaultChecked = null;
+    this._reflecting = false;
   }
 
   connectedCallback() {
+    this._defaultChecked ??= this.hasAttribute("checked");
     this.render();
     this.updateSize();
     this.setupEventListeners();
@@ -71,6 +75,7 @@ class DSCheckbox extends HTMLElement {
     switch (name) {
       case "checked":
         this._checked = this.hasAttribute("checked");
+        if (!this._reflecting) this._defaultChecked = this._checked;
         this.updateCheckState();
         this.updateAccessibility();
         break;
@@ -81,8 +86,11 @@ class DSCheckbox extends HTMLElement {
         break;
       case "disabled":
       case "error":
+        this.updateAccessibility();
+        break;
       case "required":
         this.updateAccessibility();
+        this._syncFormState();
         break;
       case "label":
         this.updateLabel();
@@ -90,6 +98,7 @@ class DSCheckbox extends HTMLElement {
       case "value":
       case "name":
         this.updateInput();
+        this._syncFormState();
         break;
       case "size":
         this.updateSize();
@@ -182,10 +191,23 @@ class DSCheckbox extends HTMLElement {
       container?.classList.remove("checked", "indeterminate");
     }
 
-    // Update form internals if available
-    if (this._internals) {
-      this._internals.setFormValue(this.checked ? this.value || "on" : null);
-    }
+    this._syncFormState();
+  }
+
+  // Submits like a native checkbox: its value (default "on") when checked,
+  // nothing when not. Required means it must be checked.
+  _syncFormState() {
+    this._setFormState(this.checked ? this.value || "on" : null, {
+      valueMissing: this.required && !this.checked,
+    });
+  }
+
+  formResetCallback() {
+    this.checked = this._defaultChecked ?? false;
+  }
+
+  _onDisabledChange() {
+    this.updateAccessibility();
   }
 
   updateLabel() {
@@ -275,12 +297,9 @@ class DSCheckbox extends HTMLElement {
   }
 
   set checked(value) {
-    const isChecked = Boolean(value);
-    if (isChecked) {
-      this.setAttribute("checked", "");
-    } else {
-      this.removeAttribute("checked");
-    }
+    this._reflecting = true;
+    this.toggleAttribute("checked", Boolean(value));
+    this._reflecting = false;
   }
 
   get indeterminate() {
@@ -293,18 +312,6 @@ class DSCheckbox extends HTMLElement {
       this.setAttribute("indeterminate", "");
     } else {
       this.removeAttribute("indeterminate");
-    }
-  }
-
-  get disabled() {
-    return this.hasAttribute("disabled");
-  }
-
-  set disabled(value) {
-    if (value) {
-      this.setAttribute("disabled", "");
-    } else {
-      this.removeAttribute("disabled");
     }
   }
 
@@ -346,14 +353,6 @@ class DSCheckbox extends HTMLElement {
 
   set value(val) {
     this.setAttribute("value", String(val));
-  }
-
-  get name() {
-    return this.getAttribute("name") || "";
-  }
-
-  set name(val) {
-    this.setAttribute("name", String(val));
   }
 
   get size() {
