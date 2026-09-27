@@ -6,6 +6,7 @@ import {
   oneEvent,
 } from "@open-wc/testing";
 import "../src/components/ds-radio.js";
+import { inDisabledFieldset, entriesOf } from "./helpers/forms.js";
 
 // Test suite for ds-radio behavior and accessibility.
 
@@ -490,6 +491,138 @@ describe("DSRadio", () => {
 
       expect(radios[0].checked).to.be.false;
       expect(radios[1].checked).to.be.true;
+    });
+  });
+
+  // Radio wasn't form-associated, and grouped every same-name radio in the
+  // document rather than per form.
+  describe("Form association", () => {
+    const planForm = (attrs = {}) => fixture(html`
+      <form>
+        <ds-radio name="plan" value="basic" ?checked=${attrs.basic}
+          ?required=${attrs.required}></ds-radio>
+        <ds-radio name="plan" value="pro" ?checked=${attrs.pro}></ds-radio>
+        <ds-radio name="plan" value="team"></ds-radio>
+      </form>
+    `);
+
+    it("should submit only the checked radio's value", async () => {
+      const form = await planForm({ pro: true });
+      expect(entriesOf(form)).to.deep.equal([["plan", "pro"]]);
+    });
+
+    it("should submit nothing while none is checked", async () => {
+      const form = await planForm();
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    it("should follow user selection", async () => {
+      const form = await planForm({ basic: true });
+      form.querySelectorAll("ds-radio")[2].click();
+      expect(entriesOf(form)).to.deep.equal([["plan", "team"]]);
+    });
+
+    it("should submit \"on\" for a checked radio without a value", async () => {
+      const form = await fixture(html`<form><ds-radio name="x" checked></ds-radio></form>`);
+      expect(entriesOf(form)).to.deep.equal([["x", "on"]]);
+    });
+
+    it("should make the whole group invalid while required and unchecked", async () => {
+      const form = await planForm({ required: true });
+      const radios = [...form.querySelectorAll("ds-radio")];
+      expect(radios.every((radio) => radio.validity.valueMissing)).to.be.true;
+      expect(form.checkValidity()).to.be.false;
+
+      radios[2].click();
+      expect(radios.every((radio) => radio.validity.valid)).to.be.true;
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should update group validity when required is toggled", async () => {
+      const form = await planForm();
+      const radios = form.querySelectorAll("ds-radio");
+      radios[1].required = true;
+      expect(radios[1].getAttribute("aria-required")).to.equal("true");
+      expect(radios[0].validity.valueMissing).to.be.true;
+      radios[1].required = false;
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should revalidate the group when its checked radio is removed", async () => {
+      const form = await planForm({ required: true, pro: true });
+      expect(form.checkValidity()).to.be.true;
+      form.querySelectorAll("ds-radio")[1].remove();
+      expect(form.checkValidity()).to.be.false;
+    });
+
+    it("should restore the initially checked radio when the form resets", async () => {
+      const form = await planForm({ basic: true });
+      const radios = form.querySelectorAll("ds-radio");
+      radios[2].click();
+      form.reset();
+      expect(radios[0].checked).to.be.true;
+      expect(radios[2].checked).to.be.false;
+      expect(entriesOf(form)).to.deep.equal([["plan", "basic"]]);
+    });
+
+    // Groups were document-wide: checking a radio in one form unchecked
+    // the same-name radio in another.
+    it("should group by form, not across forms", async () => {
+      const wrap = await fixture(html`
+        <div>
+          <form id="a"><ds-radio name="plan" value="a1" checked></ds-radio></form>
+          <form id="b"><ds-radio name="plan" value="b1"></ds-radio></form>
+        </div>
+      `);
+      wrap.querySelector("#b ds-radio").click();
+      expect(wrap.querySelector("#a ds-radio").checked).to.be.true;
+      expect(entriesOf(wrap.querySelector("#a"))).to.deep.equal([["plan", "a1"]]);
+      expect(entriesOf(wrap.querySelector("#b"))).to.deep.equal([["plan", "b1"]]);
+    });
+
+    it("should group radios inside another component's shadow root", async () => {
+      const host = await fixture(html`<div></div>`);
+      const root = host.attachShadow({ mode: "open" });
+      root.innerHTML = `
+        <ds-radio name="size" value="s" checked></ds-radio>
+        <ds-radio name="size" value="m"></ds-radio>`;
+      const [small, medium] = root.querySelectorAll("ds-radio");
+      medium.click();
+      expect(small.checked).to.be.false;
+    });
+
+    it("should handle a name containing a quote", async () => {
+      const wrap = await fixture(html`
+        <form>
+          <ds-radio name='say "hi"' value="a" checked></ds-radio>
+          <ds-radio name='say "hi"' value="b"></ds-radio>
+        </form>
+      `);
+      const [a, b] = wrap.querySelectorAll("ds-radio");
+      b.click();
+      expect(a.checked).to.be.false;
+    });
+
+    it("should announce a change when arrow keys select", async () => {
+      const form = await planForm({ basic: true });
+      const radios = form.querySelectorAll("ds-radio");
+      const values = [];
+      form.addEventListener("ds-radio:change", (e) => values.push(e.detail.value));
+      radios[0].dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+      expect(values).to.deep.equal(["pro"]);
+      expect(entriesOf(form)).to.deep.equal([["plan", "pro"]]);
+    });
+
+    it("should be disabled by a disabled fieldset", async () => {
+      const { form, fieldset, el } = await inDisabledFieldset(
+        html`<ds-radio name="plan" value="basic" checked></ds-radio>`,
+      );
+      expect(el.disabled).to.be.true;
+      expect(el.getAttribute("aria-disabled")).to.equal("true");
+      expect(entriesOf(form)).to.deep.equal([]);
+      fieldset.disabled = false;
+      expect(el.getAttribute("tabindex")).to.equal("0");
+      expect(entriesOf(form)).to.deep.equal([["plan", "basic"]]);
     });
   });
 });
