@@ -96,6 +96,20 @@ export class DSTabs extends HTMLElement {
         panel.hidden = index !== this._selectedIndex;
       }
     });
+
+    this._observeTabs();
+  }
+
+  // The indicator is measured from the selected tab, so re-measure whenever
+  // any tab or the list changes size: a viewport resize, or a late-loading
+  // font (icon tabs render their ligature name as text until the icon font
+  // arrives, at a very different width).
+  _observeTabs() {
+    if (typeof ResizeObserver === "undefined") return;
+    this._resizeObserver ??= new ResizeObserver(() => this._updateIndicator());
+    this._resizeObserver.disconnect();
+    if (this._tabList) this._resizeObserver.observe(this._tabList);
+    this._tabs.forEach((tab) => this._resizeObserver.observe(tab));
   }
 
   _attachListeners() {
@@ -118,6 +132,7 @@ export class DSTabs extends HTMLElement {
       this._tabList.removeEventListener("click", this._handleClickBound);
       this._tabList.removeEventListener("keydown", this._handleKeydownBound);
     }
+    this._resizeObserver?.disconnect();
   }
 
   _handleClick(e) {

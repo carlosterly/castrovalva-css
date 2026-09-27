@@ -1060,6 +1060,68 @@ describe("ds-tabs", () => {
       expect(() => tabs[1].click()).to.not.throw();
     });
   });
+
+  // The indicator was measured once, so a tab that changed width later (icon
+  // font loading, viewport resize) left it misaligned.
+  describe("Indicator tracking", () => {
+    const nextFrames = () =>
+      new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+    it("should follow the selected tab when it changes width", async () => {
+      const el = await fixture(html`
+        <ds-tabs>
+          <ds-tab>Short</ds-tab>
+          <ds-tab>Second</ds-tab>
+        </ds-tabs>
+      `);
+      await nextFrames();
+      const tab = el.querySelector("ds-tab");
+      const indicator = el.shadowRoot.querySelector(".indicator");
+
+      const before = tab.getBoundingClientRect().width;
+      tab.style.flex = "none";
+      tab.style.width = "150px";
+      await nextFrames();
+      const after = tab.getBoundingClientRect().width;
+      expect(after).to.not.equal(before);
+      expect(indicator.style.width).to.equal(`${after}px`);
+    });
+
+    it("should move when an earlier tab changes width", async () => {
+      const el = await fixture(html`
+        <ds-tabs selected-index="1">
+          <ds-tab>First</ds-tab>
+          <ds-tab>Second</ds-tab>
+        </ds-tabs>
+      `);
+      await nextFrames();
+      const [first, second] = el.querySelectorAll("ds-tab");
+      const indicator = el.shadowRoot.querySelector(".indicator");
+
+      first.style.flex = "none";
+      first.style.width = "300px";
+      await nextFrames();
+      const list = el.shadowRoot.querySelector('[role="tablist"]');
+      const expected =
+        second.getBoundingClientRect().left - list.getBoundingClientRect().left;
+      expect(indicator.style.transform).to.equal(`translateX(${expected}px)`);
+    });
+
+    it("should stop observing once disconnected", async () => {
+      const el = await fixture(html`<ds-tabs><ds-tab>Only</ds-tab></ds-tabs>`);
+      await nextFrames();
+      const tab = el.querySelector("ds-tab");
+      const indicator = el.shadowRoot.querySelector(".indicator");
+      const before = indicator.style.width;
+
+      el.remove();
+      document.body.appendChild(tab);
+      tab.style.width = "280px";
+      await nextFrames();
+      expect(indicator.style.width).to.equal(before);
+      tab.remove();
+    });
+  });
 });
 
 // ============================================
