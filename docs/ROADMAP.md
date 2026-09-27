@@ -30,7 +30,7 @@ The component library is **done enough**. Adding component #44 does nothing for 
 | Current status | |
 | --- | --- |
 | Components | 43 — 36/36 official MD3, plus enhancements (combobox, banner, responsive image) and 10 utilities |
-| Tests | 52 files, 2,263 passing, ~93% coverage; 396 local visual regression shots |
+| Tests | 52 files, 2,316 passing, ~93% coverage; 396 local visual regression shots |
 | Lint | Clean — 0 errors, 0 warnings |
 | Deployed | Live — [carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/) |
 
@@ -208,7 +208,7 @@ quarter.
 
 ### Why it exists
 
-2,263 passing unit tests prove **behaviour**: attributes reflect, events fire
+2,316 passing unit tests prove **behaviour**: attributes reflect, events fire
 with the right `detail`, keyboard handlers respond, ARIA attributes get set.
 
 They prove nothing about whether a component *looks* right, whether its ARIA is

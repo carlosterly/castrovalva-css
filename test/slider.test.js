@@ -7,6 +7,7 @@ import {
 } from "@open-wc/testing";
 import "../src/components/ds-slider.js";
 import { inForm, inDisabledFieldset, entriesOf } from "./helpers/forms.js";
+import { sendMouse, resetMouse } from "@web/test-runner-commands";
 
 const setupSlider = async (template) => {
   const el = await fixture(template);
@@ -15,12 +16,11 @@ const setupSlider = async (template) => {
 
   track.getBoundingClientRect = () => ({ left: 0, width: 100 });
 
-  if (!container.setPointerCapture) {
-    container.setPointerCapture = () => {};
-  }
-  if (!container.releasePointerCapture) {
-    container.releasePointerCapture = () => {};
-  }
+  // Always stub capture: these tests dispatch synthetic PointerEvents, whose
+  // pointerId belongs to no active pointer, and Firefox (per spec) throws on
+  // capturing one. Real capture is covered by "Real pointer drag" below.
+  container.setPointerCapture = () => {};
+  container.releasePointerCapture = () => {};
 
   return { el, track, container };
 };
@@ -883,6 +883,95 @@ describe("DSSlider", () => {
         el.shadowRoot.querySelector(".slider-container").classList.contains("disabled"),
       ).to.be.false;
       expect(entriesOf(form)).to.deep.equal([["volume", "30"]]);
+    });
+  });
+
+  // Real mouse input through the browser (sendMouse), so the pointer is
+  // active and pointer capture behaves as it does for a user. Synthetic
+  // PointerEvents can't do that - Firefox rightly throws on capturing an
+  // inactive pointer id - which is why the other pointer tests stub capture.
+  describe("Real pointer drag", () => {
+    afterEach(() => resetMouse());
+
+    const place = async (template) => {
+      const el = await fixture(template);
+      el.style.cssText = "display: block; width: 300px; margin: 40px";
+      await new Promise((r) => requestAnimationFrame(r));
+      const rect = el.shadowRoot.querySelector(".track").getBoundingClientRect();
+      const at = (fraction) => [
+        Math.round(rect.left + rect.width * fraction),
+        Math.round(rect.top + rect.height / 2),
+      ];
+      return { el, at };
+    };
+
+    it("sets the value where the track is pressed", async () => {
+      const { el, at } = await place(html`<ds-slider></ds-slider>`);
+      await sendMouse({ type: "move", position: at(0.2) });
+      await sendMouse({ type: "down" });
+      await sendMouse({ type: "up" });
+      expect(el.value).to.be.within(18, 22);
+    });
+
+    it("follows the pointer while dragging and commits on release", async () => {
+      const { el, at } = await place(html`<ds-slider></ds-slider>`);
+      const changes = [];
+      el.addEventListener("change", (e) => changes.push(e.detail.value));
+      let inputs = 0;
+      el.addEventListener("input", () => inputs++);
+
+      await sendMouse({ type: "move", position: at(0.1) });
+      await sendMouse({ type: "down" });
+      await sendMouse({ type: "move", position: at(0.5) });
+      await sendMouse({ type: "move", position: at(0.9) });
+      expect(el.value).to.be.within(88, 92);
+      expect(changes).to.have.length(0);
+      await sendMouse({ type: "up" });
+
+      expect(inputs).to.be.at.least(2);
+      expect(changes).to.have.length(1);
+      expect(changes[0]).to.equal(el.value);
+    });
+
+    it("keeps tracking when the pointer leaves the slider mid-drag", async () => {
+      const { el, at } = await place(html`<ds-slider></ds-slider>`);
+      const [x, y] = at(0.5);
+      await sendMouse({ type: "move", position: [x, y] });
+      await sendMouse({ type: "down" });
+      // Far below the slider: only pointer capture keeps these moves coming
+      await sendMouse({ type: "move", position: [at(0.8)[0], y + 150] });
+      expect(el.value).to.be.within(78, 82);
+      await sendMouse({ type: "up" });
+    });
+
+    it("snaps a dragged value to step", async () => {
+      const { el, at } = await place(html`<ds-slider step="10"></ds-slider>`);
+      await sendMouse({ type: "move", position: at(0.5) });
+      await sendMouse({ type: "down" });
+      await sendMouse({ type: "move", position: at(0.33) });
+      await sendMouse({ type: "up" });
+      expect(el.value).to.equal(30);
+    });
+
+    it("drags the nearer thumb of a range", async () => {
+      const { el, at } = await place(
+        html`<ds-slider range value-start="20" value-end="80"></ds-slider>`,
+      );
+      await sendMouse({ type: "move", position: at(0.25) });
+      await sendMouse({ type: "down" });
+      await sendMouse({ type: "move", position: at(0.4) });
+      await sendMouse({ type: "up" });
+      expect(el.valueStart).to.be.within(38, 42);
+      expect(el.valueEnd).to.equal(80);
+    });
+
+    it("ignores a drag while disabled", async () => {
+      const { el, at } = await place(html`<ds-slider disabled></ds-slider>`);
+      await sendMouse({ type: "move", position: at(0.1) });
+      await sendMouse({ type: "down" });
+      await sendMouse({ type: "move", position: at(0.9) });
+      await sendMouse({ type: "up" });
+      expect(el.value).to.equal(50);
     });
   });
 });

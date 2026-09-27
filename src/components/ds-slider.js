@@ -239,9 +239,10 @@ export class DSSlider extends FormAssociated(HTMLElement) {
   }
 
   _attachListeners() {
+    this._handlePointerDownBound = this._handlePointerDown.bind(this);
     this._container.addEventListener(
       "pointerdown",
-      this._handlePointerDown.bind(this),
+      this._handlePointerDownBound,
     );
 
     this._handlePointerMoveBound = this._handlePointerMove.bind(this);
@@ -255,7 +256,7 @@ export class DSSlider extends FormAssociated(HTMLElement) {
   _detachListeners() {
     this._container.removeEventListener(
       "pointerdown",
-      this._handlePointerDown.bind(this),
+      this._handlePointerDownBound,
     );
 
     if (this._handleKeyDownBound) {

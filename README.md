@@ -5,7 +5,7 @@
 Material Design 3 implemented as vanilla Web Components. Zero runtime
 dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 
-**43 components** · **2,263 tests** · **92% coverage** · **99 KB gzipped (full library)**
+**43 components** · **2,316 tests** · **92% coverage** · **99 KB gzipped (full library)**
 
 <sub>Measured, not estimated — see [Measured numbers](#measured-numbers) for the breakdown and how to reproduce each figure.</sub>
 
@@ -129,9 +129,9 @@ command shown. Last measured 27 September 2026 (Lighthouse rows: 23 September).
 
 | Metric | Result | Reproduce |
 | --- | --- | --- |
-| Unit tests | 2,263 passing, Chromium | `npm test` |
+| Unit tests | 2,316 passing, Chromium | `npm test` |
 | Coverage | 92.9% statements | `npm test` (prints a summary; full report in `coverage/`) |
-| Cross-browser | Chromium 2,263/2,263 · WebKit 2,197/2,197 · Firefox 2,185/2,197 (Firefox: 12 failing, all `ds-slider` pointer-drag simulation — tracked in [DEFECTS.md](docs/DEFECTS.md), not yet confirmed as a real Firefox bug vs. a test-harness quirk. On both, one test file doesn't finish within the runner's timeout, so 66 tests don't run — same gap as previous measurements, also tracked there. WebKit's intermittent `ds-search` arrow-key failure occurred in one of two runs) | `npm run test:all` |
+| Cross-browser | Chromium 2,316/2,316 · WebKit 2,250/2,250 · Firefox 2,250/2,250, no failures. On WebKit and Firefox one test file doesn’t finish within the runner’s timeout, so 66 tests don’t run — tracked in [DEFECTS.md](docs/DEFECTS.md) | `npm run test:all` |
 | Bundle — full library | 609 KB raw / 99 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
 | Bundle — `castrovalva/button` | 16.8 KB raw / 3.2 KB gzip | `npm run build` |
 | Bundle — `castrovalva/icon` | 6.6 KB raw / 2.0 KB gzip | `npm run build` |
@@ -159,9 +159,8 @@ Three things this table intentionally doesn't smooth over:
 Chrome/Edge 90+ · Firefox 88+ · Safari 14+ · Opera 76+
 
 Requires Custom Elements v1 and Shadow DOM v1. Backed by the cross-browser
-unit-test run in [Measured numbers](#measured-numbers) — Chromium is fully green;
-WebKit has an intermittent `ds-search` test failure and Firefox 12 known
-failures, both under investigation.
+unit-test run in [Measured numbers](#measured-numbers) — no failures on
+Chromium, Firefox or WebKit, though 66 tests don’t yet run on the latter two.
 
 ## Accessibility
 
