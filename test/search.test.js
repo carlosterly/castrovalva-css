@@ -133,7 +133,6 @@ describe("DSSearch", () => {
       const el = await fixture(html`<ds-search></ds-search>`);
       const input = el.shadowRoot.querySelector("input");
       input.focus();
-      await new Promise((resolve) => setTimeout(resolve, 10));
       expect(el.active).to.be.true;
     });
   });
@@ -254,7 +253,6 @@ describe("DSSearch", () => {
       const el = await fixture(html`<ds-search value="test"></ds-search>`);
       const clearBtn = el.shadowRoot.querySelector(".clear-btn");
       clearBtn.click();
-      await new Promise((resolve) => setTimeout(resolve, 10));
       expect(el.value).to.equal("");
     });
 
@@ -270,6 +268,55 @@ describe("DSSearch", () => {
   });
 
   describe("Keyboard", () => {
+    const frames = async () => {
+      await new Promise((r) => requestAnimationFrame(r));
+      await new Promise((r) => requestAnimationFrame(r));
+    };
+
+    // Guards listeners re-bound in a requestAnimationFrame after every
+    // render: two renders in one frame stacked a second keydown listener, so
+    // each ArrowDown skipped a suggestion once the page had settled. That
+    // race was also the WebKit-only flake in the two tests below.
+    it("moves one suggestion per key press after re-renders settle", async () => {
+      const el = await fixture(html`<ds-search value="a"></ds-search>`);
+      el.placeholder = "Search fruit";
+      el.value = "ap";
+      el.suggestions = ["Apple", "Apricot", "Grape"];
+      await frames();
+      el.filterSuggestions();
+
+      const input = el.shadowRoot.querySelector("input");
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+      expect(el._selectedIndex).to.equal(0);
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+      expect(el._selectedIndex).to.equal(1);
+    });
+
+    it("fires one input event per keystroke after re-renders settle", async () => {
+      const el = await fixture(html`<ds-search value="a"></ds-search>`);
+      el.value = "b";
+      await frames();
+      let inputs = 0;
+      el.addEventListener("ds-search:input", () => inputs++);
+
+      el.shadowRoot
+        .querySelector("input")
+        .dispatchEvent(new Event("input", { bubbles: true, composed: true }));
+      expect(inputs).to.equal(1);
+    });
+
+    it("responds to keys immediately after a re-render", async () => {
+      const el = await fixture(html`<ds-search value="a"></ds-search>`);
+      el.suggestions = ["Apple", "Apricot"];
+      el.placeholder = "Search fruit";
+      el.filterSuggestions();
+
+      el.shadowRoot
+        .querySelector("input")
+        .dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+      expect(el._selectedIndex).to.equal(0);
+    });
+
     it("navigates down with ArrowDown", async () => {
       const el = await fixture(html`<ds-search value="a"></ds-search>`);
       el.suggestions = ["Apple", "Apricot", "Avocado"];
@@ -281,7 +328,6 @@ describe("DSSearch", () => {
       input.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowDown", bubbles: true }),
       );
-      await new Promise((resolve) => setTimeout(resolve, 10));
       expect(el._selectedIndex).to.equal(0);
     });
 
@@ -295,7 +341,6 @@ describe("DSSearch", () => {
       input.dispatchEvent(
         new KeyboardEvent("keydown", { key: "ArrowUp", bubbles: true }),
       );
-      await new Promise((resolve) => setTimeout(resolve, 10));
       expect(el._selectedIndex).to.equal(0);
     });
 
@@ -329,7 +374,6 @@ describe("DSSearch", () => {
 
       const input = el.shadowRoot.querySelector("input");
       input.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
-      await new Promise((resolve) => setTimeout(resolve, 10));
       expect(el.value).to.equal("Apple");
     });
 

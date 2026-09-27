@@ -50,10 +50,6 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~609 KB raw / ~99 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
 
-### search
-
-- **B** — `DSSearch > Keyboard > navigates down with ArrowDown` / `navigates up with ArrowUp` fail intermittently on WebKit only — 1–2 failures on most isolated runs (`npx wtr --config web-test-runner.full.config.js --files test/search.test.js`), sometimes passing in a full `npm run test:all`. Reproduces on the committed code, so it predates the 26 Sep fixes. Both tests wait a fixed `setTimeout(10)` after dispatching the keydown instead of awaiting the update — the arbitrary-timeout pattern CLAUDE.md's testing practices rule out — which is the likely source of the timing sensitivity. Not yet confirmed whether it's only the test or a real WebKit keyboard bug.
-
 ### slider
 
 - **B** — 12 unit tests fail on Firefox only (`npm run test:all`), all pointer-drag interaction/event tests (`should emit input/change event on pointer interaction`, `should update value when dragged`, `should snap values to step`, …). Chromium and WebKit pass all of them. Not yet root-caused — could be a real Firefox pointer-event handling difference in the component, or a Playwright synthetic-pointer-event quirk specific to Firefox's test harness rather than a user-facing bug. Needs someone to actually drag a slider in real Firefox before concluding either way.

@@ -41,6 +41,7 @@ export class DSSearch extends HTMLElement {
     this._suggestions = [];
     this._filteredSuggestions = [];
     this._selectedIndex = -1;
+    this.setupEventListeners();
   }
 
   connectedCallback() {
@@ -261,20 +262,26 @@ export class DSSearch extends HTMLElement {
     }
   }
 
+  /**
+   * Bind once, from the constructor, delegating from the shadow root:
+   * render() replaces the input, but the shadow root persists. Binding to
+   * each new input in a requestAnimationFrame stacked listeners whenever two
+   * renders shared a frame (every key press was handled twice) and left a
+   * fresh input deaf until the next frame.
+   */
   setupEventListeners() {
-    const input = this.shadowRoot.querySelector("input");
-    const clearBtn = this.shadowRoot.querySelector(".clear-btn");
-    const suggestionsContainer = this.shadowRoot.querySelector(
-      "[part='suggestions']",
-    );
+    const root = this.shadowRoot;
+    const isInput = (e) => e.target.localName === "input";
+    // Capture phase, so events dispatched without bubbles: true still arrive
 
     // Click on input to ensure focus
-    input?.addEventListener("click", () => {
-      input.focus();
-    });
+    root.addEventListener("click", (e) => {
+      if (isInput(e)) e.target.focus();
+    }, true);
 
     // Input event
-    input?.addEventListener("input", (e) => {
+    root.addEventListener("input", (e) => {
+      if (!isInput(e)) return;
       this.filterSuggestions();
 
       this.dispatchEvent(
@@ -284,18 +291,20 @@ export class DSSearch extends HTMLElement {
           composed: true,
         }),
       );
-    });
+    }, true);
 
-    // Focus event
-    input?.addEventListener("focus", () => {
+    // Focus event (focusin: focus doesn't bubble to the root)
+    root.addEventListener("focusin", (e) => {
+      if (!isInput(e)) return;
       this.active = true;
       if (this.value) {
         this.filterSuggestions();
       }
-    });
+    }, true);
 
     // Keyboard navigation
-    input?.addEventListener("keydown", (e) => {
+    root.addEventListener("keydown", (e) => {
+      if (!isInput(e)) return;
       if (this._filteredSuggestions.length === 0) {
         if (e.key === "Enter") {
           this.dispatchEvent(
@@ -345,24 +354,24 @@ export class DSSearch extends HTMLElement {
           this._filteredSuggestions = [];
           this._selectedIndex = -1;
           this.renderSuggestions();
-          input.blur();
+          e.target.blur();
           break;
       }
-    });
+    }, true);
 
     // Clear button
-    clearBtn?.addEventListener("click", () => {
-      this.clear();
-    });
+    root.addEventListener("click", (e) => {
+      if (e.target.closest(".clear-btn")) this.clear();
+    }, true);
 
     // Suggestion clicks
-    suggestionsContainer?.addEventListener("click", (e) => {
+    root.addEventListener("click", (e) => {
       const item = e.target.closest(".suggestion-item");
       if (item) {
         const index = parseInt(item.dataset.index, 10);
         this.selectSuggestion(index);
       }
-    });
+    }, true);
   }
 
   renderSuggestions() {
@@ -627,11 +636,6 @@ export class DSSearch extends HTMLElement {
         <div part="suggestions" id="suggestions-list" role="listbox"></div>
       </div>
     `;
-
-    // Re-setup event listeners after render
-    requestAnimationFrame(() => {
-      this.setupEventListeners();
-    });
   }
 }
 
