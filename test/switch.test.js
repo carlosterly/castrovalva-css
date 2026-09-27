@@ -6,6 +6,7 @@ import {
   oneEvent,
 } from "@open-wc/testing";
 import "../src/components/ds-switch.js";
+import { inForm, inDisabledFieldset, entriesOf } from "./helpers/forms.js";
 
 describe("DSSwitch", () => {
   describe("Initialization", () => {
@@ -470,6 +471,109 @@ describe("DSSwitch", () => {
 
       expect(el.shadowRoot.querySelector(".switch-label")).to.not.exist;
       expect(el.hasAttribute("aria-label")).to.be.false;
+    });
+  });
+
+  // The switch had no form association, name, value or required at all.
+  describe("Form association", () => {
+    it("should submit \"on\" under its name when on", async () => {
+      const { form } = await inForm(html`<ds-switch name="wifi" checked></ds-switch>`);
+      expect(entriesOf(form)).to.deep.equal([["wifi", "on"]]);
+    });
+
+    it("should submit its value attribute when on", async () => {
+      const { form } = await inForm(
+        html`<ds-switch name="mode" value="dark" checked></ds-switch>`,
+      );
+      expect(entriesOf(form)).to.deep.equal([["mode", "dark"]]);
+    });
+
+    it("should be left out while off", async () => {
+      const { form } = await inForm(html`<ds-switch name="wifi"></ds-switch>`);
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    it("should follow user toggling", async () => {
+      const { form, el } = await inForm(html`<ds-switch name="wifi"></ds-switch>`);
+      el.click();
+      expect(entriesOf(form)).to.deep.equal([["wifi", "on"]]);
+      el.click();
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    it("should submit a value changed while on", async () => {
+      const { form, el } = await inForm(
+        html`<ds-switch name="mode" value="dark" checked></ds-switch>`,
+      );
+      el.value = "light";
+      expect(el.value).to.equal("light");
+      expect(entriesOf(form)).to.deep.equal([["mode", "light"]]);
+    });
+
+    it("should expose its form", async () => {
+      const { form, el } = await inForm(html`<ds-switch></ds-switch>`);
+      expect(el.form === form).to.be.true;
+    });
+
+    it("should block the form while required and off", async () => {
+      const { form, el } = await inForm(
+        html`<ds-switch name="terms" required></ds-switch>`,
+      );
+      expect(el.getAttribute("aria-required")).to.equal("true");
+      expect(el.validity.valueMissing).to.be.true;
+      expect(form.checkValidity()).to.be.false;
+
+      el.click();
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should update validity when required is toggled", async () => {
+      const { form, el } = await inForm(html`<ds-switch name="terms"></ds-switch>`);
+      el.required = true;
+      expect(el.required).to.be.true;
+      expect(form.checkValidity()).to.be.false;
+      el.required = false;
+      expect(el.hasAttribute("aria-required")).to.be.false;
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should restore its initial state when the form resets", async () => {
+      const { form, el } = await inForm(html`<ds-switch name="wifi" checked></ds-switch>`);
+      el.click();
+      form.reset();
+      expect(el.checked).to.be.true;
+      expect(el.getAttribute("aria-checked")).to.equal("true");
+      expect(entriesOf(form)).to.deep.equal([["wifi", "on"]]);
+    });
+
+    it("should be disabled by a disabled fieldset", async () => {
+      const { form, fieldset, el } = await inDisabledFieldset(
+        html`<ds-switch name="wifi" checked></ds-switch>`,
+      );
+      expect(el.disabled).to.be.true;
+      expect(el.getAttribute("aria-disabled")).to.equal("true");
+      expect(el.getAttribute("tabindex")).to.equal("-1");
+      expect(el.matches(":disabled")).to.be.true;
+      el.click();
+      expect(el.checked).to.be.true;
+      expect(entriesOf(form)).to.deep.equal([]);
+
+      fieldset.disabled = false;
+      expect(el.getAttribute("aria-disabled")).to.equal("false");
+      expect(entriesOf(form)).to.deep.equal([["wifi", "on"]]);
+    });
+
+    // A fresh bind was added on every connect, so after moving the switch
+    // each click toggled it twice — no visible change.
+    it("should toggle once per click after being moved in the DOM", async () => {
+      const el = await fixture(html`<ds-switch></ds-switch>`);
+      const other = document.createElement("div");
+      document.body.appendChild(other);
+      other.appendChild(el);
+
+      el.click();
+      expect(el.checked).to.be.true;
+      other.remove();
     });
   });
 });

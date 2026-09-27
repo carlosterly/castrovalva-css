@@ -1,3 +1,5 @@
+import { FormAssociated } from "../utils/form-associated.js";
+
 /**
  * Material Design 3 Switch Component
  * Implements MD3 switch with smooth animations and accessibility
@@ -5,21 +7,42 @@
  * @attr {string} label - Label text for the switch, rendered next to the
  *   control and mirrored into aria-label so its accessible name doesn't
  *   depend on an external, unassociated label element.
+ * @attr {string} name - Form field name
+ * @attr {string} value - Value submitted when on (default: "on")
+ * @attr {boolean} required - The switch must be on for its form to submit
  */
-export class DSSwitch extends HTMLElement {
+export class DSSwitch extends FormAssociated(HTMLElement) {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
     this._checked = false;
-    this._disabled = false;
     this._showIcons = false;
+    // What a form reset restores. The checked attribute also reflects
+    // toggling, so it can't serve as the default once the user has clicked.
+    this._defaultChecked = null;
+    this._reflecting = false;
+    this._onClick = this.handleClick.bind(this);
+    this._onKeydown = this.handleKeydown.bind(this);
+    this._onFocus = () =>
+      this.shadowRoot.querySelector(".switch-track")?.classList.add("focused");
+    this._onBlur = () =>
+      this.shadowRoot.querySelector(".switch-track")?.classList.remove("focused");
   }
 
   static get observedAttributes() {
-    return ["checked", "disabled", "show-icons", "size", "label"];
+    return [
+      "checked",
+      "disabled",
+      "show-icons",
+      "size",
+      "label",
+      "value",
+      "required",
+    ];
   }
 
   connectedCallback() {
+    this._defaultChecked ??= this.hasAttribute("checked");
     this.render();
     this.updateSize();
     this.setupEventListeners();
@@ -28,12 +51,40 @@ export class DSSwitch extends HTMLElement {
     if (!this.hasAttribute("role")) {
       this.setAttribute("role", "switch");
     }
-    this.setAttribute("tabindex", this.disabled ? "-1" : "0");
     this.setAttribute("aria-checked", this.checked ? "true" : "false");
-    this.setAttribute("aria-disabled", this.disabled ? "true" : "false");
+    this._updateDisabledState();
     if (this.label) {
       this.setAttribute("aria-label", this.label);
     }
+    this._syncFormState();
+  }
+
+  disconnectedCallback() {
+    this.removeEventListener("click", this._onClick);
+    this.removeEventListener("keydown", this._onKeydown);
+    this.removeEventListener("focus", this._onFocus);
+    this.removeEventListener("blur", this._onBlur);
+  }
+
+  // Submits like a native checkbox: its value (default "on") when on,
+  // nothing when off. Required means it must be on.
+  _syncFormState() {
+    this._setFormState(this.checked ? this.value || "on" : null, {
+      valueMissing: this.required && !this.checked,
+    });
+  }
+
+  formResetCallback() {
+    this.checked = this._defaultChecked ?? false;
+  }
+
+  _onDisabledChange() {
+    this._updateDisabledState();
+  }
+
+  _updateDisabledState() {
+    this.setAttribute("tabindex", this.disabled ? "-1" : "0");
+    this.setAttribute("aria-disabled", this.disabled ? "true" : "false");
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -42,13 +93,21 @@ export class DSSwitch extends HTMLElement {
     switch (name) {
       case "checked":
         this._checked = newValue !== null;
+        if (!this._reflecting) this._defaultChecked = this._checked;
         this.setAttribute("aria-checked", this._checked ? "true" : "false");
+        this._syncFormState();
         break;
       case "disabled":
-        this._disabled = newValue !== null;
-        this.setAttribute("tabindex", this._disabled ? "-1" : "0");
-        this.setAttribute("aria-disabled", this._disabled ? "true" : "false");
+        this._updateDisabledState();
         break;
+      case "value":
+        this._syncFormState();
+        return;
+      case "required":
+        if (newValue !== null) this.setAttribute("aria-required", "true");
+        else this.removeAttribute("aria-required");
+        this._syncFormState();
+        return;
       case "show-icons":
         this._showIcons = newValue !== null;
         break;
@@ -104,25 +163,25 @@ export class DSSwitch extends HTMLElement {
   }
 
   set checked(value) {
-    const isChecked = Boolean(value);
-    if (isChecked) {
-      this.setAttribute("checked", "");
-    } else {
-      this.removeAttribute("checked");
-    }
+    this._reflecting = true;
+    this.toggleAttribute("checked", Boolean(value));
+    this._reflecting = false;
   }
 
-  get disabled() {
-    return this._disabled;
+  get value() {
+    return this.getAttribute("value") || "";
   }
 
-  set disabled(value) {
-    const isDisabled = Boolean(value);
-    if (isDisabled) {
-      this.setAttribute("disabled", "");
-    } else {
-      this.removeAttribute("disabled");
-    }
+  set value(value) {
+    this.setAttribute("value", String(value));
+  }
+
+  get required() {
+    return this.hasAttribute("required");
+  }
+
+  set required(value) {
+    this.toggleAttribute("required", Boolean(value));
   }
 
   get showIcons() {
@@ -162,23 +221,14 @@ export class DSSwitch extends HTMLElement {
     this.setAttribute("size", String(value));
   }
 
+  // Bound once in the constructor: re-adding fresh binds on every connect
+  // doubled the click handler when the switch moved in the DOM, so each
+  // click toggled twice.
   setupEventListeners() {
-    // Handle click
-    this.addEventListener("click", this.handleClick.bind(this));
-
-    // Handle keyboard
-    this.addEventListener("keydown", this.handleKeydown.bind(this));
-
-    // Handle focus for visual feedback
-    this.addEventListener("focus", () => {
-      this.shadowRoot.querySelector(".switch-track").classList.add("focused");
-    });
-
-    this.addEventListener("blur", () => {
-      this.shadowRoot
-        .querySelector(".switch-track")
-        .classList.remove("focused");
-    });
+    this.addEventListener("click", this._onClick);
+    this.addEventListener("keydown", this._onKeydown);
+    this.addEventListener("focus", this._onFocus);
+    this.addEventListener("blur", this._onBlur);
   }
 
   handleClick(e) {
@@ -245,7 +295,7 @@ export class DSSwitch extends HTMLElement {
           --ds-switch-handle-position: calc(100% - (2px + var(--ds-switch-handle-radius)));
         }
 
-        :host([disabled]) {
+        :host(:disabled) {
           cursor: not-allowed;
           opacity: 0.38;
         }
@@ -293,11 +343,11 @@ export class DSSwitch extends HTMLElement {
         }
 
         /* Hover state */
-        :host(:not([disabled]):hover) .state-layer {
+        :host(:not(:disabled):hover) .state-layer {
           background-color: color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent);
         }
 
-        :host([checked]:not([disabled]):hover) .state-layer {
+        :host([checked]:not(:disabled):hover) .state-layer {
           background-color: color-mix(in srgb, var(--md-sys-color-primary) calc(var(--md-sys-state-hover-opacity) * 100%), transparent);
         }
 
@@ -311,15 +361,15 @@ export class DSSwitch extends HTMLElement {
         }
 
         /* Pressed state - handle expands to 28px */
-        :host(:not([disabled]):active) .state-layer {
+        :host(:not(:disabled):active) .state-layer {
           background-color: color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-pressed-opacity) * 100%), transparent);
         }
 
-        :host([checked]:not([disabled]):active) .state-layer {
+        :host([checked]:not(:disabled):active) .state-layer {
           background-color: color-mix(in srgb, var(--md-sys-color-primary) calc(var(--md-sys-state-pressed-opacity) * 100%), transparent);
         }
 
-        :host(:not([disabled]):active) .switch-handle {
+        :host(:not(:disabled):active) .switch-handle {
           width: var(--ds-switch-handle-size-pressed) !important;
           height: var(--ds-switch-handle-size-pressed) !important;
         }
@@ -348,7 +398,7 @@ export class DSSwitch extends HTMLElement {
                       background-color var(--md-sys-motion-duration-short4) var(--md-sys-motion-easing-standard);
         }
 
-        :host([disabled]) .switch-handle {
+        :host(:disabled) .switch-handle {
           background-color: var(--md-sys-color-on-surface);
           box-shadow: none;
         }
@@ -370,12 +420,12 @@ export class DSSwitch extends HTMLElement {
         }
 
         /* Disabled state */
-        :host([disabled]) .switch-track {
+        :host(:disabled) .switch-track {
           background-color: var(--md-sys-color-surface-container-highest);
           border-color: var(--md-sys-color-on-surface);
         }
 
-        :host([checked][disabled]) .switch-track {
+        :host([checked]:disabled) .switch-track {
           background-color: var(--md-sys-color-on-surface);
           border-color: transparent;
         }

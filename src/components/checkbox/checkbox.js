@@ -396,7 +396,7 @@ class DSCheckbox extends FormAssociated(HTMLElement) {
           --ds-focus-ring-color: var(--md-sys-color-error, #ba1a1a);
         }
 
-        :host([disabled]) {
+        :host(:disabled) {
           cursor: not-allowed;
           opacity: 0.38;
         }
@@ -451,7 +451,7 @@ class DSCheckbox extends FormAssociated(HTMLElement) {
           background-color: var(--md-sys-color-error, #ba1a1a);
         }
 
-        :host([disabled]) .state-layer {
+        :host(:disabled) .state-layer {
           display: none;
         }
 
@@ -494,7 +494,7 @@ class DSCheckbox extends FormAssociated(HTMLElement) {
           color: var(--md-sys-color-on-surface, #1d1b20);
         }
 
-        :host([disabled]) .checkbox-label {
+        :host(:disabled) .checkbox-label {
           color: var(--md-sys-color-on-surface, #1d1b20);
         }
 
