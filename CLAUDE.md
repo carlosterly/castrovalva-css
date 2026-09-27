@@ -13,7 +13,7 @@ Vanilla Web Components implementing Material Design 3. Zero runtime
 dependencies, Shadow DOM, MD3 design tokens. Built with Vite, tested with
 `@web/test-runner` + Playwright.
 
-43 components (36/36 official MD3 plus enhancements and utilities), 2,151
+43 components (36/36 official MD3 plus enhancements and utilities), 2,263
 tests, ~92% coverage. The library is feature-complete; see the roadmap before
 proposing new components.
 
@@ -205,9 +205,29 @@ high-contrast, before calling it done. `settings-page.html` found a real
 
 ### Form-associated components (inputs and selection)
 
-- `static formAssociated = true`
-- Update internals on state change: `this._internals?.setFormValue(...)`
+All nine (text-field, textarea, checkbox, radio, switch, slider, combobox,
+date-picker, time-picker) extend `FormAssociated(HTMLElement)` from
+`src/utils/form-associated.js`. It provides `formAssociated`, the internals,
+`form`/`validity`/`checkValidity()`/`labels`, and a `disabled` getter that
+includes a disabled `<fieldset>`. A new input does the same, and supplies:
+
+- **`_setFormState(value, { valueMissing | from })`** on every change to
+  value, checked state, `name` or `required`. Submit what the native
+  equivalent would: `""` for an empty text input, `null` (omitted) for an
+  unchecked box, a `FormData` of entries for multiple values. Wrapping a
+  native control? Pass its `validity` as `from` rather than re-implementing it.
+- **`formResetCallback()`**, restoring a default tracked *separately* from
+  any attribute you reflect user input into. Flag your own reflections
+  (`_reflecting`) so only an author's attribute change moves the default.
+- **`_onDisabledChange()`** to re-apply disabled UI (ARIA, tabindex, inner
+  control). Read `this.disabled`, never the attribute; style with
+  `:host(:disabled)`, which matches a disabled fieldset too.
 - Emit `ds-{component}:change` with `{ value, checked, indeterminate }` as applicable
+
+Test it in a real `<form>` (`test/helpers/forms.js`): what `FormData`
+contains, required blocking `form.checkValidity()`, reset, and a disabled
+fieldset. `test/form-integration.test.js` holds all nine in one form; add
+new inputs there.
 
 ### Sizing
 
@@ -387,6 +407,12 @@ Name tests by behaviour, not implementation. Isolate — no shared mutable state
 between tests. Use `beforeEach` for repeated setup and `fixture` for complex
 HTML. Await updates rather than using arbitrary timeouts. Comment *why* a test
 exists when it is guarding a specific bug, not *what* it does.
+
+**Make failing tests fail, not hang.** A failing `expect(el.form).to.equal(form)`
+hangs chai while it formats the `<form>` into the message, stalling the
+whole file until the runner times out — compare DOM nodes by identity
+(`expect(a === b).to.be.true`). Likewise don't `await oneEvent()` for an
+event the code under test might never fire; count events synchronously.
 
 ---
 

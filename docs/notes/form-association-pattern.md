@@ -19,72 +19,102 @@ aligned, extra DOM nodes that exist purely to satisfy `FormData`, and still
 no real hook into the browser's Constraint Validation API — validity has to
 be faked too.
 
-## What's actually used: Form-Associated Custom Elements
+## What's used: Form-Associated Custom Elements
 
-The browser has a real answer to this, and it's what `ds-checkbox` is built
-on:
+The browser has a real answer to this. `static formAssociated = true` tells
+the browser the Custom Element itself — not a hidden proxy — is a form
+participant, and `attachInternals()` returns an `ElementInternals` handle
+wired into the browser's own form machinery. Through it, the element reports
+its submitted value (`setFormValue()`) and its validity (`setValidity()`),
+and the browser calls it back when its form resets
+(`formResetCallback()`) or an ancestor `<fieldset>` is disabled
+(`formDisabledCallback()`).
+
+All nine input and selection components — text-field, textarea, checkbox,
+radio, switch, slider, combobox, date-picker and time-picker — get that
+contract from one mixin, [`src/utils/form-associated.js`](../../src/utils/form-associated.js):
 
 ```js
-static formAssociated = true;
-// ...
-this._internals = this.attachInternals?.() || null;
-// ...
-this._internals.setFormValue(this.checked ? this.value || "on" : null);
+export class DSSwitch extends FormAssociated(HTMLElement) {
+  _syncFormState() {
+    // A native checkbox's rules: its value (default "on") when on, nothing
+    // when off; required means it must be on.
+    this._setFormState(this.checked ? this.value || "on" : null, {
+      valueMissing: this.required && !this.checked,
+    });
+  }
+
+  formResetCallback() {
+    this.checked = this._defaultChecked ?? false;
+  }
+}
 ```
 
-`static formAssociated = true` tells the browser this Custom Element itself
-— not a hidden proxy — is a form participant. `attachInternals()` returns an
-`ElementInternals` handle that connects the element to browser-native form
-machinery. `setFormValue()` is what actually makes the element show up in
-`FormData` when the form submits, with whatever value the component decides
-is current. Notice the `this.value || "on"` fallback — that's `ds-checkbox`
-deliberately matching a native `<input type="checkbox">`'s default submitted
-value when no `value` attribute is set, so a form built with `ds-checkbox`
-behaves exactly like one built with the native element it replaces.
+The mixin supplies everything that's identical across components — the
+`form`, `validity`, `validationMessage` and `labels` getters,
+`checkValidity()` and `reportValidity()`, and a `disabled` getter that's
+true for the attribute *or* a disabled fieldset. Each component supplies
+only the two things that genuinely differ: what it submits, and what
+"reset" means for it. Where a component wraps a native control, it mirrors
+that control's validity instead of re-implementing it, so `ds-text-field`
+gets `type="email"` and `maxlength` validation from its inner `<input>` for
+free.
 
-Consumers who want to react to changes directly, rather than wait for form
-submission, get an event on top: `ds-checkbox:change` with `{ value, checked,
-indeterminate }` in `detail`, `bubbles: true, composed: true` so it escapes
-the shadow boundary like every event in this system.
+Each one submits what the native element it replaces would. Text fields
+submit `""` when empty. Checkboxes and switches submit nothing when
+unchecked. A multiple combobox submits one entry per selection, like a
+multi-select. Date and time pickers submit ISO strings. A form built from
+these components produces the same `FormData` as one built from native
+controls, which is the point.
 
-## The honest part: the pattern isn't applied consistently yet
+## What applying it everywhere actually took
 
-Here's where this note stops describing the intended architecture and
-starts describing what's actually in the repository, because those turned
-out to be different things.
+This note used to end differently. `ds-checkbox` was the only component
+that implemented the pattern; CLAUDE.md documented it as the convention for
+the whole category, and eight components ignored it. `ds-text-field`
+already called `attachInternals()` but never declared itself
+form-associated, so `new FormData(form)` silently left it out. Every
+component passed its own test suite, because every suite tested the
+component in isolation.
 
-CLAUDE.md documents `formAssociated` as the convention for the entire
-"Input & selection" category — text-field, combobox, checkbox, radio,
-switch, slider. Grepping the actual source for `formAssociated` turns up
-exactly one component that implements it: `ds-checkbox`.
+Extending the pattern turned out not to be the mechanical job it looked
+like. Real form behaviour exercises paths isolated tests never reach, and
+doing it properly surfaced bugs that had nothing to do with forms on the
+surface:
 
-`ds-text-field` calls `this.attachInternals()` — the handle is sitting right
-there — but never sets `static formAssociated = true` and never calls
-`setFormValue()`. Tested it directly: build a `<form>` containing a named,
-valued `ds-text-field`, call `new FormData(form)`, and the field's entry is
-just missing. `checkValidity()` and `reportValidity()` still work, because
-those are implemented by delegating to the field's internal native
-`<input>` directly — but that only helps a consumer who calls those methods
-by hand. The *form* doesn't know the field exists.
+- **Reset needs a record of the default.** Most components reflected the
+  user's input back into the `value` or `checked` attribute, which is also
+  where the default lived. Once the user typed or clicked, there was
+  nothing left to reset to. Each now tracks its default separately, and
+  only an author changing the attribute moves it, as with native controls.
+- **Re-rendering destroyed state.** `ds-text-field` and `ds-textarea`
+  rebuilt their inner control on any attribute change. That wiped what the
+  user had typed and dropped the event listeners, so the ordinary
+  validate-then-set-`error` flow erased the field and silenced it.
+  `ds-textarea` also interpolated its value into the markup, so a value
+  containing `</textarea>` was parsed as HTML.
+- **Radio groups were document-wide.** Groups were found with a global
+  attribute selector, so same-name radios in two different forms unchecked
+  each other. They now group the way native radios do: same name, same
+  form, same tree. `required` is a group property, as it is natively.
+- **The date picker was off by a day.** `new Date("2026-06-15")` is UTC
+  midnight. Verified with Chromium's timezone override: in New York,
+  clicking the 15th stored `2026-06-14`. In Tokyo, `min="2026-06-10"`
+  disabled the 10th itself.
+- **`disabled="false"` is disabled.** The combobox's setter wrote the
+  string `"false"` instead of removing the attribute. The platform treats
+  the attribute's presence as disabled, whatever its value.
 
-`ds-radio`, `ds-switch`, `ds-slider`, `ds-select`, `ds-combobox`,
-`ds-textarea`, and `ds-data-table` use neither `formAssociated` nor
-`attachInternals` at all. Every one of them can be operated, styled, and
-tested in isolation — and the existing test suites do exactly that, which is
-part of why this went unnoticed — but drop any of them into a real `<form>`
-expecting a native-style submission, and only `ds-checkbox` actually
-participates.
+A final test puts all nine components in one `<form>` and submits it for
+real. It caught one more bug on its first run: the slider's value setter
+wrote the attribute that reset read back as the default, so a value set
+from code survived a reset.
 
-## Why this note says this instead of just fixing it
+## The lesson
 
-It would be easy to quietly patch `ds-text-field` before publishing this and
-let the note describe an aspirational state instead of the real one. That's
-the failure mode these notes exist to avoid. The pattern is correct, it's
-proven out completely in one component, and extending it to the rest is
-mechanical once you've done it once — but "the architecture is right" and
-"the architecture is finished being applied" are different claims, and only
-one of them is currently true. This is tracked as an open defect rather than
-silently fixed, for the same reason the accessibility note describes real
-gaps instead of a clean bill of health: a note that only shows the finished
-parts isn't an engineering note, it's marketing with extra syntax
-highlighting.
+"The architecture is right" and "the architecture is applied" were
+different claims, and the gap between them held about a dozen real bugs.
+The pattern was never the hard part. The hard part is that a component
+only proves it works in a form by being tested in a form. That's why every
+one of these components now has tests that check what a `<form>` actually
+submits, not only what the component does on its own.

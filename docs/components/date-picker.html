@@ -192,6 +192,12 @@
             </thead>
             <tbody>
               <tr>
+                <td><code>name</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Form field name. The ISO date is submitted under it; without a name the field is left out.</td>
+              </tr>
+              <tr>
                 <td><code>value</code></td>
                 <td>string</td>
                 <td>""</td>
@@ -235,6 +241,9 @@
               </tr>
             </tbody>
           </table>
+
+          <h3>Forms</h3>
+          <p>Submits the date as <code>YYYY-MM-DD</code>, <code>""</code> when empty, like a native date input. Dates are read and written in local time, so the submitted day is the day the user clicked in every timezone. It resets with its form, and a disabled <code>&lt;fieldset&gt;</code> disables it. <code>form</code>, <code>validity</code>, <code>validationMessage</code>, <code>checkValidity()</code> and <code>reportValidity()</code> behave as on a native control.</p>
 
           <h3>Properties</h3>
           <table class="api-table">

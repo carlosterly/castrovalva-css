@@ -347,6 +347,12 @@
             </thead>
             <tbody>
               <tr>
+                <td><code>required</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Whether one radio in the group must be checked. Set it on any radio in the group. Blocks the enclosing form's submission until satisfied.</td>
+              </tr>
+              <tr>
                 <td><code>checked</code></td>
                 <td>Boolean</td>
                 <td>false</td>
@@ -396,6 +402,9 @@
               </tr>
             </tbody>
           </table>
+
+          <h3>Forms</h3>
+          <p>The checked radio submits its <code>value</code> (default <code>"on"</code>). Radios group as native ones do: same <code>name</code>, same form, same DOM tree — so two forms can each have their own <code>plan</code> group. <code>required</code> is a group property: every radio in the group is invalid until one is checked. It resets with its form, and a disabled <code>&lt;fieldset&gt;</code> disables it. <code>form</code>, <code>validity</code>, <code>validationMessage</code>, <code>checkValidity()</code> and <code>reportValidity()</code> behave as on a native control.</p>
 
           <h3>Properties</h3>
           <table class="api-table">

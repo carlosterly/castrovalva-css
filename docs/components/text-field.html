@@ -260,6 +260,12 @@
             </thead>
             <tbody>
               <tr>
+                <td><code>name</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Form field name. The current text is submitted under it; without a name the field is left out.</td>
+              </tr>
+              <tr>
                 <td><code>variant</code></td>
                 <td>string</td>
                 <td>"filled"</td>
@@ -333,6 +339,9 @@
               </tr>
             </tbody>
           </table>
+
+          <h3>Forms</h3>
+          <p>Submits its text, <code>""</code> when empty, like a native <code>&lt;input&gt;</code>. Its validity mirrors the inner input, so <code>required</code>, <code>type</code> and <code>maxlength</code> all block submission. It resets with its form, and a disabled <code>&lt;fieldset&gt;</code> disables it. <code>form</code>, <code>validity</code>, <code>validationMessage</code>, <code>checkValidity()</code> and <code>reportValidity()</code> behave as on a native control.</p>
 
           <h3>Events</h3>
           <table class="api-table">

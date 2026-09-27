@@ -270,6 +270,18 @@
             </thead>
             <tbody>
               <tr>
+                <td><code>name</code></td>
+                <td>string</td>
+                <td>""</td>
+                <td>Form field name. The selection is submitted under it; without a name the field is left out.</td>
+              </tr>
+              <tr>
+                <td><code>required</code></td>
+                <td>boolean</td>
+                <td>false</td>
+                <td>Whether something must be selected. Blocks the enclosing form's submission until satisfied.</td>
+              </tr>
+              <tr>
                 <td><code>open</code></td>
                 <td>boolean</td>
                 <td>false</td>
@@ -307,6 +319,9 @@
               </tr>
             </tbody>
           </table>
+
+          <h3>Forms</h3>
+          <p>Submits the selected value, and nothing with no selection. With <code>multiple</code> it submits one entry per selected value, like a multi-select. <code>required</code> means something must be selected. It resets with its form, and a disabled <code>&lt;fieldset&gt;</code> disables it. <code>form</code>, <code>validity</code>, <code>validationMessage</code>, <code>checkValidity()</code> and <code>reportValidity()</code> behave as on a native control.</p>
 
           <h3>Properties</h3>
           <table class="api-table">
