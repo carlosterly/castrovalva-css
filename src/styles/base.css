@@ -1,7 +1,12 @@
 /* Base Styles */
 
+/* One gutter, not both-edges: content can't paint in a reserved gutter, so
+   a left one left full-screen scrims with an undimmed strip. The gutter
+   stays reserved while a dialog locks scrolling (hidden honours it, clip
+   doesn't), so opening one shifts nothing. */
 html {
   background-color: var(--md-sys-color-background);
+  scrollbar-gutter: stable;
 }
 
 body {
@@ -11,13 +16,9 @@ body {
 }
 
 @supports selector(html:has(ds-dialog[open])) {
-  html:not(:has(ds-dialog[open])) {
-    scrollbar-gutter: stable both-edges;
-  }
-
   html:has(ds-dialog[open]),
   body:has(ds-dialog[open]) {
-    overflow: clip;
+    overflow: hidden;
   }
 }
 

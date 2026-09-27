@@ -5,11 +5,9 @@
  * `getBoundingClientRect()`.
  *
  * Setting `left`/`top` directly is not enough: a fixed element is laid out
- * against its containing block, which is not always the viewport origin. The
- * site's `scrollbar-gutter: stable both-edges` (src/styles/base.css) reserves
- * a gutter on the left edge too, shifting that containing block right by the
- * scrollbar width wherever scrollbars take up space (Windows desktop, 15px).
- * A transformed or filtered ancestor does the same.
+ * against its containing block, which is not always the viewport origin. A
+ * transformed or filtered ancestor moves it, as does a left scrollbar gutter
+ * (`scrollbar-gutter: stable both-edges`, which this site used to set).
  *
  * The containing block's origin is measured with a zero-size fixed probe
  * inserted beside the element, rather than by measuring the element itself —

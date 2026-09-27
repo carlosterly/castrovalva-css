@@ -248,9 +248,13 @@ spec requires it.
   snackbar all shipped the `-rgb` version.
 - **Place `position: fixed` overlays with `placeFixed()`** from
   `src/utils/fixed-position.js`, not by assigning `getBoundingClientRect()`
-  values to `left`/`top`. The site's `scrollbar-gutter: stable both-edges`
-  shifts the fixed containing block 15px right on Windows, and a transformed
-  ancestor does the same (tooltip and menu both shipped that offset).
+  values to `left`/`top`. A transformed or filtered ancestor shifts the fixed
+  containing block away from the viewport origin (tooltip and menu both
+  shipped a 15px version of that offset, from a since-removed left
+  scrollbar gutter).
+- **Keep `scrollbar-gutter: stable` one-sided.** Nothing but top-layer
+  content paints in a reserved gutter, so `both-edges` left every
+  full-screen scrim with an undimmed 15px strip on Windows.
 
 ### Focus ring
 
