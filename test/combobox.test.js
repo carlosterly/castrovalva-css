@@ -676,4 +676,113 @@ describe("DSCombobox", () => {
       expect(option.getAttribute("aria-selected")).to.equal("true");
     });
   });
+
+  // The dropdown used to be position: absolute, so any scrolling ancestor
+  // (every demo page's .demo-box) clipped it to the search field.
+  describe("Dropdown placement", () => {
+    const options = html`
+      <div slot="option" data-value="apple">Apple</div>
+      <div slot="option" data-value="banana">Banana</div>
+      <div slot="option" data-value="cherry">Cherry</div>
+    `;
+    const parts = (el) => ({
+      trigger: el.shadowRoot.querySelector(".trigger").getBoundingClientRect(),
+      dropdown: el.shadowRoot.querySelector(".dropdown"),
+    });
+
+    it("should not be clipped by a scrolling ancestor", async () => {
+      const wrapper = await fixture(html`
+        <div style="overflow: auto; height: 70px">
+          <ds-combobox>${options}</ds-combobox>
+        </div>
+      `);
+      const el = wrapper.querySelector("ds-combobox");
+      el.show();
+
+      const { dropdown } = parts(el);
+      expect(getComputedStyle(dropdown).position).to.equal("fixed");
+      const box = dropdown.getBoundingClientRect();
+      const y = wrapper.getBoundingClientRect().bottom + 4;
+      expect(box.bottom).to.be.above(y);
+      const hit = document.elementFromPoint(box.left + 10, y);
+      expect(hit === el || el.contains(hit)).to.be.true;
+      el.close();
+    });
+
+    it("should sit directly under the trigger at its width", async () => {
+      const el = await fixture(html`<ds-combobox>${options}</ds-combobox>`);
+      el.show();
+
+      const { trigger, dropdown } = parts(el);
+      const box = dropdown.getBoundingClientRect();
+      expect(box.top).to.be.closeTo(trigger.bottom, 1);
+      expect(box.left).to.be.closeTo(trigger.left, 1);
+      expect(box.width).to.be.closeTo(trigger.width, 1);
+      expect(dropdown.dataset.side).to.equal("bottom");
+      el.close();
+    });
+
+    it("should flip above the trigger near the bottom of the viewport", async () => {
+      const el = await fixture(html`
+        <ds-combobox
+          style="position: fixed; bottom: 12px; left: 20px"
+          >${options}</ds-combobox
+        >
+      `);
+      el.show();
+
+      const { trigger, dropdown } = parts(el);
+      expect(dropdown.dataset.side).to.equal("top");
+      expect(dropdown.getBoundingClientRect().bottom).to.be.closeTo(
+        trigger.top,
+        1,
+      );
+      el.close();
+    });
+
+    it("should stay in place across re-renders while filtering", async () => {
+      const el = await fixture(html`<ds-combobox>${options}</ds-combobox>`);
+      el.show();
+      el.render();
+
+      const { trigger, dropdown } = parts(el);
+      expect(dropdown.getBoundingClientRect().top).to.be.closeTo(
+        trigger.bottom,
+        1,
+      );
+      el.close();
+    });
+
+    it("should follow the trigger when its container scrolls", async () => {
+      const wrapper = await fixture(html`
+        <div style="overflow: auto; height: 120px">
+          <div style="height: 40px"></div>
+          <ds-combobox>${options}</ds-combobox>
+          <div style="height: 400px"></div>
+        </div>
+      `);
+      const el = wrapper.querySelector("ds-combobox");
+      el.show();
+
+      wrapper.scrollTop = 25;
+      wrapper.dispatchEvent(new Event("scroll"));
+      const { trigger, dropdown } = parts(el);
+      expect(dropdown.getBoundingClientRect().top).to.be.closeTo(
+        trigger.bottom,
+        1,
+      );
+      el.close();
+    });
+
+    it("should stop following once closed", async () => {
+      const el = await fixture(html`<ds-combobox>${options}</ds-combobox>`);
+      el.show();
+      el.close();
+
+      const spy = [];
+      el._positionDropdown = () => spy.push(1);
+      window.dispatchEvent(new Event("resize"));
+      expect(spy).to.have.length(0);
+    });
+  });
 });

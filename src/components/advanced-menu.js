@@ -3,7 +3,7 @@
  * Provides positioning, hover intent, and open/close orchestration.
  * Supports hierarchical submenus with breadcrumb navigation and smart positioning.
  */
-import { placeFixed } from "../utils/fixed-position.js";
+import { placeFixed, placeAnchored } from "../utils/fixed-position.js";
 
 export class DSAdvancedMenu extends HTMLElement {
   static get observedAttributes() {
@@ -779,40 +779,16 @@ export class DSAdvancedMenu extends HTMLElement {
     }
   }
 
+  // The panel is `position: fixed`, placed here rather than with CSS anchor
+  // positioning: an absolute panel is clipped by any scrolling ancestor.
   _position = () => {
-    if (this._supportsAnchorPositioning) return;
     if (!this._panel || !this._triggerEl) return;
-    const rect = this._triggerEl.getBoundingClientRect();
-    const panelRect = this._panel.getBoundingClientRect();
-    const hostRect = this.getBoundingClientRect();
-    const pad = this._collisionPadding;
-    const offset = this._offset;
-
-    let top = rect.bottom + offset;
-    let left = rect.left;
-
-    if (this._placement.startsWith("top")) {
-      top = rect.top - panelRect.height - offset;
-    }
-    if (this._placement.endsWith("end")) {
-      left = rect.right - panelRect.width;
-    }
-
-    // collision adjust
-    const vw = window.innerWidth;
-    const vh = window.innerHeight;
-    if (left + panelRect.width + pad > vw) {
-      left = vw - panelRect.width - pad;
-    }
-    if (left < pad) left = pad;
-    if (top + panelRect.height + pad > vh) {
-      top = vh - panelRect.height - pad;
-    }
-    if (top < pad) top = pad;
-
-    Object.assign(this._panel.style, {
-      top: `${top - hostRect.top}px`,
-      left: `${left - hostRect.left}px`,
+    const [side, align] = this._placement.split("-");
+    placeAnchored(this._panel, this._triggerEl.getBoundingClientRect(), {
+      side,
+      align,
+      gap: this._offset,
+      margin: this._collisionPadding,
     });
   };
 
@@ -832,8 +808,7 @@ export class DSAdvancedMenu extends HTMLElement {
           z-index: 999;
         }
         .menu-panel {
-          position: absolute;
-          position-anchor: --ds-advanced-menu-trigger;
+          position: fixed;
           width: max-content;
           max-width: min(90vw, 720px);
           border-radius: var(--ds-radius-md);
@@ -865,22 +840,7 @@ export class DSAdvancedMenu extends HTMLElement {
         .breadcrumb-sep {
           color: var(--md-sys-color-outline-variant);
         }
-        .menu-panel[data-placement="bottom-start"] {
-          top: calc(anchor(bottom) + var(--ds-advanced-menu-offset, 8px));
-          left: anchor(left);
-        }
-        .menu-panel[data-placement="bottom-end"] {
-          top: calc(anchor(bottom) + var(--ds-advanced-menu-offset, 8px));
-          left: calc(anchor(right) - 100%);
-        }
-        .menu-panel[data-placement="top-start"] {
-          top: calc(anchor(top) - var(--ds-advanced-menu-offset, 8px));
-          left: anchor(left);
-          transform: translateY(-4px);
-        }
-        .menu-panel[data-placement="top-end"] {
-          top: calc(anchor(top) - var(--ds-advanced-menu-offset, 8px));
-          left: calc(anchor(right) - 100%);
+        .menu-panel[data-placement^="top"] {
           transform: translateY(-4px);
         }
         .menu-panel.open {

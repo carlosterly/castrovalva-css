@@ -1,3 +1,8 @@
+import {
+  placeAnchored,
+  trackViewportChanges,
+} from "../../utils/fixed-position.js";
+
 /**
  * DSDatePicker - A Material Design 3 date picker component
  * Calendar-based date selection with input field
@@ -45,6 +50,8 @@ export class DSDatePicker extends HTMLElement {
 
   disconnectedCallback() {
     this.removeEventListeners();
+    this._stopTracking?.();
+    this._stopTracking = null;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -221,6 +228,26 @@ export class DSDatePicker extends HTMLElement {
         calendar.style.visibility = "hidden";
       }
     }
+
+    if (this._isOpen && this.isConnected) {
+      this.positionCalendar();
+      this._stopTracking ??= trackViewportChanges(() => this.positionCalendar());
+    } else {
+      this._stopTracking?.();
+      this._stopTracking = null;
+    }
+  }
+
+  /**
+   * Place the calendar against the input. It is `position: fixed` so a
+   * scrolling or clipping ancestor can't cut it off; it opens below the
+   * input, or above when there's no room.
+   */
+  positionCalendar() {
+    const calendar = this.shadowRoot.querySelector(".calendar");
+    const input = this.shadowRoot.querySelector(".input-container");
+    if (!calendar || !input) return;
+    placeAnchored(calendar, input.getBoundingClientRect(), { gap: 4 });
   }
 
   previousMonth() {
@@ -472,9 +499,7 @@ export class DSDatePicker extends HTMLElement {
         }
 
         .calendar {
-          position: absolute;
-          top: calc(100% + 4px);
-          left: 0;
+          position: fixed;
           z-index: 1000;
           background: var(--md-sys-color-surface-container, #F3EDF7);
           border-radius: var(--md-sys-shape-corner-medium, 12px);
@@ -635,6 +660,7 @@ export class DSDatePicker extends HTMLElement {
 
     this.renderCalendar();
     this.setupEventListeners();
+    this.updateCalendarVisibility();
   }
 }
 

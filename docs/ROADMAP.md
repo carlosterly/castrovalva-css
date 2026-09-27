@@ -30,13 +30,13 @@ The component library is **done enough**. Adding component #44 does nothing for 
 | Current status | |
 | --- | --- |
 | Components | 43 — 36/36 official MD3, plus enhancements (combobox, banner, responsive image) and 10 utilities |
-| Tests | 50 files, 2,114 passing, ~92% coverage |
+| Tests | 50 files, 2,151 passing, ~92% coverage; 396 local visual regression shots |
 | Lint | Clean — 0 errors, 0 warnings |
 | Deployed | Live — [carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/) |
 
 Public component APIs are stable. Token prefixes in [tokens.md](./tokens.md) are the canonical naming scheme, and deprecations should be announced here before removal. Shadow DOM internals and undocumented details carry no stability guarantee.
 
-The thing a portfolio needs — **a URL someone can open** — exists, and most of the year's plan landed early: Q1 and Q2 are complete, Q3's headline (the theme playground) and Q4's minimum viable stop (the engineering notes) are done, all as of September 2026. What remains is about 26 hours — visual regression, clearing the B-severity backlog in [DEFECTS.md](./DEFECTS.md), and a dependency refresh — so the risk has flipped from "not enough time" to "inventing work to fill it" (see Risks).
+The thing a portfolio needs — **a URL someone can open** — exists, and most of the year's plan landed early: Q1 and Q2 are complete, Q3's headline (the theme playground) and Q4's minimum viable stop (the engineering notes) are done, all as of September 2026. What remains is about 16 hours — clearing the B-severity backlog in [DEFECTS.md](./DEFECTS.md) and a dependency refresh — so the risk has flipped from "not enough time" to "inventing work to fill it" (see Risks).
 
 ---
 
@@ -116,11 +116,8 @@ Delivered:
 - **Mobile layout pass.** Fixed two real issues at 320–768px: the Harmony control forced 25px of horizontal page scroll (now scrolls internally instead), and the sticky control bar covered most of a phone screen while scrolling the palettes below (now scrolls away below 720px). Zero horizontal overflow at 320/375/768/1280px.
 - Generating from `#006878` reproduces the shipped palette closely (primary40 → `#006a7b`). The 12-component preview set (actions, inputs, selection, feedback, containers, navigation, lists, overlay) is judged sufficient — the playground is considered feature-complete for this quarter.
 - **Composed example.** [docs/examples/settings-page.html](./examples/settings-page.html), linked from the home page (CTA row + a new "Examples" card group) and the README — a realistic account-settings screen, not a component reference page: `ds-navigation-rail` on desktop and `ds-navigation-bar` on mobile (MD3's own responsive nav pattern) both driving the same section-switching logic, cards full of form fields with shared unsaved-changes tracking across text-fields/switches/radios, a theme switcher wired to the real `data-theme` mechanism, and a delete-account flow through a real confirmation dialog and snackbar. Paid for itself immediately: opening the delete dialog in the new high-contrast theme surfaced a real, severe bug — `ds-dialog` hardcoded its surface to white in its `:host` styles, silently low-contrast in dark theme and **completely illegible** in high-contrast (white-on-white). One-line fix (the token fallback chain underneath was already correct); `dialog.test.js` still 28/28. Also surfaced two lower-priority findings: 15 of 43 components live flat in `src/components/` instead of the `{name}/{name}.js` CLAUDE.md documents (works fine — resolved by documenting the exception in CLAUDE.md rather than moving files), and the home page's live preview panel inherited the `ds-radio`/`ds-switch`/`ds-linear-progress` accessible-name bugs, since fixed with those components (see the axe clusters below).
+- **Visual regression (27 Sep 2026).** `npm run test:visual` ([playwright.visual.config.js](../playwright.visual.config.js), [test/visual/pages.spec.js](../test/visual/pages.spec.js)): every demo page, the home page and the settings example at 360px and 1280px × light, dark and high-contrast, plus an open-state shot of 13 overlays — 396 screenshots, stable across repeated runs. What it took to make them stable: live image hosts (picsum's `?random=` returns a new photo per load) stubbed with deterministic placeholders, the date pinned for the pickers, the home page's live panel and the autoplaying carousel masked, deterministic font-rendering flags, and a 50-pixel tolerance for residual glyph antialiasing. Paid for itself before the first baseline was kept: **five components had popups clipped by any scrolling ancestor** — `split-button`, `combobox`, `date-picker`, `time-picker` and `advanced-menu` were all `position: absolute`, so every demo page's own `.demo-box` cut them to a sliver. All five are now `position: fixed`, placed by a new shared `placeAnchored()` (flips above when there's no room, clamps to the viewport) and `trackViewportChanges()` in `src/utils/fixed-position.js`. Fixing them surfaced more: advanced-menu's CSS anchor positioning put `*-end` panels off by the container's width and `top-*` panels over their trigger; the pickers' `render()` silently hid an open popup; and the `ds-tabs` indicator was measured once, so it drifted when the icon font loaded late (now a `ResizeObserver`). 37 new unit tests guard these, each confirmed to fail on the old code. One pre-existing finding logged rather than fixed: combobox options have no padding ([DEFECTS.md](./DEFECTS.md)).
 - **Component QA, second half.** The Tier-2 manual pass (all 32 remaining demo pages) — spacing rhythm and hover/focus/pressed state-layer feel, pixel-diffed rather than eyeballed. One further real defect: `ds-textarea` has no hover styling at all, in either theme. Since fixed (see Q4).
-
-| Work | Est. |
-| --- | --- |
-| Visual regression tests (Playwright screenshots) — run **after** the QA workstream completes, so the baselines capture a fixed state rather than an unstable one. **Unblocked; both decisions below made (27 Sep 2026).** | 10h |
 
 **Minimum viable stop:** the theme playground alone justifies the quarter.
 
@@ -143,12 +140,11 @@ Delivered:
    and now shifts nothing. The drawer also sits flush at the edge now.
    Verified by pixel sampling in Chromium with classic scrollbars, light,
    dark and high-contrast; tooltip and menu still land on their targets.
-
-**Proposed scope once decided:** every demo page, the home page and the
-settings example at 360px and 1280px × light, dark and high-contrast, plus
-one open-state shot per overlay (reusing the overlay checks from the A/B
-defect work). Animations disabled; the home page's live "running right now"
-panel masked, so diffs don't flicker.
+3. **Baselines are gitignored.** They are 132 MB of platform-specific
+   PNGs, and most token changes re-shoot nearly all of them. Consistent
+   with local-only: `npm run test:visual:update` regenerates them on a
+   fresh clone, and the code that produced any baseline is in git. Take
+   baselines from a known-good commit before comparing against a change.
 
 > The standalone token explorer has been merged into the theme playground. A
 > playground that shows token values as you edit them is the same build and the
@@ -195,7 +191,8 @@ work, not a reason to have skipped it. What's left, still in risk order:
 
 1. **Component QA manual passes** — done.
 2. **Axe findings, then the docs-site accessibility audit** — done, 106/106 as of 22 Sep 2026.
-3. **Visual regression** — **next, unblocked** (see "Visual regression — decisions on record" under Q3). The axe backlog, the visible A-severity defects, the visual B-severity defects and the scrim strip are all cleared (27 Sep 2026), so baselines capture a fixed state. The one remaining A, `text-field` form association, is behavioural and doesn't affect screenshots.
+3. **Visual regression** — done, 27 Sep 2026 (see Q3). Baselined after the axe backlog, the A- and B-severity visual defects and the scrim strip were cleared, and after fixing the five clipped popups it found — so the baselines record a fixed state.
+4. **What's left** — the remaining [DEFECTS.md](./DEFECTS.md) entries, led by the one A (`text-field` form association, behavioural, so it doesn't touch the baselines), then the dependency refresh.
 
 **Dependency refresh** carries its own separate risk (breaking upgrades) independent of this ordering — treat it on its own merits when it comes up, not by this list's position.
 
@@ -209,7 +206,7 @@ quarter.
 
 ### Why it exists
 
-2,114 passing unit tests prove **behaviour**: attributes reflect, events fire
+2,151 passing unit tests prove **behaviour**: attributes reflect, events fire
 with the right `detail`, keyboard handlers respond, ARIA attributes get set.
 
 They prove nothing about whether a component *looks* right, whether its ARIA is

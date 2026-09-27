@@ -5,7 +5,7 @@
 Material Design 3 implemented as vanilla Web Components. Zero runtime
 dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 
-**43 components** · **2,114 tests** · **92% coverage** · **99 KB gzipped (full library)**
+**43 components** · **2,151 tests** · **92% coverage** · **99 KB gzipped (full library)**
 
 <sub>Measured, not estimated — see [Measured numbers](#measured-numbers) for the breakdown and how to reproduce each figure.</sub>
 
@@ -49,6 +49,7 @@ from `src/` directly, so edits hot-reload without a build.
 | `npm test test/button.test.js` | One component — the fast dev loop |
 | `npm run test:all` | All tests across Chromium, Firefox and WebKit |
 | `npm run test:a11y` | Accessibility pass (axe + Playwright) |
+| `npm run test:visual` | Screenshot comparison, local only — take baselines first with `npm run test:visual:update` |
 | `npm run lint` | ESLint |
 | `npm run check:docs` | Verify every CSS property, event and part the demo pages document exists in `src/` |
 | `npm run build` | Production build to `dist/` |
@@ -124,13 +125,13 @@ the parts that didn't go cleanly:
 ## Measured numbers
 
 Republished periodically, not aspirational — reproduce any of these with the
-command shown. Last measured 26 September 2026 (Lighthouse rows: 23 September).
+command shown. Last measured 27 September 2026 (Lighthouse rows: 23 September).
 
 | Metric | Result | Reproduce |
 | --- | --- | --- |
-| Unit tests | 2,114 passing, Chromium | `npm test` |
+| Unit tests | 2,151 passing, Chromium | `npm test` |
 | Coverage | 92.2% statements | `npm test` (prints a summary; full report in `coverage/`) |
-| Cross-browser | Chromium 2,114/2,114 · WebKit 2,047/2,048 · Firefox 2,036/2,048 (Firefox: 12 failing, all `ds-slider` pointer-drag simulation — tracked in [DEFECTS.md](docs/DEFECTS.md), not yet confirmed as a real Firefox bug vs. a test-harness quirk; WebKit: 1–2 intermittent `ds-search` arrow-key test failures that predate this measurement, also tracked there) | `npm run test:all` |
+| Cross-browser | Chromium 2,151/2,151 · WebKit 2,085/2,085 · Firefox 2,073/2,085 (Firefox: 12 failing, all `ds-slider` pointer-drag simulation — tracked in [DEFECTS.md](docs/DEFECTS.md), not yet confirmed as a real Firefox bug vs. a test-harness quirk. On both, one test file doesn't finish within the runner's timeout, so 66 tests don't run — same gap as the previous measurement. WebKit's intermittent `ds-search` arrow-key failures, also tracked there, didn't occur this run) | `npm run test:all` |
 | Bundle — full library | 609 KB raw / 99 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
 | Bundle — `castrovalva/button` | 16.8 KB raw / 3.2 KB gzip | `npm run build` |
 | Bundle — `castrovalva/icon` | 6.6 KB raw / 2.0 KB gzip | `npm run build` |

@@ -13,7 +13,7 @@ Vanilla Web Components implementing Material Design 3. Zero runtime
 dependencies, Shadow DOM, MD3 design tokens. Built with Vite, tested with
 `@web/test-runner` + Playwright.
 
-43 components (36/36 official MD3 plus enhancements and utilities), 2,114
+43 components (36/36 official MD3 plus enhancements and utilities), 2,151
 tests, ~92% coverage. The library is feature-complete; see the roadmap before
 proposing new components.
 
@@ -246,9 +246,15 @@ spec requires it.
   `color-mix(in srgb, var(--md-sys-color-on-surface) calc(var(--md-sys-state-hover-opacity) * 100%), transparent)`
   — the opacity tokens double in high-contrast. Chip, radio, switch and
   snackbar all shipped the `-rgb` version.
-- **Place `position: fixed` overlays with `placeFixed()`** from
-  `src/utils/fixed-position.js`, not by assigning `getBoundingClientRect()`
-  values to `left`/`top`. A transformed or filtered ancestor shifts the fixed
+- **Popups anchored to a control are `position: fixed`, placed with
+  `placeAnchored()`** and kept in place with `trackViewportChanges()`, both in
+  `src/utils/fixed-position.js`. A `position: absolute` popup is clipped by
+  any scrolling ancestor — five components shipped that (split-button,
+  combobox, date-picker, time-picker, advanced-menu), cut to a sliver by
+  every demo page's own `.demo-box`.
+- **Place other `position: fixed` overlays with `placeFixed()`** from the
+  same file, not by assigning `getBoundingClientRect()` values to
+  `left`/`top`. A transformed or filtered ancestor shifts the fixed
   containing block away from the viewport origin (tooltip and menu both
   shipped a 15px version of that offset, from a since-removed left
   scrollbar gutter).
@@ -309,9 +315,15 @@ npm test test/button.test.js   # one component, Chromium only - the dev loop
 npm test                       # all tests, Chromium only
 npm run test:all               # all tests, Chromium + Firefox + WebKit
 npm run test:a11y              # axe accessibility pass
+npm run test:visual            # screenshot comparison - local only, see below
 npm run lint                   # ESLint - must exit 0
 npm run check:docs             # documented CSS props/events/parts exist in src/
 ```
+
+Visual regression baselines are local-only and gitignored (Windows and
+Linux render fonts differently). Take them with `npm run test:visual:update`
+on a known-good commit, then compare your change with `npm run test:visual`.
+After an intended visual change, re-run the update and look at what changed.
 
 `web-test-runner.config.js` is the default (Chromium, honours CLI file
 arguments). `web-test-runner.full.config.js` runs all three browsers for

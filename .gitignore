@@ -42,3 +42,6 @@ Desktop.ini
 # QA sweep output (scripts/qa-sweep.mjs)
 _qa-out/
 _qa-overlays/
+
+# Visual regression baselines: local only, regenerate with npm run test:visual:update
+test/visual/__screenshots__/

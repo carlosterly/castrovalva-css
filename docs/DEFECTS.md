@@ -54,6 +54,10 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — The flip-above / align-right collision logic in `positionMenu()` never has real dimensions to work with. `open()` calls `positionMenu()` *before* setting `display: block`, so `container.getBoundingClientRect()` measures a `display: none` element (0×0): "not enough space below" and "not enough space right" are never true, and a menu opened near the bottom or right edge of the viewport overflows instead of flipping. The final viewport clamp uses the same zero size, so it doesn't catch it either. Not visible on the demo page, whose triggers sit mid-page. Found while fixing the fixed-position containing-block offset (26 Sep 2026). Fix: show the container (it's still `opacity: 0`) before measuring.
 
+### combobox
+
+- **B** — Options render flush against the dropdown's left border, with no padding. `::slotted([slot="option"])` sets `--ds-combobox-option-padding-x`, but the page reset's `* { padding: 0 }` is an outer author style, which beats `::slotted` — the same trap CLAUDE.md records for `:host`. Invisible until 27 Sep 2026, when the dropdown stopped being clipped. Likely fix: `!important` on the slotted padding (shadow-tree `!important` beats outer normal declarations).
+
 ### navigation-bar
 
 - **B** — `ds-navigation-bar-item` renders `role="tab"` but `ds-navigation-bar` doesn't implement the roving-tabindex/arrow-key navigation the ARIA tab pattern expects — every item stays independently `Tab`-reachable instead of only the active one, and Left/Right don't move selection. Same gap in `navigation-rail` (see below). Not axe-detectable (axe checks structure, not interaction), found while fixing the `aria-required-parent` finding on the same component. Functions fine via `Tab` alone; the gap is a mismatch between the announced role's expected behavior and the actual one.

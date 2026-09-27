@@ -1,3 +1,8 @@
+import {
+  placeAnchored,
+  trackViewportChanges,
+} from "../../utils/fixed-position.js";
+
 /**
  * DSTimePicker - A Material Design 3 time picker component
  * Clock interface for selecting time with 12/24 hour format support
@@ -45,6 +50,8 @@ export class DSTimePicker extends HTMLElement {
 
   disconnectedCallback() {
     this.removeEventListeners();
+    this._stopTracking?.();
+    this._stopTracking = null;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -212,6 +219,26 @@ export class DSTimePicker extends HTMLElement {
         clock.style.visibility = "hidden";
       }
     }
+
+    if (this._isOpen && this.isConnected) {
+      this.positionClock();
+      this._stopTracking ??= trackViewportChanges(() => this.positionClock());
+    } else {
+      this._stopTracking?.();
+      this._stopTracking = null;
+    }
+  }
+
+  /**
+   * Place the clock against the input. It is `position: fixed` so a
+   * scrolling or clipping ancestor can't cut it off; it opens below the
+   * input, or above when there's no room.
+   */
+  positionClock() {
+    const clock = this.shadowRoot.querySelector(".clock");
+    const input = this.shadowRoot.querySelector(".input-container");
+    if (!clock || !input) return;
+    placeAnchored(clock, input.getBoundingClientRect(), { gap: 4 });
   }
 
   parseValue(value) {
@@ -506,9 +533,7 @@ export class DSTimePicker extends HTMLElement {
         }
 
         .clock {
-          position: absolute;
-          top: calc(100% + 4px);
-          left: 0;
+          position: fixed;
           z-index: 1000;
           background: var(--md-sys-color-surface-container, #F3EDF7);
           border-radius: var(--md-sys-shape-corner-large, 16px);
@@ -752,6 +777,7 @@ export class DSTimePicker extends HTMLElement {
 
     this.renderClock();
     this.setupEventListeners();
+    this.updateClockVisibility();
   }
 }
 

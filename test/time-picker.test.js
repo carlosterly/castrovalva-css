@@ -500,4 +500,90 @@ describe("DSTimePicker", () => {
       expect(event.detail.period).to.be.null;
     });
   });
+
+  // The clock used to be position: absolute, so any scrolling ancestor
+  // (every demo page's .demo-box) clipped it to a sliver.
+  describe("Clock placement", () => {
+    const popupOf = (el) => el.shadowRoot.querySelector(".clock");
+    const inputOf = (el) =>
+      el.shadowRoot.querySelector(".input-container").getBoundingClientRect();
+
+    it("should not be clipped by a scrolling ancestor", async () => {
+      const wrapper = await fixture(html`
+        <div style="overflow: auto; height: 70px">
+          <ds-time-picker label="When"></ds-time-picker>
+        </div>
+      `);
+      const el = wrapper.querySelector("ds-time-picker");
+      el.openClock();
+
+      const popup = popupOf(el);
+      expect(getComputedStyle(popup).position).to.equal("fixed");
+      const box = popup.getBoundingClientRect();
+      const y = wrapper.getBoundingClientRect().bottom + 4;
+      expect(box.bottom).to.be.above(y);
+      const hit = document.elementFromPoint(box.left + 10, y);
+      expect(hit === el || el.contains(hit)).to.be.true;
+      el.closeClock();
+    });
+
+    it("should open 4px below the input, left-aligned", async () => {
+      const el = await fixture(html`<ds-time-picker label="When"></ds-time-picker>`);
+      el.openClock();
+
+      const box = popupOf(el).getBoundingClientRect();
+      expect(box.top).to.be.closeTo(inputOf(el).bottom + 4, 1);
+      expect(box.left).to.be.closeTo(inputOf(el).left, 1);
+      el.closeClock();
+    });
+
+    it("should flip above the input near the bottom of the viewport", async () => {
+      const el = await fixture(html`
+        <ds-time-picker
+          label="When"
+          style="position: fixed; bottom: 12px; left: 20px"
+        ></ds-time-picker>
+      `);
+      el.openClock();
+
+      const box = popupOf(el).getBoundingClientRect();
+      expect(box.bottom).to.be.closeTo(inputOf(el).top - 4, 1);
+      el.closeClock();
+    });
+
+    // render() rebuilt the clock hidden while _isOpen stayed true.
+    it("should stay open and placed across a re-render", async () => {
+      const el = await fixture(html`<ds-time-picker label="When"></ds-time-picker>`);
+      el.openClock();
+      el.render();
+
+      const popup = popupOf(el);
+      expect(popup.style.display).to.equal("block");
+      expect(popup.getBoundingClientRect().top).to.be.closeTo(
+        inputOf(el).bottom + 4,
+        1,
+      );
+      el.closeClock();
+    });
+
+    it("should follow the input when its container scrolls", async () => {
+      const wrapper = await fixture(html`
+        <div style="overflow: auto; height: 120px">
+          <div style="height: 40px"></div>
+          <ds-time-picker label="When"></ds-time-picker>
+          <div style="height: 600px"></div>
+        </div>
+      `);
+      const el = wrapper.querySelector("ds-time-picker");
+      el.openClock();
+
+      wrapper.scrollTop = 25;
+      wrapper.dispatchEvent(new Event("scroll"));
+      expect(popupOf(el).getBoundingClientRect().top).to.be.closeTo(
+        inputOf(el).bottom + 4,
+        1,
+      );
+      el.closeClock();
+    });
+  });
 });

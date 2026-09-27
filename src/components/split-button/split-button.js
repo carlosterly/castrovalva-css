@@ -1,4 +1,7 @@
-import { placeFixed } from "../../utils/fixed-position.js";
+import {
+  placeAnchored,
+  trackViewportChanges,
+} from "../../utils/fixed-position.js";
 
 /**
  * DSSplitButton - A Material Design 3 split button component
@@ -41,7 +44,6 @@ export class DSSplitButton extends HTMLElement {
       this.handleMenuButtonKeydown.bind(this);
     this._boundHandleMenuKeydown = this.handleMenuKeydown.bind(this);
     this._boundHandleMenuItemKeydown = this.handleMenuItemKeydown.bind(this);
-    this._boundPositionMenu = this.positionMenu.bind(this);
   }
 
   connectedCallback() {
@@ -168,8 +170,7 @@ export class DSSplitButton extends HTMLElement {
     }
 
     document.removeEventListener("click", this._boundHandleOutsideClick);
-    window.removeEventListener("scroll", this._boundPositionMenu, true);
-    window.removeEventListener("resize", this._boundPositionMenu);
+    this._stopTracking?.();
   }
 
   getMenuItems() {
@@ -334,14 +335,14 @@ export class DSSplitButton extends HTMLElement {
         menu.style.visibility = "visible";
         menu.style.transform = "translateY(0)";
         this.positionMenu();
-        window.addEventListener("scroll", this._boundPositionMenu, true);
-        window.addEventListener("resize", this._boundPositionMenu);
+        this._stopTracking?.();
+        this._stopTracking = trackViewportChanges(() => this.positionMenu());
       } else {
         menu.style.opacity = "0";
         menu.style.visibility = "hidden";
         menu.style.transform = "translateY(-8px)";
-        window.removeEventListener("scroll", this._boundPositionMenu, true);
-        window.removeEventListener("resize", this._boundPositionMenu);
+        this._stopTracking?.();
+        this._stopTracking = null;
       }
       menu.setAttribute("aria-hidden", !this._menuOpen);
     }
@@ -359,20 +360,8 @@ export class DSSplitButton extends HTMLElement {
     const menu = this.shadowRoot.querySelector(".menu");
     if (!menu) return;
 
-    const rect = this.getBoundingClientRect();
-    const [vertical, align] = this.position.split("-");
-    const gap = 4;
-    const margin = 8;
-    const { clientWidth, clientHeight } = document.documentElement;
-    let left = align === "start" ? rect.left : rect.right - menu.offsetWidth;
-    let top =
-      vertical === "top" ? rect.top - gap - menu.offsetHeight : rect.bottom + gap;
-
-    // Keep it on screen: a 200px menu right-aligned to a narrow button near
-    // the left edge would otherwise start off-screen.
-    left = Math.max(margin, Math.min(left, clientWidth - menu.offsetWidth - margin));
-    top = Math.max(margin, Math.min(top, clientHeight - menu.offsetHeight - margin));
-    placeFixed(menu, left, top);
+    const [side, align] = this.position.split("-");
+    placeAnchored(menu, this.getBoundingClientRect(), { side, align, gap: 4 });
   }
 
   render() {

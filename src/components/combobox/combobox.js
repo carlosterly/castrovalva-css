@@ -1,3 +1,8 @@
+import {
+  placeAnchored,
+  trackViewportChanges,
+} from "../../utils/fixed-position.js";
+
 export class DSCombobox extends HTMLElement {
   static get observedAttributes() {
     return [
@@ -48,6 +53,8 @@ export class DSCombobox extends HTMLElement {
 
   disconnectedCallback() {
     this.removeEventListeners();
+    this._stopTracking?.();
+    this._stopTracking = null;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -432,6 +439,34 @@ export class DSCombobox extends HTMLElement {
     });
   }
 
+  /**
+   * The dropdown is `position: fixed` so a scrolling or clipping ancestor
+   * can't cut it off. While open, place it against the trigger — below, or
+   * above when there's no room — and follow scrolls and resizes.
+   */
+  _syncDropdownPlacement() {
+    if (this._open && this.isConnected) {
+      this._positionDropdown();
+      this._stopTracking ??= trackViewportChanges(() =>
+        this._positionDropdown(),
+      );
+    } else {
+      this._stopTracking?.();
+      this._stopTracking = null;
+    }
+  }
+
+  _positionDropdown() {
+    const dropdown = this.shadowRoot.querySelector(".dropdown");
+    const trigger = this.shadowRoot.querySelector(".trigger");
+    if (!dropdown || !trigger) return;
+    dropdown.dataset.side = placeAnchored(
+      dropdown,
+      trigger.getBoundingClientRect(),
+      { matchWidth: true },
+    );
+  }
+
   render() {
     const selectedLabel = this._selectedValues.size
       ? Array.from(this._selectedValues)
@@ -567,10 +602,7 @@ export class DSCombobox extends HTMLElement {
 
         /* ===== Dropdown Menu ===== */
         .dropdown {
-          position: absolute;
-          top: 100%;
-          left: 0;
-          right: 0;
+          position: fixed;
           z-index: 1000;
           display: ${this._open ? "block" : "none"};
           
@@ -591,6 +623,13 @@ export class DSCombobox extends HTMLElement {
           /* Elevation */
           box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.08),
                       0px 4px 8px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Flipped above the trigger: attach by the bottom edge instead */
+        .dropdown[data-side="top"] {
+          border-top: 1px solid var(--ds-combobox-border-color);
+          border-bottom: none;
+          border-radius: 4px 4px 0 0;
         }
 
         /* ===== Search Input ===== */
@@ -758,6 +797,7 @@ export class DSCombobox extends HTMLElement {
 
     // Update option states for visibility and selection
     this._updateOptionStates();
+    this._syncDropdownPlacement();
 
     // Attach listeners to the newly rendered shadow DOM elements
     requestAnimationFrame(() => {

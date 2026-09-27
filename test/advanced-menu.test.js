@@ -1436,4 +1436,72 @@ describe("DSAdvancedMenu", () => {
       expect(items.length).to.equal(0);
     });
   });
+
+  // The panel used to be position: absolute with CSS anchor positioning:
+  // scrolling ancestors clipped it, *-end placements subtracted the
+  // containing block's width instead of the panel's, and top-* placements
+  // never subtracted the panel's height, covering the trigger.
+  describe("Panel placement", () => {
+    const menu = (placement, style = "") => html`
+      <ds-advanced-menu placement=${placement} style=${style}>
+        <button slot="trigger">Menu</button>
+        <div slot="menu" role="menu">
+          <button role="menuitem">Edit</button>
+          <button role="menuitem">Delete</button>
+          <button role="menuitem">Share</button>
+        </div>
+      </ds-advanced-menu>
+    `;
+    const rects = (el) => ({
+      trigger: el._triggerEl.getBoundingClientRect(),
+      panel: el.shadowRoot.querySelector(".menu-panel").getBoundingClientRect(),
+    });
+
+    it("should not be clipped by a scrolling ancestor", async () => {
+      const wrapper = await fixture(html`
+        <div style="overflow: auto; height: 24px">${menu("bottom-start")}</div>
+      `);
+      const el = wrapper.querySelector("ds-advanced-menu");
+      el.open();
+
+      const panel = el.shadowRoot.querySelector(".menu-panel");
+      expect(getComputedStyle(panel).position).to.equal("fixed");
+      const box = panel.getBoundingClientRect();
+      const y = box.top + 4;
+      expect(y).to.be.above(wrapper.getBoundingClientRect().bottom);
+      const hit = document.elementFromPoint(box.left + 10, y);
+      expect(hit === el || el.contains(hit)).to.be.true;
+      el.close();
+    });
+
+    it("should place bottom-start below the trigger by the offset", async () => {
+      const el = await fixture(menu("bottom-start", "margin: 40px"));
+      el.open();
+
+      const { trigger, panel } = rects(el);
+      expect(panel.top).to.be.closeTo(trigger.bottom + 8, 1);
+      expect(panel.left).to.be.closeTo(trigger.left, 1);
+      el.close();
+    });
+
+    it("should align bottom-end to the trigger's right edge", async () => {
+      const el = await fixture(menu("bottom-end", "margin-left: 300px"));
+      el.open();
+
+      const { trigger, panel } = rects(el);
+      expect(panel.right).to.be.closeTo(trigger.right, 1);
+      el.close();
+    });
+
+    it("should place top-start entirely above the trigger", async () => {
+      const el = await fixture(menu("top-start", "margin-top: 300px"));
+      el.open();
+      el.shadowRoot.querySelector(".menu-panel").style.transition = "none";
+      el._position();
+
+      const { trigger, panel } = rects(el);
+      expect(panel.bottom).to.be.closeTo(trigger.top - 8, 5);
+      el.close();
+    });
+  });
 });
