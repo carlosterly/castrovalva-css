@@ -465,18 +465,28 @@
             <tbody>
               <tr>
                 <td><code>Tab</code></td>
-                <td>Any</td>
-                <td>Moves focus to the next rail destination</td>
+                <td>Outside the rail</td>
+                <td>Moves focus into the rail, onto the active destination (the first enabled one if none is active). The rail is a single tab stop.</td>
               </tr>
               <tr>
-                <td><code>Shift+Tab</code></td>
-                <td>Any</td>
-                <td>Moves focus to the previous rail destination</td>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Inside the rail</td>
+                <td>Moves focus out of the rail. Tabbing back in returns to the active destination.</td>
+              </tr>
+              <tr>
+                <td><code>ArrowDown</code> / <code>ArrowUp</code></td>
+                <td>Inside the rail</td>
+                <td>Moves focus to the next / previous enabled destination, wrapping at the ends. Does not select.</td>
+              </tr>
+              <tr>
+                <td><code>Home</code> / <code>End</code></td>
+                <td>Inside the rail</td>
+                <td>Moves focus to the first / last enabled destination</td>
               </tr>
               <tr>
                 <td><code>Enter</code> / <code>Space</code></td>
                 <td>Focus on a destination</td>
-                <td>Activates the destination and fires the select event</td>
+                <td>Selects the destination and fires the select event. Focus stays on it.</td>
               </tr>
             </tbody>
           </table>
@@ -485,6 +495,12 @@
             <li>
               The rail uses <code>role="navigation"</code>; each item uses
               <code>role="tab"</code>.
+            </li>
+            <li>
+              Arrow keys move focus without selecting (manual activation), so
+              moving between destinations doesn't navigate away on every key
+              press. Selection happens on <code>Enter</code>, <code>Space</code>
+              or a click.
             </li>
             <li>
               Active items expose <code>aria-selected="true"</code>; disabled

@@ -1,4 +1,5 @@
 import { fixture, html, expect, oneEvent } from "@open-wc/testing";
+import { rovingTabindexSuite } from "./helpers/roving-tabindex.js";
 import {
   DSNavigationRail,
   DSNavigationRailItem,
@@ -358,5 +359,13 @@ describe("DSNavigationRail", () => {
 
       expect(event.detail.label).to.equal("Home Page");
     });
+  });
+
+  rovingTabindexSuite({
+    parent: "ds-navigation-rail",
+    item: "ds-navigation-rail-item",
+    next: "ArrowDown",
+    prev: "ArrowUp",
+    ignored: ["ArrowLeft", "ArrowRight"],
   });
 });

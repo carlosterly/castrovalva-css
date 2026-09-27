@@ -1,3 +1,5 @@
+import { RovingTabindex } from "../../utils/roving-tabindex.js";
+
 /**
  * DSNavigationBar - A Material Design 3 navigation bar component
  * Bottom navigation for switching between top-level app destinations
@@ -15,15 +17,21 @@ export class DSNavigationBar extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this._boundHandleItemClick = this.handleItemClick.bind(this);
+    this._roving = new RovingTabindex(this, {
+      itemTag: "ds-navigation-bar-item",
+      orientation: "horizontal",
+    });
   }
 
   connectedCallback() {
     this.render();
     this.setupEventListeners();
+    this._roving.connect();
   }
 
   disconnectedCallback() {
     this.removeEventListeners();
+    this._roving.disconnect();
   }
 
   setupEventListeners() {
@@ -135,6 +143,8 @@ export class DSNavigationBarItem extends HTMLElement {
     super();
     this.attachShadow({ mode: "open" });
     this._boundHandleClick = this.handleClick.bind(this);
+    // In the tab order unless a parent's roving tabindex says otherwise
+    this._tabStop = true;
   }
 
   connectedCallback() {
@@ -212,22 +222,35 @@ export class DSNavigationBarItem extends HTMLElement {
     }
   }
 
-  setupEventListeners() {
-    const button = this.shadowRoot.querySelector(".nav-item");
-    if (button) {
-      button.addEventListener("click", this._boundHandleClick);
-    }
+  /**
+   * Whether this item is the group's tab stop. Set by the parent's roving
+   * tabindex; a standalone item stays tabbable.
+   * @param {boolean} val
+   */
+  set tabStop(val) {
+    this._tabStop = Boolean(val);
+    this.shadowRoot
+      .querySelector(".nav-item")
+      ?.setAttribute("tabindex", this._tabStop ? "0" : "-1");
+  }
 
-    // Also listen for clicks on the host element itself (for programmatic clicks)
+  get tabStop() {
+    return this._tabStop;
+  }
+
+  focus(options) {
+    const button = this.shadowRoot.querySelector(".nav-item");
+    if (button) button.focus(options);
+    else super.focus(options);
+  }
+
+  setupEventListeners() {
+    // One host listener: clicks on the inner button bubble here too. A
+    // second listener on the button fired every selection twice.
     this.addEventListener("click", this._boundHandleClick);
   }
 
   removeEventListeners() {
-    const button = this.shadowRoot.querySelector(".nav-item");
-    if (button) {
-      button.removeEventListener("click", this._boundHandleClick);
-    }
-
     this.removeEventListener("click", this._boundHandleClick);
   }
 
@@ -257,6 +280,8 @@ export class DSNavigationBarItem extends HTMLElement {
     const disabled = this.disabled;
     const badge = this.badge;
     const hasBadge = badge && parseInt(badge, 10) > 0;
+    // Re-rendering replaces the button; don't drop keyboard focus with it
+    const hadFocus = this.shadowRoot.activeElement !== null;
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -414,7 +439,9 @@ export class DSNavigationBarItem extends HTMLElement {
       <button
         class="nav-item"
         part="container"
+        type="button"
         role="tab"
+        tabindex="${this._tabStop ? 0 : -1}"
         aria-selected="${active}"
         aria-disabled="${disabled}"
         aria-label="${label || this.textContent?.trim() || icon}">
@@ -440,7 +467,10 @@ export class DSNavigationBarItem extends HTMLElement {
       }
     }
 
-    this.setupEventListeners();
+
+    if (hadFocus) {
+      this.shadowRoot.querySelector(".nav-item").focus();
+    }
   }
 }
 

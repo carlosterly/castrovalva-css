@@ -50,14 +50,6 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~609 KB raw / ~99 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
 
-### navigation-bar
-
-- **B** — `ds-navigation-bar-item` renders `role="tab"` but `ds-navigation-bar` doesn't implement the roving-tabindex/arrow-key navigation the ARIA tab pattern expects — every item stays independently `Tab`-reachable instead of only the active one, and Left/Right don't move selection. Same gap in `navigation-rail` (see below). Not axe-detectable (axe checks structure, not interaction), found while fixing the `aria-required-parent` finding on the same component. Functions fine via `Tab` alone; the gap is a mismatch between the announced role's expected behavior and the actual one.
-
-### navigation-rail
-
-- **B** — Same roving-tabindex/arrow-key gap as `navigation-bar` (see above): `ds-navigation-rail-item` renders `role="tab"` with no arrow-key (here, up/down) navigation between destinations.
-
 ### search
 
 - **B** — `DSSearch > Keyboard > navigates down with ArrowDown` / `navigates up with ArrowUp` fail intermittently on WebKit only — 1–2 failures on most isolated runs (`npx wtr --config web-test-runner.full.config.js --files test/search.test.js`), sometimes passing in a full `npm run test:all`. Reproduces on the committed code, so it predates the 26 Sep fixes. Both tests wait a fixed `setTimeout(10)` after dispatching the keydown instead of awaiting the update — the arbitrary-timeout pattern CLAUDE.md's testing practices rule out — which is the likely source of the timing sensitivity. Not yet confirmed whether it's only the test or a real WebKit keyboard bug.

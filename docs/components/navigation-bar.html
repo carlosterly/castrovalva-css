@@ -436,18 +436,28 @@
             <tbody>
               <tr>
                 <td><code>Tab</code></td>
-                <td>Any</td>
-                <td>Moves focus to the next navigation item</td>
+                <td>Outside the bar</td>
+                <td>Moves focus into the bar, onto the active item (the first enabled one if none is active). The bar is a single tab stop.</td>
               </tr>
               <tr>
-                <td><code>Shift+Tab</code></td>
-                <td>Any</td>
-                <td>Moves focus to the previous navigation item</td>
+                <td><code>Tab</code> / <code>Shift+Tab</code></td>
+                <td>Inside the bar</td>
+                <td>Moves focus out of the bar. Tabbing back in returns to the active item.</td>
+              </tr>
+              <tr>
+                <td><code>ArrowRight</code> / <code>ArrowLeft</code></td>
+                <td>Inside the bar</td>
+                <td>Moves focus to the next / previous enabled item, wrapping at the ends. Does not select. In a right-to-left layout the two arrows swap.</td>
+              </tr>
+              <tr>
+                <td><code>Home</code> / <code>End</code></td>
+                <td>Inside the bar</td>
+                <td>Moves focus to the first / last enabled item</td>
               </tr>
               <tr>
                 <td><code>Enter</code> / <code>Space</code></td>
-                <td>Focus on an item</td>
-                <td>Activates the destination and fires the select event</td>
+                <td>Focus on a item</td>
+                <td>Selects the destination and fires the select event. Focus stays on it.</td>
               </tr>
             </tbody>
           </table>
@@ -456,6 +466,12 @@
             <li>
               The bar uses <code>role="navigation"</code>; each item uses
               <code>role="tab"</code>.
+            </li>
+            <li>
+              Arrow keys move focus without selecting (manual activation), so
+              moving between destinations doesn't navigate away on every key
+              press. Selection happens on <code>Enter</code>, <code>Space</code>
+              or a click.
             </li>
             <li>
               Active items expose <code>aria-selected="true"</code>; disabled

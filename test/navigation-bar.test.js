@@ -1,4 +1,5 @@
 import { fixture, html, expect, oneEvent } from "@open-wc/testing";
+import { rovingTabindexSuite } from "./helpers/roving-tabindex.js";
 import {
   DSNavigationBar,
   DSNavigationBarItem,
@@ -525,5 +526,13 @@ describe("DSNavigationBar", () => {
       expect(items[1].active).to.be.false;
       expect(items[2].active).to.be.true;
     });
+  });
+
+  rovingTabindexSuite({
+    parent: "ds-navigation-bar",
+    item: "ds-navigation-bar-item",
+    next: "ArrowRight",
+    prev: "ArrowLeft",
+    ignored: ["ArrowUp", "ArrowDown"],
   });
 });
