@@ -6,18 +6,18 @@ export default defineConfig({
     lib: {
       entry: {
         // Main entry point
-        index: resolve(__dirname, "src/index.js"),
+        index: resolve(import.meta.dirname, "src/index.js"),
 
         // CSS entry point (for separate CSS/JS loading)
-        styles: resolve(__dirname, "src/styles.css"),
+        styles: resolve(import.meta.dirname, "src/styles.css"),
 
         // Individual component entries for tree-shaking
-        button: resolve(__dirname, "src/components/button/button.js"),
-        icon: resolve(__dirname, "src/components/icon/icon.js"),
+        button: resolve(import.meta.dirname, "src/components/button/button.js"),
+        icon: resolve(import.meta.dirname, "src/components/icon/icon.js"),
         // Add more components as they are built:
-        // input: resolve(__dirname, "src/components/input/input.js"),
-        // card: resolve(__dirname, "src/components/card/card.js"),
-        // modal: resolve(__dirname, "src/components/modal/modal.js"),
+        // input: resolve(import.meta.dirname, "src/components/input/input.js"),
+        // card: resolve(import.meta.dirname, "src/components/card/card.js"),
+        // modal: resolve(import.meta.dirname, "src/components/modal/modal.js"),
       },
       formats: ["es"], // ES modules only (modern browsers)
       fileName: (format, entryName) => `${entryName}.js`,
@@ -50,7 +50,10 @@ export default defineConfig({
     minify: "terser",
     terserOptions: {
       compress: {
-        drop_console: true, // Remove console.log in production
+        // Strip debug logging only. drop_console would also remove the
+        // console.warn/error calls that tell a developer about bad input
+        // (it never ran under Vite 5, which didn't minify library output).
+        pure_funcs: ["console.log", "console.debug"],
         drop_debugger: true,
       },
     },
@@ -81,10 +84,10 @@ export default defineConfig({
   // Resolve aliases
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src"),
-      "@components": resolve(__dirname, "src/components"),
-      "@tokens": resolve(__dirname, "src/tokens"),
-      "@utils": resolve(__dirname, "src/utils"),
+      "@": resolve(import.meta.dirname, "src"),
+      "@components": resolve(import.meta.dirname, "src/components"),
+      "@tokens": resolve(import.meta.dirname, "src/tokens"),
+      "@utils": resolve(import.meta.dirname, "src/utils"),
     },
   },
 
