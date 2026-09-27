@@ -1,5 +1,6 @@
 import { html, fixture, expect, waitUntil } from "@open-wc/testing";
 import "../src/components/combobox/combobox.js";
+import { inForm, inDisabledFieldset, entriesOf } from "./helpers/forms.js";
 
 describe("DSCombobox", () => {
   describe("Initialization", () => {
@@ -783,6 +784,128 @@ describe("DSCombobox", () => {
       el._positionDropdown = () => spy.push(1);
       window.dispatchEvent(new Event("resize"));
       expect(spy).to.have.length(0);
+    });
+  });
+
+  // The combobox had no form association and no required support.
+  describe("Form association", () => {
+    const fruit = html`
+      <div slot="option" data-value="apple">Apple</div>
+      <div slot="option" data-value="banana">Banana</div>
+      <div slot="option" data-value="cherry">Cherry</div>
+    `;
+    // Option click listeners are attached a frame after render.
+    const pick = async (el, value) => {
+      el.show();
+      await new Promise((r) => requestAnimationFrame(r));
+      el.querySelector(`[data-value="${value}"]`).click();
+    };
+
+    it("should submit the selected value under its name", async () => {
+      const { form, el } = await inForm(
+        html`<ds-combobox name="fruit">${fruit}</ds-combobox>`,
+      );
+      await pick(el, "banana");
+      expect(entriesOf(form)).to.deep.equal([["fruit", "banana"]]);
+    });
+
+    it("should submit its initial value attribute", async () => {
+      const { form } = await inForm(
+        html`<ds-combobox name="fruit" value="cherry">${fruit}</ds-combobox>`,
+      );
+      expect(entriesOf(form)).to.deep.equal([["fruit", "cherry"]]);
+    });
+
+    it("should be left out with nothing selected", async () => {
+      const { form } = await inForm(html`<ds-combobox name="fruit">${fruit}</ds-combobox>`);
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    it("should follow a value set by property", async () => {
+      const { form, el } = await inForm(
+        html`<ds-combobox name="fruit">${fruit}</ds-combobox>`,
+      );
+      el.value = "apple";
+      expect(entriesOf(form)).to.deep.equal([["fruit", "apple"]]);
+    });
+
+    it("should submit one entry per selection when multiple", async () => {
+      const { form, el } = await inForm(
+        html`<ds-combobox name="fruit" multiple>${fruit}</ds-combobox>`,
+      );
+      await pick(el, "apple");
+      await pick(el, "cherry");
+      expect(entriesOf(form)).to.deep.equal([
+        ["fruit", "apple"],
+        ["fruit", "cherry"],
+      ]);
+    });
+
+    it("should block the form while required with nothing selected", async () => {
+      const { form, el } = await inForm(
+        html`<ds-combobox name="fruit" required>${fruit}</ds-combobox>`,
+      );
+      expect(el.required).to.be.true;
+      expect(el.validity.valueMissing).to.be.true;
+      expect(form.checkValidity()).to.be.false;
+
+      await pick(el, "apple");
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should update validity when required is toggled", async () => {
+      const { form, el } = await inForm(html`<ds-combobox name="fruit">${fruit}</ds-combobox>`);
+      el.required = true;
+      expect(form.checkValidity()).to.be.false;
+      el.required = false;
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    // The value attribute also reflects selection, so reset needs its own
+    // record of the default.
+    it("should restore its initial value when the form resets", async () => {
+      const { form, el } = await inForm(
+        html`<ds-combobox name="fruit" value="cherry">${fruit}</ds-combobox>`,
+      );
+      await pick(el, "apple");
+      form.reset();
+      expect(el.value).to.equal("cherry");
+      expect(entriesOf(form)).to.deep.equal([["fruit", "cherry"]]);
+    });
+
+    it("should clear when reset without an initial value", async () => {
+      const { form, el } = await inForm(html`<ds-combobox name="fruit">${fruit}</ds-combobox>`);
+      await pick(el, "apple");
+      form.reset();
+      expect(el.value).to.equal(null);
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    // The setter wrote disabled="false", which the platform (and
+    // :host([disabled])) still treat as disabled.
+    it("should really re-enable when disabled is set to false", async () => {
+      const { form, el } = await inForm(
+        html`<ds-combobox name="fruit" value="apple" disabled>${fruit}</ds-combobox>`,
+      );
+      el.disabled = false;
+      expect(el.hasAttribute("disabled")).to.be.false;
+      expect(el.matches(":disabled")).to.be.false;
+      expect(entriesOf(form)).to.deep.equal([["fruit", "apple"]]);
+    });
+
+    it("should be disabled by a disabled fieldset", async () => {
+      const { form, fieldset, el } = await inDisabledFieldset(
+        html`<ds-combobox name="fruit" value="apple">${fruit}</ds-combobox>`,
+      );
+      expect(el.disabled).to.be.true;
+      expect(el.shadowRoot.querySelector(".trigger").disabled).to.be.true;
+      el.show();
+      expect(el.open).to.be.false;
+      expect(entriesOf(form)).to.deep.equal([]);
+
+      fieldset.disabled = false;
+      expect(el.shadowRoot.querySelector(".trigger").disabled).to.be.false;
+      expect(entriesOf(form)).to.deep.equal([["fruit", "apple"]]);
     });
   });
 });

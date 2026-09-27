@@ -2,8 +2,14 @@ import {
   placeAnchored,
   trackViewportChanges,
 } from "../../utils/fixed-position.js";
+import { FormAssociated } from "../../utils/form-associated.js";
 
-export class DSCombobox extends HTMLElement {
+/**
+ * @attr {string} name - Form field name. A multiple combobox submits one
+ *   entry per selected value, like a multi-select.
+ * @attr {boolean} required - A selection is needed for its form to submit
+ */
+export class DSCombobox extends FormAssociated(HTMLElement) {
   static get observedAttributes() {
     return [
       "open",
@@ -12,6 +18,8 @@ export class DSCombobox extends HTMLElement {
       "disabled",
       "placeholder",
       "value",
+      "name",
+      "required",
     ];
   }
 
@@ -22,7 +30,10 @@ export class DSCombobox extends HTMLElement {
     this._open = false;
     this._multiple = false;
     this._searchable = true;
-    this._disabled = false;
+    // What a form reset restores. The value attribute also reflects
+    // selection, so it can't serve as the default once the user has picked.
+    this._defaultValue = null;
+    this._reflecting = false;
     this._placeholder = "Select an option";
     this._selectedValues = new Set();
     this._selectedLabels = new Map();
@@ -41,10 +52,11 @@ export class DSCombobox extends HTMLElement {
     if (!this.hasAttribute("multiple")) this.setAttribute("multiple", "false");
     if (!this.hasAttribute("searchable"))
       this.setAttribute("searchable", "true");
-    // Don't set disabled="false" - the attribute's presence triggers CSS :host([disabled])
+    // Don't set disabled="false" - the attribute's presence triggers CSS :host(:disabled)
     // Only add/remove the attribute, never set it to "false"
     if (!this.hasAttribute("placeholder"))
       this.setAttribute("placeholder", this._placeholder);
+    this._defaultValue ??= this.getAttribute("value") || "";
 
     this.render();
     this.setupEventListeners();
@@ -68,13 +80,11 @@ export class DSCombobox extends HTMLElement {
       case "searchable":
         this._searchable = newValue !== null && newValue !== "false";
         break;
-      case "disabled":
-        this._disabled = newValue !== null && newValue !== "false";
-        break;
       case "placeholder":
         this._placeholder = newValue || "Select an option";
         break;
       case "value":
+        if (!this._reflecting) this._defaultValue = newValue || "";
         this._selectedValues.clear();
         this._selectedLabels.clear();
         if (newValue) {
@@ -89,7 +99,55 @@ export class DSCombobox extends HTMLElement {
         }
         break;
     }
+    this._syncFormState();
     this.render();
+  }
+
+  // Submits like a select: the selected value, or one entry per value when
+  // multiple. Required means something must be selected.
+  _syncFormState() {
+    const values = Array.from(this._selectedValues);
+    let formValue = values[0] ?? null;
+    if (this._multiple) {
+      formValue = null;
+      if (this.name && values.length) {
+        formValue = new FormData();
+        values.forEach((v) => formValue.append(this.name, v));
+      }
+    }
+    this._setFormState(formValue, {
+      valueMissing: this.required && values.length === 0,
+    });
+  }
+
+  formResetCallback() {
+    this._reflecting = true;
+    if (this._defaultValue) {
+      this.setAttribute("value", this._defaultValue);
+    } else {
+      this.removeAttribute("value");
+    }
+    this._reflecting = false;
+  }
+
+  _onDisabledChange() {
+    this.render();
+  }
+
+  get required() {
+    return this.hasAttribute("required");
+  }
+
+  set required(value) {
+    this.toggleAttribute("required", Boolean(value));
+  }
+
+  // Reflect the selection to the value attribute without treating it as a
+  // new default.
+  _reflectValue() {
+    this._reflecting = true;
+    this.setAttribute("value", Array.from(this._selectedValues).join(","));
+    this._reflecting = false;
   }
 
   get open() {
@@ -123,15 +181,6 @@ export class DSCombobox extends HTMLElement {
     this.setAttribute("searchable", this._searchable ? "true" : "false");
   }
 
-  get disabled() {
-    return this._disabled;
-  }
-
-  set disabled(value) {
-    this._disabled = Boolean(value);
-    this.setAttribute("disabled", this._disabled ? "true" : "false");
-  }
-
   get value() {
     if (this._multiple) {
       return Array.from(this._selectedValues);
@@ -151,7 +200,7 @@ export class DSCombobox extends HTMLElement {
         this._selectedValues.add(val);
       }
     }
-    this.setAttribute("value", Array.from(this._selectedValues).join(","));
+    this._reflectValue();
     this._syncSelectedLabels();
     this.render();
   }
@@ -178,7 +227,7 @@ export class DSCombobox extends HTMLElement {
   }
 
   _handleKeyDown(e) {
-    if (this._disabled) return;
+    if (this.disabled) return;
 
     const filteredOptions = this._getFilteredOptions();
 
@@ -293,7 +342,7 @@ export class DSCombobox extends HTMLElement {
       this.close();
     }
 
-    this.setAttribute("value", Array.from(this._selectedValues).join(","));
+    this._reflectValue();
 
     const detail = {
       value: this._multiple
@@ -369,7 +418,7 @@ export class DSCombobox extends HTMLElement {
   }
 
   show() {
-    if (this._open || this._disabled) return;
+    if (this._open || this.disabled) return;
 
     this._open = true;
     this._searchText = "";
@@ -515,7 +564,7 @@ export class DSCombobox extends HTMLElement {
           --ds-combobox-selected-color: var(--md-sys-color-on-secondary-container, #1d192b);
         }
 
-        :host([disabled]) {
+        :host(:disabled) {
           opacity: 0.38;
           pointer-events: none;
         }
@@ -768,7 +817,7 @@ export class DSCombobox extends HTMLElement {
           part="trigger"
           aria-expanded="${this._open}"
           aria-haspopup="listbox"
-          ${this._disabled ? 'disabled=""' : ""}
+          ${this.disabled ? 'disabled=""' : ""}
           id="trigger-btn"
         >
           <span class="trigger-label">${selectedLabel}</span>
