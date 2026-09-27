@@ -1,3 +1,5 @@
+import { placeFixed } from "../../utils/fixed-position.js";
+
 /**
  * DSSplitButton - A Material Design 3 split button component
  * Combines a primary action button with a dropdown menu for related actions
@@ -39,6 +41,7 @@ export class DSSplitButton extends HTMLElement {
       this.handleMenuButtonKeydown.bind(this);
     this._boundHandleMenuKeydown = this.handleMenuKeydown.bind(this);
     this._boundHandleMenuItemKeydown = this.handleMenuItemKeydown.bind(this);
+    this._boundPositionMenu = this.positionMenu.bind(this);
   }
 
   connectedCallback() {
@@ -165,6 +168,8 @@ export class DSSplitButton extends HTMLElement {
     }
 
     document.removeEventListener("click", this._boundHandleOutsideClick);
+    window.removeEventListener("scroll", this._boundPositionMenu, true);
+    window.removeEventListener("resize", this._boundPositionMenu);
   }
 
   getMenuItems() {
@@ -328,10 +333,15 @@ export class DSSplitButton extends HTMLElement {
         menu.style.opacity = "1";
         menu.style.visibility = "visible";
         menu.style.transform = "translateY(0)";
+        this.positionMenu();
+        window.addEventListener("scroll", this._boundPositionMenu, true);
+        window.addEventListener("resize", this._boundPositionMenu);
       } else {
         menu.style.opacity = "0";
         menu.style.visibility = "hidden";
         menu.style.transform = "translateY(-8px)";
+        window.removeEventListener("scroll", this._boundPositionMenu, true);
+        window.removeEventListener("resize", this._boundPositionMenu);
       }
       menu.setAttribute("aria-hidden", !this._menuOpen);
     }
@@ -339,6 +349,30 @@ export class DSSplitButton extends HTMLElement {
     if (menuBtn) {
       menuBtn.setAttribute("aria-expanded", this._menuOpen);
     }
+  }
+
+  /**
+   * Place the menu against the host in viewport coordinates. The menu is
+   * `position: fixed` so a scrolling or clipping ancestor can't cut it off.
+   */
+  positionMenu() {
+    const menu = this.shadowRoot.querySelector(".menu");
+    if (!menu) return;
+
+    const rect = this.getBoundingClientRect();
+    const [vertical, align] = this.position.split("-");
+    const gap = 4;
+    const margin = 8;
+    const { clientWidth, clientHeight } = document.documentElement;
+    let left = align === "start" ? rect.left : rect.right - menu.offsetWidth;
+    let top =
+      vertical === "top" ? rect.top - gap - menu.offsetHeight : rect.bottom + gap;
+
+    // Keep it on screen: a 200px menu right-aligned to a narrow button near
+    // the left edge would otherwise start off-screen.
+    left = Math.max(margin, Math.min(left, clientWidth - menu.offsetWidth - margin));
+    top = Math.max(margin, Math.min(top, clientHeight - menu.offsetHeight - margin));
+    placeFixed(menu, left, top);
   }
 
   render() {
@@ -515,10 +549,10 @@ export class DSSplitButton extends HTMLElement {
         }
 
         /* Menu */
+        /* Fixed, placed by positionMenu(): an absolute menu is clipped by
+           any scrolling ancestor. */
         .menu {
-          position: absolute;
-          top: calc(100% + 4px);
-          right: 0;
+          position: fixed;
           min-width: 200px;
           background: var(--md-sys-color-surface-container, #F3EDF7);
           border-radius: var(--md-sys-shape-corner-extra-small, 4px);
@@ -526,36 +560,18 @@ export class DSSplitButton extends HTMLElement {
           opacity: 0;
           visibility: hidden;
           transform: translateY(-8px);
-          transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+          transition:
+            opacity 0.2s cubic-bezier(0.2, 0, 0, 1),
+            transform 0.2s cubic-bezier(0.2, 0, 0, 1),
+            visibility 0.2s;
           z-index: 1000;
           max-height: 300px;
           overflow-y: auto;
         }
 
-        /* Menu position variants */
-        .position-bottom-start .menu {
-          right: auto;
-          left: 0;
-        }
-
-        .position-bottom-end .menu {
-          right: 0;
-          left: auto;
-        }
-
-        .position-top-start .menu {
-          top: auto;
-          bottom: calc(100% + 4px);
-          right: auto;
-          left: 0;
-          transform: translateY(8px);
-        }
-
+        /* Menu position variants: top menus slide in from below */
+        .position-top-start .menu,
         .position-top-end .menu {
-          top: auto;
-          bottom: calc(100% + 4px);
-          right: 0;
-          left: auto;
           transform: translateY(8px);
         }
 

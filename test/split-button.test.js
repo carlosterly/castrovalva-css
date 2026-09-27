@@ -396,4 +396,120 @@ describe("ds-split-button", () => {
       expect(container.classList.contains("variant-outlined")).to.be.true;
     });
   });
+
+  // The menu used to be position: absolute, so any scrolling ancestor (the
+  // demo page's own .demo-box) clipped it to a sliver.
+  describe("Menu placement", () => {
+    // Open with the slide-in transition off, so geometry is final at once.
+    const openStill = (el) => {
+      el.shadowRoot.querySelector(".menu").style.transition = "none";
+      el.openMenu();
+    };
+
+    const inScroller = (position) => html`
+      <div style="overflow: auto; height: 48px; padding: 0 0 0 300px">
+        <ds-split-button position=${position}>
+          Save
+          <ds-menu-item slot="menu" value="a">Save As...</ds-menu-item>
+          <ds-menu-item slot="menu" value="b">Export</ds-menu-item>
+        </ds-split-button>
+      </div>
+    `;
+
+    it("should render the menu fixed so a scrolling ancestor can't clip it", async () => {
+      const wrapper = await fixture(inScroller("bottom-end"));
+      const el = wrapper.querySelector("ds-split-button");
+      await tick();
+      openStill(el);
+
+      const menu = el.shadowRoot.querySelector(".menu");
+      expect(getComputedStyle(menu).position).to.equal("fixed");
+
+      // A point on the menu but outside the scroller: only hits the menu if
+      // the scroller doesn't clip it.
+      const box = menu.getBoundingClientRect();
+      const y = wrapper.getBoundingClientRect().bottom + 2;
+      expect(box.bottom).to.be.above(y);
+      const hit = document.elementFromPoint(box.left + 10, y);
+      expect(hit === el || el.contains(hit)).to.be.true;
+      el.closeMenu();
+    });
+
+    it("should place a bottom-end menu below the host, right edges aligned", async () => {
+      const wrapper = await fixture(inScroller("bottom-end"));
+      const el = wrapper.querySelector("ds-split-button");
+      await tick();
+      openStill(el);
+
+      const host = el.getBoundingClientRect();
+      const menu = el.shadowRoot.querySelector(".menu").getBoundingClientRect();
+      expect(menu.top).to.be.closeTo(host.bottom + 4, 1);
+      expect(menu.right).to.be.closeTo(host.right, 1);
+      el.closeMenu();
+    });
+
+    it("should place a top-start menu above the host, left edges aligned", async () => {
+      const wrapper = await fixture(inScroller("top-start"));
+      wrapper.style.marginTop = "400px";
+      const el = wrapper.querySelector("ds-split-button");
+      await tick();
+      openStill(el);
+      const menuEl = el.shadowRoot.querySelector(".menu");
+
+      const host = el.getBoundingClientRect();
+      const menu = menuEl.getBoundingClientRect();
+      expect(menu.bottom).to.be.closeTo(host.top - 4, 1);
+      expect(menu.left).to.be.closeTo(host.left, 1);
+      el.closeMenu();
+    });
+
+    it("should follow the host when its container scrolls", async () => {
+      const wrapper = await fixture(html`
+        <div style="overflow: auto; height: 120px">
+          <div style="height: 40px"></div>
+          <ds-split-button>
+            Save
+            <ds-menu-item slot="menu" value="a">Save As...</ds-menu-item>
+          </ds-split-button>
+          <div style="height: 400px"></div>
+        </div>
+      `);
+      const el = wrapper.querySelector("ds-split-button");
+      await tick();
+      openStill(el);
+
+      wrapper.scrollTop = 20;
+      wrapper.dispatchEvent(new Event("scroll"));
+      const menu = el.shadowRoot.querySelector(".menu").getBoundingClientRect();
+      expect(menu.top).to.be.closeTo(el.getBoundingClientRect().bottom + 4, 1);
+      el.closeMenu();
+    });
+
+    it("should keep a right-aligned menu on screen near the left edge", async () => {
+      const el = await fixture(html`
+        <ds-split-button>
+          Save
+          <ds-menu-item slot="menu" value="a">Save As...</ds-menu-item>
+        </ds-split-button>
+      `);
+      await tick();
+      openStill(el);
+
+      const menu = el.shadowRoot.querySelector(".menu").getBoundingClientRect();
+      expect(menu.left).to.be.at.least(8);
+      el.closeMenu();
+    });
+
+    it("should stop repositioning once closed", async () => {
+      const el = await fixture(basicFixture);
+      await tick();
+      openStill(el);
+      el.closeMenu();
+
+      const menu = el.shadowRoot.querySelector(".menu");
+      const before = menu.style.top;
+      window.dispatchEvent(new Event("resize"));
+      expect(menu.style.top).to.equal(before);
+    });
+  });
 });
