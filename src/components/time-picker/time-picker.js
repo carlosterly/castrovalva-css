@@ -2,6 +2,7 @@ import {
   placeAnchored,
   trackViewportChanges,
 } from "../../utils/fixed-position.js";
+import { FormAssociated } from "../../utils/form-associated.js";
 
 /**
  * DSTimePicker - A Material Design 3 time picker component
@@ -23,9 +24,17 @@ import {
  * @csspart input - The input field
  * @csspart clock - The clock dropdown
  */
-export class DSTimePicker extends HTMLElement {
+export class DSTimePicker extends FormAssociated(HTMLElement) {
   static get observedAttributes() {
-    return ["value", "label", "disabled", "required", "hour12", "locale"];
+    return [
+      "value",
+      "label",
+      "disabled",
+      "required",
+      "hour12",
+      "locale",
+      "name",
+    ];
   }
 
   constructor() {
@@ -36,6 +45,10 @@ export class DSTimePicker extends HTMLElement {
     this._selectedHour = null;
     this._selectedMinute = null;
     this._period = "AM"; // AM or PM for 12-hour format
+    // What a form reset restores. The value attribute also reflects the
+    // picked time, so it can't serve as the default once the user has picked.
+    this._defaultValue = null;
+    this._reflecting = false;
 
     // Bind methods
     this._boundHandleInputClick = this.handleInputClick.bind(this);
@@ -44,8 +57,26 @@ export class DSTimePicker extends HTMLElement {
   }
 
   connectedCallback() {
+    this._defaultValue ??= this.getAttribute("value") || "";
     this.render();
     this.setupEventListeners();
+  }
+
+  // Submits HH:mm like a native time input ("" when empty). Required means
+  // a time must be picked.
+  _syncFormState() {
+    this._setFormState(this.value, {
+      valueMissing: this.required && !this.value,
+      anchor: this.shadowRoot.querySelector(".input-field") ?? undefined,
+    });
+  }
+
+  formResetCallback() {
+    this.value = this._defaultValue ?? "";
+  }
+
+  _onDisabledChange() {
+    this.render();
   }
 
   disconnectedCallback() {
@@ -56,8 +87,16 @@ export class DSTimePicker extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
-      if (name === "value" && newValue) {
-        this.parseValue(newValue);
+      if (name === "value") {
+        if (!this._reflecting) this._defaultValue = newValue || "";
+        if (newValue) {
+          this.parseValue(newValue);
+        } else {
+          // A removed value clears the selection too.
+          this._selectedHour = null;
+          this._selectedMinute = null;
+          this._period = "AM";
+        }
       }
       this.render();
     }
@@ -69,11 +108,13 @@ export class DSTimePicker extends HTMLElement {
   }
 
   set value(val) {
+    this._reflecting = true;
     if (val) {
       this.setAttribute("value", val);
     } else {
       this.removeAttribute("value");
     }
+    this._reflecting = false;
   }
 
   get label() {
@@ -82,18 +123,6 @@ export class DSTimePicker extends HTMLElement {
 
   set label(val) {
     this.setAttribute("label", val);
-  }
-
-  get disabled() {
-    return this.hasAttribute("disabled");
-  }
-
-  set disabled(val) {
-    if (val) {
-      this.setAttribute("disabled", "");
-    } else {
-      this.removeAttribute("disabled");
-    }
   }
 
   get required() {
@@ -778,6 +807,7 @@ export class DSTimePicker extends HTMLElement {
     this.renderClock();
     this.setupEventListeners();
     this.updateClockVisibility();
+    this._syncFormState();
   }
 }
 

@@ -1,5 +1,6 @@
 import { fixture, html, expect, oneEvent } from "@open-wc/testing";
 import { DSTimePicker } from "../src/components/time-picker/time-picker.js";
+import { inForm, inDisabledFieldset, entriesOf } from "./helpers/forms.js";
 
 describe("DSTimePicker", () => {
   describe("Initialization", () => {
@@ -584,6 +585,81 @@ describe("DSTimePicker", () => {
         1,
       );
       el.closeClock();
+    });
+  });
+
+  // The time picker had no form association.
+  describe("Form association", () => {
+    const pickTime = (el, hour, minute) => {
+      el.openClock();
+      el.selectHour(hour);
+      el.selectMinute(minute);
+    };
+
+    it("should submit its HH:mm value under its name", async () => {
+      const { form } = await inForm(
+        html`<ds-time-picker name="alarm" value="07:30"></ds-time-picker>`,
+      );
+      expect(entriesOf(form)).to.deep.equal([["alarm", "07:30"]]);
+    });
+
+    it("should submit an empty string when empty, like a native time input", async () => {
+      const { form } = await inForm(html`<ds-time-picker name="alarm"></ds-time-picker>`);
+      expect(entriesOf(form)).to.deep.equal([["alarm", ""]]);
+    });
+
+    it("should follow a picked time", async () => {
+      const { form, el } = await inForm(html`<ds-time-picker name="alarm"></ds-time-picker>`);
+      pickTime(el, 9, 15);
+      expect(entriesOf(form)).to.deep.equal([["alarm", "09:15"]]);
+    });
+
+    it("should block the form while required and empty", async () => {
+      const { form, el } = await inForm(
+        html`<ds-time-picker name="alarm" required></ds-time-picker>`,
+      );
+      expect(el.validity.valueMissing).to.be.true;
+      expect(form.checkValidity()).to.be.false;
+      pickTime(el, 9, 15);
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should clear its selection when the value is removed", async () => {
+      const el = await fixture(html`<ds-time-picker value="07:30"></ds-time-picker>`);
+      el.removeAttribute("value");
+      expect(el._selectedHour).to.equal(null);
+      expect(el.shadowRoot.querySelector(".input-field").value).to.equal("");
+    });
+
+    it("should restore its initial value when the form resets", async () => {
+      const { form, el } = await inForm(
+        html`<ds-time-picker name="alarm" value="07:30"></ds-time-picker>`,
+      );
+      pickTime(el, 9, 15);
+      form.reset();
+      expect(el.value).to.equal("07:30");
+      expect(entriesOf(form)).to.deep.equal([["alarm", "07:30"]]);
+    });
+
+    it("should clear when reset without an initial value", async () => {
+      const { form, el } = await inForm(html`<ds-time-picker name="alarm"></ds-time-picker>`);
+      pickTime(el, 9, 15);
+      form.reset();
+      expect(el.value).to.equal("");
+      expect(el._selectedHour).to.equal(null);
+    });
+
+    it("should be disabled by a disabled fieldset", async () => {
+      const { form, fieldset, el } = await inDisabledFieldset(
+        html`<ds-time-picker name="alarm" value="07:30"></ds-time-picker>`,
+      );
+      expect(el.disabled).to.be.true;
+      expect(el.shadowRoot.querySelector(".input-field").disabled).to.be.true;
+      expect(entriesOf(form)).to.deep.equal([]);
+
+      fieldset.disabled = false;
+      expect(el.shadowRoot.querySelector(".input-field").disabled).to.be.false;
+      expect(entriesOf(form)).to.deep.equal([["alarm", "07:30"]]);
     });
   });
 });
