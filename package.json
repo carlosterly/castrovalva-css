@@ -34,6 +34,8 @@
     "test:watch": "npm run test -- --watch",
     "test:all": "web-test-runner --node-resolve --config web-test-runner.full.config.js",
     "test:a11y": "playwright test test/accessibility",
+    "test:visual": "playwright test --config playwright.visual.config.js",
+    "test:visual:update": "playwright test --config playwright.visual.config.js --update-snapshots",
     "lint": "eslint src/**/*.js",
     "check:docs": "node scripts/check-api-docs.mjs",
     "lint:fix": "eslint src/**/*.js --fix"
