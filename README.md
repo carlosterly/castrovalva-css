@@ -5,7 +5,7 @@
 Material Design 3 implemented as vanilla Web Components. Zero runtime
 dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 
-**43 components** · **2,320 tests** · **92% coverage** · **99 KB gzipped (full library)**
+**43 components** · **2,324 tests** · **92% coverage** · **83 KB gzipped (full library)**
 
 <sub>Measured, not estimated — see [Measured numbers](#measured-numbers) for the breakdown and how to reproduce each figure.</sub>
 
@@ -130,11 +130,11 @@ command shown. Last measured 27 September 2026 (Lighthouse rows: 23 September).
 
 | Metric | Result | Reproduce |
 | --- | --- | --- |
-| Unit tests | 2,320 passing, Chromium | `npm test` |
+| Unit tests | 2,324 passing, Chromium | `npm test` |
 | Coverage | 92.9% statements | `npm test` (prints a summary; full report in `coverage/`) |
-| Cross-browser | 2,320/2,320 on each of Chromium, Firefox and WebKit | `npm run test:all` |
-| Bundle — full library | 609 KB raw / 99 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
-| Bundle — `castrovalva/button` | 16.8 KB raw / 3.2 KB gzip | `npm run build` |
+| Cross-browser | 2,324/2,324 on each of Chromium, Firefox and WebKit | `npm run test:all` |
+| Bundle — full library | 474 KB raw / 83 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
+| Bundle — `castrovalva/button` | 16.1 KB raw / 3.2 KB gzip (a shared chunk plus a one-line entry) | `npm run build` |
 | Bundle — `castrovalva/icon` | 6.6 KB raw / 2.0 KB gzip | `npm run build` |
 | Lighthouse, home page — mobile (simulated throttling, Lighthouse default) | Performance 98 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/` |
 | Lighthouse, home page — desktop | Performance 100 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/ --preset=desktop` |

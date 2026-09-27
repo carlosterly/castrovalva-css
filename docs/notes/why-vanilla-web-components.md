@@ -59,12 +59,13 @@ these notes. Frameworks earn their weight:
   of a *test* tool. Nothing shipped imports it.)
 - **Tree-shaking that can be granular.** A component with its own
   `vite.config.js` build entry ships on its own: `import "castrovalva/button"`
-  pulls in 17 KB raw / 3.2 KB gzipped — just the button and what it needs —
+  pulls in 16 KB raw / 3.2 KB gzipped — just the button and what it needs —
   instead of the whole library. Only `button` and `icon` have that entry so
   far; the other 41 components currently come in through the full bundle.
   Importing everything (`import "castrovalva"`) is
-  honestly heavier: ~609 KB raw / ~99 KB gzipped for all 43 components plus
-  the full icon set, a number this project hadn't actually measured until
+  honestly heavier: ~474 KB raw / ~83 KB gzipped for all 43 components plus
+  the full icon set (it was ~609 / ~99 until the Vite 8 upgrade started
+  minifying the library build, which Vite 5 never did), a number this project hadn't actually measured until
   writing this note turned up how stale the "~11 KB gzipped" figure on the
   home page and in the README had become. That's the kind of drift that
   happens when a number gets written down once, early, and never

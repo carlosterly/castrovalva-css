@@ -30,13 +30,13 @@ The component library is **done enough**. Adding component #44 does nothing for 
 | Current status | |
 | --- | --- |
 | Components | 43 — 36/36 official MD3, plus enhancements (combobox, banner, responsive image) and 10 utilities |
-| Tests | 52 files, 2,320 passing, ~93% coverage; 396 local visual regression shots |
+| Tests | 52 files, 2,324 passing, ~93% coverage; 396 local visual regression shots |
 | Lint | Clean — 0 errors, 0 warnings |
 | Deployed | Live — [carlosterly.github.io/castrovalva-css](https://carlosterly.github.io/castrovalva-css/) |
 
 Public component APIs are stable. Token prefixes in [tokens.md](./tokens.md) are the canonical naming scheme, and deprecations should be announced here before removal. Shadow DOM internals and undocumented details carry no stability guarantee.
 
-The thing a portfolio needs — **a URL someone can open** — exists, and most of the year's plan landed early: Q1 and Q2 are complete, Q3's headline (the theme playground) and Q4's minimum viable stop (the engineering notes) are done, all as of September 2026. What remains is about 16 hours — clearing the B-severity backlog in [DEFECTS.md](./DEFECTS.md) and a dependency refresh — so the risk has flipped from "not enough time" to "inventing work to fill it" (see Risks).
+The thing a portfolio needs — **a URL someone can open** — exists, and most of the year's plan landed early: Q1 and Q2 are complete, Q3's headline (the theme playground) and Q4's minimum viable stop (the engineering notes) are done, all as of September 2026. The B-severity backlog and the dependency refresh followed on 27 September; what remains is about 3 hours — a final accessibility pass and a roadmap review — so the risk has flipped from "not enough time" to "inventing work to fill it" (see Risks).
 
 ---
 
@@ -176,11 +176,11 @@ Delivered:
 - **Documented API verified against source.** A mechanical cross-check of every `api-table` on all 51 demo pages found 9 documented names that didn't exist: `--ds-fab-action-size`, `--ds-fab-action-gap` and `--ds-textarea-width` (hardcoded values underneath — now wired to the documented properties with unchanged defaults), a `textarea` CSS part never exposed, and all five of `advanced-menu`'s documented parts (`panel`, `backdrop` and `breadcrumb` are now exposed; `submenu` and `back-button` were removed from the table — they're the consumer's own light-DOM elements, which `::part()` can't reach). Kept as `npm run check:docs` (`scripts/check-api-docs.mjs`), 374 names checked. Attributes aren't covered: they're read through `dataset`, getters and class names in ways a text search can't resolve without false positives.
 - **Visual B-severity defects cleared.** Everything the manual pass had logged, plus what verifying the A fixes turned up. The undefined `--md-sys-color-*-rgb` tokens were worse than logged: besides the on-surface fallback that made `chip`/`radio`/`switch` hover and pressed layers invisible in dark theme, `radio`/`switch` fell back to MD3's baseline *purple* for their selected-state layers in every theme, `snackbar`'s action used a third undefined token, and `animation-presets`' glow had no fallback so never rendered. All 18 state layers now `color-mix()` the real role colour at `--md-sys-state-*-opacity` — theme-correct, and picking up high-contrast's doubled opacities. `tabs` hover got the `!important` its base rule forces (plus a pressed state); `textarea` got MD3 hover; elevated `card` and `data-table` rows got an on-surface state layer rather than a tonal step dark theme can't show; `dialog` got its scrim (`--md-sys-color-scrim`), and `bottom-sheet`/`side-sheet` scrims moved to the same token; the desktop `bottom-sheet` is centred. Verified by pixel-diffing rest vs hover/pressed in light, dark and high-contrast: 20 of the 30 measurements went from 0.00–0.45% (invisible) to 15–99%; the data-table row, which a whole-table diff can't isolate, was confirmed by screenshot. 2,114 tests, `test:a11y` 106/106, QA sweep clean. One new finding logged: full-screen overlay scrims leave the scrollbar gutter undimmed.
 - **Form association, across the whole input category (27 Sep 2026).** Cleared the last A-severity defect: `ds-text-field` never reached `FormData`, and of the nine input and selection components only `ds-checkbox` implemented the form-association pattern CLAUDE.md documents. All nine now extend one `FormAssociated` mixin (`src/utils/form-associated.js`): each submits what its native equivalent would, `required` blocks submission, the form's reset restores the authored default, a disabled `<fieldset>` disables it, and `:host(:disabled)` styles cover both. `ds-select`, named in the defect, doesn't exist; `ds-data-table` was left out deliberately (row selection isn't a form value). Doing it properly surfaced about a dozen bugs that isolated tests had never reached, written up in [the form-association note](./notes/form-association-pattern.md): text-field and textarea wiped typed input and dropped their listeners on any attribute change; textarea parsed its value as HTML; radio groups were document-wide (same-name radios in two forms unchecked each other); the date picker was off by a day west of UTC and excluded its own `min` day east of it (verified with Chromium's timezone override); combobox's `disabled = false` wrote `disabled="false"`; switch and radio stacked listeners on reconnect; arrow-key radio selection fired no change event. A native-form integration test with all nine components found one more on its first run (slider reset). 112 new tests; every one guarding new behaviour was run against the old code and failed (the few that passed there check that an unnamed or disabled field stays out of the submission, which the old code met by submitting nothing). 2,263 tests, `test:a11y` 106/106, visual regression unchanged apart from the home page's test count. Also found: a failing chai assertion on a DOM node hangs the file rather than failing — logged as the likely cause of the 66 tests that never run on Firefox and WebKit.
+- **B-severity backlog cleared, dependencies current (27 Sep 2026).** Every open defect in [DEFECTS.md](./DEFECTS.md) is closed, and most turned out bigger than logged. `ds-menu` measured itself while hidden, so it never flipped at a viewport edge. `ds-navigation-bar`/`-rail` got a shared roving tabindex with manual activation, which surfaced that every click fired `:select` twice and Enter dropped focus to `<body>`. The WebKit-only `ds-search` flake was a real bug: stacked listeners made ArrowDown skip every other suggestion on the live demo. The Firefox slider failures were the test harness (a real-mouse drag suite proves it), and the 66 tests that never ran on Firefox/WebKit were `navigation-drawer.test.js` hanging on a failing assertion that hid two focus bugs: no focus-on-open or Tab trap on Firefox/Safari (`offsetParent`), nor in any browser with `ds-nav-item` (shadow-DOM focusables). Doc links now open GitHub's rendered view. Dependencies: axe-core 4.13, Vite 8 (pixel-identical across 396 screenshots; the library build is now minified, 83 KB gzipped), web-test-runner 1.0, open-wc testing 5, ESLint 10 flat config (whose new rules led to a `ds-tabs` fix: disabled-tab skipping went the wrong way in RTL and with Home/End, and hung the page when every tab was disabled). All 2,324 tests now run and pass on Chromium, Firefox and WebKit. One tooling finding logged: `test:a11y` flakes locally with corrupted-looking axe source, predating all of this.
 
 | Remaining | Est. |
 | --- | --- |
-| Clear whatever remains in [DEFECTS.md](./DEFECTS.md), and fill component gaps only if Q2–Q3 surfaced real ones. | 10h |
-| Dependency refresh, final accessibility pass, roadmap review. | 6h |
+| Final accessibility pass, roadmap review. | 3h |
 
 **Minimum viable stop:** the engineering notes. Everything else is maintenance.
 
@@ -194,7 +194,7 @@ work, not a reason to have skipped it. What's left, still in risk order:
 2. **Axe findings, then the docs-site accessibility audit** — done, 106/106 as of 22 Sep 2026.
 3. **Visual regression** — done, 27 Sep 2026 (see Q3). Baselined after the axe backlog, the A- and B-severity visual defects and the scrim strip were cleared, and after fixing the five clipped popups it found — so the baselines record a fixed state.
 4. **Form association** — done, 27 Sep 2026 (see Q4), clearing the last A-severity defect.
-5. **What's left** — the remaining B entries in [DEFECTS.md](./DEFECTS.md), then the dependency refresh.
+5. **What's left** — done, 27 Sep 2026: the B entries in [DEFECTS.md](./DEFECTS.md), then the dependency refresh (see above).
 
 **Dependency refresh** carries its own separate risk (breaking upgrades) independent of this ordering — treat it on its own merits when it comes up, not by this list's position.
 
@@ -208,7 +208,7 @@ quarter.
 
 ### Why it exists
 
-2,320 passing unit tests prove **behaviour**: attributes reflect, events fire
+2,324 passing unit tests prove **behaviour**: attributes reflect, events fire
 with the right `detail`, keyboard handlers respond, ARIA attributes get set.
 
 They prove nothing about whether a component *looks* right, whether its ARIA is
