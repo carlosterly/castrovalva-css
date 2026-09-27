@@ -2,11 +2,17 @@
  * Material Design 3 Textarea Component
  * Multi-line text input with auto-resize and character counter
  */
-export class DSTextarea extends HTMLElement {
+import { FormAssociated } from "../utils/form-associated.js";
+
+export class DSTextarea extends FormAssociated(HTMLElement) {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
     this._value = "";
+    // What a form reset restores. The value attribute also reflects typing,
+    // so it can't serve as the default once the user has typed.
+    this._defaultValue = null;
+    this._reflecting = false;
     this._disabled = false;
     this._error = false;
     this._variant = "filled"; // filled or outlined
@@ -27,12 +33,41 @@ export class DSTextarea extends HTMLElement {
       "maxlength",
       "rows",
       "auto-resize",
+      "required",
     ];
   }
 
   connectedCallback() {
+    this._defaultValue ??= this.getAttribute("value") || "";
     this.render();
-    this.setupEventListeners();
+  }
+
+  formResetCallback() {
+    this.value = this._defaultValue ?? "";
+  }
+
+  _onDisabledChange() {
+    this.render();
+  }
+
+  // Submits like a native textarea, and mirrors its validity (required,
+  // maxlength) so an invalid field blocks the enclosing form.
+  _syncFormState() {
+    const textarea = this.shadowRoot?.querySelector("textarea");
+    if (!textarea) return;
+    this._setFormState(this._value, {
+      from: textarea.validity,
+      message: textarea.validationMessage,
+      anchor: textarea,
+    });
+  }
+
+  // Reflect the current value to the attribute without treating it as a
+  // new default.
+  _reflectValue() {
+    this._reflecting = true;
+    this.setAttribute("value", this._value);
+    this._reflecting = false;
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
@@ -41,6 +76,7 @@ export class DSTextarea extends HTMLElement {
     switch (name) {
       case "value": {
         this._value = newValue || "";
+        if (!this._reflecting) this._defaultValue = this._value;
         // Don't re-render on value change from input event
         // Just update the textarea value if it exists
         const textarea = this.shadowRoot?.querySelector("textarea");
@@ -48,6 +84,7 @@ export class DSTextarea extends HTMLElement {
           textarea.value = this._value;
         }
         this.updateCounter();
+        this._syncFormState();
         return; // Don't call render() for value changes
       }
       case "disabled":
@@ -79,19 +116,15 @@ export class DSTextarea extends HTMLElement {
 
   set value(val) {
     this._value = val || "";
-    this.setAttribute("value", this._value);
+    this._reflectValue();
   }
 
-  get disabled() {
-    return this._disabled;
+  get required() {
+    return this.hasAttribute("required");
   }
 
-  set disabled(val) {
-    if (val) {
-      this.setAttribute("disabled", "");
-    } else {
-      this.removeAttribute("disabled");
-    }
+  set required(val) {
+    this.toggleAttribute("required", Boolean(val));
   }
 
   get error() {
@@ -120,7 +153,7 @@ export class DSTextarea extends HTMLElement {
     // Handle input
     textarea.addEventListener("input", (e) => {
       this._value = e.target.value;
-      this.setAttribute("value", this._value);
+      this._reflectValue();
 
       // Auto-resize
       if (this._autoResize) {
@@ -188,7 +221,7 @@ export class DSTextarea extends HTMLElement {
     const helperText = this.getAttribute("helper-text") || "";
     const errorText = this.getAttribute("error-text") || "";
     const variant = this._variant;
-    const disabled = this._disabled;
+    const disabled = this.disabled;
     const error = this._error;
     const showCounter = this._maxlength !== null;
 
@@ -369,11 +402,12 @@ export class DSTextarea extends HTMLElement {
         <textarea
           part="textarea"
           ${disabled ? "disabled" : ""}
+          ${this.required ? "required" : ""}
           ${this._maxlength ? `maxlength="${this._maxlength}"` : ""}
           rows="${this._rows}"
           placeholder="${!label ? this.getAttribute("placeholder") || "" : ""}"
           ${label ? `aria-label="${label}"` : ""}
-        >${this._value}</textarea>
+        ></textarea>
       </div>
 
       ${
@@ -392,6 +426,13 @@ export class DSTextarea extends HTMLElement {
           : ""
       }
     `;
+
+    // Set through the DOM, not the template: markup in the value (a
+    // "</textarea>") would otherwise be parsed as HTML.
+    this.shadowRoot.querySelector("textarea").value = this._value;
+    // render() replaces the textarea, so listeners go on the new one.
+    this.setupEventListeners();
+    this._syncFormState();
 
     // Initial auto-resize
     if (this._autoResize && this._value) {

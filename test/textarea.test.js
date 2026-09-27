@@ -6,6 +6,7 @@ import {
   oneEvent,
 } from "@open-wc/testing";
 import "../src/components/ds-textarea.js";
+import { inForm, inDisabledFieldset, entriesOf } from "./helpers/forms.js";
 
 /**
  * Textarea Component Test Suite
@@ -365,6 +366,114 @@ describe("ds-textarea", () => {
       const el = await fixture(defaultFixture);
       const textarea = el.shadowRoot.querySelector("textarea");
       expect(textarea.hasAttribute("aria-label")).to.be.false;
+    });
+  });
+
+  // Textarea wasn't form-associated at all: FormData omitted it and it
+  // had no required support.
+  describe("Form association", () => {
+    const type = (el, text) => {
+      const textarea = el.shadowRoot.querySelector("textarea");
+      textarea.value = text;
+      textarea.dispatchEvent(new Event("input"));
+    };
+
+    it("should submit the typed value under its name", async () => {
+      const { form, el } = await inForm(
+        html`<ds-textarea name="bio"></ds-textarea>`,
+      );
+      type(el, "Line one\nLine two");
+      expect(entriesOf(form)).to.deep.equal([["bio", "Line one\nLine two"]]);
+    });
+
+    it("should submit its initial value attribute", async () => {
+      const { form } = await inForm(
+        html`<ds-textarea name="bio" value="Hello"></ds-textarea>`,
+      );
+      expect(entriesOf(form)).to.deep.equal([["bio", "Hello"]]);
+    });
+
+    it("should expose its form", async () => {
+      const { form, el } = await inForm(html`<ds-textarea></ds-textarea>`);
+      expect(el.form === form).to.be.true;
+    });
+
+    it("should block the form while required and empty", async () => {
+      const { form, el } = await inForm(
+        html`<ds-textarea name="bio" required></ds-textarea>`,
+      );
+      expect(el.required).to.be.true;
+      expect(el.shadowRoot.querySelector("textarea").required).to.be.true;
+      expect(el.validity.valueMissing).to.be.true;
+      expect(form.checkValidity()).to.be.false;
+
+      type(el, "Something");
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should toggle required by property", async () => {
+      const { form, el } = await inForm(html`<ds-textarea name="bio"></ds-textarea>`);
+      el.required = true;
+      expect(form.checkValidity()).to.be.false;
+      el.required = false;
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    // The value attribute also reflects typing, so reset needs its own record
+    // of the default.
+    it("should restore its initial value when the form resets", async () => {
+      const { form, el } = await inForm(
+        html`<ds-textarea name="bio" value="Hello"></ds-textarea>`,
+      );
+      type(el, "Changed");
+      expect(el.getAttribute("value")).to.equal("Changed");
+      form.reset();
+      expect(el.value).to.equal("Hello");
+      expect(el.shadowRoot.querySelector("textarea").value).to.equal("Hello");
+      expect(entriesOf(form)).to.deep.equal([["bio", "Hello"]]);
+    });
+
+    it("should take a value attribute set later as the new default", async () => {
+      const { form, el } = await inForm(html`<ds-textarea name="bio"></ds-textarea>`);
+      el.setAttribute("value", "Loaded");
+      type(el, "Edited");
+      form.reset();
+      expect(el.value).to.equal("Loaded");
+    });
+
+    it("should be disabled by a disabled fieldset", async () => {
+      const { form, fieldset, el } = await inDisabledFieldset(
+        html`<ds-textarea name="bio" value="Hello"></ds-textarea>`,
+      );
+      expect(el.disabled).to.be.true;
+      expect(el.shadowRoot.querySelector("textarea").disabled).to.be.true;
+      expect(entriesOf(form)).to.deep.equal([]);
+
+      fieldset.disabled = false;
+      expect(el.shadowRoot.querySelector("textarea").disabled).to.be.false;
+      expect(entriesOf(form)).to.deep.equal([["bio", "Hello"]]);
+    });
+
+    // render() interpolated the value into the markup, so a value containing
+    // </textarea> broke out of the element and was parsed as HTML.
+    it("should treat markup in the value as text", async () => {
+      const payload = "</textarea><img id=injected src=x>";
+      const el = await fixture(html`<ds-textarea value=${payload}></ds-textarea>`);
+      // Checked by identity: a failing assertion on a DOM element can hang
+      // chai while it formats the message.
+      expect(el.shadowRoot.querySelector("#injected") === null).to.be.true;
+      expect(el.shadowRoot.querySelector("textarea").value).to.equal(payload);
+    });
+
+    // Listeners were attached once, on connect; any attribute change rebuilt
+    // the textarea without them.
+    it("should keep firing input events after an attribute changes", async () => {
+      const el = await fixture(html`<ds-textarea></ds-textarea>`);
+      el.setAttribute("error", "");
+      const values = [];
+      el.addEventListener("ds-textarea:input", (e) => values.push(e.detail.value));
+      type(el, "x");
+      expect(values).to.deep.equal(["x"]);
     });
   });
 });
