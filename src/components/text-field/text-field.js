@@ -30,7 +30,9 @@
  *
  * @cssprop --ds-text-field-width - Width of text field (default: 100%)
  */
-class DSTextField extends HTMLElement {
+import { FormAssociated } from "../../utils/form-associated.js";
+
+class DSTextField extends FormAssociated(HTMLElement) {
   static get observedAttributes() {
     return [
       "variant",
@@ -51,13 +53,18 @@ class DSTextField extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: "open" });
-    this._internals = this.attachInternals?.();
+    // The current value, kept across re-renders; null until first connect.
+    this._value = null;
     this._handleSlotChange = () => this._updateIconState();
+    this._onInput = this._handleInput.bind(this);
+    this._onChange = this._handleChange.bind(this);
+    this._onFocus = this._handleFocus.bind(this);
+    this._onBlur = this._handleBlur.bind(this);
   }
 
   connectedCallback() {
+    this._value ??= this.getAttribute("value") || "";
     this.render();
-    this._setupEventListeners();
   }
 
   disconnectedCallback() {
@@ -66,9 +73,17 @@ class DSTextField extends HTMLElement {
   }
 
   attributeChangedCallback(name, oldValue, newValue) {
-    if (oldValue !== newValue && this.shadowRoot) {
-      this.render();
-    }
+    if (oldValue === newValue) return;
+    if (name === "value") this._value = newValue || "";
+    if (this.isConnected) this.render();
+  }
+
+  formResetCallback() {
+    this.value = this.getAttribute("value") || "";
+  }
+
+  _onDisabledChange() {
+    this.render();
   }
 
   // Properties
@@ -97,28 +112,17 @@ class DSTextField extends HTMLElement {
   }
 
   get value() {
-    const input = this.shadowRoot?.querySelector("input");
-    return input?.value || "";
+    return this._value ?? this.getAttribute("value") ?? "";
   }
 
   set value(value) {
+    this._value = value == null ? "" : String(value);
     const input = this.shadowRoot?.querySelector("input");
     if (input) {
-      input.value = value;
+      input.value = this._value;
       this._updateFloatingLabel();
       this._updateCharacterCounter();
-    }
-  }
-
-  get disabled() {
-    return this.hasAttribute("disabled");
-  }
-
-  set disabled(value) {
-    if (value) {
-      this.setAttribute("disabled", "");
-    } else {
-      this.removeAttribute("disabled");
+      this._syncFormState();
     }
   }
 
@@ -162,23 +166,26 @@ class DSTextField extends HTMLElement {
     input?.select();
   }
 
-  checkValidity() {
+  // Submits like a native input, and mirrors its validity (required, type,
+  // maxlength) so an invalid field blocks the enclosing form.
+  _syncFormState() {
     const input = this.shadowRoot?.querySelector("input");
-    return input?.checkValidity() || false;
+    if (!input) return;
+    this._setFormState(this._value, {
+      from: input.validity,
+      message: input.validationMessage,
+      anchor: input,
+    });
   }
 
-  reportValidity() {
-    const input = this.shadowRoot?.querySelector("input");
-    return input?.reportValidity() || false;
-  }
-
+  // render() replaces the input, so listeners go on the new one each time.
   _setupEventListeners() {
     const input = this.shadowRoot.querySelector("input");
     if (input) {
-      input.addEventListener("input", this._handleInput.bind(this));
-      input.addEventListener("change", this._handleChange.bind(this));
-      input.addEventListener("focus", this._handleFocus.bind(this));
-      input.addEventListener("blur", this._handleBlur.bind(this));
+      input.addEventListener("input", this._onInput);
+      input.addEventListener("change", this._onChange);
+      input.addEventListener("focus", this._onFocus);
+      input.addEventListener("blur", this._onBlur);
     }
   }
 
@@ -231,14 +238,16 @@ class DSTextField extends HTMLElement {
   _removeEventListeners() {
     const input = this.shadowRoot.querySelector("input");
     if (input) {
-      input.removeEventListener("input", this._handleInput.bind(this));
-      input.removeEventListener("change", this._handleChange.bind(this));
-      input.removeEventListener("focus", this._handleFocus.bind(this));
-      input.removeEventListener("blur", this._handleBlur.bind(this));
+      input.removeEventListener("input", this._onInput);
+      input.removeEventListener("change", this._onChange);
+      input.removeEventListener("focus", this._onFocus);
+      input.removeEventListener("blur", this._onBlur);
     }
   }
 
   _handleInput(e) {
+    this._value = e.target.value;
+    this._syncFormState();
     this._updateFloatingLabel();
     this._updateCharacterCounter();
 
@@ -333,7 +342,6 @@ class DSTextField extends HTMLElement {
     const disabled = this.disabled;
     const error = this.error;
     const required = this.required;
-    const value = this.getAttribute("value") || "";
 
     this.shadowRoot.innerHTML = `
       <style>
@@ -559,7 +567,6 @@ class DSTextField extends HTMLElement {
             ${disabled ? "disabled" : ""}
             ${required ? "required" : ""}
             ${maxLength ? `maxlength="${maxLength}"` : ""}
-            value="${value}"
             aria-invalid="${error}"
             aria-describedby="supporting-text"
             ${label ? `aria-label="${label}"` : ""}
@@ -588,6 +595,12 @@ class DSTextField extends HTMLElement {
           : ""
       }
     `;
+
+    // Set through the DOM, not the template: a quote in the value would
+    // otherwise end the attribute.
+    this.shadowRoot.querySelector("input").value = this.value;
+    this._setupEventListeners();
+    this._syncFormState();
 
     this._teardownSlotListeners();
     this._setupSlotListeners();

@@ -6,6 +6,7 @@ import {
   oneEvent,
 } from "@open-wc/testing";
 import "../src/components/text-field/text-field.js";
+import { inForm, inDisabledFieldset, entriesOf } from "./helpers/forms.js";
 
 /**
  * Text Field Component Test Suite
@@ -383,6 +384,148 @@ describe("ds-text-field", () => {
       const el = await fixture(html`<ds-text-field></ds-text-field>`);
       const input = el.shadowRoot.querySelector("input");
       expect(input.hasAttribute("aria-label")).to.be.false;
+    });
+  });
+
+  // ============================================
+  // Form association
+  // ============================================
+  // Guards the A-severity defect: the field called attachInternals() but
+  // never declared formAssociated or set a form value, so FormData silently
+  // omitted it.
+  describe("Form association", () => {
+    const type = (el, text) => {
+      const input = el.shadowRoot.querySelector("input");
+      input.value = text;
+      input.dispatchEvent(new Event("input"));
+    };
+
+    it("should submit the typed value under its name", async () => {
+      const { form, el } = await inForm(
+        html`<ds-text-field name="email"></ds-text-field>`,
+      );
+      type(el, "ada@example.com");
+      expect(entriesOf(form)).to.deep.equal([["email", "ada@example.com"]]);
+    });
+
+    it("should submit its initial value attribute", async () => {
+      const { form } = await inForm(
+        html`<ds-text-field name="city" value="Lisbon"></ds-text-field>`,
+      );
+      expect(entriesOf(form)).to.deep.equal([["city", "Lisbon"]]);
+    });
+
+    it("should submit an empty string when empty, like a native input", async () => {
+      const { form } = await inForm(html`<ds-text-field name="note"></ds-text-field>`);
+      expect(entriesOf(form)).to.deep.equal([["note", ""]]);
+    });
+
+    it("should submit a value set by property", async () => {
+      const { form, el } = await inForm(
+        html`<ds-text-field name="city"></ds-text-field>`,
+      );
+      el.value = "Porto";
+      expect(entriesOf(form)).to.deep.equal([["city", "Porto"]]);
+    });
+
+    it("should be left out without a name", async () => {
+      const { form, el } = await inForm(html`<ds-text-field></ds-text-field>`);
+      type(el, "anything");
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    it("should expose its form", async () => {
+      const { form, el } = await inForm(html`<ds-text-field></ds-text-field>`);
+      // Identity, not .equal(form): chai hangs formatting a <form> element
+      // into a failure message, so a failing .equal would stall the file.
+      expect(el.form === form).to.be.true;
+    });
+
+    it("should block the form while required and empty", async () => {
+      const { form, el } = await inForm(
+        html`<ds-text-field name="email" required></ds-text-field>`,
+      );
+      expect(el.validity.valueMissing).to.be.true;
+      expect(el.checkValidity()).to.be.false;
+      expect(form.checkValidity()).to.be.false;
+
+      type(el, "ada@example.com");
+      expect(el.validity.valid).to.be.true;
+      expect(form.checkValidity()).to.be.true;
+    });
+
+    it("should mirror the native input's type validation", async () => {
+      const { form, el } = await inForm(
+        html`<ds-text-field name="email" type="email"></ds-text-field>`,
+      );
+      type(el, "not-an-email");
+      expect(el.validity.typeMismatch).to.be.true;
+      expect(el.validationMessage).to.not.equal("");
+      expect(form.checkValidity()).to.be.false;
+    });
+
+    it("should restore its initial value when the form resets", async () => {
+      const { form, el } = await inForm(
+        html`<ds-text-field name="city" value="Lisbon"></ds-text-field>`,
+      );
+      type(el, "Porto");
+      form.reset();
+      expect(el.value).to.equal("Lisbon");
+      expect(el.shadowRoot.querySelector("input").value).to.equal("Lisbon");
+      expect(entriesOf(form)).to.deep.equal([["city", "Lisbon"]]);
+    });
+
+    it("should be left out while disabled", async () => {
+      const { form } = await inForm(
+        html`<ds-text-field name="city" value="Lisbon" disabled></ds-text-field>`,
+      );
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    it("should be disabled by a disabled fieldset", async () => {
+      const { form, fieldset, el } = await inDisabledFieldset(
+        html`<ds-text-field name="city" value="Lisbon"></ds-text-field>`,
+      );
+      expect(el.disabled).to.be.true;
+      expect(el.shadowRoot.querySelector("input").disabled).to.be.true;
+      expect(entriesOf(form)).to.deep.equal([]);
+
+      fieldset.disabled = false;
+      expect(el.disabled).to.be.false;
+      expect(el.shadowRoot.querySelector("input").disabled).to.be.false;
+      expect(entriesOf(form)).to.deep.equal([["city", "Lisbon"]]);
+    });
+
+    // render() used to rebuild the input from the value attribute and never
+    // re-attach its listeners: setting error after validation wiped what the
+    // user typed and silenced every later event.
+    it("should keep the typed value when an attribute changes", async () => {
+      const { form, el } = await inForm(
+        html`<ds-text-field name="email"></ds-text-field>`,
+      );
+      type(el, "ada@example.com");
+      el.setAttribute("error", "");
+      expect(el.value).to.equal("ada@example.com");
+      expect(el.shadowRoot.querySelector("input").value).to.equal("ada@example.com");
+      expect(entriesOf(form)).to.deep.equal([["email", "ada@example.com"]]);
+    });
+
+    it("should keep firing input events after an attribute changes", async () => {
+      const el = await fixture(html`<ds-text-field></ds-text-field>`);
+      el.setAttribute("error", "");
+      // Counted synchronously rather than awaited: a missing event should
+      // fail the test, not hang the file.
+      const values = [];
+      el.addEventListener("ds-text-field:input", (e) => values.push(e.detail.value));
+      type(el, "x");
+      expect(values).to.deep.equal(["x"]);
+    });
+
+    it("should keep a value containing quotes intact", async () => {
+      const el = await fixture(html`<ds-text-field></ds-text-field>`);
+      el.value = 'He said "hi"';
+      el.setAttribute("label", "Quote");
+      expect(el.shadowRoot.querySelector("input").value).to.equal('He said "hi"');
     });
   });
 });
