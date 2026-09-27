@@ -2,6 +2,7 @@ import {
   placeAnchored,
   trackViewportChanges,
 } from "../../utils/fixed-position.js";
+import { FormAssociated } from "../../utils/form-associated.js";
 
 /**
  * DSDatePicker - A Material Design 3 date picker component
@@ -25,9 +26,18 @@ import {
  * @csspart calendar - The calendar dropdown
  * @csspart day - Calendar day cells
  */
-export class DSDatePicker extends HTMLElement {
+export class DSDatePicker extends FormAssociated(HTMLElement) {
   static get observedAttributes() {
-    return ["value", "min", "max", "label", "disabled", "required", "locale"];
+    return [
+      "value",
+      "min",
+      "max",
+      "label",
+      "disabled",
+      "required",
+      "locale",
+      "name",
+    ];
   }
 
   constructor() {
@@ -36,6 +46,10 @@ export class DSDatePicker extends HTMLElement {
     this._isOpen = false;
     this._currentMonth = new Date();
     this._selectedDate = null;
+    // What a form reset restores. The value attribute also reflects the
+    // picked date, so it can't serve as the default once the user has picked.
+    this._defaultValue = null;
+    this._reflecting = false;
 
     // Bind methods
     this._boundHandleInputClick = this.handleInputClick.bind(this);
@@ -44,8 +58,37 @@ export class DSDatePicker extends HTMLElement {
   }
 
   connectedCallback() {
+    this._defaultValue ??= this.getAttribute("value") || "";
     this.render();
     this.setupEventListeners();
+  }
+
+  // Submits the ISO date like a native date input ("" when empty).
+  // Required means a date must be picked.
+  _syncFormState() {
+    this._setFormState(this.value, {
+      valueMissing: this.required && !this.value,
+      anchor: this.shadowRoot.querySelector(".input-field") ?? undefined,
+    });
+  }
+
+  formResetCallback() {
+    this.value = this._defaultValue ?? "";
+  }
+
+  _onDisabledChange() {
+    this.render();
+  }
+
+  /**
+   * Parse "YYYY-MM-DD" as a local date. `new Date("2024-12-25")` parses as
+   * UTC midnight, which is the 24th anywhere west of UTC.
+   */
+  parseDateISO(value) {
+    const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(value);
+    return match
+      ? new Date(Number(match[1]), Number(match[2]) - 1, Number(match[3]))
+      : new Date(value);
   }
 
   disconnectedCallback() {
@@ -56,9 +99,13 @@ export class DSDatePicker extends HTMLElement {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue !== newValue) {
-      if (name === "value" && newValue) {
-        this._selectedDate = new Date(newValue);
-        this._currentMonth = new Date(this._selectedDate);
+      if (name === "value") {
+        if (!this._reflecting) this._defaultValue = newValue || "";
+        // A removed value clears the selection too.
+        this._selectedDate = newValue ? this.parseDateISO(newValue) : null;
+        if (this._selectedDate) {
+          this._currentMonth = new Date(this._selectedDate);
+        }
       }
       this.render();
     }
@@ -70,11 +117,13 @@ export class DSDatePicker extends HTMLElement {
   }
 
   set value(val) {
+    this._reflecting = true;
     if (val) {
       this.setAttribute("value", val);
     } else {
       this.removeAttribute("value");
     }
+    this._reflecting = false;
   }
 
   get min() {
@@ -107,18 +156,6 @@ export class DSDatePicker extends HTMLElement {
 
   set label(val) {
     this.setAttribute("label", val);
-  }
-
-  get disabled() {
-    return this.hasAttribute("disabled");
-  }
-
-  set disabled(val) {
-    if (val) {
-      this.setAttribute("disabled", "");
-    } else {
-      this.removeAttribute("disabled");
-    }
   }
 
   get required() {
@@ -290,8 +327,8 @@ export class DSDatePicker extends HTMLElement {
   }
 
   isDateDisabled(date) {
-    const minDate = this.min ? new Date(this.min) : null;
-    const maxDate = this.max ? new Date(this.max) : null;
+    const minDate = this.min ? this.parseDateISO(this.min) : null;
+    const maxDate = this.max ? this.parseDateISO(this.max) : null;
 
     if (minDate && date < minDate) return true;
     if (maxDate && date > maxDate) return true;
@@ -388,14 +425,14 @@ export class DSDatePicker extends HTMLElement {
         button.addEventListener("click", (e) => {
           e.stopPropagation();
           const dateStr = button.dataset.date;
-          this.selectDate(new Date(dateStr));
+          this.selectDate(this.parseDateISO(dateStr));
         });
       });
   }
 
   render() {
     const value =
-      this._selectedDate || (this.value ? new Date(this.value) : null);
+      this._selectedDate || (this.value ? this.parseDateISO(this.value) : null);
     const displayValue = value ? this.formatDateDisplay(value) : "";
     const disabled = this.disabled;
     const required = this.required;
@@ -661,6 +698,7 @@ export class DSDatePicker extends HTMLElement {
     this.renderCalendar();
     this.setupEventListeners();
     this.updateCalendarVisibility();
+    this._syncFormState();
   }
 }
 

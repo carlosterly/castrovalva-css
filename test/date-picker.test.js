@@ -1,5 +1,6 @@
 import { expect, fixture, html, oneEvent } from "@open-wc/testing";
 import "../src/components/date-picker/date-picker.js";
+import { inForm, inDisabledFieldset, entriesOf } from "./helpers/forms.js";
 
 describe("DSDatePicker", () => {
   describe("Initialization", () => {
@@ -468,6 +469,84 @@ describe("DSDatePicker", () => {
         1,
       );
       el.closeCalendar();
+    });
+  });
+
+  // The date picker had no form association.
+  describe("Form association", () => {
+    const clickDay = (el, iso) => {
+      el.openCalendar();
+      el.shadowRoot.querySelector(`.calendar-day[data-date="${iso}"]`).click();
+    };
+
+    it("should submit its ISO value under its name", async () => {
+      const { form } = await inForm(
+        html`<ds-date-picker name="start" value="2026-06-15"></ds-date-picker>`,
+      );
+      expect(entriesOf(form)).to.deep.equal([["start", "2026-06-15"]]);
+    });
+
+    it("should submit an empty string when empty, like a native date input", async () => {
+      const { form } = await inForm(html`<ds-date-picker name="start"></ds-date-picker>`);
+      expect(entriesOf(form)).to.deep.equal([["start", ""]]);
+    });
+
+    // Clicking a day parsed its ISO date as UTC midnight, so anywhere west of
+    // UTC the stored value was the day before. Only fails on the old code in
+    // such a timezone; verified separately under America/New_York.
+    it("should submit exactly the day that was clicked", async () => {
+      const { form, el } = await inForm(
+        html`<ds-date-picker name="start" value="2026-06-01"></ds-date-picker>`,
+      );
+      clickDay(el, "2026-06-15");
+      expect(el.value).to.equal("2026-06-15");
+      expect(entriesOf(form)).to.deep.equal([["start", "2026-06-15"]]);
+    });
+
+    it("should read its value as a local date", async () => {
+      const el = await fixture(html`<ds-date-picker value="2024-12-25"></ds-date-picker>`);
+      expect(el._selectedDate.getDate()).to.equal(25);
+      expect(el.parseDateISO("2024-12-25").getMonth()).to.equal(11);
+    });
+
+    it("should block the form while required and empty", async () => {
+      const { form, el } = await inForm(
+        html`<ds-date-picker name="start" value="2026-06-01" required></ds-date-picker>`,
+      );
+      expect(form.checkValidity()).to.be.true;
+      el.value = "";
+      expect(el.validity.valueMissing).to.be.true;
+      expect(form.checkValidity()).to.be.false;
+    });
+
+    it("should clear its selection when the value is removed", async () => {
+      const el = await fixture(html`<ds-date-picker value="2026-06-15"></ds-date-picker>`);
+      el.removeAttribute("value");
+      expect(el._selectedDate).to.equal(null);
+      expect(el.shadowRoot.querySelector(".input-field").value).to.equal("");
+    });
+
+    it("should restore its initial value when the form resets", async () => {
+      const { form, el } = await inForm(
+        html`<ds-date-picker name="start" value="2026-06-01"></ds-date-picker>`,
+      );
+      clickDay(el, "2026-06-20");
+      form.reset();
+      expect(el.value).to.equal("2026-06-01");
+      expect(entriesOf(form)).to.deep.equal([["start", "2026-06-01"]]);
+    });
+
+    it("should be disabled by a disabled fieldset", async () => {
+      const { form, fieldset, el } = await inDisabledFieldset(
+        html`<ds-date-picker name="start" value="2026-06-01"></ds-date-picker>`,
+      );
+      expect(el.disabled).to.be.true;
+      expect(el.shadowRoot.querySelector(".input-field").disabled).to.be.true;
+      expect(entriesOf(form)).to.deep.equal([]);
+
+      fieldset.disabled = false;
+      expect(el.shadowRoot.querySelector(".input-field").disabled).to.be.false;
+      expect(entriesOf(form)).to.deep.equal([["start", "2026-06-01"]]);
     });
   });
 });
