@@ -1,5 +1,7 @@
 import { fixture, expect, html, oneEvent } from "@open-wc/testing";
+import { sendKeys } from "@web/test-runner-commands";
 import "../src/components/navigation-drawer/navigation-drawer.js";
+import "../src/components/navigation-drawer/nav-item.js";
 
 describe("DSNavigationDrawer", () => {
   describe("Rendering", () => {
@@ -394,8 +396,9 @@ describe("DSNavigationDrawer", () => {
       el.open = true;
       await new Promise((resolve) => setTimeout(resolve, 100));
 
-      const firstBtn = el.querySelector("#first-btn");
-      expect(document.activeElement).to.equal(firstBtn);
+      // Compared by id: a failing to.equal() on DOM nodes hangs chai while
+      // it formats them, which stalled this whole file on Firefox and WebKit
+      expect(document.activeElement?.id).to.equal("first-btn");
     });
   });
 
@@ -442,52 +445,91 @@ describe("DSNavigationDrawer", () => {
   });
 
   describe("Focus Trap", () => {
-    it("should trap focus on Tab key in modal variant", async () => {
-      const el = await fixture(html`
-        <ds-navigation-drawer variant="modal" open>
-          <button id="btn1">First</button>
-          <button id="btn2">Last</button>
-        </ds-navigation-drawer>
+    // Real key presses (sendKeys), asserting where focus lands. The old
+    // versions dispatched a synthetic Tab and asserted nothing, so they
+    // passed while the trap found no focusable elements on Firefox/Safari.
+    const openModal = async () => {
+      const wrapper = await fixture(html`
+        <div>
+          <ds-navigation-drawer variant="modal">
+            <button id="btn1">Inbox</button>
+            <button id="hidden-btn" style="display: none">Hidden</button>
+            <button id="btn2">Archive</button>
+          </ds-navigation-drawer>
+          <button id="outside">Outside</button>
+        </div>
       `);
+      const el = wrapper.querySelector("ds-navigation-drawer");
+      el.open = true;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      return el;
+    };
 
-      const btn1 = el.querySelector("#btn1");
-      const btn2 = el.querySelector("#btn2");
-
-      // Move focus to last element
-      btn2.focus();
-      expect(document.activeElement).to.equal(btn2);
-
-      // Press Tab on last element - should wrap to first
-      const tabEvent = new KeyboardEvent("keydown", {
-        key: "Tab",
-        bubbles: true,
-      });
-      document.dispatchEvent(tabEvent);
-      await el.updateComplete;
+    it("wraps Tab from the last item to the first in modal variant", async () => {
+      await openModal();
+      expect(document.activeElement?.id).to.equal("btn1");
+      await sendKeys({ press: "Tab" });
+      expect(document.activeElement?.id).to.equal("btn2");
+      await sendKeys({ press: "Tab" });
+      expect(document.activeElement?.id).to.equal("btn1");
     });
 
-    it("should trap focus on Shift+Tab key in modal variant", async () => {
-      const el = await fixture(html`
-        <ds-navigation-drawer variant="modal" open>
-          <button id="btn1">First</button>
-          <button id="btn2">Last</button>
-        </ds-navigation-drawer>
+    it("wraps Shift+Tab from the first item to the last in modal variant", async () => {
+      await openModal();
+      await sendKeys({ press: "Shift+Tab" });
+      expect(document.activeElement?.id).to.equal("btn2");
+    });
+
+    // Guards the drawer's own items: ds-nav-item keeps its focusable <a> in a
+    // shadow root, which a light-DOM query never found (every browser).
+    const deepActiveText = () => {
+      let a = document.activeElement;
+      while (a?.shadowRoot?.activeElement) a = a.shadowRoot.activeElement;
+      return a?.getRootNode().host?.textContent.trim() ?? a?.id;
+    };
+    const openNavItems = async () => {
+      const wrapper = await fixture(html`
+        <div>
+          <button id="trigger">Menu</button>
+          <ds-navigation-drawer variant="modal">
+            <ds-nav-item icon="inbox">Inbox</ds-nav-item>
+            <ds-nav-item icon="send" disabled>Sent</ds-nav-item>
+            <ds-nav-item icon="archive">Archive</ds-nav-item>
+          </ds-navigation-drawer>
+        </div>
       `);
+      wrapper.querySelector("#trigger").focus();
+      const el = wrapper.querySelector("ds-navigation-drawer");
+      el.open = true;
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      return el;
+    };
 
-      const btn1 = el.querySelector("#btn1");
+    it("focuses the first ds-nav-item when opened", async () => {
+      await openNavItems();
+      expect(deepActiveText()).to.equal("Inbox");
+    });
 
-      // Move focus to first element
-      btn1.focus();
-      expect(document.activeElement).to.equal(btn1);
+    it("traps Tab among ds-nav-items, skipping disabled ones", async () => {
+      await openNavItems();
+      await sendKeys({ press: "Tab" });
+      expect(deepActiveText()).to.equal("Archive");
+      await sendKeys({ press: "Tab" });
+      expect(deepActiveText()).to.equal("Inbox");
+      await sendKeys({ press: "Shift+Tab" });
+      expect(deepActiveText()).to.equal("Archive");
+    });
 
-      // Press Shift+Tab on first element - should wrap to last
-      const shiftTabEvent = new KeyboardEvent("keydown", {
-        key: "Tab",
-        shiftKey: true,
-        bubbles: true,
-      });
-      document.dispatchEvent(shiftTabEvent);
-      await el.updateComplete;
+    it("returns focus to the trigger when closed", async () => {
+      const el = await openNavItems();
+      el.open = false;
+      expect(document.activeElement?.id).to.equal("trigger");
+    });
+
+    it("leaves hidden elements out of the focus order", async () => {
+      const el = await openModal();
+      const ids = el.getFocusableElements().map((node) => node.id);
+      expect(ids).to.deep.equal(["btn1", "btn2"]);
     });
 
     it("should not trap focus when drawer is closed", async () => {

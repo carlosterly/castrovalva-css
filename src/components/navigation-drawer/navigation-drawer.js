@@ -126,6 +126,7 @@ class DSNavigationDrawer extends HTMLElement {
 
   handleFocusTrap(event) {
     const focusableElements = this.getFocusableElements();
+    const active = this._deepActiveElement();
     if (focusableElements.length === 0) return;
 
     const firstElement = focusableElements[0];
@@ -134,7 +135,7 @@ class DSNavigationDrawer extends HTMLElement {
     if (event.shiftKey) {
       // Shift + Tab
       if (
-        document.activeElement === firstElement ||
+        active === firstElement ||
         !this.contains(document.activeElement)
       ) {
         event.preventDefault();
@@ -142,7 +143,7 @@ class DSNavigationDrawer extends HTMLElement {
       }
     } else {
       // Tab
-      if (document.activeElement === lastElement) {
+      if (active === lastElement) {
         event.preventDefault();
         firstElement.focus();
       }
@@ -159,9 +160,37 @@ class DSNavigationDrawer extends HTMLElement {
       '[tabindex]:not([tabindex="-1"])',
     ];
 
-    return Array.from(this.querySelectorAll(selectors.join(", "))).filter(
-      (el) => !el.hasAttribute("disabled") && el.offsetParent !== null,
+    const selector = selectors.join(", ");
+
+    // Walk into open shadow roots too: ds-nav-item's focusable <a> lives in
+    // its own shadow root, so a light-DOM query found nothing in a drawer
+    // built from its own items - no focus on open, no Tab trap.
+    const found = [];
+    const walk = (root) => {
+      for (const el of root.querySelectorAll("*")) {
+        if (el.matches(selector)) found.push(el);
+        if (el.shadowRoot) walk(el.shadowRoot);
+      }
+    };
+    walk(this);
+
+    // Rendered = has boxes. Not offsetParent: inside the position: fixed
+    // container it is null on Firefox and Safari for every element.
+    return found.filter(
+      (el) =>
+        !el.hasAttribute("disabled") &&
+        el.tabIndex >= 0 &&
+        el.getClientRects().length > 0,
     );
+  }
+
+  /** The focused element, looking through open shadow roots */
+  _deepActiveElement() {
+    let active = document.activeElement;
+    while (active?.shadowRoot?.activeElement) {
+      active = active.shadowRoot.activeElement;
+    }
+    return active;
   }
 
   updateOpenState() {
