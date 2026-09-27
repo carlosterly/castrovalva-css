@@ -1,6 +1,13 @@
-export class DSSlider extends HTMLElement {
+import { FormAssociated } from "../utils/form-associated.js";
+
+/**
+ * @attr {string} name - Form field name. A single slider submits its value;
+ *   a range slider submits two entries under the name, start then end.
+ */
+export class DSSlider extends FormAssociated(HTMLElement) {
   static get observedAttributes() {
     return [
+      "name",
       "value",
       "min",
       "max",
@@ -24,7 +31,6 @@ export class DSSlider extends HTMLElement {
     this._min = 0;
     this._max = 100;
     this._step = 1;
-    this._disabled = false;
     this._isDragging = false;
 
     // Range support
@@ -53,10 +59,44 @@ export class DSSlider extends HTMLElement {
     this._detachListeners();
   }
 
+  // Dragged values aren't reflected to the attributes, so they still hold
+  // the defaults a form reset restores.
+  formResetCallback() {
+    const read = (attr, fallback) =>
+      this.hasAttribute(attr) ? parseFloat(this.getAttribute(attr)) : fallback;
+    this._value = read("value", 50);
+    this._valueStart = read("value-start", 25);
+    this._valueEnd = read("value-end", 75);
+    this._updateVisuals();
+    this._updateValueText();
+  }
+
+  _onDisabledChange() {
+    this._updateDisabledState();
+  }
+
+  _syncFormState() {
+    if (!this._isRange) {
+      this._setFormState(String(this._value));
+      return;
+    }
+    if (!this.name) {
+      this._setFormState(null);
+      return;
+    }
+    const data = new FormData();
+    data.append(this.name, String(this._valueStart));
+    data.append(this.name, String(this._valueEnd));
+    this._setFormState(data);
+  }
+
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue) return;
 
     switch (name) {
+      case "name":
+        this._syncFormState();
+        break;
       case "value":
         this._value = parseFloat(newValue);
         if (!this._isDragging) this._updateVisuals();
@@ -73,7 +113,6 @@ export class DSSlider extends HTMLElement {
         this._step = parseFloat(newValue);
         break;
       case "disabled":
-        this._disabled = newValue !== null;
         this._updateDisabledState();
         break;
       case "label":
@@ -127,14 +166,6 @@ export class DSSlider extends HTMLElement {
   }
   set step(val) {
     this.setAttribute("step", val);
-  }
-
-  get disabled() {
-    return this._disabled;
-  }
-  set disabled(val) {
-    if (val) this.setAttribute("disabled", "");
-    else this.removeAttribute("disabled");
   }
 
   get range() {
@@ -215,7 +246,7 @@ export class DSSlider extends HTMLElement {
   }
 
   _handlePointerDown(e) {
-    if (this._disabled) return;
+    if (this.disabled) return;
 
     e.preventDefault();
 
@@ -364,7 +395,7 @@ export class DSSlider extends HTMLElement {
   }
 
   _handleKeyDown(e) {
-    if (this._disabled) return;
+    if (this.disabled) return;
 
     const step = this._step > 0 ? this._step : 1;
     const bigStep = Math.max(step, (this._max - this._min) / 10);
@@ -467,7 +498,7 @@ export class DSSlider extends HTMLElement {
       elm.setAttribute("aria-valuemax", String(max));
       elm.setAttribute("aria-valuenow", String(now));
       elm.setAttribute("aria-valuetext", String(now));
-      if (this._disabled) {
+      if (this.disabled) {
         elm.setAttribute("aria-disabled", "true");
         elm.setAttribute("tabindex", "-1");
       } else {
@@ -503,6 +534,8 @@ export class DSSlider extends HTMLElement {
   }
 
   _updateVisuals() {
+    // Every value change passes through here, so the form value follows.
+    this._syncFormState();
     if (!this._track) return;
 
     const range = this._max - this._min;
@@ -571,7 +604,7 @@ export class DSSlider extends HTMLElement {
   _updateDisabledState() {
     if (!this._container) return;
 
-    if (this._disabled) {
+    if (this.disabled) {
       this._container.classList.add("disabled");
     } else {
       this._container.classList.remove("disabled");

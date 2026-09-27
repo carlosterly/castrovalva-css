@@ -6,6 +6,7 @@ import {
   oneEvent,
 } from "@open-wc/testing";
 import "../src/components/ds-slider.js";
+import { inForm, inDisabledFieldset, entriesOf } from "./helpers/forms.js";
 
 const setupSlider = async (template) => {
   const el = await fixture(template);
@@ -752,6 +753,118 @@ describe("DSSlider", () => {
 
       expect(thumbEnd.getAttribute("aria-valuenow")).to.equal("80");
       expect(thumbEnd.getAttribute("aria-valuemin")).to.equal("20");
+    });
+  });
+
+  // The slider had no form association: FormData never saw its value.
+  describe("Form association", () => {
+    const press = (thumb, k) =>
+      thumb.dispatchEvent(new KeyboardEvent("keydown", { key: k, bubbles: true }));
+
+    it("should submit its value under its name", async () => {
+      const { form } = await inForm(html`<ds-slider name="volume" value="30"></ds-slider>`);
+      expect(entriesOf(form)).to.deep.equal([["volume", "30"]]);
+    });
+
+    it("should submit the default value without a value attribute", async () => {
+      const { form } = await inForm(html`<ds-slider name="volume"></ds-slider>`);
+      expect(entriesOf(form)).to.deep.equal([["volume", "50"]]);
+    });
+
+    it("should follow keyboard changes", async () => {
+      const { form, el } = await inForm(
+        html`<ds-slider name="volume" value="30" step="5"></ds-slider>`,
+      );
+      press(el.shadowRoot.querySelector(".thumb-end"), "ArrowRight");
+      expect(entriesOf(form)).to.deep.equal([["volume", "35"]]);
+    });
+
+    it("should follow a value set by property", async () => {
+      const { form, el } = await inForm(html`<ds-slider name="volume"></ds-slider>`);
+      el.value = 72;
+      expect(entriesOf(form)).to.deep.equal([["volume", "72"]]);
+    });
+
+    it("should submit a range as two entries, start then end", async () => {
+      const { form } = await inForm(html`
+        <ds-slider name="price" range value-start="20" value-end="80"></ds-slider>
+      `);
+      expect(entriesOf(form)).to.deep.equal([
+        ["price", "20"],
+        ["price", "80"],
+      ]);
+    });
+
+    it("should follow a range's keyboard changes", async () => {
+      const { form, el } = await inForm(html`
+        <ds-slider name="price" range value-start="20" value-end="80" step="10"></ds-slider>
+      `);
+      press(el.shadowRoot.querySelector(".thumb-start"), "ArrowRight");
+      expect(entriesOf(form)).to.deep.equal([
+        ["price", "30"],
+        ["price", "80"],
+      ]);
+    });
+
+    it("should resubmit a range under a changed name", async () => {
+      const { form, el } = await inForm(html`
+        <ds-slider name="price" range value-start="20" value-end="80"></ds-slider>
+      `);
+      el.name = "budget";
+      expect(entriesOf(form)).to.deep.equal([
+        ["budget", "20"],
+        ["budget", "80"],
+      ]);
+    });
+
+    it("should leave an unnamed range out", async () => {
+      const { form } = await inForm(html`<ds-slider range></ds-slider>`);
+      expect(entriesOf(form)).to.deep.equal([]);
+    });
+
+    it("should restore its initial value when the form resets", async () => {
+      const { form, el } = await inForm(
+        html`<ds-slider name="volume" value="30" step="5"></ds-slider>`,
+      );
+      const thumb = el.shadowRoot.querySelector(".thumb-end");
+      press(thumb, "ArrowRight");
+      press(thumb, "ArrowRight");
+      form.reset();
+      expect(el.value).to.equal(30);
+      expect(thumb.getAttribute("aria-valuenow")).to.equal("30");
+      expect(entriesOf(form)).to.deep.equal([["volume", "30"]]);
+    });
+
+    it("should restore a range when the form resets", async () => {
+      const { form, el } = await inForm(html`
+        <ds-slider name="price" range value-start="20" value-end="80" step="10"></ds-slider>
+      `);
+      press(el.shadowRoot.querySelector(".thumb-start"), "ArrowRight");
+      form.reset();
+      expect(el.valueStart).to.equal(20);
+      expect(entriesOf(form)).to.deep.equal([
+        ["price", "20"],
+        ["price", "80"],
+      ]);
+    });
+
+    it("should be disabled by a disabled fieldset", async () => {
+      const { form, fieldset, el } = await inDisabledFieldset(
+        html`<ds-slider name="volume" value="30"></ds-slider>`,
+      );
+      expect(el.disabled).to.be.true;
+      expect(
+        el.shadowRoot.querySelector(".slider-container").classList.contains("disabled"),
+      ).to.be.true;
+      press(el.shadowRoot.querySelector(".thumb-end"), "ArrowRight");
+      expect(el.value).to.equal(30);
+      expect(entriesOf(form)).to.deep.equal([]);
+
+      fieldset.disabled = false;
+      expect(
+        el.shadowRoot.querySelector(".slider-container").classList.contains("disabled"),
+      ).to.be.false;
+      expect(entriesOf(form)).to.deep.equal([["volume", "30"]]);
     });
   });
 });
