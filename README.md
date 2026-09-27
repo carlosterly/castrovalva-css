@@ -61,7 +61,8 @@ from `src/` directly, so edits hot-reload without a build.
 // Everything
 import "castrovalva";
 
-// Or individual components, for tree-shaking
+// Or one component on its own - only button and icon have their own
+// entry point so far; everything else comes through the full import
 import "castrovalva/button";
 import "castrovalva/icon";
 ```
