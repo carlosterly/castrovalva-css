@@ -531,6 +531,57 @@ describe("ds-tabs", () => {
       expect(el.selectedIndex).to.equal(2);
     });
 
+    // Guards the disabled-tab skip, which stepped by key name rather than
+    // by the direction actually travelled
+    describe("skipping disabled tabs", () => {
+      const tabsWith = (disabled, dir = "") =>
+        fixture(`
+          <ds-tabs ${dir ? `dir="${dir}"` : ""}>
+            ${["Overview", "Specs", "Reviews", "Q&amp;A"]
+              .map(
+                (label, i) =>
+                  `<button slot="tab" ${disabled.includes(i) ? "disabled" : ""}>${label}</button>`,
+              )
+              .join("")}
+            <div slot="panel">1</div><div slot="panel">2</div>
+            <div slot="panel">3</div><div slot="panel">4</div>
+          </ds-tabs>
+        `);
+      const press = async (el, key) => {
+        el.querySelectorAll('[role="tab"]')[el.selectedIndex].dispatchEvent(
+          new KeyboardEvent("keydown", { key, bubbles: true, cancelable: true }),
+        );
+        await elementUpdated(el);
+      };
+
+      it("moves forward past a disabled tab with ArrowLeft in RTL", async () => {
+        const el = await tabsWith([1], "rtl");
+        await press(el, "ArrowLeft");
+        expect(el.selectedIndex).to.equal(2);
+      });
+
+      it("selects the first enabled tab with Home when the first is disabled", async () => {
+        const el = await tabsWith([0]);
+        el.selectedIndex = 2;
+        await elementUpdated(el);
+        await press(el, "Home");
+        expect(el.selectedIndex).to.equal(1);
+      });
+
+      // The old skip loop never ended here and froze the page
+      it("ignores arrow keys when every tab is disabled", async () => {
+        const el = await tabsWith([0, 1, 2, 3]);
+        await press(el, "ArrowRight");
+        expect(el.selectedIndex).to.equal(0);
+      });
+
+      it("selects the last enabled tab with End when the last is disabled", async () => {
+        const el = await tabsWith([3]);
+        await press(el, "End");
+        expect(el.selectedIndex).to.equal(2);
+      });
+    });
+
     it("should focus selected tab on keyboard navigation", async () => {
       const el = await fixture(html`
         <ds-tabs>

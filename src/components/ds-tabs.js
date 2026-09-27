@@ -149,21 +149,28 @@ export class DSTabs extends HTMLElement {
     const currentTab = e.target.closest('[role="tab"]');
     if (!currentTab) return;
 
-    let newIndex;
+    const count = this._tabs.length;
     const isRTL = getComputedStyle(this).direction === "rtl";
+    // Direction of travel, used again below to skip disabled tabs
+    let step;
+    let newIndex;
 
     switch (e.key) {
       case "ArrowLeft":
-        newIndex = isRTL ? this._selectedIndex + 1 : this._selectedIndex - 1;
+        step = isRTL ? 1 : -1;
+        newIndex = this._selectedIndex + step;
         break;
       case "ArrowRight":
-        newIndex = isRTL ? this._selectedIndex - 1 : this._selectedIndex + 1;
+        step = isRTL ? -1 : 1;
+        newIndex = this._selectedIndex + step;
         break;
       case "Home":
+        step = 1;
         newIndex = 0;
         break;
       case "End":
-        newIndex = this._tabs.length - 1;
+        step = -1;
+        newIndex = count - 1;
         break;
       case "Enter":
       case " ":
@@ -176,17 +183,14 @@ export class DSTabs extends HTMLElement {
 
     e.preventDefault();
 
-    // Wrap around
-    if (newIndex < 0) newIndex = this._tabs.length - 1;
-    if (newIndex >= this._tabs.length) newIndex = 0;
-
-    // Skip disabled tabs
-    while (this._tabs[newIndex]?.hasAttribute("disabled")) {
-      newIndex =
-        e.key === "ArrowLeft" || e.key === "Home" ? newIndex - 1 : newIndex + 1;
-      if (newIndex < 0) newIndex = this._tabs.length - 1;
-      if (newIndex >= this._tabs.length) newIndex = 0;
+    // Skip disabled tabs the way we were going, wrapping; stop after one
+    // lap so a row of all-disabled tabs can't loop forever
+    const isDisabled = (i) => this._tabs[i]?.hasAttribute("disabled");
+    newIndex = (newIndex + count) % count;
+    for (let i = 0; i < count && isDisabled(newIndex); i++) {
+      newIndex = (newIndex + step + count) % count;
     }
+    if (isDisabled(newIndex)) return;
 
     this._selectTab(newIndex);
     this._tabs[newIndex]?.focus();
