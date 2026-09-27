@@ -41,6 +41,18 @@ export class DSSlider extends FormAssociated(HTMLElement) {
 
     // Color support
     this._color = "primary";
+
+    // What a form reset restores: the value attributes as authored. The
+    // property setters also write those attributes, so they're flagged as
+    // reflections and don't move the defaults.
+    this._defaults = { value: 50, "value-start": 25, "value-end": 75 };
+    this._reflecting = false;
+  }
+
+  _reflect(attr, val) {
+    this._reflecting = true;
+    this.setAttribute(attr, val);
+    this._reflecting = false;
   }
 
   connectedCallback() {
@@ -62,11 +74,14 @@ export class DSSlider extends FormAssociated(HTMLElement) {
   // Dragged values aren't reflected to the attributes, so they still hold
   // the defaults a form reset restores.
   formResetCallback() {
-    const read = (attr, fallback) =>
-      this.hasAttribute(attr) ? parseFloat(this.getAttribute(attr)) : fallback;
-    this._value = read("value", 50);
-    this._valueStart = read("value-start", 25);
-    this._valueEnd = read("value-end", 75);
+    // Assigned directly: dragging and keys don't write the attributes, so
+    // setting an attribute to the value it already holds wouldn't fire.
+    this._value = this._defaults.value;
+    this._valueStart = this._defaults["value-start"];
+    this._valueEnd = this._defaults["value-end"];
+    this._reflect("value", this._value);
+    this._reflect("value-start", this._valueStart);
+    this._reflect("value-end", this._valueEnd);
     this._updateVisuals();
     this._updateValueText();
   }
@@ -92,6 +107,10 @@ export class DSSlider extends FormAssociated(HTMLElement) {
 
   attributeChangedCallback(name, oldValue, newValue) {
     if (oldValue === newValue) return;
+
+    if (name in this._defaults && !this._reflecting && newValue !== null) {
+      this._defaults[name] = parseFloat(newValue);
+    }
 
     switch (name) {
       case "name":
@@ -144,7 +163,7 @@ export class DSSlider extends FormAssociated(HTMLElement) {
     return this._value;
   }
   set value(val) {
-    this.setAttribute("value", val);
+    this._reflect("value", val);
   }
 
   get min() {
@@ -180,14 +199,14 @@ export class DSSlider extends FormAssociated(HTMLElement) {
     return this._valueStart;
   }
   set valueStart(val) {
-    this.setAttribute("value-start", val);
+    this._reflect("value-start", val);
   }
 
   get valueEnd() {
     return this._valueEnd;
   }
   set valueEnd(val) {
-    this.setAttribute("value-end", val);
+    this._reflect("value-end", val);
   }
 
   get color() {

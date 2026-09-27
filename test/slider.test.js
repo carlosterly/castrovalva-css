@@ -848,6 +848,24 @@ describe("DSSlider", () => {
       ]);
     });
 
+    // Found by the native-form integration test: the value setter wrote the
+    // attribute, which reset then read back as the default.
+    it("should reset to the authored value, not one set by property", async () => {
+      const { form, el } = await inForm(html`<ds-slider name="volume" value="30"></ds-slider>`);
+      el.value = 90;
+      form.reset();
+      expect(el.value).to.equal(30);
+      expect(entriesOf(form)).to.deep.equal([["volume", "30"]]);
+    });
+
+    it("should take a value attribute set later as the new default", async () => {
+      const { form, el } = await inForm(html`<ds-slider name="volume" value="30"></ds-slider>`);
+      el.setAttribute("value", "60");
+      el.value = 90;
+      form.reset();
+      expect(el.value).to.equal(60);
+    });
+
     it("should be disabled by a disabled fieldset", async () => {
       const { form, fieldset, el } = await inDisabledFieldset(
         html`<ds-slider name="volume" value="30"></ds-slider>`,
