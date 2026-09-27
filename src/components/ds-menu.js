@@ -80,11 +80,12 @@ export class DSMenu extends HTMLElement {
       this._anchorElement = document.getElementById(this.anchor);
     }
 
-    // Position menu relative to anchor
-    this.positionMenu();
-
+    // Show before positioning: a display: none container measures 0x0, so
+    // the flip and clamp logic would never fire. It's still opacity: 0.
     container.style.display = "block";
     backdrop.style.display = "block";
+
+    this.positionMenu();
 
     // Trigger animation
     setTimeout(() => {
@@ -141,6 +142,8 @@ export class DSMenu extends HTMLElement {
     backdrop.classList.remove("open");
 
     setTimeout(() => {
+      // Reopened during the exit transition - leave it visible
+      if (this._isOpen) return;
       container.style.display = "none";
       backdrop.style.display = "none";
     }, 200);
@@ -183,7 +186,11 @@ export class DSMenu extends HTMLElement {
 
     const container = this.shadowRoot.querySelector(".menu-container");
     const anchorRect = this._anchorElement.getBoundingClientRect();
-    const menuRect = container.getBoundingClientRect();
+    // Layout size, not getBoundingClientRect(): the closed state is scaled 0.9
+    const menuRect = {
+      width: container.offsetWidth,
+      height: container.offsetHeight,
+    };
     const viewportWidth = window.innerWidth;
     const viewportHeight = window.innerHeight;
 

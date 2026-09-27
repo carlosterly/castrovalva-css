@@ -144,6 +144,79 @@ describe("DSMenu", () => {
     });
   });
 
+  describe("Positioning", () => {
+    // Guards the bug where positionMenu() measured the container while it was
+    // still display: none (0x0), so a menu near an edge never flipped.
+    const cornerFixture = (style) =>
+      fixture(html`
+        <div>
+          <button id="corner-anchor" style="position: fixed; ${style}; width: 40px; height: 40px">
+            Open
+          </button>
+          <ds-menu anchor="corner-anchor">
+            <ds-menu-item>Rename</ds-menu-item>
+            <ds-menu-item>Duplicate</ds-menu-item>
+            <ds-menu-item>Move to folder</ds-menu-item>
+            <ds-menu-item>Delete</ds-menu-item>
+          </ds-menu>
+        </div>
+      `);
+
+    it("flips above an anchor at the bottom of the viewport", async () => {
+      const wrapper = await cornerFixture("bottom: 8px; left: 8px");
+      const menu = wrapper.querySelector("ds-menu");
+      const anchor = wrapper.querySelector("#corner-anchor");
+      menu.open();
+      await wait(250);
+
+      const container = menu.shadowRoot.querySelector(".menu-container");
+      const menuRect = container.getBoundingClientRect();
+      expect(container.classList.contains("position-above")).to.equal(true);
+      expect(menuRect.bottom).to.be.at.most(anchor.getBoundingClientRect().top);
+      expect(menuRect.top).to.be.at.least(0);
+    });
+
+    it("aligns to the anchor's right edge at the right of the viewport", async () => {
+      const wrapper = await cornerFixture("top: 8px; right: 8px");
+      const menu = wrapper.querySelector("ds-menu");
+      menu.open();
+      await wait(250);
+
+      const container = menu.shadowRoot.querySelector(".menu-container");
+      expect(container.classList.contains("position-left")).to.equal(true);
+      expect(container.getBoundingClientRect().right).to.be.at.most(
+        window.innerWidth,
+      );
+    });
+
+    it("opens below an anchor with room beneath it", async () => {
+      const wrapper = await cornerFixture("top: 8px; left: 8px");
+      const menu = wrapper.querySelector("ds-menu");
+      const anchor = wrapper.querySelector("#corner-anchor");
+      menu.open();
+      await wait(250);
+
+      const container = menu.shadowRoot.querySelector(".menu-container");
+      expect(container.classList.contains("position-above")).to.equal(false);
+      expect(container.getBoundingClientRect().top).to.be.at.least(
+        anchor.getBoundingClientRect().bottom,
+      );
+    });
+
+    it("stays visible when reopened during the close transition", async () => {
+      const el = await fixture(html`<ds-menu><ds-menu-item>One</ds-menu-item></ds-menu>`);
+      el.open();
+      await wait(20);
+      el.close();
+      el.open();
+      await wait(250);
+
+      const container = el.shadowRoot.querySelector(".menu-container");
+      expect(el.isOpen).to.equal(true);
+      expect(container.style.display).to.equal("block");
+    });
+  });
+
   describe("Events", () => {
     it("emits ds-menu:open when opened", async () => {
       const el = await fixture(html`<ds-menu></ds-menu>`);

@@ -50,10 +50,6 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~609 KB raw / ~99 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
 
-### menu
-
-- **B** — The flip-above / align-right collision logic in `positionMenu()` never has real dimensions to work with. `open()` calls `positionMenu()` *before* setting `display: block`, so `container.getBoundingClientRect()` measures a `display: none` element (0×0): "not enough space below" and "not enough space right" are never true, and a menu opened near the bottom or right edge of the viewport overflows instead of flipping. The final viewport clamp uses the same zero size, so it doesn't catch it either. Not visible on the demo page, whose triggers sit mid-page. Found while fixing the fixed-position containing-block offset (26 Sep 2026). Fix: show the container (it's still `opacity: 0`) before measuring.
-
 ### combobox
 
 - **B** — Options render flush against the dropdown's left border, with no padding. `::slotted([slot="option"])` sets `--ds-combobox-option-padding-x`, but the page reset's `* { padding: 0 }` is an outer author style, which beats `::slotted` — the same trap CLAUDE.md records for `:host`. Invisible until 27 Sep 2026, when the dropdown stopped being clipped. Likely fix: `!important` on the slotted padding (shadow-tree `!important` beats outer normal declarations).
