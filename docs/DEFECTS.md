@@ -50,10 +50,6 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 - **B** — Only `button` and `icon` have dedicated `vite.config.js` build entries (and matching `package.json` exports) out of 43 components. The README's "Tree-shakeable — import only the components you use" claim is only true for those two; every other component is only reachable via the full `import "castrovalva"` (`dist/index.js`, ~609 KB raw / ~99 KB gzipped for all 43 components + icons). Not a functional bug — nobody consumes this via npm (`private: true`) — but the claim overstates what's actually wired up.
 
-### combobox
-
-- **B** — Options render flush against the dropdown's left border, with no padding. `::slotted([slot="option"])` sets `--ds-combobox-option-padding-x`, but the page reset's `* { padding: 0 }` is an outer author style, which beats `::slotted` — the same trap CLAUDE.md records for `:host`. Invisible until 27 Sep 2026, when the dropdown stopped being clipped. Likely fix: `!important` on the slotted padding (shadow-tree `!important` beats outer normal declarations).
-
 ### navigation-bar
 
 - **B** — `ds-navigation-bar-item` renders `role="tab"` but `ds-navigation-bar` doesn't implement the roving-tabindex/arrow-key navigation the ARIA tab pattern expects — every item stays independently `Tab`-reachable instead of only the active one, and Left/Right don't move selection. Same gap in `navigation-rail` (see below). Not axe-detectable (axe checks structure, not interaction), found while fixing the `aria-required-parent` finding on the same component. Functions fine via `Tab` alone; the gap is a mismatch between the announced role's expected behavior and the actual one.

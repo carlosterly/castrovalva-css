@@ -733,9 +733,11 @@ export class DSCombobox extends FormAssociated(HTMLElement) {
           display: block;
           width: 100%;
           min-height: var(--ds-combobox-option-height);
+          /* !important: a page reset (* { padding: 0 }) is an outer author
+             style and beats ::slotted(). Override via the custom properties. */
           padding: var(--ds-combobox-option-padding-y)
-            var(--ds-combobox-option-padding-x);
-          
+            var(--ds-combobox-option-padding-x) !important;
+
           /* Colors - Default state */
           background-color: var(--ds-combobox-dropdown-bg);
           color: var(--ds-combobox-text-color);

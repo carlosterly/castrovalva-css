@@ -259,7 +259,9 @@ spec requires it.
 - **Don't put layout on `:host` that a page reset can undo.** Outer author
   styles beat `:host` rules, and the site's reset sets `* { padding: 0; margin: 0 }`
   — so `:host { padding: … }` never renders. Put spacing on an element inside
-  the shadow root instead (see `ds-snackbar`).
+  the shadow root instead (see `ds-snackbar`). `::slotted()` loses the same
+  way; there, mark the declaration `!important` and expose a custom property
+  as the override (see `ds-combobox` options).
 - **There are no `--md-sys-color-*-rgb` tokens.** `rgba(var(--md-sys-color-on-surface-rgb, 29, 27, 32), 0.08)`
   always uses its hardcoded light-theme fallback, so it breaks in dark and
   high-contrast. Build state layers as

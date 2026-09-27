@@ -680,6 +680,32 @@ describe("DSCombobox", () => {
 
   // The dropdown used to be position: absolute, so any scrolling ancestor
   // (every demo page's .demo-box) clipped it to the search field.
+  describe("Option padding under a page reset", () => {
+    // Guards the bug where the site's `* { padding: 0 }` reset (an outer
+    // author style) beat the ::slotted() padding, so options sat flush
+    // against the dropdown's edge.
+    let reset;
+    beforeEach(() => {
+      reset = document.createElement("style");
+      reset.textContent = "* { padding: 0; }";
+      document.head.append(reset);
+    });
+    afterEach(() => reset.remove());
+
+    it("keeps the option padding tokens", async () => {
+      const el = await fixture(html`
+        <ds-combobox
+          style="--ds-combobox-option-padding-x: 16px; --ds-combobox-option-padding-y: 12px">
+          <div slot="option" data-value="apple">Apple</div>
+        </ds-combobox>
+      `);
+      const style = getComputedStyle(el.querySelector('[slot="option"]'));
+      expect(style.paddingLeft).to.equal("16px");
+      expect(style.paddingRight).to.equal("16px");
+      expect(style.paddingTop).to.equal("12px");
+    });
+  });
+
   describe("Dropdown placement", () => {
     const options = html`
       <div slot="option" data-value="apple">Apple</div>
