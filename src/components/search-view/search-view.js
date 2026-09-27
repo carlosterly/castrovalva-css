@@ -205,7 +205,7 @@ export class DSSearchView extends HTMLElement {
     if (stored) {
       try {
         this._recentSearches = JSON.parse(stored);
-      } catch (e) {
+      } catch {
         this._recentSearches = [];
       }
     }
@@ -596,7 +596,7 @@ export class DSSearchView extends HTMLElement {
         newInput.focus();
         try {
           newInput.setSelectionRange(caretPos, caretPos);
-        } catch (err) {
+        } catch {
           // Some browsers may not support setSelectionRange on certain inputs; ignore
         }
       }

@@ -149,7 +149,7 @@ export class DSTabs extends HTMLElement {
     const currentTab = e.target.closest('[role="tab"]');
     if (!currentTab) return;
 
-    let newIndex = this._selectedIndex;
+    let newIndex;
     const isRTL = getComputedStyle(this).direction === "rtl";
 
     switch (e.key) {
