@@ -37,8 +37,24 @@ const EXTRA_PAGES = [
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
 
+// Violations come back as data; analyze() only throws when axe itself fails
+// to load or run. Rarely, the axe source injected into a page fails to parse
+// even though the string Playwright sent is intact (see DEFECTS.md, "Known
+// gaps in tooling"). Retrying that once can't hide a finding, and the
+// annotation keeps each occurrence visible while the cause is open.
+async function analyzeWithHarnessRetry(page, testInfo) {
+  try {
+    return await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+  } catch (error) {
+    const first = error.message.split("\n")[0];
+    testInfo.annotations.push({ type: "axe-harness-retry", description: first });
+    console.warn(`axe harness error, retrying once: ${first}`);
+    return await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+  }
+}
+
 function runAxeSuite(name, path, theme) {
-  test(`${name} — no WCAG 2.1 AA violations (${theme})`, async ({ page }) => {
+  test(`${name} — no WCAG 2.1 AA violations (${theme})`, async ({ page }, testInfo) => {
     await page.addInitScript((t) => {
       try {
         localStorage.setItem("theme", t);
@@ -48,7 +64,7 @@ function runAxeSuite(name, path, theme) {
     }, theme);
     await page.goto(path, { waitUntil: "networkidle" });
 
-    const results = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
+    const results = await analyzeWithHarnessRetry(page, testInfo);
 
     const summary = results.violations.map(
       (v) => `[${v.impact}] ${v.id}: ${v.help} (${v.nodes.length} node(s)) — ${v.helpUrl}`,
