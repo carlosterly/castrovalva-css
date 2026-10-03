@@ -57,6 +57,15 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 - **Token pipeline work** — no migration to `md.ref`/`md.sys`/`md.comp` naming layers, no Style Dictionary or W3C Design Tokens pipeline, no build-time colour generation. `src/tokens/palette.css` (the reference tonal palettes — the theme layer) and `src/tokens/tokens.css` (role mapping + type/spacing/motion/shape) are the source of truth; [tokens.md](./tokens.md) is the guidance. Prefer additive token changes over renames. A high-contrast theme shipped in September 2026 as an additive token change; a density mode is not planned — add one only for a concrete product need. Revisit the rest only if one becomes real: token export to multiple platforms, formal token governance, or token drift that CSS conventions can no longer manage.
 - **Contribution infrastructure** — issue templates, RFC process, governance. There are no contributors and none are being sought.
 
+### Parked
+
+Small, known improvements that are deliberately not planned (recorded 3 Oct 2026). Each is real but optional, and none moves what a visitor sees in 30 seconds. Pick one up only if a [revisit trigger](#revisit-triggers) fires or feedback asks for it; never to fill slack.
+
+- **Self-hosted icon subset.** Pages load a ~315 KB static Material Symbols font; a self-hosted subset of the glyphs actually used would be ~15 KB (see Q2's font-weight entry).
+- **Meta descriptions on demo pages.** None of the 51 has one, which is why component pages score 90 for Lighthouse SEO.
+- **Token-name search.** The sidebar filter indexes the demo pages but not `tokens.md` (see Q2's content-search entry).
+- **Tooling gaps.** Responsive checks aren't in CI, and `check:docs` doesn't verify attribute tables — see "Known gaps in tooling" in [DEFECTS.md](./DEFECTS.md).
+
 ---
 
 ## Q1 · Sep–Nov 2026 — Make it credible and visible — ✅ COMPLETE (Sep 2026)
