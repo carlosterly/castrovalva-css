@@ -88,7 +88,7 @@ demo page only — never maintain it in two places.
   </head>
   <body data-page="{component-name}">
     <div class="page-container">
-      <div class="content-area">
+      <main class="content-area">
         <h1>{Component Name}</h1>
         <p class="description">Component description here.</p>
 
@@ -98,7 +98,7 @@ demo page only — never maintain it in two places.
             <!-- Component demo -->
           </div>
         </div>
-      </div>
+      </main>
     </div>
 
     <!-- Page-specific JS. No import statements. -->
@@ -130,7 +130,7 @@ components, Known limitations.
 
 ### CSS classes available
 
-`page-container` (outer wrapper) · `content-area` (main content) · `section`
+`page-container` (outer wrapper) · `content-area` (main content, on the page's `<main>` landmark) · `section`
 (major section) · `demo-box` (component example) · `code-block` (code snippet)
 · `api-table` (API tables)
 

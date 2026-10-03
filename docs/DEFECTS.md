@@ -42,7 +42,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ## Open defects
 
-None as of 27 Sep 2026.
+None as of 3 Oct 2026.
 
 ## First-pass screenshot review — done, all findings actioned
 
@@ -419,6 +419,14 @@ select; Enter/Space select. Fixed:
 
 18 new tests (9 fail against the old search code), passing in Chromium,
 Firefox and WebKit; full suite 2,342; `test:a11y` 159/159.
+
+**No `<main>` landmark on demo pages — fixed 3 Oct 2026.** Found by
+Lighthouse (`landmark-one-main`, the reason `button.html` scored 98), not by
+the harness: it's an axe best-practice rule, outside the WCAG tags the spec
+runs. Without it a screen-reader user can't jump straight past the nav
+shell. All 51 pages now wrap `.content-area` in `<main>` (CSS keys on the
+class, so nothing moved: visual regression clean on the 45 pages with no
+other change), and the CLAUDE.md template does too.
 
 ---
 

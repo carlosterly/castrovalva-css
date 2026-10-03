@@ -5,7 +5,7 @@
 Material Design 3 implemented as vanilla Web Components. Zero runtime
 dependencies, Shadow DOM encapsulation, and a complete MD3 token system.
 
-**43 components** · **2,342 tests** · **92% coverage** · **83 KB gzipped (full library)**
+**43 components** · **2,342 tests** · **93% coverage** · **83 KB gzipped (full library)**
 
 <sub>Measured, not estimated — see [Measured numbers](#measured-numbers) for the breakdown and how to reproduce each figure.</sub>
 
@@ -126,19 +126,19 @@ the parts that didn't go cleanly:
 ## Measured numbers
 
 Republished periodically, not aspirational — reproduce any of these with the
-command shown. Last measured 27 September 2026 (Lighthouse rows: 23 September).
+command shown. Last measured 3 October 2026.
 
 | Metric | Result | Reproduce |
 | --- | --- | --- |
 | Unit tests | 2,342 passing, Chromium | `npm test` |
-| Coverage | 92.9% statements | `npm test` (prints a summary; full report in `coverage/`) |
+| Coverage | 93.0% statements | `npm test` (prints a summary; full report in `coverage/`) |
 | Cross-browser | 2,342/2,342 on each of Chromium, Firefox and WebKit | `npm run test:all` |
-| Bundle — full library | 474 KB raw / 83 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
+| Bundle — full library | 475 KB raw / 83 KB gzip (`dist/index.js`, all 43 components + icons) | `npm run build` |
 | Bundle — `castrovalva/button` | 16.1 KB raw / 3.2 KB gzip (a shared chunk plus a one-line entry) | `npm run build` |
-| Bundle — `castrovalva/icon` | 6.6 KB raw / 2.0 KB gzip | `npm run build` |
-| Lighthouse, home page — mobile (simulated throttling, Lighthouse default) | Performance 98 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/` |
-| Lighthouse, home page — desktop | Performance 100 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/ --preset=desktop` |
-| Lighthouse, a component page (`button.html`) — mobile | Performance 69 · Accessibility 98 · Best Practices 100 · SEO 90 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/docs/components/button.html` |
+| Bundle — `castrovalva/icon` | 4.6 KB raw / 1.6 KB gzip | `npm run build` |
+| Lighthouse, home page — mobile (simulated throttling, Lighthouse default) | Performance 97 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/` |
+| Lighthouse, home page — desktop | Performance 99 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/ --preset=desktop` |
+| Lighthouse, a component page (`button.html`) — mobile | Performance 92 · Accessibility 98 · Best Practices 100 · SEO 90 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/docs/components/button.html` |
 
 Three things this table intentionally doesn't smooth over:
 
@@ -152,7 +152,8 @@ Three things this table intentionally doesn't smooth over:
   had found independently. Fixing those for the harness took the Lighthouse
   score to 100 too — two tools agreeing on the problem, then on the fix.
 - Lighthouse performance on simulated mobile varies a lot between runs (the
-  home page scored 71 on the first published run, 98 on the latest). Treat
+  home page scored 71 on the first published run and 97–98 since;
+  `button.html` measured 69 on 23 September and 92 on 3 October). Treat
   any single figure as a sample, not a constant.
 
 ## Browser support
