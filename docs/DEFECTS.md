@@ -379,6 +379,14 @@ part of either component's own demo page). Fixed by giving it a real label
 `settings-page.html` was already clean. `npm run test:a11y`: **106/106**
 checks pass (102 + 4 new). Full suite (2107 tests) and lint still pass.
 
+**High-contrast added to the harness — 3 Oct 2026.** `demo-pages.spec.js`
+ran only `{light, dark}`, so the high-contrast theme never had automated
+coverage (the since-fixed `ds-dialog` white-surface bug would have shown up
+here). Every page now also runs in `high-contrast`, and each test first
+asserts the page applied the saved theme, so a page that ignores it can't be
+scanned in light mode under another theme's name. `npm run test:a11y`:
+**159/159** checks pass (106 + 53 new); no new findings.
+
 ---
 
 ## Known gaps in tooling
@@ -391,5 +399,4 @@ resolved.
   **Traced 3 Oct 2026 — the page-race theory is wrong.** A trace of a failing run (`app-bar-top`, light: `SyntaxError: Unexpected identifier 'virtualNode'`) shows the demo page loaded and untouched. The failure was in the blank page `AxeBuilder.finishRun()` opens to merge results: the same 1.3 MB axe source evaluated cleanly in the demo page moments earlier, and the trace records the failing copy byte-identical to it. So the string leaves Playwright intact and is damaged or misparsed between there and V8, which fits every error above (truncated or altered source). Not reproduced outside the test runner: ~5,000 standalone injections (bare blank pages, real demo pages, AxeBuilder's own expression path, 408 full `analyze()` runs, 8 parallel browsers) never failed. Rate on 3 Oct was far lower than on 27 Sep: 1 failure in 54 suite runs (~5,700 checks), with or without the runner starting Vite, so a second trace was never caught.
   **Mitigated, cause still open.** `demo-pages.spec.js` now retries `analyze()` once when it *throws*. Violations are returned, never thrown, so the retry can't hide a finding; each retry prints `axe harness error, retrying once: …` and adds an `axe-harness-retry` annotation. Next step if it matters, e.g. the retry annotation starts appearing often: run the suite with `--trace retain-on-failure` on the unretried spec and look for a pattern in which injection fails. Debugging gotcha: stopping a backgrounded `npx vite` can leave its Node process holding port 4173, and `reuseExistingServer` then silently reuses it.
 - **Responsive testing isn't in CI.** `scripts/qa-sweep.mjs` checks horizontal overflow at 360px and 1280px, but it is run by hand, not by CI, and it can't see `position: fixed` content (that is how the since-fixed `snackbar` 360px overflow slipped past it).
-- **The axe harness doesn't test high-contrast.** `test/accessibility/demo-pages.spec.js` only runs `{light, dark}` — added before the theme existed and never extended. Real consequence, not theoretical: the since-fixed `ds-dialog` hardcoded-white-surface bug (written up under the composed example in [ROADMAP.md](./ROADMAP.md)) made dialog text completely illegible in high-contrast, and the harness would have caught it immediately if it covered that theme. Extending the `for (const theme of [...])` loop to include `"high-contrast"` is a small change (53 more checks — 51 demo pages plus the 2 extra pages); do it alongside the next `test:a11y` pass rather than as its own task.
 - **`check:docs` doesn't verify attributes.** `scripts/check-api-docs.mjs` checks every documented CSS custom property, custom event and CSS part against `src/`, but not attribute tables — components read attributes through `dataset.camelCase`, getters and class names, which a text search can't resolve without false positives. A documented attribute that doesn't exist would still slip through.

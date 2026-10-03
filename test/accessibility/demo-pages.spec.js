@@ -1,7 +1,7 @@
 /**
  * Runs an automated axe-core accessibility scan against every demo page
  * under docs/components/, plus the docs-site chrome pages (home page,
- * composed examples), in light and dark theme.
+ * composed examples), in light, dark and high-contrast theme.
  *
  * axe catches what unit tests can't: incorrect ARIA (not just present-or-not),
  * insufficient color contrast, missing accessible names, invalid roles. It
@@ -36,6 +36,7 @@ const EXTRA_PAGES = [
 ];
 
 const WCAG_TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"];
+const THEMES = ["light", "dark", "high-contrast"];
 
 // Violations come back as data; analyze() only throws when axe itself fails
 // to load or run. Rarely, the axe source injected into a page fails to parse
@@ -63,6 +64,9 @@ function runAxeSuite(name, path, theme) {
       }
     }, theme);
     await page.goto(path, { waitUntil: "networkidle" });
+    // Without this, a page that never applies the saved theme would be
+    // scanned in light mode under a dark or high-contrast test name.
+    await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
 
     const results = await analyzeWithHarnessRetry(page, testInfo);
 
@@ -74,13 +78,13 @@ function runAxeSuite(name, path, theme) {
 }
 
 for (const slug of PAGES) {
-  for (const theme of ["light", "dark"]) {
+  for (const theme of THEMES) {
     runAxeSuite(slug, `/docs/components/${slug}.html`, theme);
   }
 }
 
 for (const { name, path } of EXTRA_PAGES) {
-  for (const theme of ["light", "dark"]) {
+  for (const theme of THEMES) {
     runAxeSuite(name, path, theme);
   }
 }

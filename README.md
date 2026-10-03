@@ -169,17 +169,15 @@ Every component targets WCAG 2.1 AA: semantic HTML, correct ARIA roles and
 labels, full keyboard navigation, managed focus with visible indicators, screen
 reader announcements, and disabled states that genuinely prevent interaction.
 An automated axe pass (`npm run test:a11y`, added September 2026) covers all
-51 demo pages plus the home page and the composed example, in light and dark
-theme. Its first run found 45 of 102 checks failing — real ARIA/contrast bugs,
-not false positives. All of them are now fixed: 106/106 checks pass, and CI
-blocks on any regression. See [what building that harness actually
-found](docs/notes/accessibility-cost.md) for the longer version.
+51 demo pages plus the home page and the composed example, in light, dark and
+high-contrast theme. Its first run found 45 of 102 checks failing — real
+ARIA/contrast bugs, not false positives. All of them are now fixed: 159/159
+checks pass, and CI blocks on any regression. See [what building that harness
+actually found](docs/notes/accessibility-cost.md) for the longer version.
 
-Automated checks aren't the whole story: axe doesn't yet run against the
-high-contrast theme, and it can't judge interaction patterns — for example,
-the navigation bar and rail announce `role="tab"` without the arrow-key
-behaviour that role implies. Known gaps like these are tracked in
-[DEFECTS.md](docs/DEFECTS.md).
+Automated checks aren't the whole story: axe can't judge interaction patterns
+such as keyboard models or how a screen reader phrases a control. Known gaps
+are tracked in [DEFECTS.md](docs/DEFECTS.md).
 
 Verify with `npm run test:a11y`.
 
