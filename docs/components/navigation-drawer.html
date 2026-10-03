@@ -601,12 +601,19 @@
           <h3>ARIA Attributes</h3>
           <ul>
             <li>
-              <code>role="navigation"</code> - Identifies drawer as navigation
-              region
+              <code>role="dialog"</code> + <code>aria-modal="true"</code>
+              (modal variant) - The drawer is announced as a dialog, and a
+              screen reader's virtual cursor stays inside it, matching the Tab
+              trap. The links sit in a <code>navigation</code> landmark inside
+              it.
             </li>
             <li>
-              <code>aria-hidden="true/false"</code> - Visibility to screen
-              readers
+              <code>role="navigation"</code> (standard variant) - The drawer is
+              a navigation region alongside the page, not a dialog
+            </li>
+            <li>
+              <code>inert</code> while closed - Removes the off-screen drawer
+              from the accessibility tree and from the Tab order
             </li>
             <li>
               <code>aria-current="page"</code> - Marks active navigation item

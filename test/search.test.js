@@ -386,6 +386,69 @@ describe("DSSearch", () => {
       input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
       expect(el._filteredSuggestions).to.have.lengthOf(0);
     });
+
+    // Escape used to blur the input, stranding keyboard focus on <body>
+    it("keeps focus in the input when Escape closes suggestions", async () => {
+      const el = await fixture(html`<ds-search value="a"></ds-search>`);
+      el.suggestions = ["Apple", "Apricot"];
+      el.filterSuggestions();
+      await frames();
+
+      const input = el.shadowRoot.querySelector("input");
+      input.focus();
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+      expect(el.shadowRoot.activeElement === input).to.be.true;
+      expect(input.getAttribute("aria-expanded")).to.equal("false");
+    });
+  });
+
+  describe("Combobox semantics", () => {
+    // Focus stays in the input while arrows move the highlight, so without
+    // aria-activedescendant a screen reader announces nothing.
+    it("points aria-activedescendant at the highlighted option", async () => {
+      const el = await fixture(html`<ds-search value="ap"></ds-search>`);
+      el.suggestions = ["Apple", "Apricot"];
+      el.filterSuggestions();
+
+      const input = el.shadowRoot.querySelector("input");
+      expect(input.hasAttribute("aria-activedescendant")).to.be.false;
+
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+      const id = input.getAttribute("aria-activedescendant");
+      const option = el.shadowRoot.getElementById(id);
+      expect(option.getAttribute("role")).to.equal("option");
+      expect(option.getAttribute("aria-selected")).to.equal("true");
+      expect(option.textContent.trim()).to.equal("Apricot");
+    });
+
+    it("drops aria-activedescendant when the highlight leaves the list", async () => {
+      const el = await fixture(html`<ds-search value="ap"></ds-search>`);
+      el.suggestions = ["Apple", "Apricot"];
+      el.filterSuggestions();
+
+      const input = el.shadowRoot.querySelector("input");
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowDown" }));
+      input.dispatchEvent(new KeyboardEvent("keydown", { key: "ArrowUp" }));
+      expect(input.hasAttribute("aria-activedescendant")).to.be.false;
+    });
+
+    it("reflects whether the list is open in aria-expanded", async () => {
+      const el = await fixture(html`<ds-search value="ap"></ds-search>`);
+      el.suggestions = ["Apple"];
+      el.filterSuggestions();
+      const input = el.shadowRoot.querySelector("input");
+      expect(input.getAttribute("aria-expanded")).to.equal("true");
+
+      el.suggestions = [];
+      expect(input.getAttribute("aria-expanded")).to.equal("false");
+    });
+
+    it("gives the listbox an accessible name", async () => {
+      const el = await fixture(html`<ds-search></ds-search>`);
+      const listbox = el.shadowRoot.querySelector("[role='listbox']");
+      expect(listbox.getAttribute("aria-label")).to.equal("Suggestions");
+    });
   });
 
   describe("Events", () => {

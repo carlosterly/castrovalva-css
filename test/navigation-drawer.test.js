@@ -39,7 +39,6 @@ describe("DSNavigationDrawer", () => {
 
       const container = el.shadowRoot.querySelector(".drawer-container");
       expect(container).to.exist;
-      expect(container.getAttribute("role")).to.equal("navigation");
     });
 
     it("should render with left position by default", async () => {
@@ -280,13 +279,40 @@ describe("DSNavigationDrawer", () => {
   });
 
   describe("Accessibility", () => {
-    it("should have navigation role on container", async () => {
+    // A modal drawer traps Tab; without dialog semantics a screen reader's
+    // virtual cursor could still wander into the page behind it.
+    it("is a modal dialog containing a navigation landmark by default", async () => {
       const el = await fixture(
         html`<ds-navigation-drawer></ds-navigation-drawer>`,
       );
 
       const container = el.shadowRoot.querySelector(".drawer-container");
+      expect(container.getAttribute("role")).to.equal("dialog");
+      expect(container.getAttribute("aria-modal")).to.equal("true");
+      const content = el.shadowRoot.querySelector(".drawer-content");
+      expect(content.getAttribute("role")).to.equal("navigation");
+    });
+
+    it("is a plain navigation region in the standard variant", async () => {
+      const el = await fixture(
+        html`<ds-navigation-drawer variant="standard"></ds-navigation-drawer>`,
+      );
+
+      const container = el.shadowRoot.querySelector(".drawer-container");
       expect(container.getAttribute("role")).to.equal("navigation");
+      expect(container.hasAttribute("aria-modal")).to.be.false;
+      const content = el.shadowRoot.querySelector(".drawer-content");
+      expect(content.hasAttribute("role")).to.be.false;
+    });
+
+    it("switches semantics when the variant changes", async () => {
+      const el = await fixture(
+        html`<ds-navigation-drawer variant="standard"></ds-navigation-drawer>`,
+      );
+
+      el.setAttribute("variant", "modal");
+      const container = el.shadowRoot.querySelector(".drawer-container");
+      expect(container.getAttribute("role")).to.equal("dialog");
     });
 
     it("is inert when closed", async () => {
@@ -508,6 +534,15 @@ describe("DSNavigationDrawer", () => {
     it("focuses the first ds-nav-item when opened", async () => {
       await openNavItems();
       expect(deepActiveText()).to.equal("Inbox");
+    });
+
+    // Material Symbols draw icons from ligature text, which a screen reader
+    // otherwise reads into the control's name ("inbox Inbox").
+    it("hides ds-nav-item icon ligatures from assistive technology", async () => {
+      const el = await openNavItems();
+      const item = el.querySelector("ds-nav-item");
+      const icon = item.shadowRoot.querySelector(".nav-icon");
+      expect(icon.getAttribute("aria-hidden")).to.equal("true");
     });
 
     it("traps Tab among ds-nav-items, skipping disabled ones", async () => {

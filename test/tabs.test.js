@@ -1201,6 +1201,14 @@ describe("ds-tab", () => {
     expect(el.textContent).to.include("Favorites");
   });
 
+  // Material Symbols draw icons from ligature text, which a screen reader
+  // otherwise reads into the tab's name ("star Favorites").
+  it("hides the icon ligature from assistive technology", async () => {
+    const el = await fixture(html`<ds-tab icon="star">Favorites</ds-tab>`);
+    const icon = el.shadowRoot.querySelector(".icon");
+    expect(icon.getAttribute("aria-hidden")).to.equal("true");
+  });
+
   it("should be disabled when disabled attribute is set", async () => {
     const el = await fixture(html`<ds-tab disabled>Disabled Tab</ds-tab>`);
     expect(el.disabled).to.be.true;

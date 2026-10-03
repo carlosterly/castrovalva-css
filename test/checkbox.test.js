@@ -34,6 +34,14 @@ describe("DSCheckbox", () => {
       expect(icon.textContent).to.equal("check_box_outline_blank");
     });
 
+    // The box is a Material Symbols ligature; unhidden, an unlabelled
+    // checkbox was announced as "check_box_outline_blank".
+    it("hides the box icon ligature from assistive technology", async () => {
+      const el = await fixture(html`<ds-checkbox></ds-checkbox>`);
+      const icon = el.shadowRoot.querySelector(".checkbox-icon");
+      expect(icon.getAttribute("aria-hidden")).to.equal("true");
+    });
+
     it("should render with label", async () => {
       const el = await fixture(
         html`<ds-checkbox label="Accept terms"></ds-checkbox>`,

@@ -391,6 +391,14 @@ class DSNavigationDrawer extends HTMLElement {
   }
 
   render() {
+    // A modal drawer is a dialog: aria-modal keeps a screen reader's
+    // virtual cursor inside it, matching the Tab trap. The links keep a
+    // navigation landmark inside the dialog.
+    const modal = this.variant === "modal";
+    const containerAria = modal
+      ? 'role="dialog" aria-modal="true" aria-label="Navigation drawer"'
+      : 'role="navigation" aria-label="Navigation drawer"';
+
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -554,12 +562,12 @@ class DSNavigationDrawer extends HTMLElement {
 
       <div class="scrim" part="scrim"></div>
       
-      <div class="drawer-container" part="container" role="navigation" aria-label="Navigation drawer">
+      <div class="drawer-container" part="container" ${containerAria}>
         <div class="drawer-header" part="header">
           <slot name="header"></slot>
         </div>
-        
-        <div class="drawer-content" part="content">
+
+        <div class="drawer-content" part="content" ${modal ? 'role="navigation"' : ""}>
           <slot></slot>
         </div>
       </div>

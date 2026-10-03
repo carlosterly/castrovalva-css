@@ -13,7 +13,7 @@ Vanilla Web Components implementing Material Design 3. Zero runtime
 dependencies, Shadow DOM, MD3 design tokens. Built with Vite, tested with
 `@web/test-runner` + Playwright.
 
-43 components (36/36 official MD3 plus enhancements and utilities), 2,324
+43 components (36/36 official MD3 plus enhancements and utilities), 2,342
 tests, ~92% coverage. The library is feature-complete; see the roadmap before
 proposing new components.
 

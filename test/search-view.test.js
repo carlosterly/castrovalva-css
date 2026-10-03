@@ -1,4 +1,5 @@
 import { fixture, expect, html } from "@open-wc/testing";
+import { sendKeys } from "@web/test-runner-commands";
 import "../src/components/search-view/search-view.js";
 
 describe("DSSearchView", () => {
@@ -485,6 +486,112 @@ describe("DSSearchView", () => {
       if (clearBtn) {
         expect(clearBtn.getAttribute("aria-label")).to.equal("Clear search");
       }
+    });
+
+    it("exposes the input as a combobox controlling a listbox of options", async () => {
+      const el = await fixture(html`<ds-search-view open></ds-search-view>`);
+      el.suggestions = ["result 1", "result 2"];
+      el.value = "result";
+
+      const input = el.shadowRoot.querySelector(".search-input");
+      expect(input.getAttribute("role")).to.equal("combobox");
+      expect(input.getAttribute("aria-expanded")).to.equal("true");
+      const listbox = el.shadowRoot.getElementById(
+        input.getAttribute("aria-controls"),
+      );
+      expect(listbox.getAttribute("role")).to.equal("listbox");
+      expect(listbox.getAttribute("aria-label")).to.equal("Results");
+      const options = listbox.querySelectorAll("[role='option']");
+      expect(options).to.have.lengthOf(2);
+    });
+
+    it("reports a collapsed combobox when nothing matches", async () => {
+      const el = await fixture(html`<ds-search-view open></ds-search-view>`);
+      el.suggestions = ["result 1"];
+      el.value = "zzz";
+
+      const input = el.shadowRoot.querySelector(".search-input");
+      expect(input.getAttribute("aria-expanded")).to.equal("false");
+    });
+  });
+
+  // Every render replaces the input. The arrow handlers didn't restore
+  // focus afterwards, so the first ArrowDown stranded keyboard users on
+  // <body>, and later keys (including Escape) went nowhere.
+  describe("Keyboard focus", () => {
+    async function openWithResults() {
+      const el = await fixture(html`<ds-search-view open></ds-search-view>`);
+      el.suggestions = ["result 1", "result 2", "result 3"];
+      el.value = "result";
+      el.shadowRoot.querySelector(".search-input").focus();
+      return el;
+    }
+    const focusedInput = (el) =>
+      el.shadowRoot.activeElement ===
+      el.shadowRoot.querySelector(".search-input");
+
+    it("keeps focus in the input while arrowing through results", async () => {
+      const el = await openWithResults();
+
+      await sendKeys({ press: "ArrowDown" });
+      expect(focusedInput(el)).to.be.true;
+      await sendKeys({ press: "ArrowDown" });
+      expect(focusedInput(el)).to.be.true;
+      expect(el._selectedIndex).to.equal(1);
+      await sendKeys({ press: "ArrowUp" });
+      expect(focusedInput(el)).to.be.true;
+      expect(el._selectedIndex).to.equal(0);
+    });
+
+    it("points aria-activedescendant at the highlighted option", async () => {
+      const el = await openWithResults();
+
+      await sendKeys({ press: "ArrowDown" });
+      await sendKeys({ press: "ArrowDown" });
+      const input = el.shadowRoot.querySelector(".search-input");
+      const option = el.shadowRoot.getElementById(
+        input.getAttribute("aria-activedescendant"),
+      );
+      expect(option.getAttribute("role")).to.equal("option");
+      expect(option.getAttribute("aria-selected")).to.equal("true");
+      expect(option.textContent.trim()).to.contain("result 2");
+
+      await sendKeys({ press: "ArrowUp" });
+      await sendKeys({ press: "ArrowUp" });
+      expect(
+        el.shadowRoot
+          .querySelector(".search-input")
+          .hasAttribute("aria-activedescendant"),
+      ).to.be.false;
+    });
+
+    it("still closes on Escape after arrowing", async () => {
+      const el = await openWithResults();
+
+      await sendKeys({ press: "ArrowDown" });
+      await sendKeys({ press: "Escape" });
+      expect(el.open).to.be.false;
+    });
+
+    it("keeps the caret where the user was typing", async () => {
+      const el = await fixture(html`<ds-search-view open></ds-search-view>`);
+      el.shadowRoot.querySelector(".search-input").focus();
+
+      await sendKeys({ type: "abc" });
+      const input = el.shadowRoot.querySelector(".search-input");
+      expect(focusedInput(el)).to.be.true;
+      expect(input.value).to.equal("abc");
+      expect(input.selectionStart).to.equal(3);
+    });
+
+    it("returns focus to the input after the clear button", async () => {
+      const el = await fixture(
+        html`<ds-search-view open value="test"></ds-search-view>`,
+      );
+
+      el.shadowRoot.querySelector(".clear-button").click();
+      expect(focusedInput(el)).to.be.true;
+      expect(el.shadowRoot.querySelector(".search-input").value).to.equal("");
     });
   });
 

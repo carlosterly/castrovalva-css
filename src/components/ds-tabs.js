@@ -473,7 +473,7 @@ export class DSTab extends HTMLElement {
         }
       </style>
 
-      ${hasIcon ? `<span class="icon">${icon}</span>` : ""}
+      ${hasIcon ? `<span class="icon" aria-hidden="true">${icon}</span>` : ""}
       <span class="label"><slot></slot></span>
     `;
   }

@@ -276,7 +276,16 @@
             <li>
               Suggestions expose <code>role="option"</code> and selected state.
             </li>
-            <li>Keyboard support includes Arrow keys, Enter, and Escape.</li>
+            <li>
+              Focus stays in the input. <kbd>↓</kbd>/<kbd>↑</kbd> move the
+              highlight, and <code>aria-activedescendant</code> points at the
+              highlighted option so a screen reader announces it.
+            </li>
+            <li>
+              <kbd>Enter</kbd> picks the highlighted suggestion, or submits
+              when none is highlighted. <kbd>Escape</kbd> closes the list and
+              keeps focus in the input.
+            </li>
           </ul>
         </div>
 

@@ -520,7 +520,7 @@ class DSCheckbox extends FormAssociated(HTMLElement) {
 
       <div class="checkbox-container" part="container">
         <div class="state-layer" part="state-layer"></div>
-        <span class="checkbox-icon" part="icon">check_box_outline_blank</span>
+        <span class="checkbox-icon" part="icon" aria-hidden="true">check_box_outline_blank</span>
       </div>
       
       <span class="checkbox-label" part="label"></span>

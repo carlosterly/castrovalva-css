@@ -229,6 +229,13 @@ export class DSSearchView extends HTMLElement {
   render() {
     const filteredSuggestions = this.getFilteredSuggestions();
 
+    // Rendering replaces the input, so carry its focus and caret across;
+    // otherwise the first arrow key strands keyboard users on <body>.
+    const oldInput = this.shadowRoot.querySelector(".search-input");
+    const inputHadFocus =
+      !!oldInput && this.shadowRoot.activeElement === oldInput;
+    const caret = inputHadFocus ? oldInput.selectionStart : null;
+
     this.shadowRoot.innerHTML = `
       <style>
         :host {
@@ -493,6 +500,15 @@ export class DSSearchView extends HTMLElement {
             placeholder="Search..."
             value="${this._searchValue}"
             aria-label="Search"
+            role="combobox"
+            aria-autocomplete="list"
+            aria-controls="suggestions-list"
+            aria-expanded="${filteredSuggestions.length > 0}"
+            ${
+              this._selectedIndex >= 0 && this._selectedIndex < filteredSuggestions.length
+                ? `aria-activedescendant="suggestion-${this._selectedIndex}"`
+                : ""
+            }
             part="input" />
           ${
             this._searchValue
@@ -535,16 +551,22 @@ export class DSSearchView extends HTMLElement {
             <div class="suggestions-title">
               ${this._searchValue ? "Results" : "Recent Searches"}
             </div>
-            <div class="suggestions-list">
+            <div
+              class="suggestions-list"
+              id="suggestions-list"
+              role="listbox"
+              aria-label="${this._searchValue ? "Results" : "Recent searches"}">
               ${filteredSuggestions
                 .map(
                   (suggestion, index) => `
                 <div
                   class="suggestion-item"
+                  id="suggestion-${index}"
+                  role="option"
                   data-index="${index}"
                   aria-selected="${index === this._selectedIndex}"
                   part="suggestion">
-                  <span class="suggestion-icon material-symbols-outlined">
+                  <span class="suggestion-icon material-symbols-outlined" aria-hidden="true">
                     ${this._searchValue ? "search" : "history"}
                   </span>
                   <span class="suggestion-text">${suggestion}</span>
@@ -557,7 +579,7 @@ export class DSSearchView extends HTMLElement {
         `
             : `
           <div class="empty-state">
-            <div class="empty-state-icon material-symbols-outlined">search</div>
+            <div class="empty-state-icon material-symbols-outlined" aria-hidden="true">search</div>
             <div class="empty-state-text">
               ${
                 this._searchValue
@@ -572,6 +594,24 @@ export class DSSearchView extends HTMLElement {
     `;
 
     this._attachEventListeners();
+
+    if (inputHadFocus) this._focusInput(caret);
+  }
+
+  /**
+   * Focus the (current) input, optionally placing the caret
+   * @param {number|null} [caret]
+   */
+  _focusInput(caret = null) {
+    const input = this.shadowRoot.querySelector(".search-input");
+    if (!input) return;
+    input.focus();
+    if (caret === null) return;
+    try {
+      input.setSelectionRange(caret, caret);
+    } catch {
+      // Some browsers may not support setSelectionRange on certain inputs; ignore
+    }
   }
 
   _attachEventListeners() {
@@ -585,21 +625,9 @@ export class DSSearchView extends HTMLElement {
     closeBtn?.addEventListener("click", () => this.close());
 
     input?.addEventListener("input", (e) => {
-      // Preserve caret/focus while updating value
-      const caretPos = input.selectionStart ?? this._searchValue.length;
+      // render() carries focus and caret over to the new input
       this._searchValue = e.target.value;
       this.render();
-
-      // Restore focus/caret so typing doesn't stop after first character
-      const newInput = this.shadowRoot.querySelector(".search-input");
-      if (newInput) {
-        newInput.focus();
-        try {
-          newInput.setSelectionRange(caretPos, caretPos);
-        } catch {
-          // Some browsers may not support setSelectionRange on certain inputs; ignore
-        }
-      }
 
       this.dispatchEvent(
         new CustomEvent("ds-search-view:input", {
@@ -635,7 +663,8 @@ export class DSSearchView extends HTMLElement {
     clearBtn?.addEventListener("click", () => {
       this._searchValue = "";
       this.render();
-      input?.focus();
+      // The old input is detached by render(); focus the new one
+      this._focusInput();
     });
 
     filterChips.forEach((chip) => {

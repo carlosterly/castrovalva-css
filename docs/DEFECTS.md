@@ -387,6 +387,39 @@ asserts the page applied the saved theme, so a page that ignores it can't be
 scanned in light mode under another theme's name. `npm run test:a11y`:
 **159/159** checks pass (106 + 53 new); no new findings.
 
+**Keyboard models checked through the accessibility tree — 3 Oct 2026.** No
+real screen reader here, so a Playwright script drove each keyboard model and
+read the browser's accessibility tree for the focused node after every key
+(role, name, states, `aria-activedescendant`). Nav bar and rail behaved as
+designed: arrows and Home/End move focus, skip disabled items and don't
+select; Enter/Space select. Fixed:
+
+- `ds-search-view`: every render replaces the input, and the arrow handlers
+  didn't restore focus, so the first ArrowDown stranded keyboard users on
+  `<body>` and Escape stopped working. `render()` now carries focus and
+  caret across (which also fixed the clear button focusing a detached
+  input). The input had no combobox semantics and the results no
+  listbox/option roles; both added, with `aria-activedescendant`.
+- `ds-search`: arrows moved a highlight a screen reader never heard (no
+  `aria-activedescendant`), and Escape blurred the input. Now announced, and
+  Escape closes the list keeping focus; the listbox is named.
+- `ds-navigation-drawer` (modal): trapped Tab but was a plain
+  `navigation` region, so a screen reader's virtual cursor could leave it.
+  Now `role="dialog"` + `aria-modal="true"` with a navigation landmark
+  inside; the standard variant is unchanged.
+- Icon ligatures in accessible names, found by sweeping every page for
+  controls whose computed name contains an unhidden Material Symbols
+  ligature: `ds-tab`, `ds-chip`, `ds-nav-item`, `ds-checkbox` icons, and
+  icon markup on `tabs.html` and `theme-playground.html`. All
+  `aria-hidden` now; the sweep is clean.
+- `form.html` passed text content to `ds-checkbox`, which has no slot, so
+  both labels were invisible and the boxes were named
+  "check_box_outline_blank". axe passed them because *a* name existed. Now
+  use the `label` attribute.
+
+18 new tests (9 fail against the old search code), passing in Chromium,
+Firefox and WebKit; full suite 2,342; `test:a11y` 159/159.
+
 ---
 
 ## Known gaps in tooling
@@ -399,4 +432,5 @@ resolved.
   **Traced 3 Oct 2026 — the page-race theory is wrong.** A trace of a failing run (`app-bar-top`, light: `SyntaxError: Unexpected identifier 'virtualNode'`) shows the demo page loaded and untouched. The failure was in the blank page `AxeBuilder.finishRun()` opens to merge results: the same 1.3 MB axe source evaluated cleanly in the demo page moments earlier, and the trace records the failing copy byte-identical to it. So the string leaves Playwright intact and is damaged or misparsed between there and V8, which fits every error above (truncated or altered source). Not reproduced outside the test runner: ~5,000 standalone injections (bare blank pages, real demo pages, AxeBuilder's own expression path, 408 full `analyze()` runs, 8 parallel browsers) never failed. Rate on 3 Oct was far lower than on 27 Sep: 1 failure in 54 suite runs (~5,700 checks), with or without the runner starting Vite, so a second trace was never caught.
   **Mitigated, cause still open.** `demo-pages.spec.js` now retries `analyze()` once when it *throws*. Violations are returned, never thrown, so the retry can't hide a finding; each retry prints `axe harness error, retrying once: …` and adds an `axe-harness-retry` annotation. Next step if it matters, e.g. the retry annotation starts appearing often: run the suite with `--trace retain-on-failure` on the unretried spec and look for a pattern in which injection fails. Debugging gotcha: stopping a backgrounded `npx vite` can leave its Node process holding port 4173, and `reuseExistingServer` then silently reuses it.
 - **Responsive testing isn't in CI.** `scripts/qa-sweep.mjs` checks horizontal overflow at 360px and 1280px, but it is run by hand, not by CI, and it can't see `position: fixed` content (that is how the since-fixed `snackbar` 360px overflow slipped past it).
+- **No real screen-reader pass yet.** The 3 Oct check read the accessibility tree, which shows what is exposed, not how NVDA or Narrator phrase it. Worth 30 minutes with NVDA in Chrome: (1) nav bar/rail: does each tab say "2 of 4"? Each `tab` sits under a `generic` item host rather than directly under the `tablist`, which some screen readers count wrongly. (2) Modal drawer: announced as a dialog on open, and browse mode can't leave it. (3) `ds-search` and `ds-search-view`: each highlighted option is read while arrowing. (4) Spot-check that icon controls no longer say ligature names.
 - **`check:docs` doesn't verify attributes.** `scripts/check-api-docs.mjs` checks every documented CSS custom property, custom event and CSS part against `src/`, but not attribute tables — components read attributes through `dataset.camelCase`, getters and class names, which a text search can't resolve without false positives. A documented attribute that doesn't exist would still slip through.

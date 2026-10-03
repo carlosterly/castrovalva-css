@@ -242,8 +242,16 @@
         <div class="section">
           <h2>Accessibility</h2>
           <ul>
-            <li>Escape closes the overlay from the search input.</li>
-            <li>Arrow Up/Down navigates suggestion focus state.</li>
+            <li>
+              The input is a <code>combobox</code> controlling a
+              <code>listbox</code> of results (or recent searches).
+            </li>
+            <li>
+              Focus stays in the input. <kbd>↓</kbd>/<kbd>↑</kbd> move the
+              highlight, and <code>aria-activedescendant</code> points at the
+              highlighted option so a screen reader announces it.
+            </li>
+            <li><kbd>Escape</kbd> closes the overlay from the search input.</li>
             <li>Interactive controls include accessible labels.</li>
             <li>Search and input events expose structured detail payloads.</li>
           </ul>

@@ -197,15 +197,6 @@ export class DSSearch extends HTMLElement {
 
     this._selectedIndex = -1;
     this.renderSuggestions();
-
-    // Update aria-expanded on the input
-    const input = this.shadowRoot?.querySelector("input");
-    if (input) {
-      input.setAttribute(
-        "aria-expanded",
-        String(this._filteredSuggestions.length > 0),
-      );
-    }
   }
 
   /**
@@ -352,9 +343,10 @@ export class DSSearch extends HTMLElement {
         case "Escape":
           e.preventDefault();
           this._filteredSuggestions = [];
+          // Close the list but keep focus in the field, as the APG
+          // combobox pattern expects; blurring stranded focus on <body>.
           this._selectedIndex = -1;
           this.renderSuggestions();
-          e.target.blur();
           break;
       }
     }, true);
@@ -378,6 +370,24 @@ export class DSSearch extends HTMLElement {
     const container = this.shadowRoot.querySelector("[part='suggestions']");
     if (!container) return;
 
+    // Focus stays in the input, so the highlighted option only reaches a
+    // screen reader through aria-activedescendant.
+    const input = this.shadowRoot.querySelector("input");
+    if (input) {
+      input.setAttribute(
+        "aria-expanded",
+        String(this._filteredSuggestions.length > 0),
+      );
+      if (this._selectedIndex >= 0 && this._filteredSuggestions.length > 0) {
+        input.setAttribute(
+          "aria-activedescendant",
+          `suggestion-${this._selectedIndex}`,
+        );
+      } else {
+        input.removeAttribute("aria-activedescendant");
+      }
+    }
+
     if (this._filteredSuggestions.length === 0) {
       container.innerHTML = "";
       container.style.display = "none";
@@ -394,8 +404,9 @@ export class DSSearch extends HTMLElement {
         const isSelected = index === this._selectedIndex;
 
         return `
-          <div 
+          <div
             class="suggestion-item ${isSelected ? "selected" : ""}"
+            id="suggestion-${index}"
             data-index="${index}"
             role="option"
             aria-selected="${isSelected}">
@@ -633,7 +644,7 @@ export class DSSearch extends HTMLElement {
           </div>
         </div>
         
-        <div part="suggestions" id="suggestions-list" role="listbox"></div>
+        <div part="suggestions" id="suggestions-list" role="listbox" aria-label="Suggestions"></div>
       </div>
     `;
   }

@@ -286,7 +286,7 @@ class DSNavItem extends HTMLElement {
 
       <a href="#" part="container">
         <div class="state-layer" part="state-layer"></div>
-        <span class="nav-icon" part="icon"></span>
+        <span class="nav-icon" part="icon" aria-hidden="true"></span>
         <span class="nav-label" part="label">
           <slot></slot>
         </span>

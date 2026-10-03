@@ -178,21 +178,23 @@
           <h3>Tabs with Icons</h3>
           <p>
             Tabs can include icons alongside labels for better visual
-            recognition.
+            recognition. Mark the icon <code>aria-hidden="true"</code>: Material
+            Symbols draw from ligature text, so a screen reader would otherwise
+            read "phone Recents".
           </p>
 
           <div class="demo-box">
             <ds-tabs>
               <button type="button" slot="tab">
-                <span class="material-symbols-outlined">phone</span>
+                <span class="material-symbols-outlined" aria-hidden="true">phone</span>
                 Recents
               </button>
               <button type="button" slot="tab">
-                <span class="material-symbols-outlined">favorite</span>
+                <span class="material-symbols-outlined" aria-hidden="true">favorite</span>
                 Favorites
               </button>
               <button type="button" slot="tab">
-                <span class="material-symbols-outlined">contacts</span>
+                <span class="material-symbols-outlined" aria-hidden="true">contacts</span>
                 Contacts
               </button>
 
@@ -210,7 +212,7 @@
 
           <pre><code>&lt;ds-tabs>
   &lt;button slot="tab">
-    &lt;span class="material-symbols-outlined">icon&lt;/span>
+    &lt;span class="material-symbols-outlined" aria-hidden="true">icon&lt;/span>
     Label
   &lt;/button>
   ...

@@ -52,6 +52,16 @@ describe("DSChip", () => {
       expect(icon.textContent).to.equal("add");
     });
 
+    // Material Symbols draw icons from ligature text, which a screen reader
+    // otherwise reads into the control's name ("star Favorites").
+    it("hides the leading icon ligature from assistive technology", async () => {
+      const el = await fixture(
+        html`<ds-chip label="Add" icon="add"></ds-chip>`,
+      );
+      const icon = el.shadowRoot.querySelector(".leading-icon");
+      expect(icon.getAttribute("aria-hidden")).to.equal("true");
+    });
+
     it("should render an avatar when provided", async () => {
       const el = await fixture(
         html`<ds-chip
