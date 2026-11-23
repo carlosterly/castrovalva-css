@@ -62,7 +62,11 @@ export class DSSideSheet extends HTMLElement {
 
     // Handle initial open state if attribute is present
     if (this.hasAttribute("open")) {
-      requestAnimationFrame(() => this.show());
+      // Still open a frame later? It may have been closed in between, and
+      // close() is a no-op until show() has run.
+      requestAnimationFrame(() => {
+        if (this.hasAttribute("open")) this.show();
+      });
     }
   }
 
@@ -277,7 +281,8 @@ export class DSSideSheet extends HTMLElement {
 
     // Trigger animation by adding open class to container
     requestAnimationFrame(() => {
-      if (container) {
+      // Skip if close() ran first, or the sheet would reopen while closed
+      if (container && this._open) {
         container.classList.add("open");
       }
     });

@@ -482,9 +482,18 @@ describe("DSBottomSheet", () => {
   });
 
   describe("Animation & Transitions", () => {
+    // Opening adds the class two animation frames after connecting. Wait
+    // for frames, not milliseconds: a loaded WebKit delays frames past
+    // any fixed timeout, which is how the races below were found.
+    const frames = async (n) => {
+      for (let i = 0; i < n; i++) {
+        await new Promise((resolve) => requestAnimationFrame(resolve));
+      }
+    };
+
     it("should have open class when open", async () => {
       const el = await fixture(html`<ds-bottom-sheet open></ds-bottom-sheet>`);
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      await frames(2);
 
       const container = el.shadowRoot.querySelector(".container");
       expect(container?.classList.contains("open")).to.be.true;
@@ -492,13 +501,40 @@ describe("DSBottomSheet", () => {
 
     it("should remove open class when closed", async () => {
       const el = await fixture(html`<ds-bottom-sheet open></ds-bottom-sheet>`);
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      await frames(2);
 
       el.open = false;
-      await new Promise((resolve) => setTimeout(resolve, 50));
+      await frames(2);
 
       const container = el.shadowRoot.querySelector(".container");
       expect(container?.classList.contains("open")).to.be.false;
+    });
+
+    // close() returned early because show() hadn't run yet, then the
+    // pending show() opened the sheet with no open attribute.
+    it("stays closed when closed before its first frame", async () => {
+      const el = document.createElement("ds-bottom-sheet");
+      el.setAttribute("open", "");
+      document.body.appendChild(el);
+      el.open = false;
+      await frames(3);
+
+      const container = el.shadowRoot.querySelector(".container");
+      expect(container.classList.contains("open")).to.be.false;
+      expect(el.open).to.be.false;
+      el.remove();
+    });
+
+    // show() had run, close() removed the class, then show()'s pending
+    // animation frame added it back: on screen, but reporting closed.
+    it("stays closed when closed before its open animation frame", async () => {
+      const el = await fixture(html`<ds-bottom-sheet open></ds-bottom-sheet>`);
+      expect(el.open).to.be.true;
+      el.open = false;
+      await frames(3);
+
+      const container = el.shadowRoot.querySelector(".container");
+      expect(container.classList.contains("open")).to.be.false;
     });
 
     it("should have transform animation", async () => {
