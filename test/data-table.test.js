@@ -594,6 +594,9 @@ describe("DSDataTable", () => {
       expect(clearButton.getAttribute("aria-label")).to.equal("Clear filter");
     });
 
+    // WCAG 2.5.3 (Label in Name): each name must contain the visible text.
+    // "Previous page" didn't contain the button's "Prev" as a word, and
+    // widening the label to "Previous" overflowed the controls at 360px.
     it("sets ARIA labels on pagination buttons", async () => {
       const el = await fixture(html`
         <ds-data-table
@@ -612,7 +615,7 @@ describe("DSDataTable", () => {
         el.shadowRoot
           .querySelector('button[data-page="prev"]')
           .getAttribute("aria-label"),
-      ).to.equal("Previous page");
+      ).to.equal("Prev page");
       expect(
         el.shadowRoot
           .querySelector('button[data-page="next"]')

@@ -444,12 +444,17 @@ export class DSNavigationBarItem extends HTMLElement {
         tabindex="${this._tabStop ? 0 : -1}"
         aria-selected="${active}"
         aria-disabled="${disabled}"
-        aria-label="${label || this.textContent?.trim() || icon}">
+        ${
+          // Visible text names the tab (badge count included, as WCAG 2.5.3
+          // requires); an aria-label would hide the count. Icon-only items
+          // fall back to the icon name.
+          label || this.textContent?.trim() ? "" : `aria-label="${icon}"`
+        }>
         <div class="indicator" part="indicator"></div>
         <div class="state-layer"></div>
         
         <div class="icon-container">
-          ${icon ? "<span class=\"icon\" part=\"icon\"></span>" : ""}
+          ${icon ? "<span class=\"icon\" part=\"icon\" aria-hidden=\"true\"></span>" : ""}
           ${hasBadge ? `<span class="badge" part="badge">${badge}</span>` : ""}
         </div>
         

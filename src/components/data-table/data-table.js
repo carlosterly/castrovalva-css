@@ -901,7 +901,7 @@ export class DSDataTable extends HTMLElement {
           <button
             data-page="prev"
             ${this._currentPage === 1 ? "disabled" : ""}
-            aria-label="Previous page"
+            aria-label="Prev page"
           >
             Prev
           </button>

@@ -365,12 +365,24 @@ describe("ds-split-button", () => {
       expect(menu.getAttribute("role")).to.equal("menu");
     });
 
-    it("should expose aria-labels for both buttons", async () => {
+    // A hardcoded aria-label="Primary action" overrode the slotted text,
+    // so a button showing "Save" was announced as "Primary action".
+    it("names the primary button from its slotted text", async () => {
       const el = await fixture(basicFixture);
       const primary = el.shadowRoot.querySelector(".primary-button");
-      const menuBtn = el.shadowRoot.querySelector(".menu-button");
+      expect(primary.hasAttribute("aria-label")).to.be.false;
+      const text = primary
+        .querySelector("slot")
+        .assignedNodes()
+        .map((n) => n.textContent)
+        .join("")
+        .trim();
+      expect(text).to.equal("Save");
+    });
 
-      expect(primary.getAttribute("aria-label")).to.equal("Primary action");
+    it("labels the icon-only menu button", async () => {
+      const el = await fixture(basicFixture);
+      const menuBtn = el.shadowRoot.querySelector(".menu-button");
       expect(menuBtn.getAttribute("aria-label")).to.equal("More actions");
     });
   });

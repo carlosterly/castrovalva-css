@@ -381,15 +381,39 @@ describe("DSNavigationBar", () => {
     });
 
     describe("Accessibility", () => {
-      it("should have aria-label", async () => {
+      // WCAG 2.5.3 (Label in Name): the accessible name must contain the visible
+      // text. An aria-label of just the label dropped the badge count, so it was
+      // both an axe failure and a count screen-reader users never heard.
+      it("names the tab from its visible text, badge count included", async () => {
         const el = await fixture(html`
-          <ds-navigation-bar-item icon="home" label="Home Page"
-            >Home</ds-navigation-bar-item
-          >
+          <ds-navigation-bar-item icon="chat" badge="12">Messages</ds-navigation-bar-item>
         `);
-
         const button = el.shadowRoot.querySelector("button");
-        expect(button.getAttribute("aria-label")).to.equal("Home Page");
+        expect(button.hasAttribute("aria-label")).to.be.false;
+        expect(button.querySelector(".badge").textContent.trim()).to.equal("12");
+      });
+
+      it("names the tab from the label attribute when set", async () => {
+        const el = await fixture(html`
+          <ds-navigation-bar-item icon="home" label="Home Page">Home</ds-navigation-bar-item>
+        `);
+        const button = el.shadowRoot.querySelector("button");
+        expect(button.hasAttribute("aria-label")).to.be.false;
+        expect(button.querySelector(".label").textContent.trim()).to.equal(
+          "Home Page",
+        );
+      });
+
+      it("falls back to the icon name for an icon-only item", async () => {
+        const el = await fixture(html`<ds-navigation-bar-item icon="home"></ds-navigation-bar-item>`);
+        const button = el.shadowRoot.querySelector("button");
+        expect(button.getAttribute("aria-label")).to.equal("home");
+      });
+
+      it("hides the icon ligature from the accessible name", async () => {
+        const el = await fixture(html`<ds-navigation-bar-item icon="chat">Messages</ds-navigation-bar-item>`);
+        const icon = el.shadowRoot.querySelector(".icon");
+        expect(icon.getAttribute("aria-hidden")).to.equal("true");
       });
 
       it("should have aria-selected for active state", async () => {

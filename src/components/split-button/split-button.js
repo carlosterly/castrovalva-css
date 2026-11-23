@@ -584,7 +584,6 @@ export class DSSplitButton extends HTMLElement {
           class="primary-button" 
           part="primary-button"
           ${disabled ? "disabled" : ""}
-          aria-label="Primary action"
         >
           <slot></slot>
         </button>
