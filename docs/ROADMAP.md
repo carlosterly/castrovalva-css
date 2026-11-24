@@ -190,7 +190,7 @@ Delivered:
 
 | Remaining | Est. |
 | --- | --- |
-| Icon font subset: every page except `icon.html` loads only the 115 icons the site uses (325 KB → 11 KB), via Google Fonts' `icon_names=`, with a `check:icons` CI guard. Also fixes `settings-page.html` loading the full 4.0 MB variable font. Taken out of Parked on 24 Nov 2026 by choice, after an inventory measured the saving. | 1h |
+| Icon font subset: every page except `icon.html` loads only the 123 icons the site uses (325 KB → ~15 KB), via Google Fonts' `icon_names=`, with a `check:icons` CI guard. Also fixes `settings-page.html` loading the full 4.0 MB variable font. Taken out of Parked on 24 Nov 2026 by choice, after an inventory measured the saving. | 1h |
 | Manual screen-reader pass (checklist in DEFECTS.md). Deferred by choice on 23 Nov 2026; the nav bar has passed. | 1h |
 
 **Minimum viable stop:** the engineering notes. Everything else is maintenance.

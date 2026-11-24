@@ -6,8 +6,9 @@
  * `font-variation-settings: 'FILL' 1`, which a fixed-style font ignores.
  *
  * The inventory is every icon name found in:
- *   - page markup: `icon="…"`, `*-icon="…"` attributes, and the text of
- *     elements with a `material-symbols-*` class (outside <pre> samples)
+ *   - page markup: `icon="…"`, `*-icon="…"` and `<ds-icon name="…">`
+ *     attributes, and any element text that is a valid icon name (outside
+ *     <pre> samples), since some icons get their font from CSS
  *   - component and shared-script templates, the same way
  *   - any quoted word in a script that is also a valid icon name, since
  *     components set some icons from code (checkbox states, banner types).
@@ -51,11 +52,14 @@ const scripts = [...walk("src", ".js"), ...walk("docs/shared", ".js")];
 
 const markupIcons = (text) => [
   ...[...text.matchAll(/\b(?:icon|[a-z]+-icon)="([a-z0-9_]+)"/g)].map((m) => m[1]),
-  ...[
-    ...text.matchAll(
-      /class="[^"]*material-symbols-[a-z]+[^"]*"[^>]*>\s*([a-z0-9_]+)\s*</g,
-    ),
-  ].map((m) => m[1]),
+  // <ds-icon name="…">: missing this left state-layers showing "INBOX" as text
+  ...[...text.matchAll(/<ds-icon\b[^>]*\bname="([a-z0-9_]+)"/g)].map((m) => m[1]),
+  // Any element text that is an icon name, whatever sets its font: the
+  // data-table's sort arrow gets the icon font from CSS, not a class, and
+  // menu icons only render when the menu opens, so screenshots miss both
+  ...[...text.matchAll(/>\s*([a-z0-9_]{2,})\s*</g)]
+    .map((m) => m[1])
+    .filter((name) => valid.has(name)),
 ];
 const quotedIconWords = (code) =>
   [...code.matchAll(/["'`]([a-z0-9_]{2,})["'`]/g)]
