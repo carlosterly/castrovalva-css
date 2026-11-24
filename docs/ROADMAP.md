@@ -62,7 +62,6 @@ Explicitly not doing these in this horizon. Recorded so the decision does not ge
 Small, known improvements that are deliberately not planned (recorded 3 Oct 2026). Each is real but optional, and none moves what a visitor sees in 30 seconds. Pick one up only if a [revisit trigger](#revisit-triggers) fires or feedback asks for it; never to fill slack.
 
 - **Self-hosted icon subset.** Pages load a ~315 KB static Material Symbols font; a self-hosted subset of the glyphs actually used would be ~15 KB (see Q2's font-weight entry).
-- **Meta descriptions on demo pages.** None of the 51 has one, which is why component pages score 90 for Lighthouse SEO.
 - **Token-name search.** The sidebar filter indexes the demo pages but not `tokens.md` (see Q2's content-search entry).
 - **Tooling gaps.** Responsive checks aren't in CI, and `check:docs` doesn't verify attribute tables — see "Known gaps in tooling" in [DEFECTS.md](./DEFECTS.md).
 
@@ -191,6 +190,7 @@ Delivered:
 
 | Remaining | Est. |
 | --- | --- |
+| Meta descriptions on the 51 demo pages and the settings example, from each page's existing summary sentence. Taken out of Parked on 24 Nov 2026 by choice: cheap, and it gives shared links a real preview, which supports sharing the site for feedback. | 30m |
 | Manual screen-reader pass (checklist in DEFECTS.md). Deferred by choice on 23 Nov 2026; the nav bar has passed. | 1h |
 
 **Minimum viable stop:** the engineering notes. Everything else is maintenance.
