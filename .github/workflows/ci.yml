@@ -23,6 +23,10 @@ jobs:
       - name: Lint
         run: npm run lint
 
+      # A missing icon renders as its name in text on the live site
+      - name: Check icon font links
+        run: npm run check:icons
+
       - name: Install Chromium for tests
         run: npx playwright install --with-deps chromium
 

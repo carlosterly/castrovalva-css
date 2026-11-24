@@ -35,6 +35,9 @@ demo page only — never maintain it in two places.
 ### Also update when adding or changing a component
 
 - Register the import **and** export in `src/index.js`
+- Using an icon the site hasn't used before? Run `npm run icons:write`. Pages load
+  only the icons listed in their font link, and a missing one renders as its
+  name in text; `npm run check:icons` fails CI until it's added
 - Add a component card to `index.html`
 - Run `npm test test/{name}.test.js`
 
@@ -78,7 +81,7 @@ demo page only — never maintain it in two places.
     <meta name="description" content="{The first sentence of the page description, under 160 characters}">
     <title>{Component Name} - Material Design 3 Component Library</title>
     <link
-      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0..1,0&icon_names={written by npm run icons:write}&display=swap"
       rel="stylesheet" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
@@ -341,6 +344,7 @@ npm run test:a11y              # axe accessibility pass
 npm run test:visual            # screenshot comparison - local only, see below
 npm run lint                   # ESLint - must exit 0
 npm run check:docs             # documented CSS props/events/parts exist in src/
+npm run check:icons            # every icon used is in the pages' font subset
 ```
 
 Visual regression baselines are local-only and gitignored (Windows and
@@ -455,7 +459,7 @@ When the pattern is unclear, copy the structure from:
 - [ ] Stub README linking to the demo page
 - [ ] Registered in `src/index.js` (import **and** export)
 - [ ] Card added to `index.html`
-- [ ] `npm run lint` and `npm run check:docs` exit 0
+- [ ] `npm run lint`, `npm run check:docs` and `npm run check:icons` exit 0
 - [ ] No console errors in the browser
 - [ ] Responsive on mobile
 - [ ] Works in light, dark, and high-contrast themes
