@@ -138,7 +138,7 @@ command shown. Last measured 24 November 2026.
 | Bundle — `castrovalva/icon` | 4.6 KB raw / 1.6 KB gzip | `npm run build` |
 | Lighthouse, home page — mobile (simulated throttling, Lighthouse default) | Performance 99 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/` |
 | Lighthouse, home page — desktop | Performance 100 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/ --preset=desktop` |
-| Lighthouse, a component page (`button.html`) — mobile | Performance 98 · Accessibility 100 · Best Practices 100 · SEO 90 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/docs/components/button.html` |
+| Lighthouse, a component page (`button.html`) — mobile | Performance 98 · Accessibility 100 · Best Practices 100 · SEO 100 | `npx lighthouse https://carlosterly.github.io/castrovalva-css/docs/components/button.html` |
 
 Three things this table intentionally doesn't smooth over:
 
