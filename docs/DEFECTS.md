@@ -42,7 +42,7 @@ is probably a design decision rather than a defect, and belongs in the roadmap.
 
 ## Open defects
 
-None as of 3 Oct 2026.
+None as of 24 Nov 2026.
 
 ## First-pass screenshot review — done, all findings actioned
 
@@ -428,6 +428,25 @@ shell. All 51 pages now wrap `.content-area` in `<main>` (CSS keys on the
 class, so nothing moved: visual regression clean on the 45 pages with no
 other change), and the CLAUDE.md template does too.
 
+**Found by the dependency update — fixed 23 Nov 2026.** Two bug classes,
+each in its own commit:
+
+- `ds-side-sheet` / `ds-bottom-sheet`: opening takes two animation frames,
+  and closing inside that window left the sheet on screen while reporting
+  itself closed. Before the first frame, `close()` was a no-op and the
+  pending `show()` opened it anyway; between the two, `show()`'s pending
+  frame re-added the class `close()` had removed. Found because a loaded
+  WebKit delayed frames past the tests' fixed timeouts; those tests now
+  wait for frames. Four new tests reproduce the races.
+- WCAG 2.5.3 (Label in Name), newly checked by axe-core 4.14: four
+  controls whose spoken name didn't contain their visible text.
+  `ds-split-button` announced every primary button as "Primary action";
+  nav bar/rail items with a badge dropped the count from their name (now
+  named by visible text, e.g. "12 Messages"); `ds-data-table`'s "Prev"
+  was named "Previous page" (now "Prev page" — showing "Previous"
+  overflowed the controls at 360px); and a demo block on
+  `state-layers.html`. `test:a11y` back to 159/159.
+
 ---
 
 ## Known gaps in tooling
@@ -439,6 +458,8 @@ resolved.
 - **`test:a11y` flakes locally, 0–3 of 106 per run (27 Sep 2026).** Not accessibility findings: axe fails to load or run in the page, on a different page each run. Errors seen: `Cannot read properties of null (reading 'environmentData')` (axe not present when analysis ran), `Unexpected token '<'` (HTML parsed where JavaScript was expected), and truncated-script syntax errors (`Unexpected token '='`, `missing ) after argument list`, one `NATIVD_SYMBOL is not defined`). Reproduces on the pre-session commit `e46a15f`, on axe-core 4.11 and 4.13, and with 2 workers instead of 8; the dev server logs no reloads. Not a machine fault: the same machine runs all 2,324 unit tests cleanly on three browsers.
   **Traced 3 Oct 2026 — the page-race theory is wrong.** A trace of a failing run (`app-bar-top`, light: `SyntaxError: Unexpected identifier 'virtualNode'`) shows the demo page loaded and untouched. The failure was in the blank page `AxeBuilder.finishRun()` opens to merge results: the same 1.3 MB axe source evaluated cleanly in the demo page moments earlier, and the trace records the failing copy byte-identical to it. So the string leaves Playwright intact and is damaged or misparsed between there and V8, which fits every error above (truncated or altered source). Not reproduced outside the test runner: ~5,000 standalone injections (bare blank pages, real demo pages, AxeBuilder's own expression path, 408 full `analyze()` runs, 8 parallel browsers) never failed. Rate on 3 Oct was far lower than on 27 Sep: 1 failure in 54 suite runs (~5,700 checks), with or without the runner starting Vite, so a second trace was never caught.
   **Mitigated, cause still open.** `demo-pages.spec.js` now retries `analyze()` once when it *throws*. Violations are returned, never thrown, so the retry can't hide a finding; each retry prints `axe harness error, retrying once: …` and adds an `axe-harness-retry` annotation. Next step if it matters, e.g. the retry annotation starts appearing often: run the suite with `--trace retain-on-failure` on the unretried spec and look for a pattern in which injection fails. Debugging gotcha: stopping a backgrounded `npx vite` can leave its Node process holding port 4173, and `reuseExistingServer` then silently reuses it.
+- **Playwright is held at 1.63 (23 Nov 2026).** 1.65 (Firefox 159) made Firefox's real keyboard/mouse tests (`sendKeys`/`sendMouse`) fail intermittently, but only under the full three-browser load: alone, the same files passed six times out of six. A/B on the same machine: 0 failures in 3 full runs on 1.63, failures in 4 of 5 on 1.65; bisected to Playwright itself, not the `@web/test-runner-*` updates. A stalled `sendKeys` that finishes after its test times out also lands its keys in the next test, which is why some failures looked like wrong focus. Pinned exactly in `package.json`; retry at each quarterly review with three full `npm run test:all` runs.
+- **Visual regression fails intermittently on antialiasing (23 Nov 2026).** Against the 3 Oct baselines, a few pages (data-table, list, advanced-menu, theme-playground, mostly high-contrast) failed some runs and passed others, even in isolation — e.g. 61 pixels scattered over a whole page, just past the 50-pixel tolerance. Same Chromium build as the baselines. Fresh baselines from the committed code then passed 396/396 twice; the cause is not found. If it recurs, compare a failing page's diff against a fresh baseline before trusting either.
 - **Responsive testing isn't in CI.** `scripts/qa-sweep.mjs` checks horizontal overflow at 360px and 1280px, but it is run by hand, not by CI, and it can't see `position: fixed` content (that is how the since-fixed `snackbar` 360px overflow slipped past it).
 - **No real screen-reader pass yet.** The 3 Oct check read the accessibility tree, which shows what is exposed, not how NVDA or Narrator phrase it. Worth 30 minutes with NVDA in Chrome: (1) nav bar/rail: does each tab say "2 of 4"? Each `tab` sits under a `generic` item host rather than directly under the `tablist`, which some screen readers count wrongly. (2) Modal drawer: announced as a dialog on open, and browse mode can't leave it. (3) `ds-search` and `ds-search-view`: each highlighted option is read while arrowing. (4) Spot-check that icon controls no longer say ligature names.
 - **`check:docs` doesn't verify attributes.** `scripts/check-api-docs.mjs` checks every documented CSS custom property, custom event and CSS part against `src/`, but not attribute tables — components read attributes through `dataset.camelCase`, getters and class names, which a text search can't resolve without false positives. A documented attribute that doesn't exist would still slip through.
